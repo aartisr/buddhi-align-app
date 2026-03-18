@@ -1,0 +1,90 @@
+# Node
+node_modules/
+.npm/
+
+# Build output
+.next/
+dist/
+build/
+coverage/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Env
+.env*
+.env.*
+
+# Test
+*.test.ts.snap
+*.test.js.snap
+
+# Misc
+*.log
+*.pid
+*.seed
+*.tgz
+
+# Next.js
+out/
+
+# Mac system files
+Icon?
+
+# Exclude generated CSS chunks
+apps/frontend/.next/
+apps/frontend/.next/**
+apps/frontend/.next/dev/static/chunks/*.css
+
+# Exclude backend build output
+apps/backend/dist/
+
+# Exclude package lock if using pnpm or yarn
+pnpm-lock.yaml
+yarn.lock
+
+# Exclude local data
+*.local
+
+# Exclude Python virtualenvs (if any)
+venv/
+.venv/
+__pycache__/
+
+# Exclude all .env and secret files
+*.env
+*.env.*
+
+# Exclude test coverage
+coverage/
+
+# Exclude storybook static files
+storybook-static/
+
+# Exclude IDE settings
+*.iml
+
+# Exclude backup files
+*~
+*.bak
+
+# Exclude temporary files
+*.tmp
+*.temp
+
+# Exclude lock files
+package-lock.json
+
+# Exclude any other unnecessary files
