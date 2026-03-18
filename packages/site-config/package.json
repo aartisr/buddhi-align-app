@@ -1,0 +1,8 @@
+{
+  "name": "@buddhi-align/site-config",
+  "version": "0.1.0",
+  "main": "index.ts",
+  "types": "index.d.ts",
+  "private": true,
+  "description": "Centralized config, themes, and prompts for Buddhi Align App."
+}
