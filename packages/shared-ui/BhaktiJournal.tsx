@@ -1,0 +1,37 @@
+import React from "react";
+
+export interface BhaktiJournalEntry {
+  date: string;
+  reflection: string;
+  gratitude: string;
+}
+
+export interface BhaktiJournalProps {
+  entries: BhaktiJournalEntry[];
+  onAddEntry?: (entry: BhaktiJournalEntry) => void;
+}
+
+export const BhaktiJournal: React.FC<BhaktiJournalProps> = ({ entries, onAddEntry }) => (
+  <section className="mb-12">
+    <h2 className="text-2xl font-semibold mb-2 text-pink-700">Bhakti Journal</h2>
+    <p className="text-zinc-600 mb-4">Reflect on devotion and gratitude.</p>
+    <div className="space-y-4">
+      {entries.length === 0 ? (
+        <p className="text-zinc-400">No journal entries yet. Start by adding your first reflection.</p>
+      ) : (
+        <ul className="divide-y divide-zinc-100">
+          {entries.map((entry, i) => (
+            <li key={i} className="py-2">
+              <span className="font-medium text-pink-700 w-24">{entry.date}</span>
+              <div className="ml-2">
+                <div className="text-zinc-700">{entry.reflection}</div>
+                <div className="text-yellow-700 text-sm">Gratitude: {entry.gratitude}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+    {/* Removed extra Add Entry button to avoid duplication with page form */}
+  </section>
+);
