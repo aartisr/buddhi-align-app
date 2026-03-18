@@ -1,0 +1,39 @@
+import { useEffect, useState } from "react";
+
+export interface KarmaYogaEntry {
+  id?: string;
+  date: string;
+  action: string;
+  impact: string;
+}
+
+export function useKarmaYogaEntries() {
+  const [entries, setEntries] = useState<KarmaYogaEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:4000/api/karma")
+      .then((res) => res.json())
+      .then((data) => {
+        setEntries(data);
+        setLoading(false);
+      });
+  }, []);
+
+  const addEntry = async (entry: Omit<KarmaYogaEntry, "id">) => {
+    const res = await fetch("http://localhost:4000/api/karma", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(entry),
+    });
+    const newEntry = await res.json();
+    setEntries((prev) => [...prev, newEntry]);
+  };
+
+  const deleteEntry = async (id: string) => {
+    await fetch(`http://localhost:4000/api/karma/${id}`, { method: "DELETE" });
+    setEntries((prev) => prev.filter((e) => e.id !== id));
+  };
+
+  return { entries, loading, addEntry, deleteEntry };
+}
