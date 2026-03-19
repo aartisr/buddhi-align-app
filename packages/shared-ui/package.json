@@ -4,5 +4,9 @@
   "main": "index.tsx",
   "types": "index.d.ts",
   "private": true,
-  "description": "Themeable, accessible React UI components for Buddhi Align App."
+  "description": "Themeable, accessible React UI components for Buddhi Align App.",
+  "peerDependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
 }

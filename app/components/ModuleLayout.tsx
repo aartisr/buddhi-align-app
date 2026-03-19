@@ -17,11 +17,7 @@ export default function ModuleLayout({ title, children }: { title: string; child
   const icon = moduleIcons[title] || "";
   return (
     <div className="min-h-screen relative font-sans">
-      {/* Enhanced spiritual, Nobel Prize-level multi-gradient background with vibrant blue/indigo */}
-      <div
-        className="absolute inset-0 -z-10 buddhi-bg-gradient"
-        aria-hidden
-      />
+      {/* Background handled globally in layout.tsx */}
       {/* Large, subtle background icon for each module, absolutely centered in main content */}
       <div className="relative">
         {icon && (
@@ -53,9 +49,7 @@ export default function ModuleLayout({ title, children }: { title: string; child
           {children}
         </main>
       </div>
-      {/* Enhanced overlay for content contrast and clarity */}
-      <div className="absolute inset-0 -z-10 bg-white/80 dark:bg-zinc-900/80 backdrop-blur" />
-      {/* Duplicate header and main removed */}
+      {/* Overlay removed to reveal global background */}
     </div>
   );
 }

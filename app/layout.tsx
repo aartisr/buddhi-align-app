@@ -27,6 +27,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <div className="buddhi-bg-gradient" aria-hidden="true"></div>
         {children}
       </body>
     </html>

@@ -1,0 +1,37 @@
+.site-footer {
+  width: 100%;
+  background: rgba(255,255,255,0.85);
+  border-top: 1px solid #e5e7eb;
+  color: #4B0082;
+  font-size: 14px;
+  padding: 24px 0 12px 0;
+  text-align: center;
+  font-family: Inter, Nunito, Open Sans, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.1px;
+  margin-top: 48px;
+}
+.site-footer__dedication {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.site-footer__logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.site-footer__logo-text {
+  font-weight: 600;
+  color: #C72C6A;
+  font-size: 15px;
+}
+.site-footer__dedication-rest {
+  font-weight: 500;
+  color: #4B0082;
+}
+.site-footer__copyright {
+  color: #888;
+  font-size: 13px;
+}
