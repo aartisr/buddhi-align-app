@@ -17,11 +17,6 @@ export default function ModuleLayout({ title, children }: { title: string; child
   const icon = moduleIcons[title] || "";
   return (
     <div className="min-h-screen relative font-sans">
-      {/* Enhanced spiritual, Nobel Prize-level multi-gradient background with vibrant blue/indigo */}
-      <div
-        className="absolute inset-0 -z-10 buddhi-bg-gradient"
-        aria-hidden
-      />
       {/* Large, subtle background icon for each module, absolutely centered in main content */}
       <div className="relative">
         {icon && (

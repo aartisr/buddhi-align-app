@@ -1,10 +1,17 @@
+
 .buddhi-bg-gradient {
-  /* Spiritually calming, motivational background */
-  background:
-    radial-gradient(circle at 80% 10%, #FFD70033 0%, #fff0 40%), /* gold */
-    radial-gradient(circle at 20% 90%, #2E8B5733 0%, #fff0 60%), /* emerald */
-    radial-gradient(circle at 50% 50%, #C72C6A22 0%, #fff0 70%), /* rose */
-    linear-gradient(120deg, #F6F8FC 0%, #B39DDB 60%, #4B0082 100%); /* sand to lavender to indigo */
+  /* DEBUG: solid bright background and border to confirm rendering */
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -9999;
+  pointer-events: none;
+  background: #ff00ff;
+  border: 10px solid #00ffff;
+  opacity: 0.9;
+  transition: opacity 0.5s;
+  overflow: visible !important;
 }
 
 .buddhi-bg-icon {
