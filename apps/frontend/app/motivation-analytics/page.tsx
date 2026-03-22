@@ -128,7 +128,7 @@ export default function MotivationAnalyticsPage() {
     <ModuleLayout title="Motivation & Analytics">
       <section className="mb-10 flex flex-col items-center justify-center">
         <div className="max-w-2xl p-8 rounded-2xl bg-gradient-to-br from-gold/10 via-emerald/5 to-indigo/5 border-2 border-primary shadow-xl text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-indigo-800 mb-4">Nobel Prize Level Motivation</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-indigo-800 mb-4">Motivation for Inner Excellence</h2>
           <blockquote className="italic text-xl md:text-2xl text-zinc-800 mb-2">“{quote.quote}”</blockquote>
           <div className="text-lg text-emerald-700 font-semibold">— {quote.author}</div>
           <button
