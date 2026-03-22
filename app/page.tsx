@@ -48,7 +48,7 @@ export default function Home() {
     {
       key: "motivation",
       title: "Motivation & Analytics",
-      description: "Nobel Prize-level insights and inspiration.",
+      description: "Deep insights and inspiration.",
       icon: "\u{1F3C6}",
       href: "/motivation-analytics",
     },
