@@ -15,7 +15,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.site-footer__dedication-prefix {
+  font-weight: 500;
+  color: #4B0082;
 }
 .site-footer__logo-link {
   display: flex;
@@ -30,6 +35,11 @@
 .site-footer__dedication-rest {
   font-weight: 500;
   color: #4B0082;
+}
+.site-footer__gratitude {
+  color: #5b4a7a;
+  font-size: 13px;
+  margin-bottom: 8px;
 }
 .site-footer__copyright {
   color: #888;
