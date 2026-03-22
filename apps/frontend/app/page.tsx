@@ -1,3 +1,4 @@
+import React from "react";
 import { BuddhiDashboard } from "@buddhi-align/shared-ui";
 import ModuleLayout from "./components/ModuleLayout";
 

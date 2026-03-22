@@ -1,136 +1,264 @@
 
 # Buddhi Align App
 
-## "Buddhi Yoga as the Fastest Path to Clarity"
-### A Synthesis of the Bhagavad Gita, Vedanta, and Yogic Psychology
-#### by Aarti Ravikumar
+> Buddhi Yoga as a practical system for clarity, self-regulation, and purposeful daily action.
 
----
+[![Shishu Bharati Logo](https://www.shishubharati.net/wp-content/uploads/2024/07/ShishuBharati-Logo-Transparent-HiRes-150x150.png)](https://www.shishubharati.net/)
 
-### Introduction
-Enlightenment, in the Bhagavad Gita, is not an escape from life but a clearer way of living within it. The Gita begins not with serenity, but with confusion: Arjuna stands overwhelmed, divided within himself. Swami Chinmayananda explains that this inner division is the split between manas (the reactive mind) and buddhi (the discriminative intellect), widened by ego and desire. When the mind and intellect are not aligned, action becomes anxious, fragmented, and clouded.
+This project is dedicated by **Aarti S Ravikumar** to **Shishubharati**.
 
-What obscures clarity, according to Vedanta, are vasanas — subtle latent impressions left in the mind by past actions, emotions, and desires. These impressions shape perception, trigger reactions, and create habitual tendencies. Vasanas are not just memories; they are energetic imprints that push us to repeat patterns unconsciously. When actions are performed with ego-centered desire, new vasanas accumulate. When actions are done selflessly, vasanas are exhausted.
+The author is deeply grateful to the teachers and volunteers of Shishu Bharati for their guidance, service, and living example of values-centered education.
 
-Guided by Swami Chinmayananda’s commentary and Mahatma Gandhi’s interpretation of the Gita, this project and essay argue that Buddhi Yoga — the yoga of awakened intelligence — offers the most direct path to dissolving vasanas. By aligning a steady intellect (buddhi) with selfless action (karma), devotion (bhakti), inquiry (jnana), and meditation (dhyana), clarity naturally unfolds.
+Website: [https://www.shishubharati.net/](https://www.shishubharati.net/)
 
----
+## Abstract
+Buddhi Align App is a contemplative technology platform that operationalizes Buddhi Yoga principles into measurable, daily practice. The project combines philosophical depth with modern engineering rigor: modular architecture, testable boundaries, clear quality gates, and reproducible development workflows. Its objective is to support inner clarity through structured action, reflective observation, and habit-aware guidance.
 
-## Project Vision
-**Buddhi Align App** is a research-driven, extensible, and visually appealing monorepo platform inspired by Buddhi Yoga and the Bhagavad Gita. It empowers users to cultivate self-awareness, track progress, and align daily actions with higher purpose through a privacy-first, modular, and accessible experience.
+## Table of Contents
+- [Abstract](#abstract)
+- [Project Overview](#project-overview)
+- [Vision and Design Principles](#vision-and-design-principles)
+- [Theoretical Foundation](#theoretical-foundation)
+- [Problem Statement and Scope](#problem-statement-and-scope)
+- [Feature Modules](#feature-modules)
+- [Architecture](#architecture)
+- [Repository Structure](#repository-structure)
+- [Technology Stack](#technology-stack)
+- [Quick Start](#quick-start)
+- [Scripts and Development Workflows](#scripts-and-development-workflows)
+- [Backend API Contract](#backend-api-contract)
+- [Data Lifecycle and Privacy Model](#data-lifecycle-and-privacy-model)
+- [Testing and Quality Gates](#testing-and-quality-gates)
+- [Security Notes](#security-notes)
+- [Operational Excellence Checklist](#operational-excellence-checklist)
+- [Roadmap and Future Research](#roadmap-and-future-research)
+- [Contribution Guide](#contribution-guide)
+- [Author and Acknowledgments](#author-and-acknowledgments)
+- [References](#references)
+- [License](#license)
 
-### 🌟 Core Values
-- **Research-driven:** Grounded in the teachings of Buddhi Yoga and the Bhagavad Gita
-- **Extensible:** Modular architecture for easy feature addition
-- **Visually Appealing:** Modern, mobile-first, and accessible UI
-- **Privacy-first:** User data is never shared or sold
-- **Open & Customizable:** Themeable components and centralized configuration
+## Project Overview
+**Buddhi Align App** is a maintainable monorepo that translates Buddhi Yoga principles into practical digital tools. It helps users align intellect, emotion, and action through structured reflection and habit-aware practice.
 
----
+The app is organized into focused modules (karma, bhakti, jnana, dhyana, vasana, dharma), with an optional backend API for CRUD operations and a reusable UI package for consistency across screens.
 
-## Features
-- **Buddhi Dashboard:** Unified overview of your journey
-- **Karma Yoga Tracker:** Track selfless actions and service
-- **Bhakti Journal:** Reflect on devotion and gratitude
-- **Jnana Reflection:** Capture insights and contemplations
-- **Dhyana Meditation:** Guided and self-led meditation tools
-- **Vasana Tracker:** Monitor habits and tendencies
-- **Dharma Planner:** Align goals and actions with your purpose
+## Problem Statement and Scope
+### Problem
+Most productivity and self-improvement tools optimize output volume, not psychological alignment. Users often gain activity while losing clarity.
 
----
+### Scope
+Buddhi Align focuses on:
+- Reflection quality over task quantity.
+- Intention tracking over superficial streak metrics.
+- Module-level extensibility without architectural coupling.
 
-## Theoretical Foundation: Buddhi Yoga in Practice
+### Out of Scope (Current)
+- Multi-user identity and cloud sync.
+- Long-term persistent backend storage.
+- Clinical or therapeutic claim frameworks.
 
-### What the Gita and Commentators Teach
-Buddhi Yoga is introduced in Chapter 2 of the Gita as the method for living the truth of the eternal Self in action. Yoga is described as “skill in action” — not technical efficiency, but psychological integration. Buddhi Yoga reunites the reactive mind and discriminative intellect so that action is guided by discrimination rather than impulse. When intellect guides action without attachment to outcomes, the personality becomes harmonious.
+## Vision and Design Principles
+- **Clarity first:** UI and workflows emphasize reflection and intentionality over distraction.
+- **Modularity:** New modules can be added without destabilizing existing features.
+- **Accessibility and inclusivity:** Components are built to be readable and operable across devices.
+- **Privacy-first defaults:** No analytics tracking is enabled by default.
+- **Maintainability:** Workspace scripts, test hooks, and package boundaries are explicit and reproducible.
 
-#### Vasanas: The Real Obstacle
-Vasanas are accumulated tendencies stored in the subtle mind. Every time we act with strong attachment, pride, fear, or desire, we leave behind an impression. These impressions influence future reactions and build layers that cloud perception. The Self is already pure awareness; enlightenment is revealed when vasanas are reduced.
+## Theoretical Foundation
+The project is inspired by the Bhagavad Gita and Vedantic interpretation of human psychology.
 
-#### Four Accelerators of Buddhi Yoga
-1. **Selfless Action (Karma Yoga):** Purifies motive and reduces anxiety by focusing on duty rather than results.
-2. **Devotion (Bhakti):** Stabilizes emotion and humbles ego, transforming relationships and responses.
-3. **Inquiry (Jnana):** Clarifies identity and reduces identification with fleeting emotions.
-4. **Meditation (Dhyana):** Trains attention to rest in awareness, reflecting the quality of daily actions.
+- **Buddhi**: discriminative intelligence that guides meaningful action.
+- **Manas**: reactive mind shaped by sensory impressions and emotional patterns.
+- **Vasanas**: latent tendencies that drive repeated behavior.
 
-#### Practical Framework
-Before beginning work: Name the dharma of the moment (clarity of role).  
-During action: Watch for craving praise or fearing failure (Karma Yoga).  
-After completion: Reflect on what was learned rather than achieved (reduces ego reinforcement).
+The operating premise is practical: when action is intentional, selfless, and observed with awareness, reactive conditioning decreases and psychological clarity increases.
 
----
+### Four Practice Lenses Implemented in the App
+1. **Karma Yoga:** Action without fixation on outcomes.
+2. **Bhakti:** Devotional orientation and gratitude.
+3. **Jnana:** Inquiry, self-observation, and identity clarity.
+4. **Dhyana:** Focused attention and contemplative stillness.
 
-## Monorepo Structure
-```
+## Feature Modules
+- **Buddhi Dashboard:** Central launcher and progress context.
+- **Karma Yoga Tracker:** Track service-oriented action.
+- **Bhakti Journal:** Record gratitude and devotional reflections.
+- **Jnana Reflection:** Capture insight and contemplative thought.
+- **Dhyana Meditation:** Support guided and self-led practice.
+- **Vasana Tracker:** Observe habit loops and triggers.
+- **Dharma Planner:** Align action items with role and purpose.
+- **Motivation and Analytics:** Present progress patterns and encouragement.
+
+## Architecture
+The repository is a workspace monorepo with independently versioned app and package units.
+
+```text
 apps/
-  frontend/    # Next.js 14+, TypeScript, Tailwind CSS, App Router
-  backend/     # Node.js/Express API (optional)
+   frontend/           Next.js app (App Router, TypeScript)
+   backend/            Express API with in-memory stores
 packages/
-  shared-ui/   # Themeable, accessible React components
-  site-config/ # Centralized config, themes, prompts
+   shared-ui/          Shared React UI components used by frontend
+   site-config/        Shared site/theme/config surface
 ```
 
-## Tech Stack
-- **Frontend:** Next.js 14+, TypeScript, Tailwind CSS v3, App Router
-- **Backend:** Node.js, Express (optional)
-- **UI Library:** Themeable, accessible React components
-- **Config:** Centralized site config, themes, and prompts
+### Runtime Model
+- Frontend runs independently as a static-capable Next.js web app.
+- Backend is optional for local API-backed workflows.
+- Shared packages are consumed through workspace links.
 
-## Extensibility & Maintainability
-- Modular packages for UI and config
-- Easy to add new modules/features
-- Clean, well-documented codebase
+### Architectural Rationale
+- **Monorepo:** ensures consistent dependency and quality policy across all modules.
+- **Shared UI package:** enforces visual and behavioral consistency.
+- **Optional backend:** allows both offline-style and API-backed development workflows.
+- **Explicit scripts:** makes CI parity straightforward for local contributors.
 
-## Privacy-First Design
-- No tracking or analytics by default
-- All data stored locally or in user-controlled environments
+## Repository Structure
+Key top-level files:
+- `package.json`: workspace orchestration scripts.
+- `package-lock.json`: reproducible dependency graph.
+- `buddhi-align-app.code-workspace`: VS Code workspace definition.
 
----
+Key app files:
+- `apps/frontend/app/page.tsx`: dashboard entry page.
+- `apps/backend/index.js`: API bootstrap and route definitions.
+- `apps/backend/index.test.js`: backend API test coverage.
 
-## Getting Started
-1. **Install dependencies:**
-   ```sh
-   npm install
-   ```
-2. **Run frontend:**
-   ```sh
-   cd apps/frontend
-   npm run dev
-   ```
-3. **Run backend (optional):**
-   ```sh
-   cd apps/backend
-   node index.js
-   ```
+## Technology Stack
+- **Frontend:** Next.js 14, React 18, TypeScript, Tailwind CSS.
+- **Backend:** Node.js, Express 5, CORS middleware.
+- **Testing:** Vitest + Testing Library (frontend), Node test runner + Supertest (backend).
+- **Monorepo orchestration:** npm workspaces + `npm-run-all`.
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
+## Quick Start
+### Prerequisites
+- Node.js 18+ recommended.
+- npm 9+ recommended.
 
----
+### Install
+```sh
+npm install
+```
 
-## Contributing
-Contributions are welcome! Please open issues or PRs for ideas, improvements, or bug fixes.
+### Run development environment
+```sh
+npm run dev
+```
 
-## License
-MIT
+This starts frontend and backend in parallel.
 
----
+### Open application
+- Frontend: `http://localhost:3000`
+- Backend (optional): `http://localhost:4000`
 
-## Author & Acknowledgments
-**Aarti Ravikumar**  
-Student, Shishu Bharati School  
-Essay and project inspired by the Bhagavad Gita, Vedanta, and yogic psychology.  
-Special thanks to Swami Chinmayananda, Mahatma Gandhi, and the teachers and community of Shishu Bharati.
+## Scripts and Development Workflows
+Run from repository root:
 
----
+- `npm run dev`: start frontend and backend together.
+- `npm run dev:frontend`: start Next.js frontend only.
+- `npm run dev:backend`: start Express backend only.
+- `npm run lint`: run frontend lint checks.
+- `npm test`: run frontend and backend tests.
+- `npm run build`: build frontend and run backend build step.
+
+### Recommended local quality loop
+```sh
+npm run lint && npm test && npm run build
+```
+
+## Backend API Contract
+Base URL: `http://localhost:4000`
+
+### Health/banner
+- `GET /` -> plain text: `Buddhi Align App Backend API`
+
+### Module resources
+Supported modules:
+- `karma`
+- `bhakti`
+- `jnana`
+- `dhyana`
+- `vasana`
+- `dharma`
+
+For each module `<mod>`:
+- `GET /api/<mod>`: list entries.
+- `POST /api/<mod>`: create entry; server assigns `id`.
+- `PUT /api/<mod>/:id`: update existing entry.
+- `DELETE /api/<mod>/:id`: delete entry.
+
+### Data behavior notes
+- Storage is in-memory only and resets on server restart.
+- `PUT` and `DELETE` return `404` when ID is not found.
+
+## Data Lifecycle and Privacy Model
+### Data classes
+- **Reflection entries:** user-provided text records across module workflows.
+- **Derived context:** UI-level summaries and display transformations.
+
+### Storage model
+- Default backend storage is volatile in-memory state for local development.
+- Restarting backend clears runtime data by design.
+
+### Privacy posture
+- No tracking analytics are enabled by default.
+- No automatic third-party export pipeline is included.
+- Users retain control over where and how deployment data is hosted.
+
+## Testing and Quality Gates
+- Frontend tests are under `apps/frontend/app/**/*.test.tsx`.
+- Backend tests are under `apps/backend/*.test.js`.
+
+Current CI-equivalent local checks:
+1. Linting passes (`next lint`).
+2. Frontend tests pass (`vitest run`).
+3. Backend API tests pass (`node --test`).
+4. Production build succeeds (`next build`).
+
+## Security Notes
+- Dependency scanning should be run periodically with:
+
+```sh
+npm audit --omit=dev
+```
+
+- Some advisories may require major-version upgrades. Handle these through controlled migrations with regression checks.
+
+## Operational Excellence Checklist
+- Clear build, lint, and test gates exist and are script-addressable.
+- Frontend and backend have independent test execution paths.
+- Module boundaries are explicit through workspace package topology.
+- Documentation includes architecture, API contract, and development lifecycle.
+- Reproducibility is enforced by lockfile and workspace scripts.
+
+## Roadmap and Future Research
+1. Add persistent storage adapters with explicit migration boundaries.
+2. Expand frontend test coverage to route-level and component integration depth.
+3. Introduce observability hooks for non-invasive quality diagnostics.
+4. Add export/import flows for user-owned reflection archives.
+5. Explore longitudinal insight models grounded in ethical AI and interpretability.
+
+## Contribution Guide
+1. Create a branch for your change.
+2. Keep modules and packages scoped; avoid cross-cutting edits unless necessary.
+3. Add or update tests for behavior changes.
+4. Run `npm run lint && npm test && npm run build` before opening a PR.
+5. Keep documentation in sync with code changes.
+
+## Author and Acknowledgments
+**Author:** Aarti Sri Ravikumar
+
+**Dedication:** This project is dedicated by **Aarti S Ravikumar** to **Shishubharati**.
+
+**Institution and gratitude:**
+- Shishu Bharati School: [https://www.shishubharati.net/](https://www.shishubharati.net/)
+- Grateful acknowledgment to the teachers and volunteers for their service and inspiration.
+- Intellectual inspiration from the Bhagavad Gita and the works of Swami Chinmayananda and Mahatma Gandhi.
 
 ## References
-- Bhagavad Gita. (n.d.). In classical Hindu scripture (Original work ca. 2nd century BCE).
-- Chinmayananda, S. (n.d.). *Holy Geeta*. Central Chinmaya Mission Trust.
-- Gandhi, M. K. (2009). *The Bhagavad Gita according to Gandhi* (J. Strohmeier, Ed.). North Atlantic Books.
-- Shishu Bharati School
+- Bhagavad Gita (classical Hindu scripture).
+- Chinmayananda, S. *Holy Geeta*.
+- Gandhi, M. K. *The Bhagavad Gita according to Gandhi*.
+- Shishu Bharati School: [https://www.shishubharati.net/](https://www.shishubharati.net/)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+ISC

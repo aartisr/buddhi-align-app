@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Buddhi Align Frontend
 
-## Getting Started
+[![Shishu Bharati Logo](https://www.shishubharati.net/wp-content/uploads/2024/07/ShishuBharati-Logo-Transparent-HiRes-150x150.png)](https://www.shishubharati.net/)
 
-First, run the development server:
+This frontend is dedicated by **Aarti S Ravikumar** to **Shishubharati**.
+
+The author is grateful to the teachers and volunteers of Shishu Bharati.
+
+Website: [https://www.shishubharati.net/](https://www.shishubharati.net/)
+
+## Overview
+This app is the Next.js frontend for Buddhi Align. It delivers a module-driven user interface for Buddhi Yoga inspired practices, including karma, bhakti, jnana, dhyana, vasana, and dharma pathways.
+
+## Stack
+- Next.js 14 (App Router)
+- React 18
+- TypeScript
+- Tailwind CSS
+- Vitest + Testing Library
+
+## Development
+Run from `apps/frontend`:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App URL: [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build and Quality
+```bash
+npm run lint
+npm run test
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Test Layout
+- `app/**/*.test.tsx`: frontend component and route-level tests.
+- `vitest.config.ts`: Vitest configuration.
+- `vitest.setup.ts`: DOM matcher setup.
 
-## Learn More
+## Key Conventions
+- Keep route files focused and lightweight.
+- Place reusable visuals in `app/components`.
+- Use shared package imports (`@buddhi-align/shared-ui`) for cross-module consistency.
+- Add tests for feature wiring and user-visible behavior.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Links
+- Root documentation: `README.md`
+- Next.js docs: [https://nextjs.org/docs](https://nextjs.org/docs)

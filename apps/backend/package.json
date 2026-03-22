@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.1.1"
+  },
+  "scripts": {
+    "dev": "node index.js",
+    "start": "node index.js",
+    "build": "echo \"backend: no compile step required\"",
+    "test": "node --test"
+  }
+}

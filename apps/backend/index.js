@@ -52,6 +52,10 @@ modules.forEach((mod) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Backend API listening at http://localhost:${port}`);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Backend API listening at http://localhost:${port}`);
+  });
+}
+
+module.exports = app;
