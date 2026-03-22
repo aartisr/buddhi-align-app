@@ -14,9 +14,55 @@ Website: [https://www.shishubharati.net/](https://www.shishubharati.net/)
 ## Abstract
 Buddhi Align App is a contemplative technology platform that operationalizes Buddhi Yoga principles into measurable, daily practice. The project combines philosophical depth with modern engineering rigor: modular architecture, testable boundaries, clear quality gates, and reproducible development workflows. Its objective is to support inner clarity through structured action, reflective observation, and habit-aware guidance.
 
+## App Screenshots
+Click the section below to expand and view full images.
+
+<details>
+<summary><strong>Expand Screenshot Gallery (click to view full images)</strong></summary>
+
+<br />
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="docs/screenshots/dashboard-home.png">
+        <img src="docs/screenshots/dashboard-home.png" alt="Buddhi Align Dashboard Home" width="320" />
+      </a>
+      <br />
+      <strong>Dashboard Home</strong>
+    </td>
+    <td align="center">
+      <a href="docs/screenshots/karma-yoga.png">
+        <img src="docs/screenshots/karma-yoga.png" alt="Karma Yoga Module" width="320" />
+      </a>
+      <br />
+      <strong>Karma Yoga Module</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="docs/screenshots/bhakti-journal.png">
+        <img src="docs/screenshots/bhakti-journal.png" alt="Bhakti Journal Module" width="320" />
+      </a>
+      <br />
+      <strong>Bhakti Journal Module</strong>
+    </td>
+    <td align="center">
+      <a href="docs/screenshots/motivation-analytics.png">
+        <img src="docs/screenshots/motivation-analytics.png" alt="Motivation and Analytics Module" width="320" />
+      </a>
+      <br />
+      <strong>Motivation and Analytics Module</strong>
+    </td>
+  </tr>
+</table>
+
+</details>
+
 ## Table of Contents
 - [Buddhi Align App](#buddhi-align-app)
   - [Abstract](#abstract)
+  - [App Screenshots](#app-screenshots)
   - [Table of Contents](#table-of-contents)
   - [Project Overview](#project-overview)
   - [Problem Statement and Scope](#problem-statement-and-scope)
