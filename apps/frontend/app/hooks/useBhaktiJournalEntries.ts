@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useModuleData } from "@buddhi-align/site-config";
 
 export interface BhaktiJournalEntry {
   id?: string;
@@ -7,33 +7,21 @@ export interface BhaktiJournalEntry {
   gratitude: string;
 }
 
+/**
+ * Hook for managing Bhakti Journal entries with automatic error handling and retries
+ * Uses the generic useModuleData hook for resilience
+ */
 export function useBhaktiJournalEntries() {
-  const [entries, setEntries] = useState<BhaktiJournalEntry[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry } =
+    useModuleData<BhaktiJournalEntry>("bhakti");
 
-  useEffect(() => {
-    fetch("http://localhost:4000/api/bhakti")
-      .then((res) => res.json())
-      .then((data) => {
-        setEntries(data);
-        setLoading(false);
-      });
-  }, []);
-
-  const addEntry = async (entry: Omit<BhaktiJournalEntry, "id">) => {
-    const res = await fetch("http://localhost:4000/api/bhakti", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(entry),
-    });
-    const newEntry = await res.json();
-    setEntries((prev) => [...prev, newEntry]);
+  return {
+    entries: data,
+    loading,
+    error,
+    refetch,
+    addEntry,
+    updateEntry,
+    deleteEntry,
   };
-
-  const deleteEntry = async (id: string) => {
-    await fetch(`http://localhost:4000/api/bhakti/${id}`, { method: "DELETE" });
-    setEntries((prev) => prev.filter((e) => e.id !== id));
-  };
-
-  return { entries, loading, addEntry, deleteEntry };
 }

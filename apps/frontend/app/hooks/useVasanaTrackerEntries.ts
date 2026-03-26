@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useModuleData } from "@buddhi-align/site-config";
 
 export interface VasanaTrackerEntry {
   id?: string;
@@ -8,33 +8,20 @@ export interface VasanaTrackerEntry {
   notes: string;
 }
 
+/**
+ * Hook for managing Vasana Tracker entries with automatic error handling and retries
+ */
 export function useVasanaTrackerEntries() {
-  const [entries, setEntries] = useState<VasanaTrackerEntry[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry } =
+    useModuleData<VasanaTrackerEntry>("vasana");
 
-  useEffect(() => {
-    fetch("http://localhost:4000/api/vasana")
-      .then((res) => res.json())
-      .then((data) => {
-        setEntries(data);
-        setLoading(false);
-      });
-  }, []);
-
-  const addEntry = async (entry: Omit<VasanaTrackerEntry, "id">) => {
-    const res = await fetch("http://localhost:4000/api/vasana", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(entry),
-    });
-    const newEntry = await res.json();
-    setEntries((prev) => [...prev, newEntry]);
+  return {
+    entries: data,
+    loading,
+    error,
+    refetch,
+    addEntry,
+    updateEntry,
+    deleteEntry,
   };
-
-  const deleteEntry = async (id: string) => {
-    await fetch(`http://localhost:4000/api/vasana/${id}`, { method: "DELETE" });
-    setEntries((prev) => prev.filter((e) => e.id !== id));
-  };
-
-  return { entries, loading, addEntry, deleteEntry };
 }
