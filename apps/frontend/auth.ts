@@ -24,6 +24,19 @@ function getValidatedAuthUrl(url?: string): string | undefined {
   }
 }
 
+function shouldIgnoreConfiguredAuthUrl(url?: string): boolean {
+  if (!url || process.env.NODE_ENV === "production") {
+    return false;
+  }
+
+  try {
+    const parsed = new URL(url);
+    return ["localhost", "127.0.0.1", "0.0.0.0"].includes(parsed.hostname);
+  } catch {
+    return true;
+  }
+}
+
 const configuredAuthUrl = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL;
 
 if (process.env.NODE_ENV === "production") {
@@ -32,12 +45,18 @@ if (process.env.NODE_ENV === "production") {
   delete process.env.AUTH_URL;
   delete process.env.NEXTAUTH_URL;
 } else {
+  if (shouldIgnoreConfiguredAuthUrl(configuredAuthUrl)) {
+    delete process.env.AUTH_URL;
+    delete process.env.NEXTAUTH_URL;
+    console.warn("Ignoring localhost auth URL in development and falling back to request host.");
+  }
+
   const validatedAuthUrl = getValidatedAuthUrl(configuredAuthUrl);
-  if (configuredAuthUrl && !validatedAuthUrl) {
+  if (configuredAuthUrl && !validatedAuthUrl && !shouldIgnoreConfiguredAuthUrl(configuredAuthUrl)) {
     delete process.env.AUTH_URL;
     delete process.env.NEXTAUTH_URL;
     console.warn("Ignoring invalid auth URL and falling back to request host.");
-  } else if (validatedAuthUrl) {
+  } else if (validatedAuthUrl && !shouldIgnoreConfiguredAuthUrl(configuredAuthUrl)) {
     process.env.AUTH_URL = validatedAuthUrl;
     process.env.NEXTAUTH_URL = validatedAuthUrl;
   }

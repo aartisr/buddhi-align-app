@@ -2,6 +2,10 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useI18n } from "../i18n/provider";
+import {
+  PREFERENCES_UPDATED_EVENT,
+  readMusicControlVisibilityPreference,
+} from "../preferences";
 
 const DEFAULT_BGM_URL = "https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.mp3";
 
@@ -39,6 +43,7 @@ export default function BackgroundMusic() {
   const [volume, setVolume] = useState(0.4);
   const [prompt, setPrompt] = useState(true);
   const [trackIndex, setTrackIndex] = useState(0);
+  const [controlVisible, setControlVisible] = useState(false);
 
   const startPlayback = useCallback(async () => {
     if (!audioRef.current) return;
@@ -57,6 +62,21 @@ export default function BackgroundMusic() {
     if (!audioRef.current) return;
     audioRef.current.volume = volume;
   }, [volume]);
+
+  useEffect(() => {
+    const syncVisibility = () => {
+      setControlVisible(readMusicControlVisibilityPreference());
+    };
+
+    syncVisibility();
+    window.addEventListener(PREFERENCES_UPDATED_EVENT, syncVisibility as EventListener);
+    window.addEventListener("storage", syncVisibility);
+
+    return () => {
+      window.removeEventListener(PREFERENCES_UPDATED_EVENT, syncVisibility as EventListener);
+      window.removeEventListener("storage", syncVisibility);
+    };
+  }, []);
 
   useEffect(() => {
     void startPlayback();
@@ -94,6 +114,10 @@ export default function BackgroundMusic() {
       audioRef.current.volume = nextVolume;
     }
   };
+
+  if (!controlVisible) {
+    return null;
+  }
 
   return (
     <div className="app-music-panel">

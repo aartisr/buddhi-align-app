@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { ANONYMOUS_COOKIE_NAME, isAnonymousCookie } from "@/app/auth/anonymous";
 import { NextResponse } from "next/server";
 
 /**
@@ -7,12 +8,13 @@ import { NextResponse } from "next/server";
  */
 export default auth((req) => {
   const { pathname } = req.nextUrl;
+  const isAnonymous = isAnonymousCookie(req.cookies.get(ANONYMOUS_COOKIE_NAME)?.value);
 
   const isPublic =
     pathname.startsWith("/sign-in") ||
     pathname.startsWith("/api/auth");
 
-  if (!req.auth && !isPublic) {
+  if (!req.auth && !isPublic && !isAnonymous) {
     const signInUrl = new URL("/sign-in", req.nextUrl.origin);
     signInUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(signInUrl);

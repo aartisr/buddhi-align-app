@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useState, useEffect } from "react";
+import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
 
-import LanguageSwitcher from "./LanguageSwitcher";
 import UserMenu from "./UserMenu";
 import BuddhiAlignLogo from "./BuddhiAlignLogo";
 import { MODULE_CATALOG, type TranslationKey } from "../i18n/config";
@@ -11,9 +12,68 @@ import { useI18n } from "../i18n/provider";
 
 export default function ModuleLayout({ titleKey, children }: { titleKey: TranslationKey; children: React.ReactNode }) {
   const { t } = useI18n();
+  const pathname = usePathname();
   const icon = MODULE_CATALOG.find((item) => item.titleKey === titleKey)?.icon ?? "";
-  const navItems = MODULE_CATALOG.filter((item) => item.navKey);
+  const moduleByKey = new Map(MODULE_CATALOG.map((item) => [item.key, item]));
+  const menuGroups = [
+    {
+      key: "home",
+      icon: "🏠",
+      label: "Home",
+      items: [
+        { key: "dashboard", icon: "🏠", href: "/", label: t("app.dashboard") },
+      ],
+    },
+    {
+      key: "practice",
+      icon: "🧘",
+      label: "Practice",
+      items: (["karma", "bhakti", "dhyana"] as const).map((moduleKey) => {
+        const item = moduleByKey.get(moduleKey)!;
+        return {
+          key: item.key,
+          icon: item.icon,
+          href: item.href,
+          label: t(item.navKey ?? item.titleKey),
+        };
+      }),
+    },
+    {
+      key: "reflection",
+      icon: "💭",
+      label: "Reflection",
+      items: (["jnana", "vasana"] as const).map((moduleKey) => {
+        const item = moduleByKey.get(moduleKey)!;
+        return {
+          key: item.key,
+          icon: item.icon,
+          href: item.href,
+          label: t(item.navKey ?? item.titleKey),
+        };
+      }),
+    },
+    {
+      key: "insights",
+      icon: "📊",
+      label: "Plan & Insights",
+      items: (["dharma", "motivation"] as const).map((moduleKey) => {
+        const item = moduleByKey.get(moduleKey)!;
+        return {
+          key: item.key,
+          icon: item.icon,
+          href: item.href,
+          label: t(item.navKey ?? item.titleKey),
+        };
+      }),
+    },
+  ] as const;
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    setIsAnonymous(document.cookie.includes(`${ANONYMOUS_COOKIE_NAME}=${ANONYMOUS_COOKIE_VALUE}`));
+  }, []);
 
   // Close drawer on Escape key
   useEffect(() => {
@@ -30,6 +90,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
   }, [mobileNavOpen]);
 
   const closeNav = () => setMobileNavOpen(false);
+  const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(pathname || "/")}`;
 
   return (
     <div className="app-shell relative font-sans">
@@ -44,23 +105,32 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
         )}
 
         {/* ── Header ── */}
-        <header className="app-header-panel w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between relative z-20">
+        <header className="app-header-panel w-full px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-3 relative z-20">
           <h1>
             <Link href="/" className="inline-flex items-center" aria-label={t("app.brand")}>
               <BuddhiAlignLogo className="h-10 sm:h-11 w-auto" />
             </Link>
           </h1>
+          {/* Desktop centered nav */}
+          <nav className="hidden lg:flex items-center justify-center gap-2 text-sm font-medium app-copy" aria-label="Main navigation">
+            {menuGroups.map((group) => (
+              <div key={group.key} className="app-nav-group">
+                <button type="button" className="app-nav-group-trigger" aria-haspopup="menu">
+                  <span className="app-nav-item-icon" aria-hidden>{group.icon}</span>
+                  {group.label}
+                </button>
+                <div className="app-nav-submenu" role="menu" aria-label={group.label}>
+                  {group.items.map((item) => (
+                    <Link key={item.key} href={item.href} className="app-nav-submenu-link" role="menuitem">
+                      <span className="app-nav-item-icon" aria-hidden>{item.icon}</span>
+                      <span>{item.label}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </nav>
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Desktop nav */}
-            <nav className="hidden lg:flex gap-4 text-sm font-medium app-copy" aria-label="Main navigation">
-              <Link href="/" className="hover:underline">{t("layout.home")}</Link>
-              {navItems.map((item) => (
-                <Link key={item.key} href={item.href} className="hover:underline">
-                  {t(item.navKey!)}
-                </Link>
-              ))}
-            </nav>
-            <LanguageSwitcher />
             <UserMenu />
             {/* Mobile hamburger */}
             <button
@@ -76,6 +146,20 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
             </button>
           </div>
         </header>
+
+        {isAnonymous && (
+          <div className="app-anonymous-banner px-4 sm:px-6 py-3 relative z-20" role="status" aria-live="polite">
+            <div className="app-anonymous-banner-inner">
+              <p className="app-anonymous-banner-copy">
+                <span className="app-anonymous-banner-strong">{t("auth.anonymousBannerTitle")}</span>{" "}
+                {t("auth.persistHint")}
+              </p>
+              <Link href={signInHref} className="app-anonymous-banner-cta">
+                {t("auth.signInToSave")}
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* ── Mobile nav backdrop ── */}
         {mobileNavOpen && (
@@ -98,16 +182,28 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
             <button onClick={closeNav} className="app-mobile-nav-close" aria-label="Close menu">✕</button>
           </div>
           <ul className="app-mobile-nav-list">
-            <li>
-              <Link href="/" className="app-mobile-nav-link" onClick={closeNav}>🏠 {t("layout.home")}</Link>
-            </li>
-            {MODULE_CATALOG.map((item) => (
-              <li key={item.key}>
-                <Link href={item.href} className="app-mobile-nav-link" onClick={closeNav}>
-                  {item.icon} {t(item.titleKey)}
-                </Link>
+            {menuGroups.map((group) => (
+              <li key={group.key} className="app-mobile-nav-group">
+                <p className="app-mobile-nav-group-title">{group.label}</p>
+                <div>
+                  {group.items.map((item) => (
+                    <Link key={item.key} href={item.href} className="app-mobile-nav-link" onClick={closeNav}>
+                      <span className="app-nav-item-icon" aria-hidden>{item.icon}</span>
+                      <span>{item.label}</span>
+                    </Link>
+                  ))}
+                </div>
               </li>
             ))}
+            <li className="app-mobile-nav-group">
+              <p className="app-mobile-nav-group-title">{t("app.settings.title")}</p>
+              <div>
+                <Link href="/settings" className="app-mobile-nav-link" onClick={closeNav}>
+                  <span className="app-nav-item-icon" aria-hidden>⚙️</span>
+                  <span>{t("app.settings.link")}</span>
+                </Link>
+              </div>
+            </li>
           </ul>
         </nav>
 

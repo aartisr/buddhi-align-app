@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { ANONYMOUS_COOKIE_NAME, isAnonymousCookie } from '@/app/auth/anonymous';
 import { createDataProvider } from '@buddhi-align/data-access';
+import {
+  createAnonymousEntry,
+  listAnonymousEntries,
+} from '../_anonymous-module-store';
 
 const VALID_MODULES = new Set([
   'karma',
@@ -12,12 +17,17 @@ const VALID_MODULES = new Set([
 
 /** GET /api/[module] — list all entries */
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: { module: string } },
 ) {
   if (!VALID_MODULES.has(params.module)) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
+
+  if (isAnonymousCookie(req.cookies.get(ANONYMOUS_COOKIE_NAME)?.value)) {
+    return NextResponse.json(listAnonymousEntries(params.module));
+  }
+
   try {
     const data = await createDataProvider().list(params.module);
     return NextResponse.json(data);
@@ -48,6 +58,11 @@ export async function POST(
       { error: 'Request body must be a non-null object' },
       { status: 400 },
     );
+  }
+
+  if (isAnonymousCookie(req.cookies.get(ANONYMOUS_COOKIE_NAME)?.value)) {
+    const entry = createAnonymousEntry(params.module, body);
+    return NextResponse.json(entry, { status: 201 });
   }
 
   try {

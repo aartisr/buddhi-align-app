@@ -1,9 +1,12 @@
 import { signIn } from "@/auth";
+import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
 import { translate, DEFAULT_LOCALE, type TranslationKey } from "@/app/i18n/config";
 import {
   getConfiguredOAuthProviders,
   type OAuthProviderId,
 } from "@/app/auth/provider-catalog";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
 /** Brand colours for providers */
@@ -103,7 +106,7 @@ export default function SignInPage({
           <h1 className="app-page-title text-3xl font-bold tracking-tight">
             {t("app.brand")}
           </h1>
-          <p className="app-copy-soft mt-2 text-sm">
+          <p className="app-signin-subtitle mt-2 text-sm">
             {t("auth.chooseProvider")}
           </p>
         </div>
@@ -123,6 +126,38 @@ export default function SignInPage({
             {t("auth.signIn")}
           </p>
 
+          <div className="app-anonymous-callout rounded-xl p-4 mb-4" role="note" aria-label={t("auth.anonymousWarningTitle")}>
+            <p className="app-anonymous-title text-sm font-semibold">
+              {t("auth.anonymousWarningTitle")}
+            </p>
+            <p className="app-anonymous-copy text-xs mt-1">
+              {t("auth.anonymousWarningBody")}
+            </p>
+            <form
+              className="mt-3"
+              action={async () => {
+                "use server";
+                cookies().set({
+                  name: ANONYMOUS_COOKIE_NAME,
+                  value: ANONYMOUS_COOKIE_VALUE,
+                  sameSite: "lax",
+                  secure: process.env.NODE_ENV === "production",
+                  path: "/",
+                  maxAge: 60 * 60 * 24 * 7,
+                });
+                redirect(callbackUrl);
+              }}
+            >
+              <button
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-150 app-anonymous-button shadow-sm hover:shadow-md active:scale-[0.98]"
+              >
+                <span aria-hidden>🕊️</span>
+                <span>{t("auth.continueAnonymously")}</span>
+              </button>
+            </form>
+          </div>
+
           {configuredProviders.map((provider) => {
             const theme = PROVIDER_THEME[provider.id];
 
@@ -131,6 +166,12 @@ export default function SignInPage({
                 key={provider.id}
                 action={async () => {
                   "use server";
+                  cookies().set({
+                    name: ANONYMOUS_COOKIE_NAME,
+                    value: "",
+                    path: "/",
+                    maxAge: 0,
+                  });
                   await signIn(provider.id, { redirectTo: callbackUrl });
                 }}
               >
@@ -152,6 +193,10 @@ export default function SignInPage({
               {t("auth.noProviders")}
             </p>
           )}
+
+          <p className="app-copy-subtle text-[11px] leading-relaxed text-center pt-2">
+            {t("auth.persistHint")}
+          </p>
         </div>
 
         {/* Footer note */}

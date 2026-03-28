@@ -361,6 +361,92 @@ a:hover {
   box-shadow: 0 24px 56px rgba(67, 45, 215, 0.14);
 }
 
+.app-signin-subtitle {
+  color: #374151;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-signin-subtitle {
+    color: #1f2937;
+  }
+}
+
+.app-anonymous-callout {
+  background: linear-gradient(145deg, rgba(254, 243, 199, 0.85) 0%, rgba(255, 251, 235, 0.95) 100%);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+
+.app-anonymous-title {
+  color: #92400e;
+}
+
+.app-anonymous-copy {
+  color: #78350f;
+}
+
+.app-anonymous-button {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+  color: #fffbeb;
+  border: 1px solid rgba(120, 53, 15, 0.35);
+}
+
+.app-anonymous-button:hover {
+  filter: saturate(1.08) brightness(1.02);
+}
+
+.app-anonymous-button:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+}
+
+.app-anonymous-banner {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.75) 0%, rgba(255, 247, 220, 0.92) 100%);
+  border-top: 1px solid rgba(217, 119, 6, 0.2);
+  border-bottom: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+.app-anonymous-banner-inner {
+  max-width: 56rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.app-anonymous-banner-copy {
+  margin: 0;
+  color: #7c2d12;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.app-anonymous-banner-strong {
+  font-weight: 700;
+}
+
+.app-anonymous-banner-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.65rem;
+  padding: 0.4rem 0.8rem;
+  background: #92400e;
+  color: #fffbeb;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.app-anonymous-banner-cta:hover,
+.app-anonymous-banner-cta:focus-visible {
+  background: #7c2d12;
+  color: #fffbeb;
+  outline: none;
+}
+
 .app-section-heading {
   color: var(--primary);
 }
@@ -551,6 +637,210 @@ a:hover {
   background: var(--surface-soft);
   color: var(--primary);
   outline: none;
+}
+
+.app-mobile-nav-group {
+  margin-bottom: 0.625rem;
+}
+
+.app-mobile-nav-group-title {
+  margin: 0;
+  padding: 0.75rem 1.25rem 0.25rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  font-weight: 700;
+}
+
+/* Desktop grouped nav */
+.app-nav-group {
+  position: relative;
+}
+
+.app-nav-group-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 999px;
+  color: var(--text-muted);
+  padding: 0.45rem 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.app-nav-group:hover .app-nav-group-trigger,
+.app-nav-group:focus-within .app-nav-group-trigger {
+  border-color: var(--border-soft);
+  background: var(--surface-soft);
+  color: var(--primary);
+}
+
+.app-nav-submenu {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  min-width: 12rem;
+  background: var(--surface-strong);
+  border: 1px solid var(--border-soft);
+  border-radius: 0.75rem;
+  box-shadow: 0 16px 36px rgba(24, 24, 27, 0.16);
+  padding: 0.4rem;
+  display: none;
+  z-index: 60;
+}
+
+.app-nav-group:hover .app-nav-submenu,
+.app-nav-group:focus-within .app-nav-submenu {
+  display: block;
+}
+
+.app-nav-submenu-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.88rem;
+}
+
+.app-nav-submenu-link:hover,
+.app-nav-submenu-link:focus-visible {
+  background: var(--surface-soft);
+  color: var(--primary);
+  outline: none;
+}
+
+.app-nav-item-icon {
+  width: 1rem;
+  height: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Preferences panel */
+.app-preferences {
+  position: relative;
+}
+
+.app-preferences-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--border-soft);
+  background: var(--surface-soft);
+  color: var(--text-muted);
+  border-radius: 0.65rem;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.app-preferences-trigger:hover,
+.app-preferences-trigger:focus-visible {
+  color: var(--primary);
+  border-color: var(--border-strong);
+  outline: none;
+}
+
+.app-preferences-panel {
+  width: min(22rem, 92vw);
+  background: var(--surface-strong);
+  border: 1px solid var(--border-soft);
+  border-radius: 0.9rem;
+  box-shadow: 0 20px 40px rgba(24, 24, 27, 0.15);
+  padding: 0.85rem;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.app-preferences .app-preferences-panel {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  z-index: 70;
+}
+
+.app-surface-card .app-preferences .app-preferences-panel {
+  position: static;
+  width: 100%;
+  box-shadow: none;
+  border-radius: 0.75rem;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+.app-preferences-row {
+  display: grid;
+  gap: 0.55rem;
+  margin-bottom: 0.9rem;
+}
+
+.app-preferences-row:last-child {
+  margin-bottom: 0;
+}
+
+.app-preferences-label {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.83rem;
+  font-weight: 600;
+}
+
+.app-preferences-select {
+  min-height: 2.5rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.6rem;
+  background: var(--surface);
+  color: var(--text-muted);
+  padding: 0.45rem 0.7rem;
+  font-size: 0.9rem;
+}
+
+.app-preferences-select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+.app-preferences-toggle-group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.app-preferences-toggle {
+  min-height: 2.3rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.6rem;
+  background: var(--surface);
+  color: var(--text-soft);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.app-preferences-toggle:hover,
+.app-preferences-toggle:focus-visible {
+  border-color: var(--border-strong);
+  color: var(--primary);
+  outline: none;
+}
+
+.app-preferences-toggle.is-active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border-color: transparent;
+  color: #fff;
 }
 
 /* ── Responsive layout helpers ────────────────────────────── */

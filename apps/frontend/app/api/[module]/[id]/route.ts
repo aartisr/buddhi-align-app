@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { ANONYMOUS_COOKIE_NAME, isAnonymousCookie } from '@/app/auth/anonymous';
 import { createDataProvider } from '@buddhi-align/data-access';
+import {
+  deleteAnonymousEntry,
+  updateAnonymousEntry,
+} from '../../_anonymous-module-store';
 
 const VALID_MODULES = new Set([
   'karma',
@@ -27,6 +32,11 @@ export async function PUT(
   }
 
   try {
+    if (isAnonymousCookie(req.cookies.get(ANONYMOUS_COOKIE_NAME)?.value)) {
+      const entry = updateAnonymousEntry(params.module, params.id, body);
+      return NextResponse.json(entry);
+    }
+
     const entry = await createDataProvider().update(
       params.module,
       params.id,
@@ -44,7 +54,7 @@ export async function PUT(
 
 /** DELETE /api/[module]/[id] — remove an entry */
 export async function DELETE(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: { module: string; id: string } },
 ) {
   if (!VALID_MODULES.has(params.module)) {
@@ -52,6 +62,11 @@ export async function DELETE(
   }
 
   try {
+    if (isAnonymousCookie(req.cookies.get(ANONYMOUS_COOKIE_NAME)?.value)) {
+      deleteAnonymousEntry(params.module, params.id);
+      return new NextResponse(null, { status: 204 });
+    }
+
     await createDataProvider().delete(params.module, params.id);
     return new NextResponse(null, { status: 204 });
   } catch (err) {

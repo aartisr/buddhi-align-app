@@ -1,8 +1,10 @@
 "use client";
 
+import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useI18n } from "../i18n/provider";
 
 /**
@@ -13,6 +15,12 @@ import { useI18n } from "../i18n/provider";
 export default function UserMenu() {
   const { data: session, status } = useSession();
   const { t } = useI18n();
+  const [isAnonymous, setIsAnonymous] = useState(false);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    setIsAnonymous(document.cookie.includes(`${ANONYMOUS_COOKIE_NAME}=${ANONYMOUS_COOKIE_VALUE}`));
+  }, []);
 
   if (status === "loading") {
     return <div className="w-8 h-8 rounded-full bg-zinc-200 animate-pulse" aria-label="Loading session" />;
@@ -20,12 +28,19 @@ export default function UserMenu() {
 
   if (!session) {
     return (
-      <Link
-        href="/sign-in"
-        className="text-sm font-medium px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
-      >
-        {t("auth.signIn")}
-      </Link>
+      <div className="flex items-center gap-2">
+        {isAnonymous && (
+          <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+            {t("auth.anonymousBadge")}
+          </span>
+        )}
+        <Link
+          href="/sign-in"
+          className="text-sm font-medium px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+        >
+          {isAnonymous ? t("auth.signInToSave") : t("auth.signIn")}
+        </Link>
+      </div>
     );
   }
 
@@ -47,6 +62,12 @@ export default function UserMenu() {
       <span className="text-sm font-medium hidden sm:inline text-zinc-700 dark:text-zinc-200 max-w-30 truncate">
         {session.user?.name ?? session.user?.email}
       </span>
+      <Link
+        href="/settings"
+        className="text-xs px-2 py-1 rounded border border-zinc-300 dark:border-zinc-600 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+      >
+        {t("app.settings.link")}
+      </Link>
       <button
         onClick={() => signOut({ callbackUrl: "/sign-in" })}
         className="text-xs px-2 py-1 rounded border border-zinc-300 dark:border-zinc-600 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
