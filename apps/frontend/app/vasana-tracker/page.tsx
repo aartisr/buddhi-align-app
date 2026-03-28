@@ -4,6 +4,7 @@ import ModuleLayout from "../components/ModuleLayout";
 import ModuleEntryForm from "../components/ModuleEntryForm";
 import EntryDeleteList from "../components/EntryDeleteList";
 import { ModuleFormField } from "../components/ModuleFormFields";
+import DailyReflectionPrompt from "../components/DailyReflectionPrompt";
 import {
   getVasanaFields,
   type VasanaFormState,
@@ -21,6 +22,7 @@ export default function VasanaTrackerPage() {
 
   return (
     <ModuleLayout titleKey="module.vasana.title">
+      <DailyReflectionPrompt module="vasana" />
       <ModuleEntryForm
         title={t("module.vasana.title")}
         icon="🌱"

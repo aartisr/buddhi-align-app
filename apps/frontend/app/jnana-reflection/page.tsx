@@ -4,6 +4,7 @@ import ModuleLayout from "../components/ModuleLayout";
 import ModuleEntryForm from "../components/ModuleEntryForm";
 import EntryDeleteList from "../components/EntryDeleteList";
 import { ModuleFormField } from "../components/ModuleFormFields";
+import DailyReflectionPrompt from "../components/DailyReflectionPrompt";
 import {
   getJnanaFields,
   JNANA_INITIAL_FORM_STATE,
@@ -21,6 +22,7 @@ export default function JnanaReflectionPage() {
 
   return (
     <ModuleLayout titleKey="module.jnana.title">
+      <DailyReflectionPrompt module="jnana" />
       <ModuleEntryForm
         title={t("module.jnana.title")}
         icon="🧘‍♂️"

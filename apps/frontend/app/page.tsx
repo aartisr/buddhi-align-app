@@ -3,6 +3,7 @@
 import React from "react";
 import { BuddhiDashboard } from "@buddhi-align/shared-ui";
 import ModuleLayout from "./components/ModuleLayout";
+import DailyRings from "./components/DailyRings";
 import { useI18n, useLocalizedModules } from "./i18n/provider";
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
 
   return (
     <ModuleLayout titleKey="app.dashboard">
+      <DailyRings />
       <BuddhiDashboard
         userName={t("dashboard.defaultUser")}
         heading={t("app.dashboard")}

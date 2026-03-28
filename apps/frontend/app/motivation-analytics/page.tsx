@@ -2,9 +2,10 @@
 
 import dynamic from "next/dynamic";
 import ModuleLayout from "../components/ModuleLayout";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MOTIVATIONAL_QUOTES } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
+import type { AnalyticsPayload } from "../api/analytics/types";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -16,6 +17,7 @@ export default function MotivationAnalyticsPage() {
   const { locale, t } = useI18n();
   const quotes = MOTIVATIONAL_QUOTES[locale] ?? MOTIVATIONAL_QUOTES.en;
   const [quote, setQuote] = useState(getRandomQuote(quotes));
+  const [loadingStats, setLoadingStats] = useState(true);
 
   const [stats, setStats] = useState({
     karma: 0,
@@ -70,40 +72,47 @@ export default function MotivationAnalyticsPage() {
     }
   });
 
-  useEffect(() => {
-    // Simulate fetching analytics data from backend
-    const timer = setTimeout(() => {
+  const fetchAnalytics = useCallback(async () => {
+    setLoadingStats(true);
+    try {
+      const res = await fetch("/api/analytics");
+      if (!res.ok) throw new Error("analytics fetch failed");
+      const data: AnalyticsPayload = await res.json();
       const newStats = {
-        karma: 42,
-        bhakti: 37,
-        jnana: 29,
-        dhyana: 51,
-        vasana: 18,
-        dharma: 24,
-        streak: 12,
-        totalEntries: 201
+        karma: data.counts.karma,
+        bhakti: data.counts.bhakti,
+        jnana: data.counts.jnana,
+        dhyana: data.counts.dhyana,
+        vasana: data.counts.vasana,
+        dharma: data.counts.dharma,
+        streak: data.streak,
+        totalEntries: data.totalEntries,
       };
       setStats(newStats);
       setChartData((prev) => ({
         ...prev,
         series: [{
-            name: t("motivation.entries"),
+          name: t("motivation.entries"),
           data: [
             newStats.karma,
             newStats.bhakti,
             newStats.jnana,
             newStats.dhyana,
             newStats.vasana,
-            newStats.dharma
-          ]
-        }]
+            newStats.dharma,
+          ],
+        }],
       }));
-    }, 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
+    } catch {
+      // Non-fatal: stats remain at zero if analytics API is unavailable.
+    } finally {
+      setLoadingStats(false);
+    }
   }, [t]);
+
+  useEffect(() => {
+    fetchAnalytics();
+  }, [fetchAnalytics]);
 
   useEffect(() => {
     setChartData((prev) => ({
@@ -161,46 +170,56 @@ export default function MotivationAnalyticsPage() {
             )}
           </div>
         </div>
+        <div className="w-full max-w-3xl flex justify-end mb-2">
+          <button
+            className="app-analytics-refresh"
+            onClick={fetchAnalytics}
+            disabled={loadingStats}
+            aria-label={t("motivation.refresh")}
+          >
+            {loadingStats ? "⏳" : "🔄"} {t("motivation.refresh")}
+          </button>
+        </div>
         <div className="w-full max-w-3xl grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8 sm:mb-10">
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🙏</span>
             <span className="font-bold text-lg text-emerald-800">{t("layout.module.karma")}</span>
-            <span className="app-stat-value-warm text-2xl font-extrabold">{stats.karma}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="app-stat-value-warm text-2xl font-extrabold">{stats.karma}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🌸</span>
             <span className="font-bold text-lg text-rose-800">{t("layout.module.bhakti")}</span>
-            <span className="text-2xl text-rose-700 font-extrabold">{stats.bhakti}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl text-rose-700 font-extrabold">{stats.bhakti}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🧘‍♂️</span>
             <span className="font-bold text-lg text-indigo-800">{t("layout.module.jnana")}</span>
-            <span className="text-2xl text-indigo-700 font-extrabold">{stats.jnana}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl text-indigo-700 font-extrabold">{stats.jnana}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🧘‍♀️</span>
             <span className="font-bold text-lg text-emerald-800">{t("layout.module.dhyana")}</span>
-            <span className="text-2xl text-emerald-700 font-extrabold">{stats.dhyana}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl text-emerald-700 font-extrabold">{stats.dhyana}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🌱</span>
             <span className="app-stat-title-amber font-bold text-lg">{t("layout.module.vasana")}</span>
-            <span className="app-stat-value-warm text-2xl font-extrabold">{stats.vasana}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="app-stat-value-warm text-2xl font-extrabold">{stats.vasana}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">📜</span>
             <span className="font-bold text-lg text-indigo-800">{t("layout.module.dharma")}</span>
-            <span className="text-2xl text-indigo-700 font-extrabold">{stats.dharma}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl text-indigo-700 font-extrabold">{stats.dharma}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🔥</span>
             <span className="app-stat-title-primary font-bold text-lg">{t("motivation.streak")}</span>
-            <span className="app-stat-value-primary text-2xl font-extrabold">{stats.streak} {t("motivation.days")}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="app-stat-value-primary text-2xl font-extrabold">{stats.streak} {t("motivation.days")}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">📈</span>
             <span className="app-stat-title-amber font-bold text-lg">{t("motivation.totalEntries")}</span>
-            <span className="app-stat-value-warm text-2xl font-extrabold">{stats.totalEntries}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="app-stat-value-warm text-2xl font-extrabold">{stats.totalEntries}</span>}
           </div>
         </div>
       </section>

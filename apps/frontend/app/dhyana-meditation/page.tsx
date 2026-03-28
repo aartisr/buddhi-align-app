@@ -4,6 +4,7 @@ import ModuleLayout from "../components/ModuleLayout";
 import ModuleEntryForm from "../components/ModuleEntryForm";
 import EntryDeleteList from "../components/EntryDeleteList";
 import { ModuleFormField } from "../components/ModuleFormFields";
+import PranayamaTimer from "../components/PranayamaTimer";
 import {
   DHYANA_INITIAL_FORM_STATE,
   getDhyanaFields,
@@ -21,6 +22,7 @@ export default function DhyanaMeditationPage() {
 
   return (
     <ModuleLayout titleKey="module.dhyana.title">
+      <PranayamaTimer />
       <ModuleEntryForm
         title={t("module.dhyana.title")}
         icon="🧘‍♀️"

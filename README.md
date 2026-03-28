@@ -292,11 +292,24 @@ npm audit --omit=dev
 - Reproducibility is enforced by lockfile and workspace scripts.
 
 ## Roadmap and Future Research
+
+### Engineering Foundation
 1. Add persistent storage adapters with explicit migration boundaries.
 2. Expand frontend test coverage to route-level and component integration depth.
 3. Introduce observability hooks for non-invasive quality diagnostics.
 4. Add export/import flows for user-owned reflection archives.
 5. Explore longitudinal insight models grounded in ethical AI and interpretability.
+
+### Product Gaps (vs. Top Wellness Apps)
+6. **Daily reminders / mindful notifications** — The single highest-impact engagement driver across Headspace, Calm, and Insight Timer. Configurable per-module gentle nudges.
+7. **Achievement system** — Milestone badges beyond streaks (first entry, 7-day consistency, module mastery). Streaks alone retain poorly without reward anchors.
+8. **Mood / inner state check-in** — A fast daily emotional pulse (1–5 scale with optional note) surfaced at module entry. Present in every top-10 wellness app.
+9. **Offline capability** — Service Worker / PWA support so practices remain accessible during retreats or low-connectivity moments — critical for a contemplative app.
+
+### Social Media Trends (Top 3 by Engagement Volume)
+10. **AI-powered journaling prompts** *(trending: `#AIjournaling`, `#ChatGPTjournal`)* — Context-aware daily reflection prompts generated from the user's own entry history across Jnana, Bhakti, and Vasana modules. Personalization without surveillance.
+11. **Pranayama / breathwork visual guide** *(trending: `#breathwork`, `#pranayama` — 800M+ TikTok views)* — An animated inhale/hold/exhale breathing timer integrated into the Dhyana module. Box breathing, 4-7-8, and Nadi Shodhana presets aligned with yogic tradition.
+12. **Micro-habit daily intention rings** *(trending: `#atomichabits`, `#habitstacking`)* — Apple Fitness-style completion rings on the dashboard showing one small daily action per module. Visual closure is one of the highest-retention UX patterns in wellness apps.
 
 ## Contribution Guide
 1. Create a branch for your change.

@@ -4,6 +4,7 @@ import ModuleLayout from "../components/ModuleLayout";
 import ModuleEntryForm from "../components/ModuleEntryForm";
 import EntryDeleteList from "../components/EntryDeleteList";
 import { ModuleFormField } from "../components/ModuleFormFields";
+import DailyReflectionPrompt from "../components/DailyReflectionPrompt";
 import {
   BHAKTI_INITIAL_FORM_STATE,
   getBhaktiFields,
@@ -21,6 +22,7 @@ export default function BhaktiJournalPage() {
 
   return (
     <ModuleLayout titleKey="module.bhakti.title">
+      <DailyReflectionPrompt module="bhakti" />
       <ModuleEntryForm
         title={t("module.bhakti.title")}
         icon="🌸"
