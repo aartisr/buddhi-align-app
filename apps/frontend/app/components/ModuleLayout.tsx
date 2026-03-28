@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 
 import LanguageSwitcher from "./LanguageSwitcher";
 import UserMenu from "./UserMenu";
+import BuddhiAlignLogo from "./BuddhiAlignLogo";
 import { MODULE_CATALOG, type TranslationKey } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 
@@ -44,12 +45,14 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
 
         {/* ── Header ── */}
         <header className="app-header-panel w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between relative z-20">
-          <h1 className="app-page-title text-xl sm:text-2xl font-bold tracking-tight">
-            <Link href="/">{t("app.brand")}</Link>
+          <h1>
+            <Link href="/" className="inline-flex items-center" aria-label={t("app.brand")}>
+              <BuddhiAlignLogo className="h-10 sm:h-11 w-auto" />
+            </Link>
           </h1>
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Desktop nav */}
-            <nav className="hidden xl:flex gap-4 text-sm font-medium app-copy" aria-label="Main navigation">
+            <nav className="hidden lg:flex gap-4 text-sm font-medium app-copy" aria-label="Main navigation">
               <Link href="/" className="hover:underline">{t("layout.home")}</Link>
               {navItems.map((item) => (
                 <Link key={item.key} href={item.href} className="hover:underline">
@@ -62,7 +65,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileNavOpen(true)}
-              className="app-mobile-menu-btn xl:hidden"
+              className="app-mobile-menu-btn lg:hidden"
               aria-label="Open menu"
               aria-expanded={mobileNavOpen}
               aria-controls="mobile-nav-drawer"
@@ -77,7 +80,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
         {/* ── Mobile nav backdrop ── */}
         {mobileNavOpen && (
           <div
-            className="app-mobile-nav-overlay xl:hidden"
+            className="app-mobile-nav-overlay lg:hidden"
             onClick={closeNav}
             aria-hidden="true"
           />
@@ -86,12 +89,12 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
         {/* ── Mobile nav drawer ── */}
         <nav
           id="mobile-nav-drawer"
-          className={`app-mobile-nav-drawer xl:hidden${mobileNavOpen ? " app-mobile-nav-drawer--open" : ""}`}
+          className={`app-mobile-nav-drawer lg:hidden${mobileNavOpen ? " app-mobile-nav-drawer--open" : ""}`}
           aria-label="Site navigation"
           aria-hidden={!mobileNavOpen}
         >
           <div className="app-mobile-nav-header">
-            <span className="app-page-title font-bold text-lg">🧘 {t("app.brand")}</span>
+            <BuddhiAlignLogo className="h-9 w-auto" />
             <button onClick={closeNav} className="app-mobile-nav-close" aria-label="Close menu">✕</button>
           </div>
           <ul className="app-mobile-nav-list">
