@@ -11,7 +11,7 @@ export interface KarmaYogaEntry {
  * Hook for managing Karma Yoga entries with automatic error handling and retries
  */
 export function useKarmaYogaEntries() {
-  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry } =
+  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry, isCreating, deletingIds } =
     useModuleData<KarmaYogaEntry>("karma");
 
   return {
@@ -22,5 +22,7 @@ export function useKarmaYogaEntries() {
     addEntry,
     updateEntry,
     deleteEntry,
+    isCreating,
+    deletingIds,
   };
 }

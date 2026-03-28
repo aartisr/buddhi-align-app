@@ -11,7 +11,7 @@ export interface JnanaReflectionEntry {
  * Hook for managing Jnana Reflection entries with automatic error handling and retries
  */
 export function useJnanaReflectionEntries() {
-  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry } =
+  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry, isCreating, deletingIds } =
     useModuleData<JnanaReflectionEntry>("jnana");
 
   return {
@@ -22,5 +22,7 @@ export function useJnanaReflectionEntries() {
     addEntry,
     updateEntry,
     deleteEntry,
+    isCreating,
+    deletingIds,
   };
 }

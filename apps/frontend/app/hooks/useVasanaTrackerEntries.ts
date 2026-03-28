@@ -12,7 +12,7 @@ export interface VasanaTrackerEntry {
  * Hook for managing Vasana Tracker entries with automatic error handling and retries
  */
 export function useVasanaTrackerEntries() {
-  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry } =
+  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry, isCreating, deletingIds } =
     useModuleData<VasanaTrackerEntry>("vasana");
 
   return {
@@ -23,5 +23,7 @@ export function useVasanaTrackerEntries() {
     addEntry,
     updateEntry,
     deleteEntry,
+    isCreating,
+    deletingIds,
   };
 }

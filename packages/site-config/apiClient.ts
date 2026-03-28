@@ -75,6 +75,10 @@ export async function apiFetch<T>(
         }
         lastError = error;
       } else {
+        // Handle 204 No Content responses (e.g., DELETE)
+        if (response.status === 204 || response.headers.get('content-length') === '0') {
+          return undefined as T;
+        }
         const data = await response.json();
         return data as T;
       }

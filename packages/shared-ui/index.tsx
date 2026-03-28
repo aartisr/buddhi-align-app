@@ -7,3 +7,4 @@ export * from "./JnanaReflection";
 export * from "./DhyanaMeditation";
 export * from "./VasanaTracker";
 export * from "./DharmaPlanner";
+export * from "./ModuleRecordCollection";

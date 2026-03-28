@@ -10,6 +10,7 @@ interface ModuleEntryFormProps {
   children: ReactNode;
   submitLabel: string;
   submitButtonClassName?: string;
+  isSubmitting?: boolean;
 }
 
 export default function ModuleEntryForm({
@@ -20,6 +21,7 @@ export default function ModuleEntryForm({
   children,
   submitLabel,
   submitButtonClassName,
+  isSubmitting = false,
 }: ModuleEntryFormProps) {
   return (
     <form
@@ -34,13 +36,16 @@ export default function ModuleEntryForm({
         {children}
         <button
           type="submit"
+          disabled={isSubmitting}
           className={
             submitButtonClassName ??
             "app-button-primary app-button-primary--karma"
           }
           aria-label={submitLabel}
+          aria-busy={isSubmitting}
         >
-          <span className="text-xl">➕</span> <span className="font-bold">{submitLabel}</span>
+          <span className="text-xl">{isSubmitting ? "⏳" : "➕"}</span>{" "}
+          <span className="font-bold">{isSubmitting ? `${submitLabel}...` : submitLabel}</span>
         </button>
       </div>
     </form>

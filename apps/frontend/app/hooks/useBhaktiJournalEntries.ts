@@ -12,7 +12,7 @@ export interface BhaktiJournalEntry {
  * Uses the generic useModuleData hook for resilience
  */
 export function useBhaktiJournalEntries() {
-  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry } =
+  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry, isCreating, deletingIds } =
     useModuleData<BhaktiJournalEntry>("bhakti");
 
   return {
@@ -23,5 +23,7 @@ export function useBhaktiJournalEntries() {
     addEntry,
     updateEntry,
     deleteEntry,
+    isCreating,
+    deletingIds,
   };
 }

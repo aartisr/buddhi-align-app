@@ -2,7 +2,6 @@
 import { JnanaReflection } from "@buddhi-align/shared-ui";
 import ModuleLayout from "../components/ModuleLayout";
 import ModuleEntryForm from "../components/ModuleEntryForm";
-import EntryDeleteList from "../components/EntryDeleteList";
 import { ModuleFormField } from "../components/ModuleFormFields";
 import DailyReflectionPrompt from "../components/DailyReflectionPrompt";
 import {
@@ -16,7 +15,7 @@ import { useI18n } from "../i18n/provider";
 
 export default function JnanaReflectionPage() {
   const { t } = useI18n();
-  const { entries, loading, addEntry, deleteEntry } = useJnanaReflectionEntries();
+  const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useJnanaReflectionEntries();
   const [form, setForm] = useState<JnanaFormState>(JNANA_INITIAL_FORM_STATE);
   const fields = getJnanaFields(form, t);
 
@@ -29,10 +28,12 @@ export default function JnanaReflectionPage() {
         className="app-form-shell app-form-shell--jnana mb-8 flex flex-col gap-4 p-6 rounded-2xl max-w-xl mx-auto"
         onSubmit={async (e) => {
           e.preventDefault();
+          if (isCreating) return;
           if (!form.date || !form.insight || !form.contemplation) return;
           await addEntry(form);
           setForm({ ...JNANA_INITIAL_FORM_STATE });
         }}
+        isSubmitting={isCreating}
         submitLabel={t("app.add")}
         submitButtonClassName="app-button-primary app-button-primary--jnana"
       >
@@ -54,14 +55,11 @@ export default function JnanaReflectionPage() {
           contemplationLabel={t("label.contemplation")}
           entries={entries}
           onAddEntry={addEntry}
+          onDelete={deleteEntry}
+          deletingIds={deletingIds}
+          deleteLabel={t("app.delete")}
         />
       )}
-      <EntryDeleteList
-        entries={entries}
-        onDelete={deleteEntry}
-        deleteLabel={t("app.delete")}
-        renderText={(entry) => `${entry.date} - ${entry.insight} - ${t("label.contemplation")}: ${entry.contemplation}`}
-      />
     </ModuleLayout>
   );
 }

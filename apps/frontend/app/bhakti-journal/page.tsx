@@ -2,7 +2,6 @@
 import { BhaktiJournal } from "@buddhi-align/shared-ui";
 import ModuleLayout from "../components/ModuleLayout";
 import ModuleEntryForm from "../components/ModuleEntryForm";
-import EntryDeleteList from "../components/EntryDeleteList";
 import { ModuleFormField } from "../components/ModuleFormFields";
 import DailyReflectionPrompt from "../components/DailyReflectionPrompt";
 import {
@@ -16,7 +15,7 @@ import { useI18n } from "../i18n/provider";
 
 export default function BhaktiJournalPage() {
   const { t } = useI18n();
-  const { entries, loading, addEntry, deleteEntry } = useBhaktiJournalEntries();
+  const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useBhaktiJournalEntries();
   const [form, setForm] = useState<BhaktiFormState>(BHAKTI_INITIAL_FORM_STATE);
   const fields = getBhaktiFields(form, t);
 
@@ -29,10 +28,12 @@ export default function BhaktiJournalPage() {
         className="app-form-shell app-form-shell--bhakti mb-8 flex flex-col gap-4 p-6 rounded-2xl max-w-xl mx-auto"
         onSubmit={async (e) => {
           e.preventDefault();
+          if (isCreating) return;
           if (!form.date || !form.reflection || !form.gratitude) return;
           await addEntry(form);
           setForm({ ...BHAKTI_INITIAL_FORM_STATE });
         }}
+        isSubmitting={isCreating}
         submitLabel={t("app.add")}
         submitButtonClassName="app-button-primary app-button-primary--bhakti"
       >
@@ -54,14 +55,11 @@ export default function BhaktiJournalPage() {
           gratitudeLabel={t("label.gratitude")}
           entries={entries}
           onAddEntry={addEntry}
+          onDelete={deleteEntry}
+          deletingIds={deletingIds}
+          deleteLabel={t("app.delete")}
         />
       )}
-      <EntryDeleteList
-        entries={entries}
-        onDelete={deleteEntry}
-        deleteLabel={t("app.delete")}
-        renderText={(entry) => `${entry.date} - ${entry.reflection} - ${t("label.gratitude")}: ${entry.gratitude}`}
-      />
     </ModuleLayout>
   );
 }

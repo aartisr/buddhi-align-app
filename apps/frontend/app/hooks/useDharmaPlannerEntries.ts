@@ -12,7 +12,7 @@ export interface DharmaPlannerEntry {
  * Hook for managing Dharma Planner entries with automatic error handling and retries
  */
 export function useDharmaPlannerEntries() {
-  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry } =
+  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry, isCreating, deletingIds } =
     useModuleData<DharmaPlannerEntry>("dharma");
 
   return {
@@ -23,5 +23,7 @@ export function useDharmaPlannerEntries() {
     addEntry,
     updateEntry,
     deleteEntry,
+    isCreating,
+    deletingIds,
   };
 }

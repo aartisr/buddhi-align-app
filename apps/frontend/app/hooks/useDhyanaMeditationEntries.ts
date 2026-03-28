@@ -12,7 +12,7 @@ export interface DhyanaMeditationEntry {
  * Hook for managing Dhyana Meditation entries with automatic error handling and retries
  */
 export function useDhyanaMeditationEntries() {
-  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry } =
+  const { data, loading, error, refetch, addEntry, updateEntry, deleteEntry, isCreating, deletingIds } =
     useModuleData<DhyanaMeditationEntry>("dhyana");
 
   return {
@@ -23,5 +23,7 @@ export function useDhyanaMeditationEntries() {
     addEntry,
     updateEntry,
     deleteEntry,
+    isCreating,
+    deletingIds,
   };
 }

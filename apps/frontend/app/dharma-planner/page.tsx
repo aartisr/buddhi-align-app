@@ -2,7 +2,6 @@
 import { DharmaPlanner } from "@buddhi-align/shared-ui";
 import ModuleLayout from "../components/ModuleLayout";
 import ModuleEntryForm from "../components/ModuleEntryForm";
-import EntryDeleteList from "../components/EntryDeleteList";
 import { ModuleFormField } from "../components/ModuleFormFields";
 import {
   DHARMA_INITIAL_FORM_STATE,
@@ -15,7 +14,7 @@ import { useI18n } from "../i18n/provider";
 
 export default function DharmaPlannerPage() {
   const { t } = useI18n();
-  const { entries, loading, addEntry, deleteEntry } = useDharmaPlannerEntries();
+  const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useDharmaPlannerEntries();
   const [form, setForm] = useState<DharmaFormState>(DHARMA_INITIAL_FORM_STATE);
   const fields = getDharmaFields(form, t);
 
@@ -27,10 +26,12 @@ export default function DharmaPlannerPage() {
         className="app-form-shell app-form-shell--dharma mb-8 flex flex-col gap-4 p-6 rounded-2xl max-w-xl mx-auto"
         onSubmit={async (e) => {
           e.preventDefault();
+          if (isCreating) return;
           if (!form.date || !form.goal || !form.action) return;
           await addEntry(form);
           setForm({ ...DHARMA_INITIAL_FORM_STATE });
         }}
+        isSubmitting={isCreating}
         submitLabel={t("app.add")}
         submitButtonClassName="app-button-primary app-button-primary--dharma"
       >
@@ -51,14 +52,11 @@ export default function DharmaPlannerPage() {
           emptyState={t("list.empty.dharma")}
           entries={entries}
           onAddEntry={addEntry}
+          onDelete={deleteEntry}
+          deletingIds={deletingIds}
+          deleteLabel={t("app.delete")}
         />
       )}
-      <EntryDeleteList
-        entries={entries}
-        onDelete={deleteEntry}
-        deleteLabel={t("app.delete")}
-        renderText={(entry) => `${entry.date} - ${entry.goal} - ${entry.action} - ${entry.status}`}
-      />
     </ModuleLayout>
   );
 }

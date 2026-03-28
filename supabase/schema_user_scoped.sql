@@ -10,6 +10,7 @@
 -- ============================================================
 
 -- 1. Add a user_id column to link entries to Supabase Auth users.
+--    Made nullable to support entries without authenticated users (dev/testing).
 ALTER TABLE module_entries
   ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
 

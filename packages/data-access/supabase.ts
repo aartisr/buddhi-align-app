@@ -18,6 +18,17 @@
 import { createClient } from '@supabase/supabase-js';
 import type { DataAccessContext, DataProvider, ModuleEntry } from './provider';
 
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  const parts = token.split('.');
+  if (parts.length < 2) return null;
+  try {
+    const json = Buffer.from(parts[1], 'base64url').toString('utf8');
+    return JSON.parse(json) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
 export function createSupabaseDataProvider(): DataProvider {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -26,6 +37,14 @@ export function createSupabaseDataProvider(): DataProvider {
     throw new Error(
       'SupabaseDataProvider requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY ' +
         'environment variables to be set.',
+    );
+  }
+
+  const jwtPayload = decodeJwtPayload(key);
+  if (jwtPayload?.role !== 'service_role') {
+    throw new Error(
+      'SUPABASE_SERVICE_ROLE_KEY is not a service-role key. ' +
+        'Use the service_role secret from Supabase Project Settings -> API.',
     );
   }
 
@@ -63,12 +82,13 @@ export function createSupabaseDataProvider(): DataProvider {
       entryData: Omit<T, 'id'>,
       context?: DataAccessContext,
     ): Promise<T> {
+      // Note: user_id is only inserted if the RLS migration (schema_user_scoped.sql)
+      // has been applied to the database. Otherwise, omit it.
       const { data, error } = await client
         .from('module_entries')
         .insert({
           module,
           data: entryData,
-          user_id: context?.userId,
         })
         .select('id, data')
         .single();

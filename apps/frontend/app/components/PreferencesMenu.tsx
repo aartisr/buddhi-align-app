@@ -21,6 +21,7 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
   const { status } = useSession();
   const [open, setOpen] = useState(!showTrigger);
   const [musicControlVisible, setMusicControlVisible] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -90,12 +91,17 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
     writeMusicControlVisibilityPreference(nextValue);
 
     if (status === "authenticated") {
+      setIsSaving(true);
       void savePreferencesToDatabase({
         locale,
         musicControlVisible: nextValue,
-      }).catch((error) => {
-        console.error("Failed to persist music preference", error);
-      });
+      })
+        .catch((error) => {
+          console.error("Failed to persist music preference", error);
+        })
+        .finally(() => {
+          setIsSaving(false);
+        });
     }
   };
 
@@ -103,12 +109,17 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
     setLocale(nextLocale);
 
     if (status === "authenticated") {
+      setIsSaving(true);
       void savePreferencesToDatabase({
         locale: nextLocale,
         musicControlVisible,
-      }).catch((error) => {
-        console.error("Failed to persist locale preference", error);
-      });
+      })
+        .catch((error) => {
+          console.error("Failed to persist locale preference", error);
+        })
+        .finally(() => {
+          setIsSaving(false);
+        });
     }
   };
 
@@ -131,18 +142,22 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
         <div className="app-preferences-panel" role={showTrigger ? "dialog" : undefined} aria-label="Preferences">
           <div className="app-preferences-row">
             <label htmlFor="prefs-language" className="app-preferences-label">Default language</label>
-            <select
-              id="prefs-language"
-              className="app-preferences-select"
-              value={locale}
-              onChange={(event) => handleLocaleChange(event.target.value as Locale)}
-            >
-              {locales.map((option) => (
-                <option key={option.code} value={option.code}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+            <div className="app-preferences-field-wrap">
+              <select
+                id="prefs-language"
+                className="app-preferences-select"
+                value={locale}
+                disabled={isSaving}
+                onChange={(event) => handleLocaleChange(event.target.value as Locale)}
+              >
+                {locales.map((option) => (
+                  <option key={option.code} value={option.code}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              {isSaving ? <span className="app-inline-spinner app-preferences-spinner" aria-hidden="true" /> : null}
+            </div>
           </div>
 
           <div className="app-preferences-row">
@@ -152,20 +167,43 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
                 type="button"
                 className={`app-preferences-toggle ${musicControlVisible ? "is-active" : ""}`}
                 aria-pressed={musicControlVisible}
+                disabled={isSaving}
                 onClick={() => handleMusicVisibility(true)}
               >
-                Show
+                {isSaving && musicControlVisible ? (
+                  <>
+                    <span className="app-inline-spinner" aria-hidden="true" />
+                    <span>Show</span>
+                  </>
+                ) : (
+                  "Show"
+                )}
               </button>
               <button
                 type="button"
                 className={`app-preferences-toggle ${!musicControlVisible ? "is-active" : ""}`}
                 aria-pressed={!musicControlVisible}
+                disabled={isSaving}
                 onClick={() => handleMusicVisibility(false)}
               >
-                Hide
+                {isSaving && !musicControlVisible ? (
+                  <>
+                    <span className="app-inline-spinner" aria-hidden="true" />
+                    <span>Hide</span>
+                  </>
+                ) : (
+                  "Hide"
+                )}
               </button>
             </div>
           </div>
+
+          {isSaving ? (
+            <div className="app-preferences-status" role="status" aria-live="polite">
+              <span className="app-inline-spinner" aria-hidden="true" />
+              <span>Saving your preferences...</span>
+            </div>
+          ) : null}
         </div>
       )}
     </div>

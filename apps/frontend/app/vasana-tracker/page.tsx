@@ -2,7 +2,6 @@
 import { VasanaTracker } from "@buddhi-align/shared-ui";
 import ModuleLayout from "../components/ModuleLayout";
 import ModuleEntryForm from "../components/ModuleEntryForm";
-import EntryDeleteList from "../components/EntryDeleteList";
 import { ModuleFormField } from "../components/ModuleFormFields";
 import DailyReflectionPrompt from "../components/DailyReflectionPrompt";
 import {
@@ -16,7 +15,7 @@ import { useI18n } from "../i18n/provider";
 
 export default function VasanaTrackerPage() {
   const { t } = useI18n();
-  const { entries, loading, addEntry, deleteEntry } = useVasanaTrackerEntries();
+  const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useVasanaTrackerEntries();
   const [form, setForm] = useState<VasanaFormState>(VASANA_INITIAL_FORM_STATE);
   const fields = getVasanaFields(form, t);
 
@@ -29,10 +28,12 @@ export default function VasanaTrackerPage() {
         className="app-form-shell app-form-shell--vasana mb-8 flex flex-col gap-4 p-6 rounded-2xl max-w-xl mx-auto"
         onSubmit={async (e) => {
           e.preventDefault();
+          if (isCreating) return;
           if (!form.date || !form.habit || !form.tendency) return;
           await addEntry(form);
           setForm({ ...VASANA_INITIAL_FORM_STATE });
         }}
+        isSubmitting={isCreating}
         submitLabel={t("app.add")}
         submitButtonClassName="app-button-primary app-button-primary--bhakti"
       >
@@ -53,14 +54,11 @@ export default function VasanaTrackerPage() {
           emptyState={t("list.empty.vasana")}
           entries={entries}
           onAddEntry={addEntry}
+          onDelete={deleteEntry}
+          deletingIds={deletingIds}
+          deleteLabel={t("app.delete")}
         />
       )}
-      <EntryDeleteList
-        entries={entries}
-        onDelete={deleteEntry}
-        deleteLabel={t("app.delete")}
-        renderText={(entry) => `${entry.date} - ${entry.habit} - ${entry.tendency} - ${entry.notes}`}
-      />
     </ModuleLayout>
   );
 }

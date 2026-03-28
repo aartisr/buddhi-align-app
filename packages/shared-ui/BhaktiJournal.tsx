@@ -1,6 +1,8 @@
 import React from "react";
+import { ModuleRecordCollection } from "./ModuleRecordCollection";
 
 export interface BhaktiJournalEntry {
+  id?: string;
   date: string;
   reflection: string;
   gratitude: string;
@@ -13,6 +15,9 @@ export interface BhaktiJournalProps {
   gratitudeLabel: string;
   entries: BhaktiJournalEntry[];
   onAddEntry?: (entry: BhaktiJournalEntry) => void;
+  onDelete?: (id: string) => void | Promise<void>;
+  deletingIds?: string[];
+  deleteLabel?: string;
 }
 
 export const BhaktiJournal: React.FC<BhaktiJournalProps> = ({
@@ -21,27 +26,23 @@ export const BhaktiJournal: React.FC<BhaktiJournalProps> = ({
   emptyState,
   gratitudeLabel,
   entries,
-  onAddEntry,
+  onDelete,
+  deletingIds,
+  deleteLabel,
 }) => (
-  <section className="mb-12">
-    <h2 className="app-section-heading text-2xl font-semibold mb-2">{title}</h2>
-    <p className="app-copy mb-4">{description}</p>
-    <div className="space-y-4">
-      {entries.length === 0 ? (
-        <p className="app-empty-state">{emptyState}</p>
-      ) : (
-        <ul className="divide-y divide-zinc-100">
-          {entries.map((entry, i) => (
-            <li key={i} className="py-2">
-              <span className="app-record-date font-medium w-24">{entry.date}</span>
-              <div className="ml-2">
-                <div className="text-zinc-700">{entry.reflection}</div>
-                <div className="app-record-accent--bhakti text-sm">{gratitudeLabel}: {entry.gratitude}</div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  </section>
+  <ModuleRecordCollection
+    title={title}
+    description={description}
+    emptyState={emptyState}
+    entries={entries.map((entry) => ({
+      id: entry.id,
+      date: entry.date,
+      title: entry.reflection,
+      details: [`${gratitudeLabel}: ${entry.gratitude}`],
+      accentClassName: "app-record-accent--bhakti",
+    }))}
+    onDelete={onDelete}
+    deletingIds={deletingIds}
+    deleteLabel={deleteLabel}
+  />
 );

@@ -31,11 +31,15 @@ export function useModuleData<T extends { id?: string }>(
   addEntry: (entry: Omit<T, 'id'>) => Promise<void>;
   updateEntry: (id: string, updates: Partial<T>) => Promise<void>;
   deleteEntry: (id: string) => Promise<void>;
+  isCreating: boolean;
+  deletingIds: string[];
 } {
   const { autoLoad = true, timeout } = options;
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(autoLoad);
   const [error, setError] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [deletingIds, setDeletingIds] = useState<string[]>([]);
 
   const refetch = useCallback(async () => {
     setLoading(true);
@@ -67,6 +71,8 @@ export function useModuleData<T extends { id?: string }>(
         throw new Error('Invalid entry data');
       }
 
+      setIsCreating(true);
+
       try {
         const newEntry = await apiFetch<T>(`/api/${moduleName}`, {
           method: 'POST',
@@ -80,6 +86,8 @@ export function useModuleData<T extends { id?: string }>(
         setError(message);
         console.error(`[useModuleData] Error adding entry to ${moduleName}:`, err);
         throw err;
+      } finally {
+        setIsCreating(false);
       }
     },
     [moduleName, timeout],
@@ -115,6 +123,8 @@ export function useModuleData<T extends { id?: string }>(
         throw new Error('Entry ID is required');
       }
 
+      setDeletingIds((prev) => [...prev, id]);
+
       try {
         await apiFetch(`/api/${moduleName}/${id}`, {
           method: 'DELETE',
@@ -127,6 +137,8 @@ export function useModuleData<T extends { id?: string }>(
         setError(message);
         console.error(`[useModuleData] Error deleting entry ${id} from ${moduleName}:`, err);
         throw err;
+      } finally {
+        setDeletingIds((prev) => prev.filter((entryId) => entryId !== id));
       }
     },
     [moduleName, timeout],
@@ -140,5 +152,7 @@ export function useModuleData<T extends { id?: string }>(
     addEntry,
     updateEntry,
     deleteEntry,
+    isCreating,
+    deletingIds,
   };
 }
