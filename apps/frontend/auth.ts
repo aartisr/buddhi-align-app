@@ -10,6 +10,30 @@ import {
   type OAuthProviderId,
 } from "./app/auth/provider-catalog";
 
+function isLoopbackAuthUrl(url: string): boolean {
+  try {
+    const { hostname } = new URL(url);
+    return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "0.0.0.0";
+  } catch {
+    return false;
+  }
+}
+
+const configuredAuthUrl = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL;
+
+if (
+  process.env.NODE_ENV === "production" &&
+  configuredAuthUrl &&
+  isLoopbackAuthUrl(configuredAuthUrl)
+) {
+  // Force Auth.js to derive the host from forwarded headers when a bad localhost URL is set in production.
+  delete process.env.AUTH_URL;
+  delete process.env.NEXTAUTH_URL;
+  console.warn(
+    `Ignoring loopback auth URL in production: ${configuredAuthUrl}. Falling back to request host.`,
+  );
+}
+
 /**
  * NextAuth v5 configuration with 5 OAuth providers.
  *
@@ -64,6 +88,7 @@ const providers = configuredProviders.map((provider) => providerFactory[provider
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers,
+  trustHost: true,
 
   pages: {
     signIn: "/sign-in",
