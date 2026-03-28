@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 
 import LanguageSwitcher from "./LanguageSwitcher";
+import UserMenu from "./UserMenu";
 import { MODULE_CATALOG } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 
@@ -38,6 +39,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: string;
               ))}
             </nav>
             <LanguageSwitcher />
+            <UserMenu />
           </div>
         </header>
         <main className="max-w-2xl mx-auto py-12 px-4 sm:px-8 relative z-10">

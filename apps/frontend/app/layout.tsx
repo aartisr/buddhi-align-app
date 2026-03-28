@@ -9,6 +9,7 @@ import BackgroundMusic from "./components/BackgroundMusic";
 import SiteFooter from "./components/SiteFooter";
 import { I18nProvider } from "./i18n/provider";
 import { DEFAULT_LOCALE, translate } from "./i18n/config";
+import Providers from "./components/Providers";
 
 
 const inter = Inter({
@@ -30,12 +31,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        <I18nProvider>
-          <div className="buddhi-bg-gradient" aria-hidden="true"></div>
-          <BackgroundMusic />
-          {children}
-          <SiteFooter />
-        </I18nProvider>
+        <Providers>
+          <I18nProvider>
+            <div className="buddhi-bg-gradient" aria-hidden="true"></div>
+            <BackgroundMusic />
+            {children}
+            <SiteFooter />
+          </I18nProvider>
+        </Providers>
       </body>
     </html>
   );

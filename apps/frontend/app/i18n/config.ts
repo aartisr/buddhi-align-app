@@ -132,6 +132,11 @@ const EN_MESSAGES: TranslationDict = {
   "motivation.howto.3": "Celebrate your streaks and milestones-consistency is key.",
   "motivation.howto.4": "Let ancient wisdom and modern analytics guide your journey.",
   "motivation.howto.5": "Remember: The journey itself is the reward.",
+  "auth.signIn": "Sign in",
+  "auth.signOut": "Sign out",
+  "auth.signInWith": "Continue with {{provider}}",
+  "auth.pageTitle": "Sign in to Buddhi Align",
+  "auth.chooseProvider": "Choose how you'd like to sign in",
 };
 
 function createLocaleMessages(overrides: TranslationDict): TranslationDict {
@@ -239,6 +244,11 @@ const HI_MESSAGES: TranslationDict = createLocaleMessages({
   "motivation.howto.3": "अपनी सततता और मील के पत्थर का जश्न मनाएं - निरंतरता महत्वपूर्ण है।",
   "motivation.howto.4": "प्राचीन ज्ञान और आधुनिक विश्लेषण को आपकी यात्रा का मार्गदर्शन करने दें।",
   "motivation.howto.5": "याद रखें: यात्रा ही पुरस्कार है।",
+  "auth.signIn": "साइन इन करें",
+  "auth.signOut": "साइन आउट करें",
+  "auth.signInWith": "{{provider}} से जारी रखें",
+  "auth.pageTitle": "बुद्धि एलाइन में साइन इन करें",
+  "auth.chooseProvider": "साइन इन करने का तरीका चुनें",
 });
 
 const KN_MESSAGES: TranslationDict = createLocaleMessages({
