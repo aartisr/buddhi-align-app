@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "test": "npm --workspace=apps/frontend run test",
     "test:frontend": "npm --workspace=apps/frontend run test",
