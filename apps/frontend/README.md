@@ -34,6 +34,29 @@ npm run test
 npm run build
 ```
 
+## Background Music Source
+The background music player supports a configurable source URL.
+
+- Environment variable: `NEXT_PUBLIC_BGM_URL`
+- Optional playlist variable: `NEXT_PUBLIC_BGM_URLS` (comma-separated HTTPS URLs)
+- Fallback: Pixabay royalty-free track (if the variable is missing or invalid)
+
+Example:
+
+```bash
+NEXT_PUBLIC_BGM_URL=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.mp3
+```
+
+Playlist example:
+
+```bash
+NEXT_PUBLIC_BGM_URLS=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.mp3,https://example.com/track2.mp3,https://example.com/track3.mp3
+```
+
+If `NEXT_PUBLIC_BGM_URLS` is set with valid URLs, tracks auto-rotate when each track ends.
+
+Tip: prefer HTTPS direct audio URLs (`.mp3`, `.ogg`, `.wav`) from providers whose license allows your use case.
+
 ## Test Layout
 - `app/**/*.test.tsx`: frontend component and route-level tests.
 - `vitest.config.ts`: Vitest configuration.
