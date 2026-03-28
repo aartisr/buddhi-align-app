@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ANONYMOUS_COOKIE_NAME, isAnonymousCookie } from '@/app/auth/anonymous';
+import { auth } from '@/auth';
 import { createDataProvider } from '@buddhi-align/data-access';
 import {
   deleteAnonymousEntry,
@@ -37,10 +38,12 @@ export async function PUT(
       return NextResponse.json(entry);
     }
 
+    const session = await auth();
     const entry = await createDataProvider().update(
       params.module,
       params.id,
       body,
+      { userId: session?.user?.id },
     );
     return NextResponse.json(entry);
   } catch (err: unknown) {
@@ -67,7 +70,10 @@ export async function DELETE(
       return new NextResponse(null, { status: 204 });
     }
 
-    await createDataProvider().delete(params.module, params.id);
+    const session = await auth();
+    await createDataProvider().delete(params.module, params.id, {
+      userId: session?.user?.id,
+    });
     return new NextResponse(null, { status: 204 });
   } catch (err) {
     console.error(`DELETE /api/${params.module}/${params.id}`, err);

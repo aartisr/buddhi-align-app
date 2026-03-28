@@ -10,14 +10,19 @@
 
 export type ModuleEntry = { id: string; [key: string]: unknown };
 
+export interface DataAccessContext {
+  userId?: string;
+}
+
 export interface DataProvider {
   /** Return all entries for a module, ordered oldest-first. */
-  list<T extends ModuleEntry>(module: string): Promise<T[]>;
+  list<T extends ModuleEntry>(module: string, context?: DataAccessContext): Promise<T[]>;
 
   /** Persist a new entry and return the saved record (with id populated). */
   create<T extends ModuleEntry>(
     module: string,
     data: Omit<T, 'id'>,
+    context?: DataAccessContext,
   ): Promise<T>;
 
   /** Merge `data` into an existing entry and return the merged record. */
@@ -25,8 +30,9 @@ export interface DataProvider {
     module: string,
     id: string,
     data: Partial<Omit<T, 'id'>>,
+    context?: DataAccessContext,
   ): Promise<T>;
 
   /** Remove an entry. Resolves silently if the entry does not exist. */
-  delete(module: string, id: string): Promise<void>;
+  delete(module: string, id: string, context?: DataAccessContext): Promise<void>;
 }

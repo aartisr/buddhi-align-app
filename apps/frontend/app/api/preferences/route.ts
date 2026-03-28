@@ -39,8 +39,11 @@ export async function GET(_req: NextRequest) {
   }
 
   try {
-    const entries = await createDataProvider().list<PreferenceEntry>(PREFERENCES_MODULE);
-    const mine = entries.filter((entry) => entry.userId === userId);
+    const entries = await createDataProvider().list<PreferenceEntry>(
+      PREFERENCES_MODULE,
+      { userId },
+    );
+    const mine = entries.filter((entry) => entry.userId === userId || entry.userId === undefined);
     const latest = mine.length > 0 ? mine[mine.length - 1] : null;
 
     return NextResponse.json(toPublicPreferences(latest));
@@ -80,8 +83,8 @@ export async function PUT(req: NextRequest) {
 
   try {
     const provider = createDataProvider();
-    const entries = await provider.list<PreferenceEntry>(PREFERENCES_MODULE);
-    const mine = entries.filter((entry) => entry.userId === userId);
+    const entries = await provider.list<PreferenceEntry>(PREFERENCES_MODULE, { userId });
+    const mine = entries.filter((entry) => entry.userId === userId || entry.userId === undefined);
     const latest = mine.length > 0 ? mine[mine.length - 1] : null;
 
     const patch: Omit<PreferenceEntry, "id"> = {
@@ -95,8 +98,8 @@ export async function PUT(req: NextRequest) {
     }
 
     const saved = latest
-      ? await provider.update<PreferenceEntry>(PREFERENCES_MODULE, latest.id, patch)
-      : await provider.create<PreferenceEntry>(PREFERENCES_MODULE, patch);
+      ? await provider.update<PreferenceEntry>(PREFERENCES_MODULE, latest.id, patch, { userId })
+      : await provider.create<PreferenceEntry>(PREFERENCES_MODULE, patch, { userId });
 
     return NextResponse.json(toPublicPreferences(saved));
   } catch (err) {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ANONYMOUS_COOKIE_NAME, isAnonymousCookie } from '@/app/auth/anonymous';
+import { auth } from '@/auth';
 import { createDataProvider } from '@buddhi-align/data-access';
 import {
   createAnonymousEntry,
@@ -29,7 +30,10 @@ export async function GET(
   }
 
   try {
-    const data = await createDataProvider().list(params.module);
+    const session = await auth();
+    const data = await createDataProvider().list(params.module, {
+      userId: session?.user?.id,
+    });
     return NextResponse.json(data);
   } catch (err) {
     console.error(`GET /api/${params.module}`, err);
@@ -66,7 +70,10 @@ export async function POST(
   }
 
   try {
-    const entry = await createDataProvider().create(params.module, body);
+    const session = await auth();
+    const entry = await createDataProvider().create(params.module, body, {
+      userId: session?.user?.id,
+    });
     return NextResponse.json(entry, { status: 201 });
   } catch (err) {
     console.error(`POST /api/${params.module}`, err);

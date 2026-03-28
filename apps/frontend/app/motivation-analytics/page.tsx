@@ -2,7 +2,9 @@
 
 import dynamic from "next/dynamic";
 import ModuleLayout from "../components/ModuleLayout";
+import LongitudinalChart from "../components/LongitudinalChart";
 import { useCallback, useEffect, useState } from "react";
+import { logEvent } from "../lib/logEvent";
 import { MOTIVATIONAL_QUOTES } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 import type { AnalyticsPayload } from "../api/analytics/types";
@@ -103,8 +105,13 @@ export default function MotivationAnalyticsPage() {
           ],
         }],
       }));
+      logEvent("analytics_fetch_success", {
+        totalEntries: data.totalEntries,
+        streak: data.streak,
+      });
     } catch {
       // Non-fatal: stats remain at zero if analytics API is unavailable.
+      logEvent("analytics_fetch_failed");
     } finally {
       setLoadingStats(false);
     }
@@ -223,6 +230,7 @@ export default function MotivationAnalyticsPage() {
           </div>
         </div>
       </section>
+      <LongitudinalChart />
       <section className="mt-10 sm:mt-12 max-w-2xl mx-auto text-center">
         <h3 className="app-panel-title text-lg sm:text-xl md:text-2xl font-bold mb-4">{t("motivation.howTo")}</h3>
         <ul className="app-list-copy list-disc list-inside text-base sm:text-lg space-y-2 text-left mx-auto max-w-xl">

@@ -20,13 +20,14 @@ export class InMemoryDataProvider implements DataProvider {
     return store.get(module)!;
   }
 
-  async list<T extends ModuleEntry>(module: string): Promise<T[]> {
+  async list<T extends ModuleEntry>(module: string, _context?: { userId?: string }): Promise<T[]> {
     return Array.from(this.bucket(module).values()) as T[];
   }
 
   async create<T extends ModuleEntry>(
     module: string,
     data: Omit<T, 'id'>,
+    _context?: { userId?: string },
   ): Promise<T> {
     const id = String(++counter);
     const entry = { ...data, id } as T;
@@ -38,6 +39,7 @@ export class InMemoryDataProvider implements DataProvider {
     module: string,
     id: string,
     data: Partial<Omit<T, 'id'>>,
+    _context?: { userId?: string },
   ): Promise<T> {
     const bucket = this.bucket(module);
     const existing = bucket.get(id);
@@ -49,7 +51,7 @@ export class InMemoryDataProvider implements DataProvider {
     return updated;
   }
 
-  async delete(module: string, id: string): Promise<void> {
+  async delete(module: string, id: string, _context?: { userId?: string }): Promise<void> {
     this.bucket(module).delete(id);
   }
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ANONYMOUS_COOKIE_NAME, isAnonymousCookie } from '@/app/auth/anonymous';
+import { auth } from '@/auth';
 import { createDataProvider } from '@buddhi-align/data-access';
 import { listAnonymousEntries } from '../_anonymous-module-store';
 import {
@@ -48,6 +49,7 @@ function calcStreak(allEntries: Entry[]): number {
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const isAnon = isAnonymousCookie(req.cookies.get(ANONYMOUS_COOKIE_NAME)?.value);
+  const session = isAnon ? null : await auth();
   const today = new Date().toISOString().slice(0, 10);
 
   const counts = {} as Record<AnalyticsModuleName, number>;
@@ -58,7 +60,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     try {
       const entries: Entry[] = isAnon
         ? listAnonymousEntries(mod)
-        : await createDataProvider().list(mod);
+        : await createDataProvider().list(mod, { userId: session?.user?.id });
       counts[mod] = entries.length;
       todayActivity[mod] = entries.some(
         (e) => typeof e.date === 'string' && e.date.slice(0, 10) === today,

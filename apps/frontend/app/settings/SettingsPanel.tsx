@@ -1,6 +1,7 @@
 "use client";
 
 import PreferencesMenu from "../components/PreferencesMenu";
+import DataPortability from "../components/DataPortability";
 import { useI18n } from "../i18n/provider";
 
 export default function SettingsPanel() {
@@ -11,6 +12,7 @@ export default function SettingsPanel() {
       <h3 className="app-panel-title text-xl sm:text-2xl font-bold mb-2">{t("app.settings.title")}</h3>
       <p className="app-copy-soft mb-6">{t("app.settings.subtitle")}</p>
       <PreferencesMenu showTrigger={false} />
+      <DataPortability />
     </section>
   );
 }
