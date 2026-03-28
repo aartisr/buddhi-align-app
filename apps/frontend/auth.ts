@@ -25,16 +25,22 @@ function getValidatedAuthUrl(url?: string): string | undefined {
 }
 
 const configuredAuthUrl = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL;
-const validatedAuthUrl = getValidatedAuthUrl(configuredAuthUrl);
 
-if (configuredAuthUrl && !validatedAuthUrl) {
-  // Keep auth URL environment-driven and drop invalid values instead of hardcoding host fallbacks.
+if (process.env.NODE_ENV === "production") {
+  // In production, always derive Auth.js host from forwarded request headers.
+  // This avoids stale/misconfigured AUTH_URL/NEXTAUTH_URL values causing localhost redirects.
   delete process.env.AUTH_URL;
   delete process.env.NEXTAUTH_URL;
-  console.warn("Ignoring invalid auth URL and falling back to request host.");
-} else if (validatedAuthUrl) {
-  process.env.AUTH_URL = validatedAuthUrl;
-  process.env.NEXTAUTH_URL = validatedAuthUrl;
+} else {
+  const validatedAuthUrl = getValidatedAuthUrl(configuredAuthUrl);
+  if (configuredAuthUrl && !validatedAuthUrl) {
+    delete process.env.AUTH_URL;
+    delete process.env.NEXTAUTH_URL;
+    console.warn("Ignoring invalid auth URL and falling back to request host.");
+  } else if (validatedAuthUrl) {
+    process.env.AUTH_URL = validatedAuthUrl;
+    process.env.NEXTAUTH_URL = validatedAuthUrl;
+  }
 }
 
 /**
