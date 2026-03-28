@@ -24,7 +24,7 @@ export default function VasanaTrackerPage() {
       <ModuleEntryForm
         title={t("module.vasana.title")}
         icon="🌱"
-        className="mb-8 flex flex-col gap-4 p-6 rounded-2xl bg-linear-to-br from-rose/20 via-gold/10 to-primary/10 border-2 border-rose shadow-lg max-w-xl mx-auto"
+        className="app-form-shell app-form-shell--vasana mb-8 flex flex-col gap-4 p-6 rounded-2xl max-w-xl mx-auto"
         onSubmit={async (e) => {
           e.preventDefault();
           if (!form.date || !form.habit || !form.tendency) return;
@@ -32,7 +32,7 @@ export default function VasanaTrackerPage() {
           setForm({ ...VASANA_INITIAL_FORM_STATE });
         }}
         submitLabel={t("app.add")}
-        submitButtonClassName="px-6 py-2 rounded-xl bg-linear-to-r from-rose to-gold text-rose font-bold shadow-lg hover:from-gold hover:to-emerald focus:outline-none focus:ring-2 focus:ring-gold transition w-full"
+        submitButtonClassName="app-button-primary app-button-primary--bhakti"
       >
         {fields.map((field) => (
           <ModuleFormField

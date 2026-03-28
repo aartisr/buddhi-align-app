@@ -1,6 +1,6 @@
 
 'use client';
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useI18n } from "../i18n/provider";
 
 const DEFAULT_BGM_URL = "https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.mp3";
@@ -31,7 +31,6 @@ function getBgmUrls() {
   return [getBgmUrl()];
 }
 
-
 export default function BackgroundMusic() {
   const { t } = useI18n();
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -41,7 +40,7 @@ export default function BackgroundMusic() {
   const [prompt, setPrompt] = useState(true);
   const [trackIndex, setTrackIndex] = useState(0);
 
-  const startPlayback = async () => {
+  const startPlayback = useCallback(async () => {
     if (!audioRef.current) return;
 
     try {
@@ -52,33 +51,28 @@ export default function BackgroundMusic() {
       setPlaying(false);
       setPrompt(true);
     }
-  };
-
-  useEffect(() => {
-    if (!audioRef.current) return;
-    audioRef.current.volume = volume;
-
-    // Attempt autoplay; browsers may block this until user interaction.
-    void startPlayback();
   }, []);
 
   useEffect(() => {
     if (!audioRef.current) return;
-    if (!playing) return;
+    audioRef.current.volume = volume;
+  }, [volume]);
 
+  useEffect(() => {
     void startPlayback();
-  }, [trackIndex]);
+  }, [startPlayback]);
+
+  useEffect(() => {
+    if (!playing) return;
+    void startPlayback();
+  }, [trackIndex, playing, startPlayback]);
 
   const playNextTrack = () => {
     if (bgmUrls.length <= 1) return;
 
     setTrackIndex((currentIndex) => {
       const nextIndex = currentIndex + 1;
-      if (nextIndex >= bgmUrls.length) {
-        return 0;
-      }
-
-      return nextIndex;
+      return nextIndex >= bgmUrls.length ? 0 : nextIndex;
     });
   };
 
@@ -94,17 +88,19 @@ export default function BackgroundMusic() {
   };
 
   const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = parseFloat(e.target.value);
-    setVolume(v);
-    if (audioRef.current) audioRef.current.volume = v;
+    const nextVolume = parseFloat(e.target.value);
+    setVolume(nextVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = nextVolume;
+    }
   };
 
   return (
-    <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 1000, background: "#fff", border: "2px solid #4B0082", borderRadius: 14, boxShadow: "0 2px 12px #0002", padding: 16, display: "flex", alignItems: "center", gap: 12, minWidth: 220 }}>
+    <div className="app-music-panel">
       <button
         aria-label={playing ? t("app.pause") : t("app.play")}
         onClick={togglePlay}
-        style={{ fontSize: 16, fontWeight: 600, background: "#4B0082", color: "#fff", border: "none", borderRadius: 8, padding: "6px 18px", cursor: "pointer" }}
+        className="app-music-button"
       >
         {playing ? t("app.pause") : t("app.play")}
       </button>
@@ -116,15 +112,15 @@ export default function BackgroundMusic() {
         value={volume}
         onChange={handleVolume}
         aria-label={t("app.backgroundMusic")}
-        style={{ width: 80 }}
+        className="app-music-slider"
       />
       <audio
         ref={audioRef}
-          src={bgmUrls[trackIndex]}
-          loop={bgmUrls.length === 1}
+        src={bgmUrls[trackIndex]}
+        loop={bgmUrls.length === 1}
         autoPlay
         preload="auto"
-        style={{ display: "none" }}
+        className="hidden"
         onLoadedMetadata={() => {
           if (audioRef.current) audioRef.current.volume = volume;
         }}
@@ -138,14 +134,10 @@ export default function BackgroundMusic() {
         }}
         onPlay={() => setPrompt(false)}
         onPause={() => setPrompt(true)}
-          onEnded={playNextTrack}
+        onEnded={playNextTrack}
       />
-      <span style={{ fontSize: 12, color: "#4B0082", marginLeft: 8 }}>{t("app.backgroundMusic")}</span>
-      {prompt && (
-        <span style={{ color: "#C72C6A", fontSize: 12, marginLeft: 8 }}>
-          {t("app.musicPrompt")}
-        </span>
-      )}
+      <span className="app-music-label">{t("app.backgroundMusic")}</span>
+      {prompt && <span className="app-music-prompt">{t("app.musicPrompt")}</span>}
     </div>
   );
 }

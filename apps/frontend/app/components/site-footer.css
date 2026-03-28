@@ -45,3 +45,9 @@
   color: #888;
   font-size: 13px;
 }
+
+.site-footer__author-link {
+  color: #C72C6A;
+  font-weight: 500;
+  text-decoration: none;
+}

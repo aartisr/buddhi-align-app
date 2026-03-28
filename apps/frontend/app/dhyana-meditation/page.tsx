@@ -24,7 +24,7 @@ export default function DhyanaMeditationPage() {
       <ModuleEntryForm
         title={t("module.dhyana.title")}
         icon="🧘‍♀️"
-        className="mb-8 flex flex-col gap-4 p-6 rounded-2xl bg-linear-to-br from-emerald/20 via-gold/10 to-primary/10 border-2 border-emerald shadow-lg max-w-xl mx-auto"
+        className="app-form-shell app-form-shell--dhyana mb-8 flex flex-col gap-4 p-6 rounded-2xl max-w-xl mx-auto"
         onSubmit={async (e) => {
           e.preventDefault();
           if (!form.date || !form.type || !form.duration) return;
@@ -32,7 +32,7 @@ export default function DhyanaMeditationPage() {
           setForm({ ...DHYANA_INITIAL_FORM_STATE });
         }}
         submitLabel={t("app.add")}
-        submitButtonClassName="px-6 py-2 rounded-xl bg-linear-to-r from-emerald to-gold text-emerald font-bold shadow-lg hover:from-gold hover:to-primary focus:outline-none focus:ring-2 focus:ring-gold transition w-full"
+        submitButtonClassName="app-button-primary app-button-primary--dhyana"
       >
         {fields.map((field) => (
           <ModuleFormField

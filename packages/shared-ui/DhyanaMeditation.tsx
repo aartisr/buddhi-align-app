@@ -25,24 +25,23 @@ export const DhyanaMeditation: React.FC<DhyanaMeditationProps> = ({
   onAddEntry,
 }) => (
   <section className="mb-12">
-    <h2 className="text-2xl font-semibold mb-2 text-green-700">{title}</h2>
-    <p className="text-zinc-600 mb-4">{description}</p>
+    <h2 className="app-section-heading text-2xl font-semibold mb-2">{title}</h2>
+    <p className="app-copy mb-4">{description}</p>
     <div className="space-y-4">
       {entries.length === 0 ? (
-        <p className="text-zinc-400">{emptyState}</p>
+        <p className="app-empty-state">{emptyState}</p>
       ) : (
         <ul className="divide-y divide-zinc-100">
           {entries.map((entry, i) => (
             <li key={i} className="py-2 flex flex-col md:flex-row md:items-center md:gap-4">
-              <span className="font-medium text-green-700 w-24">{entry.date}</span>
+              <span className="app-record-date font-medium w-24">{entry.date}</span>
               <span className="flex-1">{entry.type}</span>
               <span className="text-zinc-700">{entry.duration} {durationUnit}</span>
-              <span className="text-zinc-500 text-sm">{entry.notes}</span>
+              <span className="app-record-note text-sm">{entry.notes}</span>
             </li>
           ))}
         </ul>
       )}
     </div>
-    {/* Removed extra Add Session button to avoid duplication with page form */}
   </section>
 );

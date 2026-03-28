@@ -44,7 +44,7 @@ export default function UserMenu() {
           {(session.user?.name ?? session.user?.email ?? "?")[0].toUpperCase()}
         </div>
       )}
-      <span className="text-sm font-medium hidden sm:inline text-zinc-700 dark:text-zinc-200 max-w-[120px] truncate">
+      <span className="text-sm font-medium hidden sm:inline text-zinc-700 dark:text-zinc-200 max-w-30 truncate">
         {session.user?.name ?? session.user?.email}
       </span>
       <button

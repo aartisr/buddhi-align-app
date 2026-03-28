@@ -21,6 +21,7 @@
   opacity: 0.05;
   filter: blur(6px);
   line-height: 1;
+  -webkit-user-select: none;
   user-select: none;
   color: #bdbdbd;
   position: absolute;

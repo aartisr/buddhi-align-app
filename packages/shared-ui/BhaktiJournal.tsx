@@ -24,25 +24,24 @@ export const BhaktiJournal: React.FC<BhaktiJournalProps> = ({
   onAddEntry,
 }) => (
   <section className="mb-12">
-    <h2 className="text-2xl font-semibold mb-2 text-pink-700">{title}</h2>
-    <p className="text-zinc-600 mb-4">{description}</p>
+    <h2 className="app-section-heading text-2xl font-semibold mb-2">{title}</h2>
+    <p className="app-copy mb-4">{description}</p>
     <div className="space-y-4">
       {entries.length === 0 ? (
-        <p className="text-zinc-400">{emptyState}</p>
+        <p className="app-empty-state">{emptyState}</p>
       ) : (
         <ul className="divide-y divide-zinc-100">
           {entries.map((entry, i) => (
             <li key={i} className="py-2">
-              <span className="font-medium text-pink-700 w-24">{entry.date}</span>
+              <span className="app-record-date font-medium w-24">{entry.date}</span>
               <div className="ml-2">
                 <div className="text-zinc-700">{entry.reflection}</div>
-                <div className="text-yellow-700 text-sm">{gratitudeLabel}: {entry.gratitude}</div>
+                <div className="app-record-accent--bhakti text-sm">{gratitudeLabel}: {entry.gratitude}</div>
               </div>
             </li>
           ))}
         </ul>
       )}
     </div>
-    {/* Removed extra Add Entry button to avoid duplication with page form */}
   </section>
 );

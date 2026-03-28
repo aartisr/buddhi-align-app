@@ -12,7 +12,7 @@ const TONE_CLASS: Record<InputTone, string> = {
 };
 
 const BASE_CLASS =
-  "border-2 bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 text-lg shadow-sm text-zinc-900 placeholder-zinc-400";
+  "app-form-input border-2 bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 text-lg shadow-sm";
 
 interface BaseInputProps {
   value: string;

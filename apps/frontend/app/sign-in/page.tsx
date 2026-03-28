@@ -95,15 +95,15 @@ export default function SignInPage({
   const error = searchParams?.error;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-indigo-50 via-white to-amber-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800 px-4">
+    <div className="app-signin-shell min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         {/* Brand header */}
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">🧘</div>
-          <h1 className="text-3xl font-bold text-indigo-700 dark:text-amber-300 tracking-tight">
+          <h1 className="app-page-title text-3xl font-bold tracking-tight">
             {t("app.brand")}
           </h1>
-          <p className="mt-2 text-zinc-500 dark:text-zinc-400 text-sm">
+          <p className="app-copy-soft mt-2 text-sm">
             {t("auth.chooseProvider")}
           </p>
         </div>
@@ -118,8 +118,8 @@ export default function SignInPage({
         )}
 
         {/* Provider buttons */}
-        <div className="bg-white dark:bg-zinc-800 rounded-2xl shadow-xl p-6 space-y-3 border border-zinc-100 dark:border-zinc-700">
-          <p className="text-xs text-center text-zinc-400 dark:text-zinc-500 uppercase tracking-widest font-medium mb-4">
+        <div className="app-signin-card rounded-2xl p-6 space-y-3">
+          <p className="app-copy-subtle text-xs text-center uppercase tracking-widest font-medium mb-4">
             {t("auth.signIn")}
           </p>
 
@@ -148,16 +148,16 @@ export default function SignInPage({
           })}
 
           {configuredProviders.length === 0 && (
-            <p className="text-sm text-center text-zinc-500 dark:text-zinc-400 py-2">
+            <p className="app-copy-soft text-sm text-center py-2">
               {t("auth.noProviders")}
             </p>
           )}
         </div>
 
         {/* Footer note */}
-        <p className="mt-6 text-center text-xs text-zinc-400 dark:text-zinc-500">
+        <p className="app-copy-subtle mt-6 text-center text-xs">
           {t("footer.dedicatedTo")}{" "}
-          <span className="text-indigo-600 dark:text-amber-300 font-medium">Shishu Bharati</span>.{" "}
+          <span className="app-inline-brand font-medium">Shishu Bharati</span>.{" "}
           {t("footer.gratitude")}
         </p>
       </div>

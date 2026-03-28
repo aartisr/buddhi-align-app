@@ -26,13 +26,13 @@ export const BuddhiDashboard: React.FC<BuddhiDashboardProps> = ({
     <h2 className="text-3xl font-semibold mb-2 text-zinc-900">
       {userName ? welcomeTemplate.replace("{{name}}", userName) : heading}
     </h2>
-    <p className="text-zinc-600 mb-4">{subtitle}</p>
+    <p className="app-copy mb-4">{subtitle}</p>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {modules.map((mod) => {
         const isInternal = mod.href.startsWith("/");
         const commonProps = {
           className:
-            "group rounded-lg border border-zinc-200 p-6 bg-white shadow hover:shadow-lg focus:shadow-lg transition flex items-center gap-4 outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 active:scale-95 cursor-pointer",
+            "app-dashboard-card group rounded-lg p-6 hover:shadow-lg focus:shadow-lg transition flex items-center gap-4 outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 active:scale-95 cursor-pointer",
           "aria-label": mod.title,
           tabIndex: 0,
         };
@@ -40,8 +40,8 @@ export const BuddhiDashboard: React.FC<BuddhiDashboardProps> = ({
           <>
             <span className="text-3xl group-hover:scale-110 group-focus:scale-110 transition-transform">{mod.icon}</span>
             <span>
-              <h3 className="font-bold text-lg mb-1 text-indigo-700 group-hover:underline group-focus:underline">{mod.title}</h3>
-              <p className="text-zinc-600">{mod.description}</p>
+              <h3 className="app-section-heading font-bold text-lg mb-1 group-hover:underline group-focus:underline">{mod.title}</h3>
+              <p className="app-copy">{mod.description}</p>
             </span>
           </>
         );

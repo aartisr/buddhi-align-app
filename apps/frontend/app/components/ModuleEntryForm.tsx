@@ -36,7 +36,7 @@ export default function ModuleEntryForm({
           type="submit"
           className={
             submitButtonClassName ??
-            "px-6 py-2 rounded-xl bg-linear-to-r from-primary to-accent text-primary font-bold shadow-lg hover:from-gold hover:to-rose focus:outline-none focus:ring-2 focus:ring-gold transition w-full"
+            "app-button-primary app-button-primary--karma"
           }
           aria-label={submitLabel}
         >
