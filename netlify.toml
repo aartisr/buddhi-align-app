@@ -13,7 +13,7 @@
 [build]
   # Install from the monorepo root so all workspace packages are available,
   # then build only the frontend.
-  command = "npm ci && npm i --no-save @next/swc-linux-x64-gnu@14.2.33 lightningcss-linux-x64-gnu@1.32.0 && npm run build:frontend"
+  command = "npm ci && npm i --no-save @next/swc-linux-x64-gnu@14.2.33 @next/swc-linux-x64-musl@14.2.33 lightningcss-linux-x64-gnu@1.32.0 lightningcss-linux-x64-musl@1.32.0 && npm run build:frontend"
   publish  = "apps/frontend/.next"
 
 [build.environment]
@@ -34,7 +34,7 @@
 # Context overrides
 # ------------------------------------------------------------
 [context.deploy-preview]
-  command = "npm ci && npm i --no-save @next/swc-linux-x64-gnu@14.2.33 lightningcss-linux-x64-gnu@1.32.0 && npm run build:frontend"
+  command = "npm ci && npm i --no-save @next/swc-linux-x64-gnu@14.2.33 @next/swc-linux-x64-musl@14.2.33 lightningcss-linux-x64-gnu@1.32.0 lightningcss-linux-x64-musl@1.32.0 && npm run build:frontend"
 
 [context.branch-deploy]
-  command = "npm ci && npm i --no-save @next/swc-linux-x64-gnu@14.2.33 lightningcss-linux-x64-gnu@1.32.0 && npm run build:frontend"
+  command = "npm ci && npm i --no-save @next/swc-linux-x64-gnu@14.2.33 @next/swc-linux-x64-musl@14.2.33 lightningcss-linux-x64-gnu@1.32.0 lightningcss-linux-x64-musl@1.32.0 && npm run build:frontend"
