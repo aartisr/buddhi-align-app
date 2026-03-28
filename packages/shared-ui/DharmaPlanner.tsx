@@ -8,17 +8,26 @@ export interface DharmaPlannerEntry {
 }
 
 export interface DharmaPlannerProps {
+  title: string;
+  description: string;
+  emptyState: string;
   entries: DharmaPlannerEntry[];
   onAddEntry?: (entry: DharmaPlannerEntry) => void;
 }
 
-export const DharmaPlanner: React.FC<DharmaPlannerProps> = ({ entries, onAddEntry }) => (
+export const DharmaPlanner: React.FC<DharmaPlannerProps> = ({
+  title,
+  description,
+  emptyState,
+  entries,
+  onAddEntry,
+}) => (
   <section className="mb-12">
-    <h2 className="text-2xl font-semibold mb-2 text-purple-700">Dharma Planner</h2>
-    <p className="text-zinc-600 mb-4">Align goals and actions with your purpose.</p>
+    <h2 className="text-2xl font-semibold mb-2 text-purple-700">{title}</h2>
+    <p className="text-zinc-600 mb-4">{description}</p>
     <div className="space-y-4">
       {entries.length === 0 ? (
-        <p className="text-zinc-400">No plans yet. Start by adding your first dharma goal.</p>
+        <p className="text-zinc-400">{emptyState}</p>
       ) : (
         <ul className="divide-y divide-zinc-100">
           {entries.map((entry, i) => (

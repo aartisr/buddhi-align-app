@@ -1,6 +1,9 @@
 import React from "react";
 
 export interface KarmaYogaTrackerProps {
+  title: string;
+  description: string;
+  emptyState: string;
   entries: Array<{
     date: string;
     action: string;
@@ -9,13 +12,19 @@ export interface KarmaYogaTrackerProps {
   onAddEntry?: (entry: { date: string; action: string; impact: string }) => void;
 }
 
-export const KarmaYogaTracker: React.FC<KarmaYogaTrackerProps> = ({ entries, onAddEntry }) => (
+export const KarmaYogaTracker: React.FC<KarmaYogaTrackerProps> = ({
+  title,
+  description,
+  emptyState,
+  entries,
+  onAddEntry,
+}) => (
   <section className="mb-12">
-    <h2 className="text-2xl font-semibold mb-2 text-indigo-700">Karma Yoga Tracker</h2>
-    <p className="text-zinc-600 mb-4">Track your selfless actions and service.</p>
+    <h2 className="text-2xl font-semibold mb-2 text-indigo-700">{title}</h2>
+    <p className="text-zinc-600 mb-4">{description}</p>
     <div className="space-y-4">
       {entries.length === 0 ? (
-        <p className="text-zinc-400">No entries yet. Start by adding your first act of service.</p>
+        <p className="text-zinc-400">{emptyState}</p>
       ) : (
         <ul className="divide-y divide-zinc-100">
           {entries.map((entry, i) => (

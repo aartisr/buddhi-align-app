@@ -5,9 +5,15 @@ import React from "react";
  */
 export function ErrorAlert({
   error,
+  title,
+  retryLabel,
+  retryAriaLabel,
   onRetry,
 }: {
   error: string | null;
+  title: string;
+  retryLabel: string;
+  retryAriaLabel: string;
   onRetry?: () => void;
 }) {
   if (!error) return null;
@@ -17,15 +23,15 @@ export function ErrorAlert({
       role="alert"
       className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
     >
-      <p className="text-red-800 font-semibold mb-2">Error</p>
+      <p className="text-red-800 font-semibold mb-2">{title}</p>
       <p className="text-red-700 text-sm mb-3">{error}</p>
       {onRetry && (
         <button
           onClick={onRetry}
           className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm font-medium"
-          aria-label="Retry loading data"
+          aria-label={retryAriaLabel}
         >
-          Retry
+          {retryLabel}
         </button>
       )}
     </div>
@@ -35,7 +41,7 @@ export function ErrorAlert({
 /**
  * Loading skeleton component
  */
-export function LoadingSkeleton({ count = 3 }: { count?: number }) {
+export function LoadingSkeleton({ count = 3, loadingLabel }: { count?: number; loadingLabel: string }) {
   return (
     <div className="space-y-4">
       {Array.from({ length: count }).map((_, i) => (
@@ -43,7 +49,7 @@ export function LoadingSkeleton({ count = 3 }: { count?: number }) {
           key={i}
           className="h-16 bg-zinc-200 rounded animate-pulse"
           role="status"
-          aria-label="Loading..."
+          aria-label={loadingLabel}
         />
       ))}
     </div>
@@ -54,12 +60,12 @@ export function LoadingSkeleton({ count = 3 }: { count?: number }) {
  * Empty state component
  */
 export function EmptyState({
-  title = "No entries yet",
-  description = "Create your first entry to get started.",
+  title,
+  description,
   action,
 }: {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   action?: React.ReactNode;
 }) {
   return (

@@ -3,13 +3,15 @@ import { JnanaReflection } from "@buddhi-align/shared-ui";
 import ModuleLayout from "../components/ModuleLayout";
 import { useJnanaReflectionEntries } from "../hooks/useJnanaReflectionEntries";
 import { useState } from "react";
+import { useI18n } from "../i18n/provider";
 
 export default function JnanaReflectionPage() {
+  const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry } = useJnanaReflectionEntries();
   const [form, setForm] = useState({ date: "", insight: "", contemplation: "" });
 
   return (
-    <ModuleLayout title="Jnana Reflection">
+    <ModuleLayout titleKey="module.jnana.title">
       <form
         className="mb-8 flex flex-col gap-4 p-6 rounded-2xl bg-gradient-to-br from-emerald/20 via-gold/10 to-primary/10 border-2 border-primary shadow-lg max-w-xl mx-auto"
         onSubmit={async (e) => {
@@ -18,7 +20,7 @@ export default function JnanaReflectionPage() {
           await addEntry(form);
           setForm({ date: "", insight: "", contemplation: "" });
         }}
-        aria-label="Add Jnana Reflection Entry"
+        aria-label={t("module.jnana.title")}
       >
         <div className="flex flex-col gap-4 w-full">
           <span className="text-3xl self-center" aria-hidden>🧘‍♂️</span>
@@ -28,39 +30,43 @@ export default function JnanaReflectionPage() {
             value={form.date}
             onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
             required
-            aria-label="Date"
+            aria-label={t("form.date")}
           />
           <input
             type="text"
-            placeholder="Insight (e.g. True knowledge...)"
+            placeholder={t("form.placeholder.insight")}
             className="border-2 border-emerald bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary text-lg shadow-sm text-zinc-900 placeholder-zinc-400"
             value={form.insight}
             onChange={e => setForm(f => ({ ...f, insight: e.target.value }))}
             required
-            aria-label="Insight"
+            aria-label={t("form.insight")}
           />
           <input
             type="text"
-            placeholder="Contemplation (e.g. What is my true nature?)"
+            placeholder={t("form.placeholder.contemplation")}
             className="border-2 border-accent bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-emerald text-lg shadow-sm text-zinc-900 placeholder-zinc-400"
             value={form.contemplation}
             onChange={e => setForm(f => ({ ...f, contemplation: e.target.value }))}
             required
-            aria-label="Contemplation"
+            aria-label={t("form.contemplation")}
           />
           <button
             type="submit"
             className="px-6 py-2 rounded-xl bg-gradient-to-r from-primary to-emerald text-primary font-bold shadow-lg hover:from-gold hover:to-emerald focus:outline-none focus:ring-2 focus:ring-gold transition w-full"
-            aria-label="Add Entry"
+            aria-label={t("app.add")}
           >
-            <span className="text-xl">➕</span> <span className="font-bold">Add</span>
+            <span className="text-xl">➕</span> <span className="font-bold">{t("app.add")}</span>
           </button>
         </div>
       </form>
       {loading ? (
-        <div>Loading...</div>
+        <div>{t("app.loading")}</div>
       ) : (
         <JnanaReflection
+          title={t("module.jnana.title")}
+          description={t("module.jnana.description")}
+          emptyState={t("list.empty.jnana")}
+          contemplationLabel={t("label.contemplation")}
           entries={entries}
           onAddEntry={addEntry}
         />
@@ -68,8 +74,8 @@ export default function JnanaReflectionPage() {
       <ul className="mt-4">
         {entries.map((entry) => (
           <li key={entry.id} className="flex items-center gap-2 text-sm">
-            <span>{entry.date} - {entry.insight} - Contemplation: {entry.contemplation}</span>
-            <button onClick={() => deleteEntry(entry.id!)} className="text-red-600 hover:underline ml-2">Delete</button>
+            <span>{entry.date} - {entry.insight} - {t("label.contemplation")}: {entry.contemplation}</span>
+            <button onClick={() => deleteEntry(entry.id!)} className="text-red-600 hover:underline ml-2">{t("app.delete")}</button>
           </li>
         ))}
       </ul>

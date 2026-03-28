@@ -7,6 +7,8 @@ import "./components/buddhi-bg.css";
 
 import BackgroundMusic from "./components/BackgroundMusic";
 import SiteFooter from "./components/SiteFooter";
+import { I18nProvider } from "./i18n/provider";
+import { DEFAULT_LOCALE, translate } from "./i18n/config";
 
 
 const inter = Inter({
@@ -15,8 +17,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Buddhi Align App",
-  description: "A subtle, spiritual, and professional journaling and analytics app.",
+  title: translate(DEFAULT_LOCALE, "app.title"),
+  description: translate(DEFAULT_LOCALE, "app.description"),
 };
 
 
@@ -28,10 +30,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        <div className="buddhi-bg-gradient" aria-hidden="true"></div>
-        <BackgroundMusic />
-        {children}
-        <SiteFooter />
+        <I18nProvider>
+          <div className="buddhi-bg-gradient" aria-hidden="true"></div>
+          <BackgroundMusic />
+          {children}
+          <SiteFooter />
+        </I18nProvider>
       </body>
     </html>
   );

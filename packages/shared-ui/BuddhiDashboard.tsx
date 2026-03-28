@@ -3,6 +3,9 @@ import Link from "next/link";
 
 export interface BuddhiDashboardProps {
   userName?: string;
+  heading: string;
+  subtitle: string;
+  welcomeTemplate: string;
   modules: Array<{
     key: string;
     title: string;
@@ -12,14 +15,18 @@ export interface BuddhiDashboardProps {
   }>;
 }
 
-export const BuddhiDashboard: React.FC<BuddhiDashboardProps> = ({ userName, modules }) => (
+export const BuddhiDashboard: React.FC<BuddhiDashboardProps> = ({
+  userName,
+  heading,
+  subtitle,
+  welcomeTemplate,
+  modules,
+}) => (
   <section className="mb-12">
     <h2 className="text-3xl font-semibold mb-2 text-zinc-900">
-      {userName ? `Welcome, ${userName}` : "Buddhi Dashboard"}
+      {userName ? welcomeTemplate.replace("{{name}}", userName) : heading}
     </h2>
-    <p className="text-zinc-600 mb-4">
-      Your unified overview for self-development and spiritual growth.
-    </p>
+    <p className="text-zinc-600 mb-4">{subtitle}</p>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {modules.map((mod) => {
         const isInternal = mod.href.startsWith("/");

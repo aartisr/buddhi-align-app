@@ -8,17 +8,26 @@ export interface VasanaTrackerEntry {
 }
 
 export interface VasanaTrackerProps {
+  title: string;
+  description: string;
+  emptyState: string;
   entries: VasanaTrackerEntry[];
   onAddEntry?: (entry: VasanaTrackerEntry) => void;
 }
 
-export const VasanaTracker: React.FC<VasanaTrackerProps> = ({ entries, onAddEntry }) => (
+export const VasanaTracker: React.FC<VasanaTrackerProps> = ({
+  title,
+  description,
+  emptyState,
+  entries,
+  onAddEntry,
+}) => (
   <section className="mb-12">
-    <h2 className="text-2xl font-semibold mb-2 text-yellow-700">Vasana Tracker</h2>
-    <p className="text-zinc-600 mb-4">Monitor habits and tendencies.</p>
+    <h2 className="text-2xl font-semibold mb-2 text-yellow-700">{title}</h2>
+    <p className="text-zinc-600 mb-4">{description}</p>
     <div className="space-y-4">
       {entries.length === 0 ? (
-        <p className="text-zinc-400">No vasana entries yet. Start by adding your first observation.</p>
+        <p className="text-zinc-400">{emptyState}</p>
       ) : (
         <ul className="divide-y divide-zinc-100">
           {entries.map((entry, i) => (

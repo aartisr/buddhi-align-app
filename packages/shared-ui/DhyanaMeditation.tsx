@@ -8,24 +8,35 @@ export interface DhyanaMeditationEntry {
 }
 
 export interface DhyanaMeditationProps {
+  title: string;
+  description: string;
+  emptyState: string;
+  durationUnit: string;
   entries: DhyanaMeditationEntry[];
   onAddEntry?: (entry: DhyanaMeditationEntry) => void;
 }
 
-export const DhyanaMeditation: React.FC<DhyanaMeditationProps> = ({ entries, onAddEntry }) => (
+export const DhyanaMeditation: React.FC<DhyanaMeditationProps> = ({
+  title,
+  description,
+  emptyState,
+  durationUnit,
+  entries,
+  onAddEntry,
+}) => (
   <section className="mb-12">
-    <h2 className="text-2xl font-semibold mb-2 text-green-700">Dhyana Meditation</h2>
-    <p className="text-zinc-600 mb-4">Guided and self-led meditation tools.</p>
+    <h2 className="text-2xl font-semibold mb-2 text-green-700">{title}</h2>
+    <p className="text-zinc-600 mb-4">{description}</p>
     <div className="space-y-4">
       {entries.length === 0 ? (
-        <p className="text-zinc-400">No meditation sessions yet. Start by adding your first session.</p>
+        <p className="text-zinc-400">{emptyState}</p>
       ) : (
         <ul className="divide-y divide-zinc-100">
           {entries.map((entry, i) => (
             <li key={i} className="py-2 flex flex-col md:flex-row md:items-center md:gap-4">
               <span className="font-medium text-green-700 w-24">{entry.date}</span>
               <span className="flex-1">{entry.type}</span>
-              <span className="text-zinc-700">{entry.duration} min</span>
+              <span className="text-zinc-700">{entry.duration} {durationUnit}</span>
               <span className="text-zinc-500 text-sm">{entry.notes}</span>
             </li>
           ))}

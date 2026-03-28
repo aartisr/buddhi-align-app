@@ -7,17 +7,28 @@ export interface BhaktiJournalEntry {
 }
 
 export interface BhaktiJournalProps {
+  title: string;
+  description: string;
+  emptyState: string;
+  gratitudeLabel: string;
   entries: BhaktiJournalEntry[];
   onAddEntry?: (entry: BhaktiJournalEntry) => void;
 }
 
-export const BhaktiJournal: React.FC<BhaktiJournalProps> = ({ entries, onAddEntry }) => (
+export const BhaktiJournal: React.FC<BhaktiJournalProps> = ({
+  title,
+  description,
+  emptyState,
+  gratitudeLabel,
+  entries,
+  onAddEntry,
+}) => (
   <section className="mb-12">
-    <h2 className="text-2xl font-semibold mb-2 text-pink-700">Bhakti Journal</h2>
-    <p className="text-zinc-600 mb-4">Reflect on devotion and gratitude.</p>
+    <h2 className="text-2xl font-semibold mb-2 text-pink-700">{title}</h2>
+    <p className="text-zinc-600 mb-4">{description}</p>
     <div className="space-y-4">
       {entries.length === 0 ? (
-        <p className="text-zinc-400">No journal entries yet. Start by adding your first reflection.</p>
+        <p className="text-zinc-400">{emptyState}</p>
       ) : (
         <ul className="divide-y divide-zinc-100">
           {entries.map((entry, i) => (
@@ -25,7 +36,7 @@ export const BhaktiJournal: React.FC<BhaktiJournalProps> = ({ entries, onAddEntr
               <span className="font-medium text-pink-700 w-24">{entry.date}</span>
               <div className="ml-2">
                 <div className="text-zinc-700">{entry.reflection}</div>
-                <div className="text-yellow-700 text-sm">Gratitude: {entry.gratitude}</div>
+                <div className="text-yellow-700 text-sm">{gratitudeLabel}: {entry.gratitude}</div>
               </div>
             </li>
           ))}
