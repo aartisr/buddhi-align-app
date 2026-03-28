@@ -5,10 +5,10 @@ import React from "react";
 
 import LanguageSwitcher from "./LanguageSwitcher";
 import UserMenu from "./UserMenu";
-import { MODULE_CATALOG } from "../i18n/config";
+import { MODULE_CATALOG, type TranslationKey } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 
-export default function ModuleLayout({ titleKey, children }: { titleKey: string; children: React.ReactNode }) {
+export default function ModuleLayout({ titleKey, children }: { titleKey: TranslationKey; children: React.ReactNode }) {
   const { t } = useI18n();
   const icon = MODULE_CATALOG.find((item) => item.titleKey === titleKey)?.icon ?? "";
 

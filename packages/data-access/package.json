@@ -1,0 +1,11 @@
+{
+  "name": "@buddhi-align/data-access",
+  "version": "0.1.0",
+  "main": "index.ts",
+  "types": "index.d.ts",
+  "private": true,
+  "description": "Pluggable data-access layer for Buddhi Align App. Swap providers via the DATA_PROVIDER env var.",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4"
+  }
+}

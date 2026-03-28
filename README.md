@@ -209,18 +209,17 @@ npm install
 npm run dev
 ```
 
-This starts frontend and backend in parallel.
+Starts the Next.js frontend development server.
 
 ### Open application
 - Frontend: `http://localhost:3000`
-- Backend (optional): `http://localhost:4000`
 
 ## Scripts and Development Workflows
 Run from repository root:
 
-- `npm run dev`: start frontend and backend together.
-- `npm run dev:frontend`: start Next.js frontend only.
-- `npm run dev:backend`: start Express backend only.
+- `npm run dev`: start Next.js frontend development server.
+- `npm run lint`: run frontend lint checks.
+- `npm run test`: run frontend tests.
 - `npm run lint`: run frontend lint checks.
 - `npm test`: run frontend and backend tests.
 - `npm run build`: build frontend and run backend build step.
@@ -230,11 +229,8 @@ Run from repository root:
 npm run lint && npm test && npm run build
 ```
 
-## Backend API Contract
-Base URL: `http://localhost:4000`
-
-### Health/banner
-- `GET /` -> plain text: `Buddhi Align App Backend API`
+## API Routes
+All CRUD endpoints are built into the Next.js frontend (`apps/frontend/app/api/[module]/route.ts`).
 
 ### Module resources
 Supported modules:

@@ -1,9 +1,13 @@
 /**
  * Centralized API Configuration
  * Supports environment-based configuration for development, staging, and production
+ *
+ * NEXT_PUBLIC_API_URL — override the API origin (e.g. when running the Express
+ * backend locally alongside Next.js).  Defaults to '' (same origin), which
+ * means all /api/* calls are handled by the Next.js API routes.
  */
 
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 
 export const API_CONFIG = {
   baseUrl: API_BASE_URL,

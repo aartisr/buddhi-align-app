@@ -1,12 +1,22 @@
 import { signIn } from "@/auth";
-import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
-import Image from "next/image";
+import { translate, DEFAULT_LOCALE, type TranslationKey } from "@/app/i18n/config";
+import {
+  getConfiguredOAuthProviders,
+  type OAuthProviderId,
+} from "@/app/auth/provider-catalog";
+import type { ReactNode } from "react";
 
 /** Brand colours for providers */
-const PROVIDERS = [
+const PROVIDER_THEME: Record<
+  OAuthProviderId,
   {
-    id: "google",
-    name: "Google",
+    bg: string;
+    border: string;
+    text: string;
+    icon: ReactNode;
+  }
+> = {
+  google: {
     bg: "bg-white hover:bg-gray-50",
     border: "border border-gray-300",
     text: "text-gray-700",
@@ -19,9 +29,7 @@ const PROVIDERS = [
       </svg>
     ),
   },
-  {
-    id: "microsoft-entra-id",
-    name: "Microsoft",
+  "microsoft-entra-id": {
     bg: "bg-white hover:bg-gray-50",
     border: "border border-gray-300",
     text: "text-gray-700",
@@ -35,9 +43,7 @@ const PROVIDERS = [
       </svg>
     ),
   },
-  {
-    id: "github",
-    name: "GitHub",
+  github: {
     bg: "bg-gray-900 hover:bg-gray-800",
     border: "border border-gray-700",
     text: "text-white",
@@ -47,9 +53,7 @@ const PROVIDERS = [
       </svg>
     ),
   },
-  {
-    id: "apple",
-    name: "Apple",
+  apple: {
     bg: "bg-black hover:bg-gray-900",
     border: "border border-gray-700",
     text: "text-white",
@@ -59,9 +63,7 @@ const PROVIDERS = [
       </svg>
     ),
   },
-  {
-    id: "facebook",
-    name: "Facebook",
+  facebook: {
     bg: "bg-[#1877F2] hover:bg-[#166FE5]",
     border: "border border-transparent",
     text: "text-white",
@@ -71,20 +73,29 @@ const PROVIDERS = [
       </svg>
     ),
   },
-] as const;
+};
 
-const t = (key: string) => translate(DEFAULT_LOCALE, key);
+const t = (key: TranslationKey, vars?: Record<string, string | number>) =>
+  translate(DEFAULT_LOCALE, key, vars);
+
+function sanitizeCallbackUrl(callbackUrl?: string): string {
+  if (!callbackUrl) return "/";
+  if (!callbackUrl.startsWith("/")) return "/";
+  if (callbackUrl.startsWith("//")) return "/";
+  return callbackUrl;
+}
 
 export default function SignInPage({
   searchParams,
 }: {
   searchParams?: { callbackUrl?: string; error?: string };
 }) {
-  const callbackUrl = searchParams?.callbackUrl ?? "/";
+  const configuredProviders = getConfiguredOAuthProviders();
+  const callbackUrl = sanitizeCallbackUrl(searchParams?.callbackUrl);
   const error = searchParams?.error;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-amber-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-indigo-50 via-white to-amber-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800 px-4">
       <div className="w-full max-w-md">
         {/* Brand header */}
         <div className="text-center mb-8">
@@ -101,8 +112,8 @@ export default function SignInPage({
         {error && (
           <div className="mb-4 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm text-center" role="alert">
             {error === "OAuthSignin" || error === "OAuthCallback"
-              ? "Sign-in failed. Please try a different provider."
-              : `Authentication error: ${error}`}
+              ? t("auth.error.signInFailed")
+              : t("auth.error.generic", { error })}
           </div>
         )}
 
@@ -112,25 +123,35 @@ export default function SignInPage({
             {t("auth.signIn")}
           </p>
 
-          {PROVIDERS.map((provider) => (
-            <form
-              key={provider.id}
-              action={async () => {
-                "use server";
-                await signIn(provider.id, { redirectTo: callbackUrl });
-              }}
-            >
-              <button
-                type="submit"
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-150 ${provider.bg} ${provider.border} ${provider.text} shadow-sm hover:shadow-md active:scale-[0.98]`}
+          {configuredProviders.map((provider) => {
+            const theme = PROVIDER_THEME[provider.id];
+
+            return (
+              <form
+                key={provider.id}
+                action={async () => {
+                  "use server";
+                  await signIn(provider.id, { redirectTo: callbackUrl });
+                }}
               >
-                <span className="flex-shrink-0">{provider.icon}</span>
-                <span className="flex-1 text-left">
-                  {t("auth.signInWith").replace("{{provider}}", provider.name)}
-                </span>
-              </button>
-            </form>
-          ))}
+                <button
+                  type="submit"
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-150 ${theme.bg} ${theme.border} ${theme.text} shadow-sm hover:shadow-md active:scale-[0.98]`}
+                >
+                  <span className="shrink-0">{theme.icon}</span>
+                  <span className="flex-1 text-left">
+                    {t("auth.signInWith", { provider: provider.name })}
+                  </span>
+                </button>
+              </form>
+            );
+          })}
+
+          {configuredProviders.length === 0 && (
+            <p className="text-sm text-center text-zinc-500 dark:text-zinc-400 py-2">
+              {t("auth.noProviders")}
+            </p>
+          )}
         </div>
 
         {/* Footer note */}

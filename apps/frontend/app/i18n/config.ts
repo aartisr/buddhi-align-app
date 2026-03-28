@@ -137,7 +137,12 @@ const EN_MESSAGES: TranslationDict = {
   "auth.signInWith": "Continue with {{provider}}",
   "auth.pageTitle": "Sign in to Buddhi Align",
   "auth.chooseProvider": "Choose how you'd like to sign in",
+  "auth.error.signInFailed": "Sign-in failed. Please try a different provider.",
+  "auth.error.generic": "Authentication error: {{error}}",
+  "auth.noProviders": "No sign-in providers are configured yet.",
 };
+
+export type TranslationKey = keyof typeof EN_MESSAGES;
 
 function createLocaleMessages(overrides: TranslationDict): TranslationDict {
   return {
@@ -249,6 +254,9 @@ const HI_MESSAGES: TranslationDict = createLocaleMessages({
   "auth.signInWith": "{{provider}} से जारी रखें",
   "auth.pageTitle": "बुद्धि एलाइन में साइन इन करें",
   "auth.chooseProvider": "साइन इन करने का तरीका चुनें",
+  "auth.error.signInFailed": "साइन-इन विफल रहा। कृपया किसी अन्य प्रदाता से प्रयास करें।",
+  "auth.error.generic": "प्रमाणीकरण त्रुटि: {{error}}",
+  "auth.noProviders": "अभी कोई साइन-इन प्रदाता कॉन्फ़िगर नहीं है।",
 });
 
 const KN_MESSAGES: TranslationDict = createLocaleMessages({
@@ -524,9 +532,9 @@ export interface ModuleCatalogItem {
   key: "karma" | "bhakti" | "jnana" | "dhyana" | "vasana" | "dharma" | "motivation";
   icon: string;
   href: string;
-  titleKey: string;
-  descriptionKey: string;
-  navKey?: string;
+  titleKey: TranslationKey;
+  descriptionKey: TranslationKey;
+  navKey?: TranslationKey;
 }
 
 export const MODULE_CATALOG: ModuleCatalogItem[] = [
@@ -539,10 +547,10 @@ export const MODULE_CATALOG: ModuleCatalogItem[] = [
   { key: "motivation", icon: "🏆", href: "/motivation-analytics", titleKey: "module.motivation.title", descriptionKey: "module.motivation.description" },
 ];
 
-export const MODULE_ICON_MAP: Record<string, string> = MODULE_CATALOG.reduce((acc, item) => {
+export const MODULE_ICON_MAP: Record<TranslationKey, string> = MODULE_CATALOG.reduce((acc, item) => {
   acc[item.titleKey] = item.icon;
   return acc;
-}, {} as Record<string, string>);
+}, {} as Record<TranslationKey, string>);
 
 export function getIntlLocale(locale: Locale): string {
   return LOCALE_DEFINITIONS.find((item) => item.code === locale)?.htmlLang ?? "en-US";
@@ -556,7 +564,11 @@ function interpolate(template: string, vars?: Record<string, string | number>): 
   );
 }
 
-export function translate(locale: Locale, key: string, vars?: Record<string, string | number>): string {
+export function translate(
+  locale: Locale,
+  key: TranslationKey,
+  vars?: Record<string, string | number>,
+): string {
   const localized = MESSAGES[locale][key] ?? MESSAGES[DEFAULT_LOCALE][key] ?? key;
   return interpolate(localized, vars);
 }

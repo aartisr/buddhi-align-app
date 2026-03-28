@@ -148,24 +148,24 @@ npm run test:frontend # Component rendering & integration tests
 ### Environment Variables
 
 ```bash
-# .env (development)
-REACT_APP_API_URL=http://localhost:4000
+# .env.local (development) — leave blank to use same-origin routes
+NEXT_PUBLIC_API_URL=
 
-# .env.production
-REACT_APP_API_URL=https://api.buddhi-align.com
+# For local testing with in-memory store
+DATA_PROVIDER=memory
+
+# For Supabase (production)
+DATA_PROVIDER=supabase
+SUPABASE_URL=https://<project>.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=<service-role-secret>
 ```
 
 ### API Client Config
 
 ```typescript
 // packages/site-config/apiConfig.ts
-export const API_CONFIG = {
-  baseUrl: process.env.REACT_APP_API_URL || 'http://localhost:4000',
-  timeout: 10000,           // milliseconds
-  retries: 3,
-  retryDelay: 1000,         // milliseconds
-  retryBackoffMultiplier: 2, // exponential (1x, 2x, 4x)
-};
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
+// Defaults to '' (same origin), so all /api/* calls go to Next.js routes
 ```
 
 ---
@@ -224,7 +224,7 @@ const [entries, setEntries] = useState([]);
 const [loading, setLoading] = useState(true);
 
 useEffect(() => {
-  fetch('http://localhost:4000/api/bhakti')
+  fetch('/api/bhakti')  // Old: pointed to separate backend server
     .then(res => res.json())
     .then(data => { setEntries(data); setLoading(false); });
 }, []);

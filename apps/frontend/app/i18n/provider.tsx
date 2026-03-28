@@ -1,18 +1,19 @@
 "use client";
 
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import {
   DEFAULT_LOCALE,
   LOCALE_OPTIONS,
   MODULE_CATALOG,
   type Locale,
+  type TranslationKey,
   translate,
 } from "./config";
 
 interface I18nContextValue {
   locale: Locale;
   setLocale: (locale: Locale) => void;
-  t: (key: string, vars?: Record<string, string | number>) => string;
+  t: (key: TranslationKey, vars?: Record<string, string | number>) => string;
   locales: typeof LOCALE_OPTIONS;
 }
 
@@ -29,7 +30,13 @@ function readStoredLocale(): Locale {
 }
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(() => readStoredLocale());
+  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
+
+  useEffect(() => {
+    const storedLocale = readStoredLocale();
+    setLocaleState(storedLocale);
+    document.documentElement.lang = storedLocale;
+  }, []);
 
   const setLocale = (nextLocale: Locale) => {
     setLocaleState(nextLocale);

@@ -1,0 +1,39 @@
+# ============================================================
+# Netlify build configuration for Buddhi Align App
+#
+# The Next.js frontend (apps/frontend) is the deployed site.
+# The Express backend is NOT deployed to Netlify — its CRUD
+# endpoints are replaced by the Next.js API routes in
+#   apps/frontend/app/api/[module]/route.ts
+#   apps/frontend/app/api/[module]/[id]/route.ts
+# which are automatically converted to Netlify Functions by
+# @netlify/plugin-nextjs.
+# ============================================================
+
+[build]
+  # Install from the monorepo root so all workspace packages are available,
+  # then build only the frontend.
+  command = "npm ci && npm run build:frontend"
+  publish  = "apps/frontend/.next"
+
+[build.environment]
+  NODE_VERSION            = "20"
+  NEXT_TELEMETRY_DISABLED = "1"
+  # DATA_PROVIDER defaults to "supabase".
+  # Set this (and SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY) in the
+  # Netlify UI under Site → Environment Variables.
+  DATA_PROVIDER = "supabase"
+
+# @netlify/plugin-nextjs converts API routes, SSR pages, and middleware
+# into Netlify Functions / Edge Functions automatically.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# ------------------------------------------------------------
+# Context overrides
+# ------------------------------------------------------------
+[context.deploy-preview]
+  command = "npm ci && npm run build:frontend"
+
+[context.branch-deploy]
+  command = "npm ci && npm run build:frontend"

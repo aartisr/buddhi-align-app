@@ -1,6 +1,14 @@
 "use client";
 import { DharmaPlanner } from "@buddhi-align/shared-ui";
 import ModuleLayout from "../components/ModuleLayout";
+import ModuleEntryForm from "../components/ModuleEntryForm";
+import EntryDeleteList from "../components/EntryDeleteList";
+import { ModuleFormField } from "../components/ModuleFormFields";
+import {
+  DHARMA_INITIAL_FORM_STATE,
+  getDharmaFields,
+  type DharmaFormState,
+} from "../config/module-fields";
 import { useDharmaPlannerEntries } from "../hooks/useDharmaPlannerEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
@@ -8,65 +16,32 @@ import { useI18n } from "../i18n/provider";
 export default function DharmaPlannerPage() {
   const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry } = useDharmaPlannerEntries();
-  const [form, setForm] = useState({ date: "", goal: "", action: "", status: "" });
+  const [form, setForm] = useState<DharmaFormState>(DHARMA_INITIAL_FORM_STATE);
+  const fields = getDharmaFields(form, t);
 
   return (
     <ModuleLayout titleKey="module.dharma.title">
-      <form
-        className="mb-8 flex flex-col gap-4 p-6 rounded-2xl bg-gradient-to-br from-indigo/20 via-gold/10 to-primary/10 border-2 border-indigo shadow-lg max-w-xl mx-auto"
+      <ModuleEntryForm
+        title={t("module.dharma.title")}
+        icon="📜"
+        className="mb-8 flex flex-col gap-4 p-6 rounded-2xl bg-linear-to-br from-indigo/20 via-gold/10 to-primary/10 border-2 border-indigo shadow-lg max-w-xl mx-auto"
         onSubmit={async (e) => {
           e.preventDefault();
           if (!form.date || !form.goal || !form.action) return;
           await addEntry(form);
-          setForm({ date: "", goal: "", action: "", status: "" });
+          setForm({ ...DHARMA_INITIAL_FORM_STATE });
         }}
-        aria-label={t("module.dharma.title")}
+        submitLabel={t("app.add")}
+        submitButtonClassName="px-6 py-2 rounded-xl bg-linear-to-r from-indigo to-gold text-indigo font-bold shadow-lg hover:from-gold hover:to-primary focus:outline-none focus:ring-2 focus:ring-gold transition w-full"
       >
-        <div className="flex flex-col gap-4 w-full">
-          <span className="text-3xl self-center" aria-hidden>📜</span>
-          <input
-            type="date"
-            className="border-2 border-indigo bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-gold text-lg shadow-sm text-zinc-900 placeholder-zinc-400"
-            value={form.date}
-            onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
-            required
-            aria-label={t("form.date")}
+        {fields.map((field) => (
+          <ModuleFormField
+            key={field.key}
+            field={field}
+            onValueChange={(key, value) => setForm((f) => ({ ...f, [key]: value } as typeof f))}
           />
-          <input
-            type="text"
-            placeholder={t("form.placeholder.goal")}
-            className="border-2 border-primary bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo text-lg shadow-sm text-zinc-900 placeholder-zinc-400"
-            value={form.goal}
-            onChange={e => setForm(f => ({ ...f, goal: e.target.value }))}
-            required
-            aria-label={t("form.goal")}
-          />
-          <input
-            type="text"
-            placeholder={t("form.placeholder.actionPlan")}
-            className="border-2 border-gold bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary text-lg shadow-sm text-zinc-900 placeholder-zinc-400"
-            value={form.action}
-            onChange={e => setForm(f => ({ ...f, action: e.target.value }))}
-            required
-            aria-label={t("form.actionPlan")}
-          />
-          <input
-            type="text"
-            placeholder={t("form.placeholder.status")}
-            className="border-2 border-accent bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo text-lg shadow-sm text-zinc-900 placeholder-zinc-400"
-            value={form.status}
-            onChange={e => setForm(f => ({ ...f, status: e.target.value }))}
-            aria-label={t("form.status")}
-          />
-          <button
-            type="submit"
-            className="px-6 py-2 rounded-xl bg-gradient-to-r from-indigo to-gold text-indigo font-bold shadow-lg hover:from-gold hover:to-primary focus:outline-none focus:ring-2 focus:ring-gold transition w-full"
-            aria-label={t("app.add")}
-          >
-            <span className="text-xl">➕</span> <span className="font-bold">{t("app.add")}</span>
-          </button>
-        </div>
-      </form>
+        ))}
+      </ModuleEntryForm>
       {loading ? (
         <div>{t("app.loading")}</div>
       ) : (
@@ -78,14 +53,12 @@ export default function DharmaPlannerPage() {
           onAddEntry={addEntry}
         />
       )}
-      <ul className="mt-4">
-        {entries.map((entry) => (
-          <li key={entry.id} className="flex items-center gap-2 text-sm">
-            <span>{entry.date} - {entry.goal} - {entry.action} - {entry.status}</span>
-            <button onClick={() => deleteEntry(entry.id!)} className="text-red-600 hover:underline ml-2">{t("app.delete")}</button>
-          </li>
-        ))}
-      </ul>
+      <EntryDeleteList
+        entries={entries}
+        onDelete={deleteEntry}
+        deleteLabel={t("app.delete")}
+        renderText={(entry) => `${entry.date} - ${entry.goal} - ${entry.action} - ${entry.status}`}
+      />
     </ModuleLayout>
   );
 }

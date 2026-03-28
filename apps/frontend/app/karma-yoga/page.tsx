@@ -1,6 +1,14 @@
 "use client";
 import { KarmaYogaTracker } from "@buddhi-align/shared-ui";
 import ModuleLayout from "../components/ModuleLayout";
+import ModuleEntryForm from "../components/ModuleEntryForm";
+import EntryDeleteList from "../components/EntryDeleteList";
+import { ModuleFormField } from "../components/ModuleFormFields";
+import {
+  getKarmaFields,
+  KARMA_INITIAL_FORM_STATE,
+  type KarmaFormState,
+} from "../config/module-fields";
 import { useKarmaYogaEntries } from "../hooks/useKarmaYogaEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
@@ -8,57 +16,32 @@ import { useI18n } from "../i18n/provider";
 export default function KarmaYogaPage() {
   const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry } = useKarmaYogaEntries();
-  const [form, setForm] = useState({ date: "", action: "", impact: "" });
+  const [form, setForm] = useState<KarmaFormState>(KARMA_INITIAL_FORM_STATE);
+  const fields = getKarmaFields(form, t);
 
   return (
     <ModuleLayout titleKey="module.karma.title">
-      <form
-        className="mb-8 flex flex-col gap-4 p-6 rounded-2xl bg-gradient-to-br from-gold/30 via-emerald/10 to-rose/10 border-2 border-primary shadow-lg max-w-xl mx-auto"
+      <ModuleEntryForm
+        title={t("module.karma.title")}
+        icon="🙏"
+        className="mb-8 flex flex-col gap-4 p-6 rounded-2xl bg-linear-to-br from-gold/30 via-emerald/10 to-rose/10 border-2 border-primary shadow-lg max-w-xl mx-auto"
         onSubmit={async (e) => {
           e.preventDefault();
           if (!form.date || !form.action || !form.impact) return;
           await addEntry(form);
-          setForm({ date: "", action: "", impact: "" });
+          setForm({ ...KARMA_INITIAL_FORM_STATE });
         }}
-        aria-label={t("module.karma.title")}
+        submitLabel={t("app.add")}
+        submitButtonClassName="px-6 py-2 rounded-xl bg-linear-to-r from-primary to-accent text-primary font-bold shadow-lg hover:from-gold hover:to-rose focus:outline-none focus:ring-2 focus:ring-gold transition w-full"
       >
-        <div className="flex flex-col gap-4 w-full">
-          <span className="text-3xl self-center" aria-hidden>🙏</span>
-          <input
-            type="date"
-            className="border-2 border-emerald bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-gold text-lg shadow-sm text-zinc-900 placeholder-zinc-400"
-            value={form.date}
-            onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
-            required
-            aria-label={t("form.date")}
+        {fields.map((field) => (
+          <ModuleFormField
+            key={field.key}
+            field={field}
+            onValueChange={(key, value) => setForm((f) => ({ ...f, [key]: value } as typeof f))}
           />
-          <input
-            type="text"
-            placeholder={t("form.placeholder.action")}
-            className="border-2 border-primary bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-rose text-lg shadow-sm text-zinc-900 placeholder-zinc-400"
-            value={form.action}
-            onChange={e => setForm(f => ({ ...f, action: e.target.value }))}
-            required
-            aria-label={t("form.action")}
-          />
-          <input
-            type="text"
-            placeholder={t("form.placeholder.impact")}
-            className="border-2 border-accent bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-emerald text-lg shadow-sm text-zinc-900 placeholder-zinc-400"
-            value={form.impact}
-            onChange={e => setForm(f => ({ ...f, impact: e.target.value }))}
-            required
-            aria-label={t("form.impact")}
-          />
-          <button
-            type="submit"
-            className="px-6 py-2 rounded-xl bg-gradient-to-r from-primary to-accent text-primary font-bold shadow-lg hover:from-gold hover:to-rose focus:outline-none focus:ring-2 focus:ring-gold transition w-full"
-            aria-label={t("app.add")}
-          >
-            <span className="text-xl">➕</span> <span className="font-bold">{t("app.add")}</span>
-          </button>
-        </div>
-      </form>
+        ))}
+      </ModuleEntryForm>
       {loading ? (
         <div>{t("app.loading")}</div>
       ) : (
@@ -70,14 +53,12 @@ export default function KarmaYogaPage() {
           onAddEntry={addEntry}
         />
       )}
-      <ul className="mt-4">
-        {entries.map((entry) => (
-          <li key={entry.id} className="flex items-center gap-2 text-sm">
-            <span>{entry.date} - {entry.action} - {entry.impact}</span>
-            <button onClick={() => deleteEntry(entry.id!)} className="text-red-600 hover:underline ml-2">{t("app.delete")}</button>
-          </li>
-        ))}
-      </ul>
+      <EntryDeleteList
+        entries={entries}
+        onDelete={deleteEntry}
+        deleteLabel={t("app.delete")}
+        renderText={(entry) => `${entry.date} - ${entry.action} - ${entry.impact}`}
+      />
     </ModuleLayout>
   );
 }

@@ -31,14 +31,8 @@ jobs:
       - name: Test frontend
         run: npm run test:frontend
 
-      - name: Test backend
-        run: npm run test:backend
-
       - name: Build frontend
         run: npm run build:frontend
-
-      - name: Build backend
-        run: npm run build:backend
 
   security-audit:
     runs-on: ubuntu-latest
