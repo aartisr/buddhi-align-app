@@ -137,28 +137,31 @@ export default function MotivationAnalyticsPage() {
 
   return (
     <ModuleLayout titleKey="module.motivation.title">
-      <section className="mb-10 flex flex-col items-center justify-center">
-        <div className="app-analytics-hero max-w-2xl p-8 rounded-2xl shadow-xl text-center mb-8">
-          <h2 className="app-panel-title text-2xl md:text-3xl font-bold mb-4">{t("motivation.title")}</h2>
-          <blockquote className="app-quote-text italic text-xl md:text-2xl mb-2">“{quote.quote}”</blockquote>
-          <div className="app-author-text text-lg font-semibold">— {quote.author}</div>
-          <button
-            className="app-button-primary app-button-primary--analytics mt-6"
-            onClick={() => setQuote(getRandomQuote(quotes))}
-            aria-label={t("motivation.inspireAgain")}
-          >
-            {t("motivation.inspireAgain")}
-          </button>
+      <section className="mb-8 sm:mb-10 flex flex-col items-center justify-center">
+        <div className="app-analytics-hero max-w-2xl p-4 sm:p-8 rounded-2xl shadow-xl text-center mb-6 sm:mb-8 w-full">
+          <h2 className="app-panel-title text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">{t("motivation.title")}</h2>
+          <blockquote className="app-quote-text italic text-base sm:text-xl md:text-2xl mb-2">&ldquo;{quote.quote}&rdquo;</blockquote>
+          <div className="app-author-text text-base sm:text-lg font-semibold">— {quote.author}</div>
+          <div className="flex justify-center mt-4 sm:mt-6">
+            <button
+              className="app-button-primary app-button-primary--analytics"
+              style={{ width: "auto", minWidth: "11rem" }}
+              onClick={() => setQuote(getRandomQuote(quotes))}
+              aria-label={t("motivation.inspireAgain")}
+            >
+              {t("motivation.inspireAgain")}
+            </button>
+          </div>
         </div>
-        <div className="app-surface-card w-full max-w-3xl rounded-2xl p-6 mb-10">
-          <h3 className="app-panel-title text-xl font-bold mb-4 text-center">{t("motivation.chartTitle")}</h3>
-          <div className="w-full h-80">
+        <div className="app-surface-card w-full max-w-3xl rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10">
+          <h3 className="app-panel-title text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-center">{t("motivation.chartTitle")}</h3>
+          <div className="w-full h-52 sm:h-80">
             {typeof window !== "undefined" && Chart && (
               <Chart options={chartData.options} series={chartData.series} type="bar" height={320} />
             )}
           </div>
         </div>
-        <div className="w-full max-w-3xl grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+        <div className="w-full max-w-3xl grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8 sm:mb-10">
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🙏</span>
             <span className="font-bold text-lg text-emerald-800">{t("layout.module.karma")}</span>
@@ -201,20 +204,18 @@ export default function MotivationAnalyticsPage() {
           </div>
         </div>
       </section>
-      <section className="mt-12 max-w-2xl mx-auto text-center">
-        <h3 className="app-panel-title text-xl md:text-2xl font-bold mb-4">{t("motivation.howTo")}</h3>
-        <ul className="app-list-copy list-disc list-inside text-lg space-y-2 text-left mx-auto max-w-xl">
+      <section className="mt-10 sm:mt-12 max-w-2xl mx-auto text-center">
+        <h3 className="app-panel-title text-lg sm:text-xl md:text-2xl font-bold mb-4">{t("motivation.howTo")}</h3>
+        <ul className="app-list-copy list-disc list-inside text-base sm:text-lg space-y-2 text-left mx-auto max-w-xl">
           <li>{t("motivation.howto.1")}</li>
           <li>{t("motivation.howto.2")}</li>
           <li>{t("motivation.howto.3")}</li>
           <li>{t("motivation.howto.4")}</li>
           <li>{t("motivation.howto.5")}</li>
         </ul>
-        <div className="app-info-panel app-info-copy mt-10 p-6 rounded-xl shadow text-lg">
+        <div className="app-info-panel app-info-copy mt-8 sm:mt-10 p-4 sm:p-6 rounded-xl shadow text-base sm:text-lg">
           <h4 className="app-info-title font-bold mb-2">{t("motivation.tipTitle")}</h4>
-          <p>
-            {t("motivation.tipBody")}
-          </p>
+          <p>{t("motivation.tipBody")}</p>
         </div>
       </section>
     </ModuleLayout>

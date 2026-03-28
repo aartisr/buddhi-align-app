@@ -22,17 +22,17 @@ export const BuddhiDashboard: React.FC<BuddhiDashboardProps> = ({
   welcomeTemplate,
   modules,
 }) => (
-  <section className="mb-12">
-    <h2 className="text-3xl font-semibold mb-2 text-zinc-900">
+  <section className="mb-8 sm:mb-12">
+    <h2 className="text-2xl sm:text-3xl font-semibold mb-2 text-zinc-900">
       {userName ? welcomeTemplate.replace("{{name}}", userName) : heading}
     </h2>
     <p className="app-copy mb-4">{subtitle}</p>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
       {modules.map((mod) => {
         const isInternal = mod.href.startsWith("/");
         const commonProps = {
           className:
-            "app-dashboard-card group rounded-lg p-6 hover:shadow-lg focus:shadow-lg transition flex items-center gap-4 outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 active:scale-95 cursor-pointer",
+            "app-dashboard-card group rounded-xl p-4 sm:p-6 hover:shadow-lg focus:shadow-lg transition flex items-center gap-3 sm:gap-4 outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 active:scale-95 cursor-pointer",
           "aria-label": mod.title,
           tabIndex: 0,
         };
