@@ -10,28 +10,31 @@ import {
   type OAuthProviderId,
 } from "./app/auth/provider-catalog";
 
-function isLoopbackAuthUrl(url: string): boolean {
+function getValidatedAuthUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+
   try {
-    const { hostname } = new URL(url);
-    return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "0.0.0.0";
+    const parsed = new URL(url);
+    if (process.env.NODE_ENV === "production" && parsed.protocol !== "https:") {
+      return undefined;
+    }
+    return parsed.toString();
   } catch {
-    return false;
+    return undefined;
   }
 }
 
 const configuredAuthUrl = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL;
+const validatedAuthUrl = getValidatedAuthUrl(configuredAuthUrl);
 
-if (
-  process.env.NODE_ENV === "production" &&
-  configuredAuthUrl &&
-  isLoopbackAuthUrl(configuredAuthUrl)
-) {
-  // Force Auth.js to derive the host from forwarded headers when a bad localhost URL is set in production.
+if (configuredAuthUrl && !validatedAuthUrl) {
+  // Keep auth URL environment-driven and drop invalid values instead of hardcoding host fallbacks.
   delete process.env.AUTH_URL;
   delete process.env.NEXTAUTH_URL;
-  console.warn(
-    `Ignoring loopback auth URL in production: ${configuredAuthUrl}. Falling back to request host.`,
-  );
+  console.warn("Ignoring invalid auth URL and falling back to request host.");
+} else if (validatedAuthUrl) {
+  process.env.AUTH_URL = validatedAuthUrl;
+  process.env.NEXTAUTH_URL = validatedAuthUrl;
 }
 
 /**
