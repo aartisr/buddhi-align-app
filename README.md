@@ -1,4 +1,3 @@
-
 # Buddhi Align App
 
 > Buddhi Yoga as a practical system for clarity, self-regulation, and purposeful daily action.
@@ -7,233 +6,116 @@
 
 This project is dedicated to **Shishubharati**.
 
-The author is deeply grateful to the teachers and volunteers of Shishu Bharati for their guidance, service, and living example of values-centered education.
-
 Website: [https://www.shishubharati.net/](https://www.shishubharati.net/)
 
-## Abstract
-Buddhi Align App is a contemplative technology platform that operationalizes Buddhi Yoga principles into measurable, daily practice. The project combines philosophical depth with modern engineering rigor: modular architecture, testable boundaries, clear quality gates, and reproducible development workflows. Its objective is to support inner clarity through structured action, reflective observation, and habit-aware guidance.
+## Documentation Status
 
-## App Screenshots
-Click the section below to expand and view full images.
+This documentation was refreshed on **2026-03-30** to match the current codebase.
 
-<details>
-<summary><strong>Expand Screenshot Gallery (click to view full images)</strong></summary>
+## What This App Is
 
-<br />
+Buddhi Align is a monorepo centered on a Next.js App Router application that helps users build contemplative practice through structured modules:
 
-<table>
-  <tr>
-    <td align="center">
-      <a href="docs/screenshots/dashboard-home.png">
-        <img src="docs/screenshots/dashboard-home.png" alt="Buddhi Align Dashboard Home" width="320" />
-      </a>
-      <br />
-      <strong>Dashboard Home</strong>
-    </td>
-    <td align="center">
-      <a href="docs/screenshots/karma-yoga.png">
-        <img src="docs/screenshots/karma-yoga.png" alt="Karma Yoga Module" width="320" />
-      </a>
-      <br />
-      <strong>Karma Yoga Module</strong>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="docs/screenshots/bhakti-journal.png">
-        <img src="docs/screenshots/bhakti-journal.png" alt="Bhakti Journal Module" width="320" />
-      </a>
-      <br />
-      <strong>Bhakti Journal Module</strong>
-    </td>
-    <td align="center">
-      <a href="docs/screenshots/motivation-analytics.png">
-        <img src="docs/screenshots/motivation-analytics.png" alt="Motivation and Analytics Module" width="320" />
-      </a>
-      <br />
-      <strong>Motivation and Analytics Module</strong>
-    </td>
-  </tr>
-</table>
+- Karma Yoga
+- Bhakti Journal
+- Jnana Reflection
+- Dhyana Meditation
+- Vasana Tracker
+- Dharma Planner
+- Motivation and Analytics
 
-</details>
+It includes built-in API routes, optional anonymous mode, OAuth sign-in, data portability, and longitudinal analytics.
 
-## Table of Contents
-- [Buddhi Align App](#buddhi-align-app)
-  - [Abstract](#abstract)
-  - [App Screenshots](#app-screenshots)
-  - [Table of Contents](#table-of-contents)
-  - [Project Overview](#project-overview)
-  - [Problem Statement and Scope](#problem-statement-and-scope)
-    - [Problem](#problem)
-    - [Scope](#scope)
-    - [Out of Scope (Current)](#out-of-scope-current)
-  - [Vision and Design Principles](#vision-and-design-principles)
-  - [Theoretical Foundation](#theoretical-foundation)
-    - [Four Practice Lenses Implemented in the App](#four-practice-lenses-implemented-in-the-app)
-  - [Feature Modules](#feature-modules)
-  - [Architecture](#architecture)
-    - [Runtime Model](#runtime-model)
-    - [Architectural Rationale](#architectural-rationale)
-  - [Repository Structure](#repository-structure)
-  - [Technology Stack](#technology-stack)
-  - [Quick Start](#quick-start)
-    - [Prerequisites](#prerequisites)
-    - [Install](#install)
-    - [Run development environment](#run-development-environment)
-    - [Open application](#open-application)
-  - [Scripts and Development Workflows](#scripts-and-development-workflows)
-    - [Recommended local quality loop](#recommended-local-quality-loop)
-  - [Backend API Contract](#backend-api-contract)
-    - [Health/banner](#healthbanner)
-    - [Module resources](#module-resources)
-    - [Data behavior notes](#data-behavior-notes)
-  - [Data Lifecycle and Privacy Model](#data-lifecycle-and-privacy-model)
-    - [Data classes](#data-classes)
-    - [Storage model](#storage-model)
-    - [Privacy posture](#privacy-posture)
-  - [Testing and Quality Gates](#testing-and-quality-gates)
-  - [Security Notes](#security-notes)
-  - [Operational Excellence Checklist](#operational-excellence-checklist)
-  - [Roadmap and Future Research](#roadmap-and-future-research)
-  - [Contribution Guide](#contribution-guide)
-  - [Author and Acknowledgments](#author-and-acknowledgments)
-  - [References](#references)
-  - [License](#license)
-
-## Project Overview
-**Buddhi Align App** is a maintainable monorepo that translates Buddhi Yoga principles into practical digital tools. It helps users align intellect, emotion, and action through structured reflection and habit-aware practice.
-
-The app is organized into focused modules (karma, bhakti, jnana, dhyana, vasana, dharma), with an optional backend API for CRUD operations and a reusable UI package for consistency across screens.
-
-## Problem Statement and Scope
-### Problem
-Most productivity and self-improvement tools optimize output volume, not psychological alignment. Users often gain activity while losing clarity.
-
-### Scope
-Buddhi Align focuses on:
-- Reflection quality over task quantity.
-- Intention tracking over superficial streak metrics.
-- Module-level extensibility without architectural coupling.
-
-### Out of Scope (Current)
-- Multi-user identity and cloud sync.
-- Long-term persistent backend storage.
-- Clinical or therapeutic claim frameworks.
-
-## Vision and Design Principles
-- **Clarity first:** UI and workflows emphasize reflection and intentionality over distraction.
-- **Modularity:** New modules can be added without destabilizing existing features.
-- **Accessibility and inclusivity:** Components are built to be readable and operable across devices.
-- **Privacy-first defaults:** No analytics tracking is enabled by default.
-- **Maintainability:** Workspace scripts, test hooks, and package boundaries are explicit and reproducible.
-
-## Theoretical Foundation
-The project is inspired by the Bhagavad Gita and Vedantic interpretation of human psychology.
-
-- **Buddhi**: discriminative intelligence that guides meaningful action.
-- **Manas**: reactive mind shaped by sensory impressions and emotional patterns.
-- **Vasanas**: latent tendencies that drive repeated behavior.
-
-The operating premise is practical: when action is intentional, selfless, and observed with awareness, reactive conditioning decreases and psychological clarity increases.
-
-### Four Practice Lenses Implemented in the App
-1. **Karma Yoga:** Action without fixation on outcomes.
-2. **Bhakti:** Devotional orientation and gratitude.
-3. **Jnana:** Inquiry, self-observation, and identity clarity.
-4. **Dhyana:** Focused attention and contemplative stillness.
-
-## Feature Modules
-- **Buddhi Dashboard:** Central launcher and progress context.
-- **Karma Yoga Tracker:** Track service-oriented action.
-- **Bhakti Journal:** Record gratitude and devotional reflections.
-- **Jnana Reflection:** Capture insight and contemplative thought.
-- **Dhyana Meditation:** Support guided and self-led practice.
-- **Vasana Tracker:** Observe habit loops and triggers.
-- **Dharma Planner:** Align action items with role and purpose.
-- **Motivation and Analytics:** Present progress patterns and encouragement.
-
-## Architecture
-The repository is a workspace monorepo with independently versioned app and package units.
+## Current Architecture
 
 ```text
 apps/
-   frontend/           Next.js app (App Router, TypeScript)
-   backend/            Express API with in-memory stores
+  frontend/                Next.js 14 app (UI + API routes + auth + middleware)
 packages/
-   shared-ui/          Shared React UI components used by frontend
-   site-config/        Shared site/theme/config surface
+  data-access/             DataProvider interface + memory/supabase implementations
+  site-config/             API client/config utilities + reusable hooks
+  shared-ui/               Shared React UI components
+supabase/
+  schema.sql               Core schema
+  schema_user_scoped.sql   User-scoped/RLS-oriented schema variant
 ```
 
-### Runtime Model
-- Frontend runs independently as a static-capable Next.js web app.
-- Backend is optional for local API-backed workflows.
-- Shared packages are consumed through workspace links.
+Note: There is no standalone `apps/backend` service in this repository. API behavior is implemented via Next.js route handlers under `apps/frontend/app/api`.
 
-### Architectural Rationale
-- **Monorepo:** ensures consistent dependency and quality policy across all modules.
-- **Shared UI package:** enforces visual and behavioral consistency.
-- **Optional backend:** allows both offline-style and API-backed development workflows.
-- **Explicit scripts:** makes CI parity straightforward for local contributors.
+## Tech Stack
 
-## Repository Structure
-Key top-level files:
-- `package.json`: workspace orchestration scripts.
-- `package-lock.json`: reproducible dependency graph.
-- `buddhi-align-app.code-workspace`: VS Code workspace definition.
-
-Key app files:
-- `apps/frontend/app/page.tsx`: dashboard entry page.
-- `apps/backend/index.js`: API bootstrap and route definitions.
-- `apps/backend/index.test.js`: backend API test coverage.
-
-## Technology Stack
-- **Frontend:** Next.js 14, React 18, TypeScript, Tailwind CSS.
-- **Backend:** Node.js, Express 5, CORS middleware.
-- **Testing:** Vitest + Testing Library (frontend), Node test runner + Supertest (backend).
-- **Monorepo orchestration:** npm workspaces + `npm-run-all`.
+- Next.js 14 (App Router)
+- React 18 + TypeScript
+- Tailwind CSS
+- NextAuth v5 (OAuth)
+- Vitest + Testing Library
+- npm workspaces
 
 ## Quick Start
+
 ### Prerequisites
-- Node.js 18+ recommended.
-- npm 9+ recommended.
+
+- Node.js 20.x (repo engines target)
+- npm 9+
 
 ### Install
-```sh
+
+```bash
 npm install
 ```
 
-### Run development environment
-```sh
+### Start local development
+
+```bash
 npm run dev
 ```
 
-Starts the Next.js frontend development server.
+Open: [http://localhost:3000](http://localhost:3000)
 
-### Open application
-- Frontend: `http://localhost:3000`
+## Workspace Scripts
 
-## Scripts and Development Workflows
 Run from repository root:
 
-- `npm run dev`: start Next.js frontend development server.
-- `npm run lint`: run frontend lint checks.
-- `npm run test`: run frontend tests.
-- `npm run lint`: run frontend lint checks.
-- `npm test`: run frontend and backend tests.
-- `npm run build`: build frontend and run backend build step.
+- `npm run dev` / `npm run dev:frontend`: start frontend dev server
+- `npm run lint` / `npm run lint:frontend`: run frontend linting
+- `npm run test` / `npm run test:frontend`: run frontend tests
+- `npm run build` / `npm run build:frontend`: build frontend
 
-### Recommended local quality loop
-```sh
-npm run lint && npm test && npm run build
+Recommended local quality loop:
+
+```bash
+npm run lint && npm run test && npm run build
 ```
 
-## API Routes
-All CRUD endpoints are built into the Next.js frontend (`apps/frontend/app/api/[module]/route.ts`).
+## Environment Variables
 
-### Module resources
-Supported modules:
+Core runtime variables used by the app:
+
+- `DATA_PROVIDER`: `supabase` (default) or `memory`
+- `SUPABASE_URL`: required when `DATA_PROVIDER=supabase`
+- `SUPABASE_SERVICE_ROLE_KEY`: required when `DATA_PROVIDER=supabase`
+- `NEXT_PUBLIC_API_URL`: optional API origin override (defaults to same origin)
+- `NEXT_PUBLIC_BGM_URL`: optional single background music URL
+- `NEXT_PUBLIC_BGM_URLS`: optional comma-separated background music playlist
+
+Auth variables:
+
+- `AUTH_SECRET`
+- `AUTH_URL` or `NEXTAUTH_URL` (optional in development; production derives host from request headers)
+- `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`
+- `AUTH_MICROSOFT_ENTRA_ID`, `AUTH_MICROSOFT_ENTRA_SECRET`, optional `AUTH_MICROSOFT_ENTRA_TENANT_ID`
+- `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`
+- `AUTH_APPLE_ID`, `AUTH_APPLE_SECRET`, `AUTH_APPLE_KEY_ID`, `AUTH_APPLE_TEAM_ID`
+- `AUTH_FACEBOOK_ID`, `AUTH_FACEBOOK_SECRET`
+
+If provider credentials are missing, that provider is automatically omitted from sign-in options.
+
+## API Surface
+
+### Module CRUD
+
+Valid modules:
+
 - `karma`
 - `bhakti`
 - `jnana`
@@ -241,98 +123,74 @@ Supported modules:
 - `vasana`
 - `dharma`
 
-For each module `<mod>`:
-- `GET /api/<mod>`: list entries.
-- `POST /api/<mod>`: create entry; server assigns `id`.
-- `PUT /api/<mod>/:id`: update existing entry.
-- `DELETE /api/<mod>/:id`: delete entry.
+Routes:
 
-### Data behavior notes
-- Storage is in-memory only and resets on server restart.
-- `PUT` and `DELETE` return `404` when ID is not found.
+- `GET /api/[module]`
+- `POST /api/[module]`
+- `PUT /api/[module]/[id]`
+- `DELETE /api/[module]/[id]`
 
-## Data Lifecycle and Privacy Model
-### Data classes
-- **Reflection entries:** user-provided text records across module workflows.
-- **Derived context:** UI-level summaries and display transformations.
+### Additional routes
 
-### Storage model
-- Default backend storage is volatile in-memory state for local development.
-- Restarting backend clears runtime data by design.
+- `GET /api/analytics`: streaks, counts, most active module, today activity
+- `GET /api/data/longitudinal`: 8-week trend + consistency score + growth module
+- `GET /api/data/export`: export module data archive
+- `POST /api/data/export`: import module data archive (disabled in anonymous mode)
+- `GET /api/preferences`: user preference fetch (requires auth)
+- `PUT /api/preferences`: user preference update (requires auth)
+- `POST /api/obs`: lightweight observability event ingestion
+- `GET|POST /api/auth/[...nextauth]`: NextAuth endpoints
 
-### Privacy posture
-- No tracking analytics are enabled by default.
-- No automatic third-party export pipeline is included.
-- Users retain control over where and how deployment data is hosted.
+## Auth and Anonymous Mode
 
-## Testing and Quality Gates
-- Frontend tests are under `apps/frontend/app/**/*.test.tsx`.
-- Backend tests are under `apps/backend/*.test.js`.
+- Middleware protects routes by default.
+- Public routes include `/sign-in` and `/api/auth/*`.
+- Anonymous mode can be used for exploration and stores temporary data in an in-memory anonymous store.
+- Signed-in users persist through configured `DataProvider` storage.
 
-Current CI-equivalent local checks:
-1. Linting passes (`next lint`).
-2. Frontend tests pass (`vitest run`).
-3. Backend API tests pass (`node --test`).
-4. Production build succeeds (`next build`).
+## Data Providers
 
-## Security Notes
-- Dependency scanning should be run periodically with:
+`packages/data-access` defines a storage abstraction:
 
-```sh
-npm audit --omit=dev
-```
+- `InMemoryDataProvider`: local/ephemeral storage
+- `SupabaseDataProvider`: persistent storage via Supabase
 
-- Some advisories may require major-version upgrades. Handle these through controlled migrations with regression checks.
+Default selection is controlled by `DATA_PROVIDER` in `packages/data-access/factory.ts`.
 
-## Operational Excellence Checklist
-- Clear build, lint, and test gates exist and are script-addressable.
-- Frontend and backend have independent test execution paths.
-- Module boundaries are explicit through workspace package topology.
-- Documentation includes architecture, API contract, and development lifecycle.
-- Reproducibility is enforced by lockfile and workspace scripts.
+## Testing and CI
 
-## Roadmap and Future Research
+Current tests include:
 
-### Engineering Foundation
-1. Add persistent storage adapters with explicit migration boundaries.
-2. Expand frontend test coverage to route-level and component integration depth.
-3. Introduce observability hooks for non-invasive quality diagnostics.
-4. Add export/import flows for user-owned reflection archives.
-5. Explore longitudinal insight models grounded in ethical AI and interpretability.
+- `apps/frontend/app/page.test.tsx`
+- `apps/frontend/app/components/DataPortability.test.tsx`
+- `apps/frontend/app/components/LongitudinalChart.test.tsx`
+- `packages/site-config/apiClient.test.ts`
 
-### Product Gaps (vs. Top Wellness Apps)
-6. **Daily reminders / mindful notifications** — The single highest-impact engagement driver across Headspace, Calm, and Insight Timer. Configurable per-module gentle nudges.
-7. **Achievement system** — Milestone badges beyond streaks (first entry, 7-day consistency, module mastery). Streaks alone retain poorly without reward anchors.
-8. **Mood / inner state check-in** — A fast daily emotional pulse (1–5 scale with optional note) surfaced at module entry. Present in every top-10 wellness app.
-9. **Offline capability** — Service Worker / PWA support so practices remain accessible during retreats or low-connectivity moments — critical for a contemplative app.
+CI workflow (`.github/workflows/ci.yml`) runs:
 
-### Social Media Trends (Top 3 by Engagement Volume)
-10. **AI-powered journaling prompts** *(trending: `#AIjournaling`, `#ChatGPTjournal`)* — Context-aware daily reflection prompts generated from the user's own entry history across Jnana, Bhakti, and Vasana modules. Personalization without surveillance.
-11. **Pranayama / breathwork visual guide** *(trending: `#breathwork`, `#pranayama` — 800M+ TikTok views)* — An animated inhale/hold/exhale breathing timer integrated into the Dhyana module. Box breathing, 4-7-8, and Nadi Shodhana presets aligned with yogic tradition.
-12. **Micro-habit daily intention rings** *(trending: `#atomichabits`, `#habitstacking`)* — Apple Fitness-style completion rings on the dashboard showing one small daily action per module. Visual closure is one of the highest-retention UX patterns in wellness apps.
+- Lint (`npm run lint:frontend`)
+- Tests (`npm run test:frontend`)
+- Build (`npm run build:frontend`)
+- Matrix: Node 18.x and 20.x
+- Security audit and coverage upload steps
 
-## Contribution Guide
-1. Create a branch for your change.
-2. Keep modules and packages scoped; avoid cross-cutting edits unless necessary.
-3. Add or update tests for behavior changes.
-4. Run `npm run lint && npm test && npm run build` before opening a PR.
-5. Keep documentation in sync with code changes.
+## Deployment
 
-## Author and Acknowledgments
-**Author:** Aarti Sri Ravikumar
+The included `netlify.toml` deploys `apps/frontend` with `@netlify/plugin-nextjs`.
 
-**Dedication:** This project is dedicated by **Aarti S Ravikumar** to **Shishubharati**.
+Deployment notes:
 
-**Institution and gratitude:**
-- Shishu Bharati School: [https://www.shishubharati.net/](https://www.shishubharati.net/)
-- Grateful acknowledgment to the teachers and volunteers for their service and inspiration.
-- Intellectual inspiration from the Bhagavad Gita and the works of Swami Chinmayananda and Mahatma Gandhi.
+- Build is executed from workspace root.
+- Next.js API routes and middleware are converted into Netlify Functions / Edge Functions.
+- `DATA_PROVIDER=supabase` is expected for hosted environments unless intentionally overridden.
 
-## References
-- Bhagavad Gita (classical Hindu scripture).
-- Chinmayananda, S. *Holy Geeta*.
-- Gandhi, M. K. *The Bhagavad Gita according to Gandhi*.
-- Shishu Bharati School: [https://www.shishubharati.net/](https://www.shishubharati.net/)
+## Related Docs
+
+- Frontend-specific guide: `apps/frontend/README.md`
+- Quality and resilience notes: `IMPROVEMENTS.md`
+- Music shortlist: `docs/spiritual-music-shortlist.md`
+- Music source comparison: `docs/spiritual-music-source-comparison.md`
 
 ## License
+
 ISC

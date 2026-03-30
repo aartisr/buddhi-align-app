@@ -1,28 +1,32 @@
 # Buddhi Align Frontend
 
-[![Shishu Bharati Logo](https://www.shishubharati.net/wp-content/uploads/2024/07/ShishuBharati-Logo-Transparent-HiRes-150x150.png)](https://www.shishubharati.net/)
+This is the Next.js App Router application for Buddhi Align.
 
-This frontend is dedicated by **Aarti S Ravikumar** to **Shishubharati**.
+It contains:
 
-The author is grateful to the teachers and volunteers of Shishu Bharati.
-
-Website: [https://www.shishubharati.net/](https://www.shishubharati.net/)
-
-## Overview
-
-This app is the Next.js frontend for Buddhi Align. It delivers a module-driven user interface for Buddhi Yoga inspired practices, including karma, bhakti, jnana, dhyana, vasana, and dharma pathways.
+- The web UI for all practice modules
+- API route handlers under `app/api/*`
+- NextAuth setup and auth middleware
+- Preferences, analytics, and data portability endpoints
 
 ## Stack
 
-- Next.js 14 (App Router)
+- Next.js 14
 - React 18
 - TypeScript
 - Tailwind CSS
+- NextAuth v5
 - Vitest + Testing Library
 
-## Development
+## Run Locally
 
-Run from `apps/frontend`:
+From repo root:
+
+```bash
+npm run dev:frontend
+```
+
+Or from this folder:
 
 ```bash
 npm run dev
@@ -30,7 +34,7 @@ npm run dev
 
 App URL: [http://localhost:3000](http://localhost:3000)
 
-## Build and Quality
+## Quality Commands
 
 ```bash
 npm run lint
@@ -38,44 +42,84 @@ npm run test
 npm run build
 ```
 
-## Background Music Source
+## Environment Variables
 
-The background music player supports a configurable source URL.
+### Data
 
-- Environment variable: `NEXT_PUBLIC_BGM_URL`
-- Optional playlist variable: `NEXT_PUBLIC_BGM_URLS` (comma-separated HTTPS URLs)
-- Fallback: Pixabay royalty-free track (if the variable is missing or invalid)
+- `DATA_PROVIDER`: `supabase` (default) or `memory`
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `NEXT_PUBLIC_API_URL` (optional; defaults to same-origin API routing)
+
+### Authentication Variables
+
+- `AUTH_SECRET`
+- Optional URL hints: `AUTH_URL` / `NEXTAUTH_URL`
+- Provider credentials:
+  - `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`
+  - `AUTH_MICROSOFT_ENTRA_ID`, `AUTH_MICROSOFT_ENTRA_SECRET`, optional `AUTH_MICROSOFT_ENTRA_TENANT_ID`
+  - `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`
+  - `AUTH_APPLE_ID`, `AUTH_APPLE_SECRET`, `AUTH_APPLE_KEY_ID`, `AUTH_APPLE_TEAM_ID`
+  - `AUTH_FACEBOOK_ID`, `AUTH_FACEBOOK_SECRET`
+
+Providers without required env vars are automatically excluded from the sign-in page.
+
+### Background Music
+
+- `NEXT_PUBLIC_BGM_URL`: single URL fallback/primary track
+- `NEXT_PUBLIC_BGM_URLS`: comma-separated playlist URLs
 
 Example:
 
 ```bash
-NEXT_PUBLIC_BGM_URL=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.mp3
+NEXT_PUBLIC_BGM_URLS=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.mp3,https://example.com/track-2.mp3
 ```
 
-Playlist example:
+## API Routes in This App
 
-```bash
-NEXT_PUBLIC_BGM_URLS=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.mp3,https://example.com/track2.mp3,https://example.com/track3.mp3
-```
+### Module CRUD
 
-If `NEXT_PUBLIC_BGM_URLS` is set with valid URLs, tracks auto-rotate when each track ends.
+- `GET /api/[module]`
+- `POST /api/[module]`
+- `PUT /api/[module]/[id]`
+- `DELETE /api/[module]/[id]`
 
-Tip: prefer HTTPS direct audio URLs (`.mp3`, `.ogg`, `.wav`) from providers whose license allows your use case.
+Supported module names: `karma`, `bhakti`, `jnana`, `dhyana`, `vasana`, `dharma`.
 
-## Test Layout
+### Analytics and Data
 
-- `app/**/*.test.tsx`: frontend component and route-level tests.
-- `vitest.config.ts`: Vitest configuration.
-- `vitest.setup.ts`: DOM matcher setup.
+- `GET /api/analytics`
+- `GET /api/data/longitudinal`
+- `GET /api/data/export`
+- `POST /api/data/export`
+- `GET /api/preferences`
+- `PUT /api/preferences`
+- `POST /api/obs`
 
-## Key Conventions
+### Auth
 
-- Keep route files focused and lightweight.
-- Place reusable visuals in `app/components`.
-- Use shared package imports (`@buddhi-align/shared-ui`) for cross-module consistency.
-- Add tests for feature wiring and user-visible behavior.
+- `GET|POST /api/auth/[...nextauth]`
 
-## Links
+## Auth and Middleware Behavior
 
-- Root documentation: `README.md`
-- Next.js docs: [https://nextjs.org/docs](https://nextjs.org/docs)
+- Route protection is enforced by `middleware.ts`.
+- Public paths include `/sign-in` and `/api/auth/*`.
+- Anonymous users can explore with temporary in-memory data.
+
+## i18n and Preferences
+
+- Locale definitions live in `app/i18n/config.ts`.
+- Preferences API stores locale + music control visibility.
+- Local preferences are also mirrored in browser localStorage.
+
+## Tests
+
+- `app/page.test.tsx`
+- `app/components/DataPortability.test.tsx`
+- `app/components/LongitudinalChart.test.tsx`
+- `../../packages/site-config/apiClient.test.ts`
+
+## Related Docs
+
+- Root project guide: `../../README.md`
+- Improvement log: `../../IMPROVEMENTS.md`
