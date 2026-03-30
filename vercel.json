@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm ci && npm i --no-save @next/swc-linux-x64-gnu@14.2.33 @next/swc-linux-x64-musl@14.2.33 lightningcss-linux-x64-gnu@1.32.0 lightningcss-linux-x64-musl@1.32.0 @tailwindcss/oxide-linux-x64-gnu@4.2.2 @tailwindcss/oxide-linux-x64-musl@4.2.2 && npm run build",
+  "buildCommand": "npm ci && npm i --no-save @next/swc-linux-x64-gnu@14.2.33 @next/swc-linux-x64-musl@14.2.33 lightningcss-linux-x64-gnu@1.32.0 lightningcss-linux-x64-musl@1.32.0 @tailwindcss/oxide-linux-x64-gnu@4.2.2 @tailwindcss/oxide-linux-x64-musl@4.2.2 && npm run build:frontend",
   "outputDirectory": "apps/frontend/.next",
   "installCommand": "npm ci"
 }
