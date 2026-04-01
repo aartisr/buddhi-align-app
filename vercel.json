@@ -1,5 +1,5 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "apps/frontend/.next",
-  "installCommand": "npm install --no-audit --no-fund --prefer-offline"
+  "installCommand": "npm install --no-audit --no-fund --prefer-online --cache /tmp/npm-cache"
 }
