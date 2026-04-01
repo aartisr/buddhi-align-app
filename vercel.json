@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npx -y npm@10.9.2 run build",
+  "buildCommand": "NPM_CONFIG_USERCONFIG=/dev/null npm_config_registry=https://registry.npmjs.org npx -y npm@10.9.2 run build",
   "outputDirectory": "apps/frontend/.next",
-  "installCommand": "npx -y npm@10.9.2 install --no-audit --no-fund --prefer-online --cache /tmp/npm-cache"
+  "installCommand": "NPM_CONFIG_USERCONFIG=/dev/null npm_config_registry=https://registry.npmjs.org npx -y npm@10.9.2 install --no-audit --no-fund --prefer-online --cache /tmp/npm-cache"
 }
