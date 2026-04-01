@@ -31,8 +31,9 @@ export const BuddhiDashboard: React.FC<BuddhiDashboardProps> = ({
       {modules.map((mod) => {
         const isInternal = mod.href.startsWith("/");
         const commonProps = {
+          // focus-visible ring uses the theme primary token instead of a hardcoded colour
           className:
-            "app-dashboard-card group rounded-xl p-4 sm:p-6 hover:shadow-lg focus:shadow-lg transition flex items-center gap-3 sm:gap-4 outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 active:scale-95 cursor-pointer",
+            "app-dashboard-card group rounded-xl p-4 sm:p-6 hover:shadow-lg focus-visible:shadow-lg transition flex items-center gap-3 sm:gap-4 outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:border-[var(--primary)] active:scale-95 cursor-pointer",
           "aria-label": mod.title,
           tabIndex: 0,
         };

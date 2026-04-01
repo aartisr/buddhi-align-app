@@ -1,0 +1,97 @@
+:root {
+  --background: #f2f6f1;
+  --foreground: #1f2f28;
+  --primary: #2f5d50;
+  --accent: #4b7f63;
+  --gold: #dec48f;
+  --emerald: #3f7a60;
+  --rose: #9d6153;
+  --surface: #ffffff;
+  --surface-strong: rgba(255, 255, 255, 0.95);
+  --surface-soft: rgba(252, 254, 251, 0.9);
+  --surface-muted: rgba(246, 250, 245, 0.82);
+  --border-soft: rgba(63, 122, 96, 0.2);
+  --border-strong: rgba(47, 93, 80, 0.34);
+  --text-muted: #2e3f38;
+  --text-soft: #455b52;
+  --text-subtle: #60756d;
+  --font-sans: 'Avenir Next', 'Nunito Sans', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0f1d19;
+    --foreground: #e6efe9;
+    --surface: #172923;
+    --surface-strong: rgba(23, 41, 35, 0.94);
+    --surface-soft: rgba(25, 45, 38, 0.9);
+    --surface-muted: rgba(28, 52, 44, 0.82);
+    --border-soft: rgba(178, 213, 198, 0.18);
+    --border-strong: rgba(222, 196, 143, 0.34);
+    --text-muted: #d2e2da;
+    --text-soft: #bdd0c7;
+    --text-subtle: #95ada3;
+  }
+}
+
+body {
+  background: linear-gradient(140deg, var(--background) 0%, #e6efe6 52%, #dce8db 100%);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  transition: background 0.5s, color 0.5s;
+  position: relative;
+}
+
+.spiritual-bg {
+  background: radial-gradient(circle at 80% 10%, rgba(222, 196, 143, 0.42) 0%, #fff0 42%),
+    radial-gradient(circle at 20% 90%, rgba(63, 122, 96, 0.2) 0%, #fff0 62%),
+    radial-gradient(circle at 50% 50%, rgba(157, 97, 83, 0.14) 0%, #fff0 72%),
+    linear-gradient(140deg, #f2f6f1 0%, #e6efe6 100%);
+}
+
+.spiritual-overlay {
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.text-on-spiritual {
+  color: #18181b !important;
+}
+
+.dark .text-on-spiritual {
+  color: #fff085 !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--primary);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--gold);
+}
+
+.card,
+.surface {
+  background: var(--surface);
+  border-radius: 1.25rem;
+  box-shadow: 0 2px 10px 0 rgba(47, 93, 80, 0.12);
+  padding: 1.5rem;
+}

@@ -1,0 +1,58 @@
+{
+  "name": "Buddhi Align App",
+  "short_name": "Buddhi Align",
+  "description": "A subtle, spiritual, and professional journaling and analytics app for self-development and spiritual growth.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fcfefb",
+  "theme_color": "#2f5d50",
+  "categories": ["health", "lifestyle", "productivity"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32 48x48",
+      "type": "image/x-icon",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Karma Yoga Tracker",
+      "short_name": "Karma Yoga",
+      "description": "Log your karma yoga practice",
+      "url": "/karma-yoga",
+      "icons": [{ "src": "/favicon.ico", "sizes": "16x16" }]
+    },
+    {
+      "name": "Bhakti Journal",
+      "short_name": "Bhakti",
+      "description": "Journal your devotional practice",
+      "url": "/bhakti-journal",
+      "icons": [{ "src": "/favicon.ico", "sizes": "16x16" }]
+    },
+    {
+      "name": "Dhyana Meditation",
+      "short_name": "Dhyana",
+      "description": "Track your meditation sessions",
+      "url": "/dhyana-meditation",
+      "icons": [{ "src": "/favicon.ico", "sizes": "16x16" }]
+    }
+  ]
+}

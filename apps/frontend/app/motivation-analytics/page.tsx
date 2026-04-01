@@ -160,8 +160,7 @@ export default function MotivationAnalyticsPage() {
           <div className="app-author-text text-base sm:text-lg font-semibold">— {quote.author}</div>
           <div className="flex justify-center mt-4 sm:mt-6">
             <button
-              className="app-button-primary app-button-primary--analytics"
-              style={{ width: "auto", minWidth: "11rem" }}
+              className="app-button-primary app-button-primary--analytics app-button-primary--auto"
               onClick={() => setQuote(getRandomQuote(quotes))}
               aria-label={t("motivation.inspireAgain")}
             >
@@ -190,23 +189,23 @@ export default function MotivationAnalyticsPage() {
         <div className="w-full max-w-3xl grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8 sm:mb-10">
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🙏</span>
-            <span className="font-bold text-lg text-emerald-800">{t("layout.module.karma")}</span>
-            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="app-stat-value-warm text-2xl font-extrabold">{stats.karma}</span>}
+            <span className="font-bold text-lg app-module-label--karma">{t("layout.module.karma")}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl font-extrabold app-module-value--karma">{stats.karma}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🌸</span>
-            <span className="font-bold text-lg text-rose-800">{t("layout.module.bhakti")}</span>
-            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl text-rose-700 font-extrabold">{stats.bhakti}</span>}
+            <span className="font-bold text-lg app-module-label--bhakti">{t("layout.module.bhakti")}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl font-extrabold app-module-value--bhakti">{stats.bhakti}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🧘‍♂️</span>
-            <span className="font-bold text-lg text-indigo-800">{t("layout.module.jnana")}</span>
-            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl text-indigo-700 font-extrabold">{stats.jnana}</span>}
+            <span className="font-bold text-lg app-module-label--jnana">{t("layout.module.jnana")}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl font-extrabold app-module-value--jnana">{stats.jnana}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🧘‍♀️</span>
-            <span className="font-bold text-lg text-emerald-800">{t("layout.module.dhyana")}</span>
-            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl text-emerald-700 font-extrabold">{stats.dhyana}</span>}
+            <span className="font-bold text-lg app-module-label--dhyana">{t("layout.module.dhyana")}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl font-extrabold app-module-value--dhyana">{stats.dhyana}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🌱</span>
@@ -215,8 +214,8 @@ export default function MotivationAnalyticsPage() {
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">📜</span>
-            <span className="font-bold text-lg text-indigo-800">{t("layout.module.dharma")}</span>
-            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl text-indigo-700 font-extrabold">{stats.dharma}</span>}
+            <span className="font-bold text-lg app-module-label--dharma">{t("layout.module.dharma")}</span>
+            {loadingStats ? <span className="app-stat-skeleton" /> : <span className="text-2xl font-extrabold app-module-value--dharma">{stats.dharma}</span>}
           </div>
           <div className="app-stat-card flex flex-col items-center p-4">
             <span className="text-3xl mb-2">🔥</span>

@@ -8,10 +8,10 @@ export default function LanguageSwitcher() {
   const { locale, locales, setLocale, t } = useI18n();
 
   return (
-    <label className="flex items-center gap-2 text-xs sm:text-sm text-zinc-700">
+    <label className="flex items-center gap-2 text-xs sm:text-sm app-language-switcher">
       <span>{t("app.language")}</span>
       <select
-        className="rounded-md border border-zinc-300 bg-white px-2 py-1 text-xs sm:text-sm"
+        className="rounded-md px-2 py-1 text-xs sm:text-sm app-language-switcher__select"
         value={locale}
         onChange={(event) => setLocale(event.target.value as Locale)}
         aria-label={t("app.language")}

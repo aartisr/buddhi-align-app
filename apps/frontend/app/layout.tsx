@@ -1,8 +1,16 @@
 
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 
 import "./globals.css";
+import "./styles/theme-base.css";
+import "./styles/auth-ui.css";
+import "./styles/feedback-ui.css";
+import "./styles/analytics-ui.css";
+import "./styles/widgets.css";
+import "./styles/records.css";
+import "./styles/navigation.css";
+import "./styles/responsive.css";
 import "./components/buddhi-bg.css";
 
 import BackgroundMusic from "./components/BackgroundMusic";
@@ -17,11 +25,70 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  "https://buddhi-align.netlify.app";
+
+const title = translate(DEFAULT_LOCALE, "app.title");
+const description = translate(DEFAULT_LOCALE, "app.description");
+
 export const metadata: Metadata = {
-  title: translate(DEFAULT_LOCALE, "app.title"),
-  description: translate(DEFAULT_LOCALE, "app.description"),
+  title: {
+    default: title,
+    template: `%s | ${title}`,
+  },
+  description,
+  metadataBase: new URL(siteUrl),
+  applicationName: title,
+  manifest: "/manifest.json",
+  keywords: [
+    "spiritual journaling",
+    "meditation tracker",
+    "karma yoga",
+    "bhakti journal",
+    "dhyana meditation",
+    "jnana reflection",
+    "self-development",
+    "mindfulness",
+    "Indian philosophy",
+  ],
+  authors: [{ name: "Aarti Sri Ravikumar", url: "https://aartisr.netlify.app/" }],
+  creator: "Aarti Sri Ravikumar",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-snippet": -1 },
+  },
+  alternates: {
+    canonical: siteUrl,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName: title,
+    title,
+    description,
+  },
+  twitter: {
+    card: "summary",
+    title,
+    description,
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
+
+export const viewport: Viewport = {
+  themeColor: "#2f5d50",
+  colorScheme: "light dark",
+  width: "device-width",
+  initialScale: 1,
+};
 
 export default function RootLayout({
   children,

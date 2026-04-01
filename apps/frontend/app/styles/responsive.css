@@ -1,0 +1,53 @@
+/* Main content wrapper */
+.app-main-content {
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem 1rem 6rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* Main content wrapper responsive */
+@media (min-width: 640px) {
+  .app-main-content {
+    padding: 3rem 2rem 6rem;
+  }
+}
+
+/* Form shells tighter on small screens */
+@media (max-width: 639px) {
+  .app-form-shell {
+    padding: 1rem !important;
+    border-radius: 1.25rem !important;
+  }
+
+  .app-button-primary {
+    padding: 0.875rem 1.25rem;
+    min-height: 3rem;
+    letter-spacing: 0.01em;
+  }
+}
+
+/* Dashboard cards */
+.app-dashboard-card {
+  min-height: 5rem;
+}
+
+/* Compact stat cards */
+@media (max-width: 399px) {
+  .app-stat-card {
+    padding: 0.75rem !important;
+  }
+
+  .app-stat-card span {
+    font-size: 0.875rem !important;
+  }
+}
+
+/* Sign-in tiny screens */
+@media (max-width: 479px) {
+  .app-signin-card {
+    border-radius: 1rem;
+  }
+}

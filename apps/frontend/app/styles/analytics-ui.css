@@ -1,0 +1,44 @@
+.app-button-primary--auto {
+  width: auto;
+  min-width: 11rem;
+}
+
+.app-module-label--karma,
+.app-module-value--karma,
+.app-module-label--dhyana,
+.app-module-value--dhyana {
+  color: #2f7659;
+}
+
+.app-module-label--bhakti,
+.app-module-value--bhakti {
+  color: #9a564a;
+}
+
+.app-module-label--jnana,
+.app-module-value--jnana,
+.app-module-label--dharma,
+.app-module-value--dharma {
+  color: #4f7a6b;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-module-label--karma,
+  .app-module-value--karma,
+  .app-module-label--dhyana,
+  .app-module-value--dhyana {
+    color: #9fd3bc;
+  }
+
+  .app-module-label--bhakti,
+  .app-module-value--bhakti {
+    color: #e2b4aa;
+  }
+
+  .app-module-label--jnana,
+  .app-module-value--jnana,
+  .app-module-label--dharma,
+  .app-module-value--dharma {
+    color: #b5d7ca;
+  }
+}

@@ -1,0 +1,108 @@
+"use client";
+
+// Root-level error boundary — wraps the entire application including the layout.
+// Must render its own <html> and <body> since the normal layout is unavailable.
+//
+// IMPORTANT: Inline styles are used intentionally here because Next.js does NOT
+// apply layout-level CSS (Tailwind/global imports) when GlobalError is active.
+// See: https://nextjs.org/docs/app/api-reference/file-conventions/error#global-errorjs
+// Using inline styles ensures meaningful fallback UI regardless of bundled CSS state.
+
+import React, { useEffect } from "react";
+
+export default function GlobalError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    console.error("[Global Error]", error.message, error.digest ?? "");
+  }, [error]);
+
+  return (
+    <html lang="en">
+      <body
+        style={{
+          margin: 0,
+          fontFamily: "system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+          background: "#fcfefb",
+          color: "#2e3f38",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "100vh",
+          padding: "1rem",
+          boxSizing: "border-box",
+        }}
+      >
+        <div role="alert" style={{ textAlign: "center", maxWidth: "28rem" }}>
+          <div
+            style={{ fontSize: "3.5rem", marginBottom: "1.25rem", lineHeight: 1 }}
+            aria-hidden="true"
+          >
+            🙏
+          </div>
+          <h1
+            style={{
+              fontSize: "1.5rem",
+              fontWeight: 700,
+              margin: "0 0 0.5rem",
+              color: "#2e3f38",
+            }}
+          >
+            Something went wrong
+          </h1>
+          <p
+            style={{
+              fontSize: "0.95rem",
+              color: "#60756d",
+              margin: "0 0 1.5rem",
+              lineHeight: 1.6,
+            }}
+          >
+            A critical error occurred. Our team has been notified. Please
+            refresh the page to try again.
+          </p>
+          {error.digest && (
+            <p
+              style={{
+                fontSize: "0.75rem",
+                color: "#95ada3",
+                marginBottom: "1.5rem",
+                fontFamily: "monospace",
+              }}
+            >
+              Ref: {error.digest}
+            </p>
+          )}
+          <button
+            type="button"
+            onClick={reset}
+            style={{
+              background: "#2f5d50",
+              color: "#ffffff",
+              border: "none",
+              borderRadius: "0.875rem",
+              padding: "0.65rem 1.75rem",
+              fontSize: "0.9rem",
+              fontWeight: 600,
+              cursor: "pointer",
+              transition: "background 0.15s",
+            }}
+            onMouseOver={(e) =>
+              ((e.currentTarget as HTMLButtonElement).style.background = "#24493e")
+            }
+            onMouseOut={(e) =>
+              ((e.currentTarget as HTMLButtonElement).style.background = "#2f5d50")
+            }
+            aria-label="Reload the application"
+          >
+            Reload
+          </button>
+        </div>
+      </body>
+    </html>
+  );
+}

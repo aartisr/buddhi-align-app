@@ -21,14 +21,14 @@ export function ErrorAlert({
   return (
     <div
       role="alert"
-      className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
+      className="mb-6 p-4 rounded-lg app-alert-error"
     >
-      <p className="text-red-800 font-semibold mb-2">{title}</p>
-      <p className="text-red-700 text-sm mb-3">{error}</p>
+      <p className="font-semibold mb-2 app-alert-error__title">{title}</p>
+      <p className="text-sm mb-3 app-alert-error__text">{error}</p>
       {onRetry && (
         <button
           onClick={onRetry}
-          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm font-medium"
+          className="px-4 py-2 rounded text-sm font-medium app-alert-error__button"
           aria-label={retryAriaLabel}
         >
           {retryLabel}
@@ -47,7 +47,7 @@ export function LoadingSkeleton({ count = 3, loadingLabel }: { count?: number; l
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="h-16 bg-zinc-200 rounded animate-pulse"
+          className="h-16 rounded animate-pulse app-skeleton-soft"
           role="status"
           aria-label={loadingLabel}
         />
@@ -69,9 +69,9 @@ export function EmptyState({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="text-center py-12 px-4 border border-dashed border-zinc-300 rounded-lg bg-zinc-50">
-      <p className="text-lg font-semibold text-zinc-900 mb-2">{title}</p>
-      <p className="text-zinc-600 mb-6">{description}</p>
+    <div className="text-center py-12 px-4 border border-dashed rounded-lg app-empty-state">
+      <p className="text-lg font-semibold mb-2 app-empty-state__title">{title}</p>
+      <p className="mb-6 app-empty-state__description">{description}</p>
       {action}
     </div>
   );

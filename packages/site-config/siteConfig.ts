@@ -4,7 +4,7 @@ export const siteConfig = {
   theme: {
     default: "light",
     available: ["light", "dark"],
-    primaryColor: "indigo",
+    primaryColor: "forest",
   },
   prompts: {
     welcome: "Welcome to Buddhi Align App!",

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /sign-in
+Disallow: /settings
+
+# Sitemap location
+Sitemap: https://buddhi-align.netlify.app/sitemap.xml

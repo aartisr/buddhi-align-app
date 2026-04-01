@@ -1,0 +1,72 @@
+.app-user-skeleton {
+  background: rgba(96, 117, 109, 0.26);
+}
+
+.app-anonymous-badge {
+  color: #7b5528;
+  background: rgba(222, 196, 143, 0.28);
+  border: 1px solid rgba(176, 130, 68, 0.34);
+}
+
+.app-user-signin-link {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: #fff;
+}
+
+.app-user-signin-link:hover {
+  filter: brightness(1.06);
+}
+
+.app-user-avatar,
+.app-user-avatar-fallback {
+  background: linear-gradient(135deg, #3e7963 0%, #2f5d50 100%);
+  color: #fff;
+}
+
+.app-user-avatar-ring {
+  box-shadow: 0 0 0 2px rgba(79, 122, 107, 0.38);
+}
+
+.app-user-name {
+  color: var(--text-muted);
+}
+
+.app-user-action {
+  border: 1px solid var(--border-soft);
+  color: var(--text-soft);
+  background: transparent;
+}
+
+.app-user-action:hover {
+  background: var(--surface-soft);
+}
+
+.app-language-switcher {
+  color: var(--text-soft);
+}
+
+.app-language-switcher__select {
+  border: 1px solid var(--border-soft);
+  background: var(--surface-strong);
+  color: var(--text-muted);
+}
+
+.app-provider-btn {
+  border: 1px solid var(--border-soft);
+  background: var(--surface-strong);
+  color: var(--text-muted);
+}
+
+.app-provider-btn:hover {
+  background: var(--surface-soft);
+}
+
+.app-provider-btn--deep {
+  background: linear-gradient(135deg, #253f36 0%, #1d332b 100%);
+  color: #e9f2ec;
+  border-color: rgba(233, 242, 236, 0.18);
+}
+
+.app-provider-btn--deep:hover {
+  background: linear-gradient(135deg, #29493e 0%, #223d33 100%);
+}

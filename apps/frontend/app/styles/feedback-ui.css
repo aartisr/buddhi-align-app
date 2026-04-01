@@ -1,0 +1,38 @@
+.app-alert-error {
+  background: linear-gradient(145deg, rgba(157, 97, 83, 0.15) 0%, rgba(255, 249, 246, 0.92) 100%);
+  border: 1px solid rgba(157, 97, 83, 0.34);
+}
+
+.app-alert-error__title {
+  color: #7d463d;
+}
+
+.app-alert-error__text {
+  color: #96584d;
+}
+
+.app-alert-error__button {
+  background: #8e5346;
+  color: #fff;
+}
+
+.app-alert-error__button:hover {
+  background: #7d463d;
+}
+
+.app-skeleton-soft {
+  background: rgba(96, 117, 109, 0.18);
+}
+
+.app-empty-state {
+  border-color: var(--border-soft);
+  background: var(--surface-soft);
+}
+
+.app-empty-state__title {
+  color: var(--text-muted);
+}
+
+.app-empty-state__description {
+  color: var(--text-soft);
+}

@@ -23,20 +23,20 @@ export default function UserMenu() {
   }, []);
 
   if (status === "loading") {
-    return <div className="w-8 h-8 rounded-full bg-zinc-200 animate-pulse" aria-label="Loading session" />;
+    return <div className="w-8 h-8 rounded-full app-user-skeleton animate-pulse" aria-label="Loading session" />;
   }
 
   if (!session) {
     return (
       <div className="flex items-center gap-2">
         {isAnonymous && (
-          <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+          <span className="text-xs px-2 py-1 rounded-full app-anonymous-badge">
             {t("auth.anonymousBadge")}
           </span>
         )}
         <Link
           href="/sign-in"
-          className="text-sm font-medium px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+          className="text-sm font-medium px-3 py-1.5 rounded-lg app-user-signin-link transition-colors"
         >
           {isAnonymous ? t("auth.signInToSave") : t("auth.signIn")}
         </Link>
@@ -52,25 +52,25 @@ export default function UserMenu() {
           alt={session.user.name ?? "User avatar"}
           width={32}
           height={32}
-          className="rounded-full ring-2 ring-indigo-300"
+          className="rounded-full app-user-avatar-ring"
         />
       ) : (
-        <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-sm font-bold">
+        <div className="w-8 h-8 rounded-full app-user-avatar-fallback flex items-center justify-center text-sm font-bold">
           {(session.user?.name ?? session.user?.email ?? "?")[0].toUpperCase()}
         </div>
       )}
-      <span className="text-sm font-medium hidden sm:inline text-zinc-700 dark:text-zinc-200 max-w-30 truncate">
+      <span className="text-sm font-medium hidden sm:inline app-user-name max-w-30 truncate">
         {session.user?.name ?? session.user?.email}
       </span>
       <Link
         href="/settings"
-        className="text-xs px-2 py-1 rounded border border-zinc-300 dark:border-zinc-600 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+        className="text-xs px-2 py-1 rounded app-user-action transition-colors"
       >
         {t("app.settings.link")}
       </Link>
       <button
         onClick={() => signOut({ callbackUrl: "/sign-in" })}
-        className="text-xs px-2 py-1 rounded border border-zinc-300 dark:border-zinc-600 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+        className="text-xs px-2 py-1 rounded app-user-action transition-colors"
         aria-label={t("auth.signOut")}
       >
         {t("auth.signOut")}
