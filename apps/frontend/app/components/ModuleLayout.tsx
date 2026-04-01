@@ -119,9 +119,9 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
                   <span className="app-nav-item-icon" aria-hidden>{group.icon}</span>
                   {group.label}
                 </button>
-                <div className="app-nav-submenu" role="menu" aria-label={group.label}>
+                <div className="app-nav-submenu" aria-label={group.label}>
                   {group.items.map((item) => (
-                    <Link key={item.key} href={item.href} className="app-nav-submenu-link" role="menuitem">
+                    <Link key={item.key} href={item.href} className="app-nav-submenu-link">
                       <span className="app-nav-item-icon" aria-hidden>{item.icon}</span>
                       <span>{item.label}</span>
                     </Link>
@@ -137,7 +137,6 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
               onClick={() => setMobileNavOpen(true)}
               className="app-mobile-menu-btn lg:hidden"
               aria-label="Open menu"
-              aria-expanded={mobileNavOpen}
               aria-controls="mobile-nav-drawer"
             >
               <span className="app-hamburger-bar" />
@@ -175,7 +174,6 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
           id="mobile-nav-drawer"
           className={`app-mobile-nav-drawer lg:hidden${mobileNavOpen ? " app-mobile-nav-drawer--open" : ""}`}
           aria-label="Site navigation"
-          aria-hidden={!mobileNavOpen}
         >
           <div className="app-mobile-nav-header">
             <BuddhiAlignLogo className="h-9 w-auto" />

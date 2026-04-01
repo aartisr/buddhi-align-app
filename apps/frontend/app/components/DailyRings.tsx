@@ -65,13 +65,12 @@ export default function DailyRings() {
                   <circle
                     cx="30" cy="30" r={RING_R}
                     fill="none"
-                    stroke={done ? mod.color : "#d1d5db"}
+                    className={`app-daily-ring-fill ${done ? `app-daily-ring-fill--${mod.key}` : "app-daily-ring-fill--inactive"}`}
                     strokeWidth="5"
                     strokeLinecap="round"
                     strokeDasharray={RING_C}
                     strokeDashoffset={done ? completedRingOffset : emptyRingOffset}
                     transform="rotate(-90 30 30)"
-                    style={{ transition: "stroke-dashoffset 0.7s cubic-bezier(0.34,1.56,0.64,1), stroke 0.4s ease" }}
                   />
                   {/* Icon */}
                   <text x="30" y="35" textAnchor="middle" fontSize="18" role="img" aria-hidden="true">
@@ -87,7 +86,7 @@ export default function DailyRings() {
                   </span>
                 )}
               </div>
-              <span className="app-daily-ring-label text-xs font-medium text-center leading-tight" style={{ color: mod.color }}>
+              <span className={`app-daily-ring-label app-daily-ring-label--${mod.key} text-xs font-medium text-center leading-tight`}>
                 {t(mod.labelKey)}
               </span>
             </Link>

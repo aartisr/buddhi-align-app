@@ -1,6 +1,7 @@
 
 'use client';
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import { usePathname } from "next/navigation";
 import { useI18n } from "../i18n/provider";
 import {
   PREFERENCES_UPDATED_EVENT,
@@ -25,8 +26,8 @@ function getBgmUrl() {
 function getBgmUrls() {
   const configuredUrls = process.env.NEXT_PUBLIC_BGM_URLS
     ?.split(",")
-    .map((url) => url.trim())
-    .filter((url) => /^https?:\/\//i.test(url));
+    .map((url: string) => url.trim())
+    .filter((url: string) => /^https?:\/\//i.test(url));
 
   if (configuredUrls && configuredUrls.length > 0) {
     return configuredUrls;
@@ -35,14 +36,68 @@ function getBgmUrls() {
   return [getBgmUrl()];
 }
 
+function getRouteTrackPool(pathname: string, totalTracks: number): number[] {
+  const all = Array.from({ length: totalTracks }, (_, index) => index);
+  if (totalTracks <= 3) return all;
+
+  const byRatio = (start: number, end: number) => {
+    const startIndex = Math.max(0, Math.min(totalTracks - 1, Math.floor(totalTracks * start)));
+    const endIndex = Math.max(startIndex, Math.min(totalTracks, Math.ceil(totalTracks * end)));
+    return all.slice(startIndex, endIndex);
+  };
+
+  if (pathname.startsWith("/dhyana-meditation")) {
+    return byRatio(0, 0.35);
+  }
+
+  if (pathname.startsWith("/bhakti-journal")) {
+    return byRatio(0.2, 0.65);
+  }
+
+  if (pathname.startsWith("/jnana-reflection")) {
+    return byRatio(0, 0.5);
+  }
+
+  if (pathname.startsWith("/dharma-planner") || pathname.startsWith("/karma-yoga")) {
+    return byRatio(0.45, 1);
+  }
+
+  if (pathname.startsWith("/motivation-analytics")) {
+    return byRatio(0.55, 1);
+  }
+
+  return all;
+}
+
+function pickRandomTrack(pool: number[], fallbackIndex: number) {
+  if (pool.length === 0) return fallbackIndex;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function pickNextRandomTrack(pool: number[], currentIndex: number) {
+  if (pool.length <= 1) return pool[0] ?? currentIndex;
+
+  let nextIndex = pool[Math.floor(Math.random() * pool.length)];
+  if (nextIndex === currentIndex) {
+    const options = pool.filter((index) => index !== currentIndex);
+    nextIndex = options[Math.floor(Math.random() * options.length)] ?? currentIndex;
+  }
+  return nextIndex;
+}
+
 export default function BackgroundMusic() {
   const { t } = useI18n();
+  const pathname = usePathname();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const bgmUrls = getBgmUrls();
+  const bgmUrls = useMemo(() => getBgmUrls(), []);
+  const routeTrackPool = useMemo(
+    () => getRouteTrackPool(pathname ?? "/", bgmUrls.length),
+    [pathname, bgmUrls.length],
+  );
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.4);
   const [prompt, setPrompt] = useState(true);
-  const [trackIndex, setTrackIndex] = useState(0);
+  const [trackIndex, setTrackIndex] = useState(() => pickRandomTrack(routeTrackPool, 0));
   const [controlVisible, setControlVisible] = useState(false);
 
   const startPlayback = useCallback(async () => {
@@ -87,13 +142,17 @@ export default function BackgroundMusic() {
     void startPlayback();
   }, [trackIndex, playing, startPlayback]);
 
-  const playNextTrack = () => {
-    if (bgmUrls.length <= 1) return;
-
-    setTrackIndex((currentIndex) => {
-      const nextIndex = currentIndex + 1;
-      return nextIndex >= bgmUrls.length ? 0 : nextIndex;
+  useEffect(() => {
+    setTrackIndex((currentIndex: number) => {
+      if (routeTrackPool.includes(currentIndex)) return currentIndex;
+      return pickRandomTrack(routeTrackPool, currentIndex);
     });
+  }, [routeTrackPool]);
+
+  const playNextTrack = () => {
+    if (routeTrackPool.length <= 1) return;
+
+    setTrackIndex((currentIndex: number) => pickNextRandomTrack(routeTrackPool, currentIndex));
   };
 
   const togglePlay = () => {
@@ -107,7 +166,7 @@ export default function BackgroundMusic() {
     }
   };
 
-  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVolume = (e: ChangeEvent<HTMLInputElement>) => {
     const nextVolume = parseFloat(e.target.value);
     setVolume(nextVolume);
     if (audioRef.current) {
@@ -122,6 +181,7 @@ export default function BackgroundMusic() {
   return (
     <div className="app-music-panel">
       <button
+        type="button"
         aria-label={playing ? t("app.pause") : t("app.play")}
         onClick={togglePlay}
         className="app-music-button"
@@ -155,6 +215,7 @@ export default function BackgroundMusic() {
         onError={() => {
           setPlaying(false);
           setPrompt(true);
+          playNextTrack();
         }}
         onPlay={() => setPrompt(false)}
         onPause={() => setPrompt(true)}

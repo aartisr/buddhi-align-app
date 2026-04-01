@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { useSession } from "next-auth/react";
 
 import { useI18n } from "../i18n/provider";
@@ -130,8 +130,7 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
           type="button"
           className="app-preferences-trigger"
           aria-label="Open preferences"
-          aria-expanded={open}
-          onClick={() => setOpen((prev) => !prev)}
+          onClick={() => setOpen((prev: boolean) => !prev)}
         >
           <span aria-hidden>⚙️</span>
           <span className="hidden sm:inline">Preferences</span>
@@ -139,7 +138,7 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
       )}
 
       {open && (
-        <div className="app-preferences-panel" role={showTrigger ? "dialog" : undefined} aria-label="Preferences">
+        <div className="app-preferences-panel" role="dialog" aria-label="Preferences">
           <div className="app-preferences-row">
             <label htmlFor="prefs-language" className="app-preferences-label">Default language</label>
             <div className="app-preferences-field-wrap">
@@ -148,9 +147,9 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
                 className="app-preferences-select"
                 value={locale}
                 disabled={isSaving}
-                onChange={(event) => handleLocaleChange(event.target.value as Locale)}
+                onChange={(event: ChangeEvent<HTMLSelectElement>) => handleLocaleChange(event.target.value as Locale)}
               >
-                {locales.map((option) => (
+                {locales.map((option: { code: string; label: string }) => (
                   <option key={option.code} value={option.code}>
                     {option.label}
                   </option>
@@ -166,7 +165,6 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
               <button
                 type="button"
                 className={`app-preferences-toggle ${musicControlVisible ? "is-active" : ""}`}
-                aria-pressed={musicControlVisible}
                 disabled={isSaving}
                 onClick={() => handleMusicVisibility(true)}
               >
@@ -182,7 +180,6 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
               <button
                 type="button"
                 className={`app-preferences-toggle ${!musicControlVisible ? "is-active" : ""}`}
-                aria-pressed={!musicControlVisible}
                 disabled={isSaving}
                 onClick={() => handleMusicVisibility(false)}
               >

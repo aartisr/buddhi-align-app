@@ -372,34 +372,59 @@ export default function RequestFeedbackProvider({ children }: { children: React.
       {children}
       <div className="app-request-toast-stack" aria-live="polite" aria-atomic="true">
         {toasts.map((toast) => (
-          <div
-            key={toast.id}
-            className={`app-request-toast app-request-toast--${toast.tone}`}
-            role={toast.tone === "error" ? "alert" : "status"}
-          >
-            <div className="app-request-toast__row">
-              <span className="app-request-toast__badge" aria-hidden="true">
-                {toast.tone === "info" ? "⋯" : toast.tone === "success" ? "✓" : "!"}
-              </span>
-              <div className="app-request-toast__copy">
-                <strong>{toast.title}</strong>
-                {toast.detail ? <span>{toast.detail}</span> : null}
+          toast.tone === "error" ? (
+            <div
+              key={toast.id}
+              className={`app-request-toast app-request-toast--${toast.tone}`}
+              role="alert"
+            >
+              <div className="app-request-toast__row">
+                <span className="app-request-toast__badge" aria-hidden="true">
+                  !
+                </span>
+                <div className="app-request-toast__copy">
+                  <strong>{toast.title}</strong>
+                  {toast.detail ? <span>{toast.detail}</span> : null}
+                </div>
+                <button
+                  type="button"
+                  className="app-request-toast__dismiss"
+                  aria-label="Dismiss notification"
+                  onClick={() => dismissToast(toast.id)}
+                >
+                  ×
+                </button>
               </div>
-              <button
-                type="button"
-                className="app-request-toast__dismiss"
-                aria-label="Dismiss notification"
-                onClick={() => dismissToast(toast.id)}
-              >
-                ×
-              </button>
             </div>
-          </div>
+          ) : (
+            <div
+              key={toast.id}
+              className={`app-request-toast app-request-toast--${toast.tone}`}
+              role="status"
+            >
+              <div className="app-request-toast__row">
+                <span className="app-request-toast__badge" aria-hidden="true">
+                  {toast.tone === "info" ? "⋯" : "✓"}
+                </span>
+                <div className="app-request-toast__copy">
+                  <strong>{toast.title}</strong>
+                  {toast.detail ? <span>{toast.detail}</span> : null}
+                </div>
+                <button
+                  type="button"
+                  className="app-request-toast__dismiss"
+                  aria-label="Dismiss notification"
+                  onClick={() => dismissToast(toast.id)}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          )
         ))}
       </div>
       <div
         className={`app-request-overlay ${overlayVisible ? "app-request-overlay--visible" : ""}`}
-        aria-hidden={overlayVisible ? "false" : "true"}
       >
         <div className="app-request-overlay__panel">
           <PrayerSpinner label="Waiting for the server" />
