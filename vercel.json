@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "npx -y npm@10.9.2 run build",
   "outputDirectory": "apps/frontend/.next",
-  "installCommand": "npm install --no-audit --no-fund --prefer-online --cache /tmp/npm-cache"
+  "installCommand": "npx -y npm@10.9.2 install --no-audit --no-fund --prefer-online --cache /tmp/npm-cache"
 }
