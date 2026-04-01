@@ -7,7 +7,6 @@
     "node": "20.x"
   },
   "scripts": {
-    "preinstall": "npm i -g npm@9",
     "test": "npm --workspace=apps/frontend run test",
     "test:frontend": "npm --workspace=apps/frontend run test",
     "lint": "npm --workspace=apps/frontend run lint",
