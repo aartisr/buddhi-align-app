@@ -3,19 +3,32 @@ import { apiFetch, APIClientError, API_CONFIG } from "@buddhi-align/site-config"
 
 describe("apiFetch", () => {
   let fetchSpy: any;
+  let originalFetch: typeof globalThis.fetch;
 
   beforeEach(() => {
-    fetchSpy = vi.stubGlobal("fetch", vi.fn());
+    originalFetch = globalThis.fetch;
+    fetchSpy = vi.fn();
+    Object.defineProperty(globalThis, "fetch", {
+      value: fetchSpy,
+      configurable: true,
+      writable: true,
+    });
   });
 
   afterEach(() => {
-    vi.unstubAllGlobals();
+    Object.defineProperty(globalThis, "fetch", {
+      value: originalFetch,
+      configurable: true,
+      writable: true,
+    });
   });
 
   it("returns data on successful fetch", async () => {
     const mockData = { id: "1", name: "Test" };
     fetchSpy.mockResolvedValueOnce({
       ok: true,
+      status: 200,
+      headers: { get: vi.fn().mockReturnValue(null) },
       json: vi.fn().mockResolvedValueOnce(mockData),
     });
 
@@ -49,6 +62,8 @@ describe("apiFetch", () => {
       })
       .mockResolvedValueOnce({
         ok: true,
+        status: 200,
+        headers: { get: vi.fn().mockReturnValue(null) },
         json: vi.fn().mockResolvedValueOnce({ success: true }),
       });
 
@@ -73,6 +88,8 @@ describe("apiFetch", () => {
   it("includes Content-Type header", async () => {
     fetchSpy.mockResolvedValueOnce({
       ok: true,
+      status: 200,
+      headers: { get: vi.fn().mockReturnValue(null) },
       json: vi.fn().mockResolvedValueOnce({}),
     });
 

@@ -95,6 +95,7 @@ Core runtime variables used by the app:
 - `SUPABASE_URL`: required when `DATA_PROVIDER=supabase`
 - `SUPABASE_SERVICE_ROLE_KEY`: required when `DATA_PROVIDER=supabase`
 - `NEXT_PUBLIC_API_URL`: optional API origin override (defaults to same origin)
+- `NEXT_PUBLIC_SITE_URL`: canonical public origin (recommended in production)
 - `NEXT_PUBLIC_BGM_URL`: optional single background music URL
 - `NEXT_PUBLIC_BGM_URLS`: optional comma-separated background music playlist
 
@@ -177,6 +178,22 @@ CI workflow (`.github/workflows/ci.yml`) runs:
 ## Deployment
 
 The included `netlify.toml` deploys `apps/frontend` with `@netlify/plugin-nextjs`.
+
+For Vercel deployment, use the existing root-level `vercel.json` and configure these project settings in Vercel:
+
+- Framework preset: `Next.js`
+- Root directory: repository root
+- Build command: from `vercel.json` (already configured)
+- Install command: from `vercel.json` (already configured)
+
+Recommended Vercel environment variables:
+
+- `NEXT_PUBLIC_SITE_URL` = your production domain (for canonical metadata + sitemap)
+- `DATA_PROVIDER`
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `AUTH_SECRET`
+- Any OAuth provider secrets you plan to enable
 
 Deployment notes:
 

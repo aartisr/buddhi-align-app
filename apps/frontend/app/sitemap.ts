@@ -1,9 +1,7 @@
 import type { MetadataRoute } from "next";
+import { getSiteUrl } from "./lib/site-url";
 
-// The production base URL. Set NEXT_PUBLIC_SITE_URL in your deployment environment.
-const baseUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://buddhi-align.netlify.app";
+const baseUrl = getSiteUrl();
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

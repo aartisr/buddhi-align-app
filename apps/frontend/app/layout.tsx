@@ -18,6 +18,7 @@ import SiteFooter from "./components/SiteFooter";
 import { I18nProvider } from "./i18n/provider";
 import { DEFAULT_LOCALE, translate } from "./i18n/config";
 import Providers from "./components/Providers";
+import { getSiteUrl } from "./lib/site-url";
 
 
 const inter = Inter({
@@ -25,9 +26,7 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://buddhi-align.netlify.app";
+const siteUrl = getSiteUrl();
 
 const title = translate(DEFAULT_LOCALE, "app.title");
 const description = translate(DEFAULT_LOCALE, "app.description");
