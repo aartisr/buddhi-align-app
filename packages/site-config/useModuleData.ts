@@ -3,7 +3,7 @@
  * Supports loading, error handling, and retries
  */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { apiFetch, APIClientError } from '@buddhi-align/site-config';
 
 export interface UseModuleDataOptions {
@@ -41,21 +41,32 @@ export function useModuleData<T extends { id?: string }>(
   const [isCreating, setIsCreating] = useState(false);
   const [deletingIds, setDeletingIds] = useState<string[]>([]);
 
+  // Prevents state updates after the component has unmounted.
+  const isMountedRef = useRef(true);
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
   const refetch = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
       const entries = await apiFetch<T[]>(`/api/${moduleName}`, { timeout });
+      if (!isMountedRef.current) return;
       setData(Array.isArray(entries) ? entries : []);
       setError(null);
     } catch (err) {
+      if (!isMountedRef.current) return;
       const message = err instanceof Error ? err.message : 'Failed to load data';
       setError(message);
       setData([]);
       console.error(`[useModuleData] Error loading ${moduleName}:`, err);
     } finally {
-      setLoading(false);
+      if (isMountedRef.current) setLoading(false);
     }
   }, [moduleName, timeout]);
 

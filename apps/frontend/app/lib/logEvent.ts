@@ -42,10 +42,8 @@ export function logEvent(event: string, data?: Record<string, unknown>): void {
     }
   }
 
-  // Server-side fallback.
-  void fetch("http://localhost:3000/api/obs", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  }).catch(() => undefined);
+  // Server-side: cannot self-call via HTTP without knowing the deployment URL.
+  // Emit to stdout so the platform's log aggregator (Vercel, Supabase, etc.) captures it.
+  console.info('[obs:server]', JSON.stringify(payload));
+  return;
 }

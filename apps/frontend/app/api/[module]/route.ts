@@ -6,15 +6,12 @@ import {
   createAnonymousEntry,
   listAnonymousEntries,
 } from '../_anonymous-module-store';
+import { ANALYTICS_MODULES } from '../analytics/types';
+import { logServerError } from '@/app/lib/server-error-log';
 
-const VALID_MODULES = new Set([
-  'karma',
-  'bhakti',
-  'jnana',
-  'dhyana',
-  'vasana',
-  'dharma',
-]);
+// Single source of truth for permitted practice module names.
+// Derived from ANALYTICS_MODULES to avoid duplicate declarations.
+const VALID_MODULES = new Set<string>(ANALYTICS_MODULES);
 
 /** GET /api/[module] — list all entries */
 export async function GET(
@@ -36,6 +33,7 @@ export async function GET(
     });
     return NextResponse.json(data);
   } catch (err) {
+    void logServerError(`/api/${params.module}`, 'GET', err);
     console.error(`GET /api/${params.module}`, err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
@@ -76,6 +74,7 @@ export async function POST(
     });
     return NextResponse.json(entry, { status: 201 });
   } catch (err) {
+    void logServerError(`/api/${params.module}`, 'POST', err);
     console.error(`POST /api/${params.module}`, err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }

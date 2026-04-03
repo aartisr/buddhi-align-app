@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 export interface ModuleRecordItem {
   id?: string;
@@ -29,7 +29,11 @@ export function ModuleRecordCollection({
   onDelete,
   deletingIds = [],
 }: ModuleRecordCollectionProps) {
-  const sortedEntries = [...entries].sort((left, right) => right.date.localeCompare(left.date));
+  // Memoize the sorted list so we don't re-sort on every unrelated re-render.
+  const sortedEntries = useMemo(
+    () => [...entries].sort((left, right) => right.date.localeCompare(left.date)),
+    [entries],
+  );
 
   return (
     <section className="app-records-shell mb-12">

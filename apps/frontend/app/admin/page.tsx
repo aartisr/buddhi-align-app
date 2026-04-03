@@ -7,8 +7,11 @@ import { createDataProvider } from "@buddhi-align/data-access";
 import { ADMIN_COOKIE_NAME, isAdminCookieValid } from "@/app/auth/admin";
 import ModuleLayout from "../components/ModuleLayout";
 import { ADMIN_AUDIT_MODULE, type AdminAuditEntry, writeAdminAudit } from "./_audit";
+import { APP_ERROR_LOG_MODULE, type AppErrorEntry } from "@/app/lib/server-error-log";
+import { ANALYTICS_MODULES } from "@/app/api/analytics/types";
 
-const PRACTICE_MODULES = ["karma", "bhakti", "jnana", "dhyana", "vasana", "dharma"] as const;
+// Use the shared ANALYTICS_MODULES constant as the single source of truth.
+const PRACTICE_MODULES = ANALYTICS_MODULES;
 const ADMIN_EXPERIMENT_MODULE = "__admin_experiment";
 const ADMIN_INCIDENT_MODULE = "__admin_incident";
 
@@ -51,7 +54,7 @@ export default async function AdminPage() {
 
   const provider = createDataProvider();
 
-  const [practiceCounts, audits, incidents, experiments] = await Promise.all([
+  const [practiceCounts, audits, incidents, experiments, errorLog] = await Promise.all([
     Promise.all(
       PRACTICE_MODULES.map(async (module) => {
         const rows = await provider.list<BasicEntry>(module);
@@ -61,6 +64,7 @@ export default async function AdminPage() {
     provider.list<AdminAuditEntry>(ADMIN_AUDIT_MODULE),
     provider.list<BasicEntry>(ADMIN_INCIDENT_MODULE),
     provider.list<BasicEntry>(ADMIN_EXPERIMENT_MODULE),
+    provider.list<AppErrorEntry>(APP_ERROR_LOG_MODULE),
   ]);
 
   const severityPenalty = incidents.reduce((penalty, incident) => {
@@ -199,6 +203,24 @@ export default async function AdminPage() {
             <p className="text-2xl font-bold mt-1">{totalCount}</p>
           </article>
         </div>
+
+        {/* Server Error Log */}
+        <article className="app-record-card">
+          <h4 className="font-semibold mb-2">Server Error Log <span className="text-xs app-copy-soft font-normal ml-1">({errorLog.length} total)</span></h4>
+          {errorLog.length === 0 ? (
+            <p className="text-sm app-copy-soft">No server errors recorded. 🎉</p>
+          ) : (
+            <ul className="space-y-2 text-sm max-h-64 overflow-y-auto">
+              {errorLog.slice(-20).reverse().map((entry) => (
+                <li key={entry.id} className="border-b border-[var(--border-soft)] pb-2 last:border-b-0">
+                  <p className="font-medium text-red-500 dark:text-red-400">{entry.errorName}: {entry.errorMessage}</p>
+                  <p className="app-copy-soft text-xs">{entry.method} {entry.route}</p>
+                  <p className="app-copy-soft text-xs">{formatTimestamp(entry.at)}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </article>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <article className="app-record-card">

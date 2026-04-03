@@ -2,6 +2,9 @@ type ModuleEntry = Record<string, unknown> & { id: string };
 
 type ModuleStore = Record<string, ModuleEntry[]>;
 
+/** Maximum entries kept per module in the in-memory anonymous store. */
+const MAX_ENTRIES_PER_MODULE = 500;
+
 declare global {
   var __buddhiAnonymousModuleStore: ModuleStore | undefined;
 }
@@ -31,6 +34,10 @@ export function createAnonymousEntry(module: string, body: Record<string, unknow
     ...body,
   };
   const entries = getModuleEntries(module);
+  // Evict oldest entries if the store grows too large to prevent memory leaks.
+  if (entries.length >= MAX_ENTRIES_PER_MODULE) {
+    entries.splice(0, entries.length - MAX_ENTRIES_PER_MODULE + 1);
+  }
   entries.push(entry);
   return entry;
 }

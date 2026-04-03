@@ -56,20 +56,27 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const todayActivity = {} as Record<AnalyticsModuleName, boolean>;
   const allEntries: Entry[] = [];
 
-  for (const mod of ANALYTICS_MODULES) {
-    try {
-      const entries: Entry[] = isAnon
-        ? listAnonymousEntries(mod)
-        : await createDataProvider().list(mod, { userId: session?.user?.id });
-      counts[mod] = entries.length;
-      todayActivity[mod] = entries.some(
-        (e) => typeof e.date === 'string' && e.date.slice(0, 10) === today,
-      );
-      allEntries.push(...entries);
-    } catch {
-      counts[mod] = 0;
-      todayActivity[mod] = false;
-    }
+  // Fetch all modules in parallel — avoids N sequential round-trips.
+  const provider = isAnon ? null : createDataProvider();
+  const modResults = await Promise.all(
+    ANALYTICS_MODULES.map(async (mod) => {
+      try {
+        const entries: Entry[] = isAnon
+          ? listAnonymousEntries(mod)
+          : await provider!.list(mod, { userId: session?.user?.id });
+        return { mod, entries };
+      } catch {
+        return { mod, entries: [] as Entry[] };
+      }
+    }),
+  );
+
+  for (const { mod, entries } of modResults) {
+    counts[mod] = entries.length;
+    todayActivity[mod] = entries.some(
+      (e) => typeof e.date === 'string' && e.date.slice(0, 10) === today,
+    );
+    allEntries.push(...entries);
   }
 
   const totalEntries = Object.values(counts).reduce((a, b) => a + b, 0);

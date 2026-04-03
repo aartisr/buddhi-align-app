@@ -38,20 +38,25 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const isAnon = isAnonymousCookie(req.cookies.get(ANONYMOUS_COOKIE_NAME)?.value);
   const session = isAnon ? null : await auth();
 
-  // Collect all entries with their dates across every module
-  const allByModule: Record<AnalyticsModuleName, { date: string }[]> = {} as never;
-  for (const mod of ANALYTICS_MODULES) {
-    try {
-      const entries = isAnon
-        ? listAnonymousEntries(mod)
-        : await createDataProvider().list(mod, { userId: session?.user?.id });
-      allByModule[mod] = entries
-        .filter((e) => typeof e.date === 'string')
-        .map((e) => ({ date: (e.date as string).slice(0, 10) }));
-    } catch {
-      allByModule[mod] = [];
-    }
-  }
+  // Collect all entries with their dates across every module — in parallel.
+  const provider = isAnon ? null : createDataProvider();
+  const modEntries = await Promise.all(
+    ANALYTICS_MODULES.map(async (mod) => {
+      try {
+        const entries = isAnon
+          ? listAnonymousEntries(mod)
+          : await provider!.list(mod, { userId: session?.user?.id });
+        return entries
+          .filter((e) => typeof e.date === 'string')
+          .map((e) => ({ date: (e.date as string).slice(0, 10) }));
+      } catch {
+        return [];
+      }
+    }),
+  );
+  const allByModule = Object.fromEntries(
+    ANALYTICS_MODULES.map((mod, i) => [mod, modEntries[i]]),
+  ) as Record<AnalyticsModuleName, { date: string }[]>;
 
   // Build 8-week buckets (most recent first during construction, reversed at end)
   const today = new Date();

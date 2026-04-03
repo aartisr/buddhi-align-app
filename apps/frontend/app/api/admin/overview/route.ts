@@ -16,16 +16,18 @@ export async function GET() {
 
   try {
     const provider = createDataProvider();
-    const practiceCounts = await Promise.all(
-      PRACTICE_MODULES.map(async (module) => {
-        const rows = await provider.list<BasicEntry>(module);
-        return { module, count: rows.length };
-      }),
-    );
-
-    const audits = await provider.list<AdminAuditEntry>(ADMIN_AUDIT_MODULE);
-    const incidents = await provider.list<BasicEntry>(ADMIN_INCIDENT_MODULE);
-    const experiments = await provider.list<BasicEntry>(ADMIN_EXPERIMENT_MODULE);
+    // Fetch practice counts AND admin data in parallel — all independent queries.
+    const [practiceCounts, audits, incidents, experiments] = await Promise.all([
+      Promise.all(
+        PRACTICE_MODULES.map(async (module) => {
+          const rows = await provider.list<BasicEntry>(module);
+          return { module, count: rows.length };
+        }),
+      ),
+      provider.list<AdminAuditEntry>(ADMIN_AUDIT_MODULE),
+      provider.list<BasicEntry>(ADMIN_INCIDENT_MODULE),
+      provider.list<BasicEntry>(ADMIN_EXPERIMENT_MODULE),
+    ]);
 
     const severityPenalty = incidents.reduce((penalty, incident) => {
       if (incident.severity === "critical") return penalty + 12;

@@ -6,6 +6,13 @@
  * JSONB `data` column so no schema changes are needed when a module's
  * fields evolve.
  *
+ * User ownership is tracked exclusively via the `__ownerId` field inside
+ * the JSONB `data` column.  The optional `user_id` column (added by
+ * schema_user_scoped.sql) is intentionally NOT used for writes because the
+ * app uses NextAuth, whose user IDs are NOT registered in Supabase's
+ * `auth.users` table — writing to that column would violate the FK
+ * constraint "module_entries_user_id_fkey".
+ *
  * Required environment variables (server-side only — never expose to clients):
  *   SUPABASE_URL              — Project URL from Supabase Settings → API
  *   SUPABASE_SERVICE_ROLE_KEY — Service-role secret (full DB access, bypasses RLS)
@@ -13,6 +20,8 @@
  * Activate: DATA_PROVIDER=supabase  (the default)
  *
  * See /supabase/schema.sql for the table definition and indexes.
+ * Run /supabase/schema_fix_user_id_fk.sql to drop the FK constraint if you
+ * previously applied schema_user_scoped.sql.
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -24,16 +33,6 @@ type ModuleRow = {
   id: string;
   data: Record<string, unknown>;
 };
-
-function isUuid(value: string): boolean {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
-}
-
-function isMissingUserIdColumnError(error: { message: string } | null): boolean {
-  if (!error) return false;
-  const msg = error.message.toLowerCase();
-  return msg.includes('user_id') && (msg.includes('column') || msg.includes('schema cache'));
-}
 
 function withOwnerId(data: Record<string, unknown>, context?: DataAccessContext): Record<string, unknown> {
   if (!context?.userId) return data;
@@ -91,93 +90,6 @@ export function createSupabaseDataProvider(): DataProvider {
     auth: { persistSession: false },
   });
 
-  async function listByUserIdColumn(
-    module: string,
-    context?: DataAccessContext,
-  ): Promise<ModuleRow[]> {
-    if (!context?.userId || !isUuid(context.userId)) return [];
-
-    const { data, error } = await client
-      .from('module_entries')
-      .select('id, data')
-      .eq('module', module)
-      .eq('user_id', context.userId)
-      .order('created_at', { ascending: true });
-
-    if (error) {
-      if (isMissingUserIdColumnError(error)) return [];
-      throw new Error(`Supabase list error: ${error.message}`);
-    }
-
-    return (data ?? []) as ModuleRow[];
-  }
-
-  async function isOwnedByUserIdColumn(
-    module: string,
-    id: string,
-    context?: DataAccessContext,
-  ): Promise<boolean> {
-    if (!context?.userId || !isUuid(context.userId)) return false;
-
-    const { data, error } = await client
-      .from('module_entries')
-      .select('id')
-      .eq('module', module)
-      .eq('id', id)
-      .eq('user_id', context.userId)
-      .maybeSingle();
-
-    if (error) {
-      if (isMissingUserIdColumnError(error)) return false;
-      throw new Error(`Supabase ownership check error: ${error.message}`);
-    }
-
-    return Boolean(data?.id);
-  }
-
-  async function insertWithOptionalUserIdColumn(
-    module: string,
-    data: Record<string, unknown>,
-    context?: DataAccessContext,
-  ): Promise<ModuleRow> {
-    const payload: Record<string, unknown> = {
-      module,
-      data,
-    };
-
-    if (context?.userId && isUuid(context.userId)) {
-      payload.user_id = context.userId;
-    }
-
-    const insertQuery = client
-      .from('module_entries')
-      .insert(payload)
-      .select('id, data')
-      .single();
-
-    const { data: inserted, error } = await insertQuery;
-
-    if (!error) {
-      return inserted as ModuleRow;
-    }
-
-    if (!('user_id' in payload) || !isMissingUserIdColumnError(error)) {
-      throw new Error(`Supabase create error: ${error.message}`);
-    }
-
-    const { data: fallbackInserted, error: fallbackError } = await client
-      .from('module_entries')
-      .insert({ module, data })
-      .select('id, data')
-      .single();
-
-    if (fallbackError) {
-      throw new Error(`Supabase create error: ${fallbackError.message}`);
-    }
-
-    return fallbackInserted as ModuleRow;
-  }
-
   return {
     async list<T extends ModuleEntry>(module: string, context?: DataAccessContext): Promise<T[]> {
       const { data, error } = await client
@@ -193,14 +105,13 @@ export function createSupabaseDataProvider(): DataProvider {
         return rows.map((row) => stripInternalFields<T>(row));
       }
 
-      const ownerScopedRows = rows.filter((row) => extractOwnerId(row.data) === context.userId);
-      const userIdScopedRows = await listByUserIdColumn(module, context);
-
-      const mergedById = new Map<string, ModuleRow>();
-      for (const row of ownerScopedRows) mergedById.set(row.id, row);
-      for (const row of userIdScopedRows) mergedById.set(row.id, row);
-
-      return Array.from(mergedById.values()).map((row) => stripInternalFields<T>(row));
+      // Ownership scoped entirely via __ownerId in the JSONB data column.
+      // The optional user_id column (schema_user_scoped.sql) is NOT used here
+      // because it has a FK constraint to auth.users which is incompatible with
+      // NextAuth user IDs. Run schema_fix_user_id_fk.sql to remove that FK.
+      return rows
+        .filter((row) => extractOwnerId(row.data) === context.userId)
+        .map((row) => stripInternalFields<T>(row));
     },
 
     async create<T extends ModuleEntry>(
@@ -209,8 +120,17 @@ export function createSupabaseDataProvider(): DataProvider {
       context?: DataAccessContext,
     ): Promise<T> {
       const payload = withOwnerId(entryData as Record<string, unknown>, context);
-      const created = await insertWithOptionalUserIdColumn(module, payload, context);
-      return stripInternalFields<T>(created);
+
+      // Never write to the user_id column — its FK to auth.users conflicts with
+      // NextAuth session IDs. All user-scoping uses __ownerId inside the data JSONB.
+      const { data, error } = await client
+        .from('module_entries')
+        .insert({ module, data: payload })
+        .select('id, data')
+        .single();
+
+      if (error) throw new Error(`Supabase create error: ${error.message}`);
+      return stripInternalFields<T>(data as ModuleRow);
     },
 
     async update<T extends ModuleEntry>(
@@ -219,7 +139,6 @@ export function createSupabaseDataProvider(): DataProvider {
       entryData: Partial<Omit<T, 'id'>>,
       context?: DataAccessContext,
     ): Promise<T> {
-      // Fetch current payload, verify ownership, then merge and persist.
       const { data: current, error: fetchErr } = await client
         .from('module_entries')
         .select('id, data')
@@ -228,25 +147,16 @@ export function createSupabaseDataProvider(): DataProvider {
         .single();
 
       if (fetchErr) {
-        throw new Error(
-          `Supabase update (fetch) error: ${fetchErr.message}`,
-        );
+        throw new Error(`Supabase update (fetch) error: ${fetchErr.message}`);
       }
 
       const currentRow = current as ModuleRow;
-      if (context?.userId) {
-        const ownerMatchesData = extractOwnerId(currentRow.data) === context.userId;
-        const ownerMatchesColumn = await isOwnedByUserIdColumn(module, id, context);
-        if (!ownerMatchesData && !ownerMatchesColumn) {
-          throw new Error('Not found');
-        }
+      if (context?.userId && extractOwnerId(currentRow.data) !== context.userId) {
+        throw new Error('Not found');
       }
 
       const merged = withOwnerId(
-        {
-          ...currentRow.data,
-          ...(entryData as object),
-        } as Record<string, unknown>,
+        { ...currentRow.data, ...(entryData as object) } as Record<string, unknown>,
         context,
       );
 
@@ -269,16 +179,14 @@ export function createSupabaseDataProvider(): DataProvider {
           .select('id, data')
           .eq('id', id)
           .eq('module', module)
-          .single();
+          .maybeSingle();
 
         if (fetchErr) {
           throw new Error(`Supabase delete (fetch) error: ${fetchErr.message}`);
         }
-
+        if (!current) throw new Error('Not found');
         const currentRow = current as ModuleRow;
-        const ownerMatchesData = extractOwnerId(currentRow.data) === context.userId;
-        const ownerMatchesColumn = await isOwnedByUserIdColumn(module, id, context);
-        if (!ownerMatchesData && !ownerMatchesColumn) {
+        if (extractOwnerId(currentRow.data) !== context.userId) {
           throw new Error('Not found');
         }
       }

@@ -6,15 +6,11 @@ import {
   deleteAnonymousEntry,
   updateAnonymousEntry,
 } from '../../_anonymous-module-store';
+import { ANALYTICS_MODULES } from '../../analytics/types';
+import { logServerError } from '@/app/lib/server-error-log';
 
-const VALID_MODULES = new Set([
-  'karma',
-  'bhakti',
-  'jnana',
-  'dhyana',
-  'vasana',
-  'dharma',
-]);
+// Single source of truth — matches the set in [module]/route.ts.
+const VALID_MODULES = new Set<string>(ANALYTICS_MODULES);
 
 /** PUT /api/[module]/[id] — update an existing entry */
 export async function PUT(
@@ -50,6 +46,7 @@ export async function PUT(
     if (err instanceof Error && err.message.toLowerCase().includes('not found')) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
+    void logServerError(`/api/${params.module}/${params.id}`, 'PUT', err);
     console.error(`PUT /api/${params.module}/${params.id}`, err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
@@ -76,6 +73,7 @@ export async function DELETE(
     });
     return new NextResponse(null, { status: 204 });
   } catch (err) {
+    void logServerError(`/api/${params.module}/${params.id}`, 'DELETE', err);
     console.error(`DELETE /api/${params.module}/${params.id}`, err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }

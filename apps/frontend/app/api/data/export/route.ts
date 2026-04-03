@@ -19,14 +19,22 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const session = isAnon ? null : await auth();
   const modules: Record<string, unknown[]> = {};
 
-  for (const mod of ANALYTICS_MODULES) {
-    try {
-      modules[mod] = isAnon
-        ? listAnonymousEntries(mod)
-        : await createDataProvider().list(mod, { userId: session?.user?.id });
-    } catch {
-      modules[mod] = [];
-    }
+  // Fetch all modules in parallel.
+  const provider = isAnon ? null : createDataProvider();
+  const modResults = await Promise.all(
+    ANALYTICS_MODULES.map(async (mod) => {
+      try {
+        const entries = isAnon
+          ? listAnonymousEntries(mod)
+          : await provider!.list(mod, { userId: session?.user?.id });
+        return [mod, entries] as const;
+      } catch {
+        return [mod, [] as unknown[]] as const;
+      }
+    }),
+  );
+  for (const [mod, entries] of modResults) {
+    modules[mod] = entries;
   }
 
   const payload: ArchivePayload = {
