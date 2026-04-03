@@ -1,5 +1,5 @@
 {
   "buildCommand": "NPM_CONFIG_USERCONFIG=/dev/null npm_config_registry=https://registry.npmjs.org npx -y npm@9 run build",
-  "outputDirectory": "apps/frontend/.next",
+  "outputDirectory": ".next",
   "installCommand": "NPM_CONFIG_USERCONFIG=/dev/null npm_config_registry=https://registry.npmjs.org npx -y npm@9 install --no-audit --no-fund"
 }
