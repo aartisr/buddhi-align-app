@@ -3,12 +3,13 @@ import { createDataProvider } from "@buddhi-align/data-access";
 export const ADMIN_AUDIT_MODULE = "__admin_audit";
 
 export interface AdminAuditEntry {
-  id?: string;
+  id: string;
   at: string;
   actor: string;
   action: string;
   detail: string;
   severity: "info" | "warning" | "critical";
+  [key: string]: unknown;
 }
 
 export async function writeAdminAudit(entry: Omit<AdminAuditEntry, "id" | "at"> & { at?: string }) {

@@ -8,7 +8,7 @@ const PRACTICE_MODULES = ["karma", "bhakti", "jnana", "dhyana", "vasana", "dharm
 const ADMIN_EXPERIMENT_MODULE = "__admin_experiment";
 const ADMIN_INCIDENT_MODULE = "__admin_incident";
 
-type BasicEntry = { id?: string; createdAt?: string; at?: string; severity?: "info" | "warning" | "critical"; status?: string };
+type BasicEntry = { id: string; createdAt?: string; at?: string; severity?: "info" | "warning" | "critical"; status?: string };
 
 export async function GET() {
   const authResult = await requireAdminApiAccess();

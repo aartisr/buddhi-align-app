@@ -13,7 +13,7 @@ const ADMIN_EXPERIMENT_MODULE = "__admin_experiment";
 const ADMIN_INCIDENT_MODULE = "__admin_incident";
 
 type BasicEntry = {
-  id?: string;
+  id: string;
   createdAt?: string;
   title?: string;
   severity?: "info" | "warning" | "critical";
@@ -110,6 +110,7 @@ export default async function AdminPage() {
 
     const actionProvider = createDataProvider();
     await actionProvider.create<BasicEntry>(ADMIN_EXPERIMENT_MODULE, {
+      id: crypto.randomUUID(),
       name,
       hypothesis,
       metric,
@@ -143,6 +144,7 @@ export default async function AdminPage() {
 
     const actionProvider = createDataProvider();
     await actionProvider.create<BasicEntry>(ADMIN_INCIDENT_MODULE, {
+      id: crypto.randomUUID(),
       title,
       severity,
       status: "open",

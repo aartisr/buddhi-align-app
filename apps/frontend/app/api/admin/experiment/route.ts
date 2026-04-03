@@ -7,7 +7,7 @@ import { writeAdminAudit } from "@/app/admin/_audit";
 const ADMIN_EXPERIMENT_MODULE = "__admin_experiment";
 
 interface AdminExperimentEntry {
-  id?: string;
+  id: string;
   name: string;
   hypothesis: string;
   metric: string;
@@ -15,6 +15,7 @@ interface AdminExperimentEntry {
   status: "planned" | "active" | "completed";
   createdAt: string;
   createdBy: string;
+  [key: string]: unknown;
 }
 
 export async function POST(req: NextRequest) {

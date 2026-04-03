@@ -7,13 +7,14 @@ import { writeAdminAudit } from "@/app/admin/_audit";
 const ADMIN_INCIDENT_MODULE = "__admin_incident";
 
 interface AdminIncidentEntry {
-  id?: string;
+  id: string;
   title: string;
   severity: "info" | "warning" | "critical";
   status: "open" | "resolved";
   note?: string;
   createdAt: string;
   createdBy: string;
+  [key: string]: unknown;
 }
 
 export async function POST(req: NextRequest) {

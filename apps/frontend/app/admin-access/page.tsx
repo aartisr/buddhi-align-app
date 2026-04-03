@@ -52,6 +52,8 @@ export default async function AdminAccessPage({
       redirect(`/admin-access?error=invalid&callbackUrl=${encodeURIComponent(callback)}`);
     }
 
+    const actorId = session?.user?.id ?? "unknown-admin";
+
     cookies().set({
       name: ADMIN_COOKIE_NAME,
       value: createAdminSessionValue(),
@@ -63,7 +65,7 @@ export default async function AdminAccessPage({
     });
 
     await writeAdminAudit({
-      actor: session.user.id ?? "unknown-admin",
+      actor: actorId,
       action: "admin.unlock",
       detail: "Admin module unlocked via password.",
       severity: "info",
