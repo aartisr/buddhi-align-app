@@ -303,8 +303,11 @@ export default function RequestFeedbackProvider({ children }: { children: React.
 
       const requestMeta = describeRequest(descriptor);
       const toastId = requestMeta.announce ? makeToastId() : null;
+      const shouldAffectOverlay = requestMeta.announce;
 
-      setPendingCount((count) => count + 1);
+      if (shouldAffectOverlay) {
+        setPendingCount((count) => count + 1);
+      }
 
       if (toastId && requestMeta.startTitle) {
         queueToast({
@@ -354,7 +357,9 @@ export default function RequestFeedbackProvider({ children }: { children: React.
 
         throw error;
       } finally {
-        setPendingCount((count) => Math.max(0, count - 1));
+        if (shouldAffectOverlay) {
+          setPendingCount((count) => Math.max(0, count - 1));
+        }
       }
     }
 

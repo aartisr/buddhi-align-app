@@ -96,6 +96,7 @@ Core runtime variables used by the app:
 - `SUPABASE_SERVICE_ROLE_KEY`: required when `DATA_PROVIDER=supabase`
 - `NEXT_PUBLIC_API_URL`: optional API origin override (defaults to same origin)
 - `NEXT_PUBLIC_SITE_URL`: canonical public origin (recommended in production)
+- `ADMIN_PASSWORD`: password used to unlock the admin-only module at `/admin`
 - `NEXT_PUBLIC_BGM_URL`: optional single background music URL
 - `NEXT_PUBLIC_BGM_URLS`: optional comma-separated background music playlist
 
@@ -194,6 +195,26 @@ Recommended Vercel environment variables:
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `AUTH_SECRET`
 - Any OAuth provider secrets you plan to enable
+
+## Admin Module
+
+The app includes a protected admin workflow:
+
+- `GET /admin-access` unlock page (requires signed-in user + `ADMIN_PASSWORD`)
+- `GET /admin` admin control center (requires signed-in user + valid admin cookie)
+
+Admin capabilities include:
+
+- Aggregate module footprint and reliability snapshot
+- Incident logging workflow
+- Experiment planning workflow
+- Immutable-style audit feed stored via data provider
+
+Admin API endpoints (server-protected):
+
+- `GET /api/admin/overview`
+- `POST /api/admin/incident`
+- `POST /api/admin/experiment`
 
 Deployment notes:
 
