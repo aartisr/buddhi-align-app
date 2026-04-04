@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React, { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { useSession } from "next-auth/react";
 
@@ -129,16 +130,28 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
         <button
           type="button"
           className="app-preferences-trigger"
-          aria-label={t("preferences.openAria")}
+          aria-label={t("app.settings.link")}
           onClick={() => setOpen((prev: boolean) => !prev)}
         >
           <span aria-hidden>⚙️</span>
-          <span className="hidden sm:inline">{t("preferences.title")}</span>
+          <span className="hidden sm:inline">{t("app.settings.link")}</span>
         </button>
       )}
 
       {open && (
-        <div className="app-preferences-panel" role="dialog" aria-label={t("preferences.title")}>
+        <div className="app-preferences-panel" role="dialog" aria-label={t("app.settings.link")}>
+          <div className="app-preferences-row app-preferences-row--compact">
+            <Link
+              href="/settings"
+              className="app-preferences-settings-link"
+              onClick={() => {
+                if (showTrigger) setOpen(false);
+              }}
+            >
+              <span aria-hidden>⚙️</span>
+              <span>{t("app.settings.link")}</span>
+            </Link>
+          </div>
           <div className="app-preferences-row">
             <label htmlFor="prefs-language" className="app-preferences-label">{t("preferences.defaultLanguage")}</label>
             <div className="app-preferences-field-wrap">
@@ -161,11 +174,9 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
 
           <div className="app-preferences-row">
             <p className="app-preferences-label">{t("preferences.musicControl")}</p>
-            <div className="app-preferences-toggle-group" role="radiogroup" aria-label={t("preferences.musicControlVisibility")}>
+            <div className="app-preferences-toggle-group" aria-label={t("preferences.musicControlVisibility")}>
               <button
                 type="button"
-                role="radio"
-                aria-checked={musicControlVisible}
                 className={`app-preferences-toggle ${musicControlVisible ? "is-active" : ""}`}
                 disabled={isSaving}
                 onClick={() => handleMusicVisibility(true)}
@@ -181,8 +192,6 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
               </button>
               <button
                 type="button"
-                role="radio"
-                aria-checked={!musicControlVisible}
                 className={`app-preferences-toggle ${!musicControlVisible ? "is-active" : ""}`}
                 disabled={isSaving}
                 onClick={() => handleMusicVisibility(false)}

@@ -3,7 +3,6 @@
 import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useI18n } from "../i18n/provider";
 
@@ -56,12 +55,6 @@ export default function UserMenu() {
       <span className="text-sm font-medium hidden sm:inline app-user-name max-w-30 truncate">
         {session.user?.name ?? session.user?.email}
       </span>
-      <Link
-        href="/settings"
-        className="text-xs px-2 py-1 rounded app-user-action transition-colors"
-      >
-        {t("app.settings.link")}
-      </Link>
       <button
         onClick={() => signOut({ callbackUrl: "/sign-in" })}
         className="text-xs px-2 py-1 rounded app-user-action transition-colors"

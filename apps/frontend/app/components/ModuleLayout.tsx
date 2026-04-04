@@ -14,8 +14,23 @@ import { useI18n } from "../i18n/provider";
 export default function ModuleLayout({ titleKey, children }: { titleKey: TranslationKey; children: React.ReactNode }) {
   const { t } = useI18n();
   const pathname = usePathname();
-  const icon = MODULE_CATALOG.find((item) => item.titleKey === titleKey)?.icon ?? "";
+  const currentModule = MODULE_CATALOG.find((item) => item.titleKey === titleKey) ?? null;
+  const icon = currentModule?.icon ?? "";
   const moduleByKey = new Map(MODULE_CATALOG.map((item) => [item.key, item]));
+  const recommendedSequence: Array<(typeof MODULE_CATALOG)[number]["key"]> = [
+    "dharma",
+    "karma",
+    "bhakti",
+    "dhyana",
+    "jnana",
+    "vasana",
+    "motivation",
+  ];
+  const sequenceIndex = currentModule ? recommendedSequence.indexOf(currentModule.key) : -1;
+  const previousModule = sequenceIndex > 0 ? moduleByKey.get(recommendedSequence[sequenceIndex - 1]) ?? null : null;
+  const nextModule = sequenceIndex >= 0 && sequenceIndex < recommendedSequence.length - 1
+    ? moduleByKey.get(recommendedSequence[sequenceIndex + 1]) ?? null
+    : null;
   const menuGroups = [
     {
       key: "home",
@@ -114,6 +129,8 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
     if (href === "/") return pathname === "/";
     return pathname === href || pathname.startsWith(`${href}/`);
   };
+
+  const getModuleLabel = (moduleItem: (typeof MODULE_CATALOG)[number]) => t(moduleItem.navKey ?? moduleItem.titleKey);
 
   const closeNav = () => setMobileNavOpen(false);
   const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(pathname || "/")}`;
@@ -270,7 +287,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
               </li>
             ))}
             <li className="app-mobile-nav-group app-mobile-nav-group--preferences">
-              <p className="app-mobile-nav-group-title">{t("preferences.title")}</p>
+              <p className="app-mobile-nav-group-title">{t("app.settings.link")}</p>
               <div className="app-mobile-nav-preferences">
                 <PreferencesMenu showTrigger={false} />
               </div>
@@ -284,6 +301,51 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
             {t(titleKey)}
           </h2>
           {children}
+          {sequenceIndex >= 0 && (previousModule || nextModule) && (
+            <nav className="app-sequence-nav" aria-label={t("nav.sequenceAria")}>
+              <div className="app-sequence-nav-header">
+                <p className="app-sequence-nav-eyebrow">{t("nav.sequenceLabel")}</p>
+                <div className="app-sequence-nav-copy">
+                  <p>{t("nav.sequenceHint")}</p>
+                  <p>{t("nav.sequenceProgress", { current: sequenceIndex + 1, total: recommendedSequence.length })}</p>
+                </div>
+              </div>
+              <div className="app-sequence-nav-grid">
+                {previousModule ? (
+                  <Link
+                    href={previousModule.href}
+                    className="app-sequence-card"
+                    aria-label={`${t("nav.previous")}: ${getModuleLabel(previousModule)}`}
+                  >
+                    <span className="app-sequence-card-label">{t("nav.previous")}</span>
+                    <span className="app-sequence-card-title">
+                      <span aria-hidden>{previousModule.icon}</span>
+                      <span>{getModuleLabel(previousModule)}</span>
+                    </span>
+                    <span className="app-sequence-card-description">{t(previousModule.descriptionKey)}</span>
+                  </Link>
+                ) : (
+                  <div className="app-sequence-card app-sequence-card--placeholder" aria-hidden="true" />
+                )}
+                {nextModule ? (
+                  <Link
+                    href={nextModule.href}
+                    className="app-sequence-card app-sequence-card--next"
+                    aria-label={`${t("nav.next")}: ${getModuleLabel(nextModule)}`}
+                  >
+                    <span className="app-sequence-card-label">{t("nav.next")}</span>
+                    <span className="app-sequence-card-title">
+                      <span aria-hidden>{nextModule.icon}</span>
+                      <span>{getModuleLabel(nextModule)}</span>
+                    </span>
+                    <span className="app-sequence-card-description">{t(nextModule.descriptionKey)}</span>
+                  </Link>
+                ) : (
+                  <div className="app-sequence-card app-sequence-card--placeholder" aria-hidden="true" />
+                )}
+              </div>
+            </nav>
+          )}
         </main>
       </div>
       <div className="app-backdrop-panel" />

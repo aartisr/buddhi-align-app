@@ -410,6 +410,10 @@
   margin-bottom: 0.9rem;
 }
 
+.app-preferences-row--compact {
+  margin-bottom: 0.75rem;
+}
+
 .app-preferences-row:last-child {
   margin-bottom: 0;
 }
@@ -419,6 +423,28 @@
   color: var(--text-muted);
   font-size: 0.83rem;
   font-weight: 600;
+}
+
+.app-preferences-settings-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.35rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.6rem;
+  background: var(--surface);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.app-preferences-settings-link:hover,
+.app-preferences-settings-link:focus-visible {
+  border-color: var(--border-strong);
+  color: var(--primary);
+  outline: none;
 }
 
 .app-preferences-field-wrap {
