@@ -7,19 +7,19 @@
 .app-module-value--karma,
 .app-module-label--dhyana,
 .app-module-value--dhyana {
-  color: #2f7659;
+  color: var(--primary);
 }
 
 .app-module-label--bhakti,
 .app-module-value--bhakti {
-  color: #9a564a;
+  color: var(--rose);
 }
 
 .app-module-label--jnana,
 .app-module-value--jnana,
 .app-module-label--dharma,
 .app-module-value--dharma {
-  color: #4f7a6b;
+  color: var(--accent);
 }
 
 @media (prefers-color-scheme: dark) {

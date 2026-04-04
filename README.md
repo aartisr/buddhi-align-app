@@ -64,6 +64,12 @@ Note: There is no standalone `apps/backend` service in this repository. API beha
 npm install
 ```
 
+Create local env file from the template:
+
+```bash
+cp .env.example apps/frontend/.env.local
+```
+
 ### Start local development
 
 ```bash
@@ -89,6 +95,8 @@ npm run lint && npm run test && npm run build
 
 ## Environment Variables
 
+Use `.env.example` as the canonical template and place runtime values in `apps/frontend/.env.local`.
+
 Core runtime variables used by the app:
 
 - `DATA_PROVIDER`: `supabase` (default) or `memory`
@@ -111,6 +119,15 @@ Auth variables:
 - `AUTH_FACEBOOK_ID`, `AUTH_FACEBOOK_SECRET`
 
 If provider credentials are missing, that provider is automatically omitted from sign-in options.
+
+## White-Label and Generic Setup
+
+This repository is intentionally modular and can be adapted for different brands or organizations.
+
+- Replace app name, logos, and copy in UI components without changing module APIs.
+- Keep module route names stable (`/karma-yoga`, `/jnana-reflection`, etc.) to avoid breaking links.
+- Keep `packages/data-access` provider interfaces unchanged so storage backends remain plug-and-play.
+- Use `DATA_PROVIDER=memory` for zero-infra local startup, then switch to `supabase` for persistent environments.
 
 ## API Surface
 

@@ -1,5 +1,7 @@
 :root {
   --background: #f2f6f1;
+  --background-elevated: #e6efe6;
+  --background-deep: #dce8db;
   --foreground: #1f2f28;
   --primary: #2f5d50;
   --accent: #4b7f63;
@@ -21,6 +23,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0f1d19;
+    --background-elevated: #12231e;
+    --background-deep: #162b24;
     --foreground: #e6efe9;
     --primary: #9fd3bc;
     --accent: #7fb79f;
@@ -40,7 +44,7 @@
 }
 
 body {
-  background: linear-gradient(140deg, var(--background) 0%, #e6efe6 52%, #dce8db 100%);
+  background: linear-gradient(140deg, var(--background) 0%, var(--background-elevated) 52%, var(--background-deep) 100%);
   color: var(--foreground);
   font-family: var(--font-sans);
   min-height: 100vh;
@@ -54,7 +58,7 @@ body {
   background: radial-gradient(circle at 80% 10%, rgba(222, 196, 143, 0.42) 0%, #fff0 42%),
     radial-gradient(circle at 20% 90%, rgba(63, 122, 96, 0.2) 0%, #fff0 62%),
     radial-gradient(circle at 50% 50%, rgba(157, 97, 83, 0.14) 0%, #fff0 72%),
-    linear-gradient(140deg, #f2f6f1 0%, #e6efe6 100%);
+    linear-gradient(140deg, var(--background) 0%, var(--background-elevated) 100%);
 }
 
 .spiritual-overlay {
@@ -90,7 +94,7 @@ a {
 }
 
 a:hover {
-  color: var(--gold);
+  color: var(--primary);
 }
 
 .card,

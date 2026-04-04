@@ -3,7 +3,7 @@
 }
 
 .app-anonymous-badge {
-  color: #7b5528;
+  color: var(--text-muted);
   background: rgba(222, 196, 143, 0.28);
   border: 1px solid rgba(176, 130, 68, 0.34);
 }
@@ -19,7 +19,7 @@
 
 .app-user-avatar,
 .app-user-avatar-fallback {
-  background: linear-gradient(135deg, #3e7963 0%, #2f5d50 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
   color: #fff;
 }
 
@@ -62,11 +62,11 @@
 }
 
 .app-provider-btn--deep {
-  background: linear-gradient(135deg, #253f36 0%, #1d332b 100%);
-  color: #e9f2ec;
-  border-color: rgba(233, 242, 236, 0.18);
+  background: linear-gradient(135deg, rgba(47, 93, 80, 0.96) 0%, rgba(37, 63, 54, 0.96) 100%);
+  color: var(--foreground);
+  border-color: var(--border-strong);
 }
 
 .app-provider-btn--deep:hover {
-  background: linear-gradient(135deg, #29493e 0%, #223d33 100%);
+  background: linear-gradient(135deg, rgba(52, 100, 84, 0.96) 0%, rgba(40, 73, 62, 0.96) 100%);
 }

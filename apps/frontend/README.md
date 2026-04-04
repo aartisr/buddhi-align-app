@@ -20,6 +20,12 @@ It contains:
 
 ## Run Locally
 
+Create local environment values first:
+
+```bash
+cp ../../.env.example .env.local
+```
+
 From repo root:
 
 ```bash

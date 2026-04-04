@@ -176,7 +176,10 @@ export default function MotivationAnalyticsPage() {
         },
         yaxis: {
           ...prev.options.yaxis,
-          title: { text: t("motivation.entries") },
+          title: {
+            ...prev.options.yaxis.title,
+            text: t("motivation.entries"),
+          },
         },
         title: {
           ...prev.options.title,

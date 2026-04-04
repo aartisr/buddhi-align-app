@@ -4,20 +4,20 @@
 }
 
 .app-alert-error__title {
-  color: #7d463d;
+  color: var(--rose);
 }
 
 .app-alert-error__text {
-  color: #96584d;
+  color: var(--text-muted);
 }
 
 .app-alert-error__button {
-  background: #8e5346;
+  background: var(--rose);
   color: #fff;
 }
 
 .app-alert-error__button:hover {
-  background: #7d463d;
+  filter: brightness(0.94);
 }
 
 .app-skeleton-soft {

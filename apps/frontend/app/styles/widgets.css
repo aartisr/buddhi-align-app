@@ -42,12 +42,12 @@
 
 .app-insight-chip--indigo {
   background: rgba(75, 127, 99, 0.14);
-  color: #2c5548;
+  color: var(--foreground);
 }
 
 .app-insight-chip--emerald {
   background: rgba(222, 196, 143, 0.28);
-  color: #5c4323;
+  color: var(--foreground);
 }
 
 .app-insight-chip__icon {
@@ -128,8 +128,8 @@
 .app-breathwork-btn--reset:hover { background: var(--surface-soft); }
 
 /* Daily Intention Rings */
-.app-daily-rings-title { color: var(--text-strong, #18181b); font-size: 1rem; }
-.app-daily-rings-subtitle { color: var(--text-soft, #71717a); }
+.app-daily-rings-title { color: var(--foreground); font-size: 1rem; }
+.app-daily-rings-subtitle { color: var(--text-soft); }
 
 .app-daily-ring-item {
   text-decoration: none;
@@ -223,12 +223,12 @@
 
 .app-data-import-btn {
   background: transparent;
-  color: #059669;
-  border-color: #059669;
+  color: var(--emerald);
+  border-color: var(--emerald);
 }
 
 .app-data-import-btn:hover:not(:disabled) {
-  background: #059669;
+  background: var(--emerald);
   color: #fff;
 }
 
@@ -237,7 +237,7 @@
   cursor: not-allowed;
 }
 
-.app-import-success { color: #065f46; font-weight: 600; }
+.app-import-success { color: var(--emerald); font-weight: 600; }
 .app-import-error { color: #991b1b; font-weight: 600; }
 
 @media (prefers-color-scheme: dark) {

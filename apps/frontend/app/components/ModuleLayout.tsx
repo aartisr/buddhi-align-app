@@ -7,6 +7,7 @@ import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonym
 
 import UserMenu from "./UserMenu";
 import BuddhiAlignLogo from "./BuddhiAlignLogo";
+import PreferencesMenu from "./PreferencesMenu";
 import { MODULE_CATALOG, type TranslationKey } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 
@@ -68,12 +69,18 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
     },
   ] as const;
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [desktopOpenGroup, setDesktopOpenGroup] = useState<string | null>(null);
   const [isAnonymous, setIsAnonymous] = useState(false);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
     setIsAnonymous(document.cookie.includes(`${ANONYMOUS_COOKIE_NAME}=${ANONYMOUS_COOKIE_VALUE}`));
   }, []);
+
+  useEffect(() => {
+    setDesktopOpenGroup(null);
+    setMobileNavOpen(false);
+  }, [pathname]);
 
   // Close drawer on Escape key
   useEffect(() => {
@@ -88,6 +95,25 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
     document.body.style.overflow = mobileNavOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [mobileNavOpen]);
+
+  useEffect(() => {
+    if (!desktopOpenGroup) return;
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setDesktopOpenGroup(null);
+      }
+    };
+
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [desktopOpenGroup]);
+
+  const isPathActive = (href: string) => {
+    if (!pathname) return href === "/";
+    if (href === "/") return pathname === "/";
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
 
   const closeNav = () => setMobileNavOpen(false);
   const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(pathname || "/")}`;
@@ -119,16 +145,32 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
             </Link>
           </h1>
           {/* Desktop centered nav */}
-          <nav className="hidden lg:flex items-center justify-center gap-2 text-sm font-medium app-copy" aria-label="Main navigation">
+          <nav className="hidden md:flex items-center justify-center gap-2 text-sm font-medium app-copy app-top-nav" aria-label="Main navigation">
             {menuGroups.map((group) => (
-              <div key={group.key} className="app-nav-group">
-                <button type="button" className="app-nav-group-trigger" aria-haspopup="menu">
+              <div
+                key={group.key}
+                className={`app-nav-group${desktopOpenGroup === group.key ? " is-open" : ""}${group.items.some((item) => isPathActive(item.href)) ? " is-active" : ""}`}
+                onMouseEnter={() => setDesktopOpenGroup(group.key)}
+                onMouseLeave={() => setDesktopOpenGroup((current) => (current === group.key ? null : current))}
+              >
+                <button
+                  type="button"
+                  className="app-nav-group-trigger"
+                  aria-haspopup="menu"
+                  aria-expanded={desktopOpenGroup === group.key}
+                  onClick={() => setDesktopOpenGroup((current) => (current === group.key ? null : group.key))}
+                >
                   <span className="app-nav-item-icon" aria-hidden>{group.icon}</span>
                   {group.label}
                 </button>
-                <div className="app-nav-submenu" aria-label={group.label}>
+                <div className="app-nav-submenu" aria-label={group.label} role="menu">
                   {group.items.map((item) => (
-                    <Link key={item.key} href={item.href} className="app-nav-submenu-link">
+                    <Link
+                      key={item.key}
+                      href={item.href}
+                      className={`app-nav-submenu-link${isPathActive(item.href) ? " is-active" : ""}`}
+                      aria-current={isPathActive(item.href) ? "page" : undefined}
+                    >
                       <span className="app-nav-item-icon" aria-hidden>{item.icon}</span>
                       <span>{item.label}</span>
                     </Link>
@@ -138,11 +180,14 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
             ))}
           </nav>
           <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden sm:block">
+              <PreferencesMenu />
+            </div>
             <UserMenu />
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileNavOpen(true)}
-              className="app-mobile-menu-btn lg:hidden"
+              className="app-mobile-menu-btn md:hidden"
               aria-label="Open menu"
               aria-controls="mobile-nav-drawer"
             >
@@ -170,7 +215,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
         {/* ── Mobile nav backdrop ── */}
         {mobileNavOpen && (
           <div
-            className="app-mobile-nav-overlay lg:hidden"
+            className="app-mobile-nav-overlay md:hidden"
             onClick={closeNav}
             aria-hidden="true"
           />
@@ -179,7 +224,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
         {/* ── Mobile nav drawer ── */}
         <nav
           id="mobile-nav-drawer"
-          className={`app-mobile-nav-drawer lg:hidden${mobileNavOpen ? " app-mobile-nav-drawer--open" : ""}`}
+          className={`app-mobile-nav-drawer md:hidden${mobileNavOpen ? " app-mobile-nav-drawer--open" : ""}`}
           aria-label="Site navigation"
         >
           <div className="app-mobile-nav-header">
@@ -187,12 +232,38 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
             <button onClick={closeNav} className="app-mobile-nav-close" aria-label="Close menu">✕</button>
           </div>
           <ul className="app-mobile-nav-list">
+            <li className="app-mobile-nav-quick-links">
+              <Link
+                href="/"
+                className={`app-mobile-nav-chip${isPathActive("/") ? " is-active" : ""}`}
+                onClick={closeNav}
+                aria-current={isPathActive("/") ? "page" : undefined}
+              >
+                <span aria-hidden>🏠</span>
+                <span>{t("app.dashboard")}</span>
+              </Link>
+              <Link
+                href="/settings"
+                className={`app-mobile-nav-chip${isPathActive("/settings") ? " is-active" : ""}`}
+                onClick={closeNav}
+                aria-current={isPathActive("/settings") ? "page" : undefined}
+              >
+                <span aria-hidden>⚙️</span>
+                <span>{t("app.settings.link")}</span>
+              </Link>
+            </li>
             {menuGroups.map((group) => (
               <li key={group.key} className="app-mobile-nav-group">
                 <p className="app-mobile-nav-group-title">{group.label}</p>
                 <div>
                   {group.items.map((item) => (
-                    <Link key={item.key} href={item.href} className="app-mobile-nav-link" onClick={closeNav}>
+                    <Link
+                      key={item.key}
+                      href={item.href}
+                      className={`app-mobile-nav-link${isPathActive(item.href) ? " is-active" : ""}`}
+                      onClick={closeNav}
+                      aria-current={isPathActive(item.href) ? "page" : undefined}
+                    >
                       <span className="app-nav-item-icon" aria-hidden>{item.icon}</span>
                       <span>{item.label}</span>
                     </Link>
@@ -200,13 +271,10 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
                 </div>
               </li>
             ))}
-            <li className="app-mobile-nav-group">
-              <p className="app-mobile-nav-group-title">{t("app.settings.title")}</p>
-              <div>
-                <Link href="/settings" className="app-mobile-nav-link" onClick={closeNav}>
-                  <span className="app-nav-item-icon" aria-hidden>⚙️</span>
-                  <span>{t("app.settings.link")}</span>
-                </Link>
+            <li className="app-mobile-nav-group app-mobile-nav-group--preferences">
+              <p className="app-mobile-nav-group-title">Preferences</p>
+              <div className="app-mobile-nav-preferences">
+                <PreferencesMenu showTrigger={false} />
               </div>
             </li>
           </ul>
