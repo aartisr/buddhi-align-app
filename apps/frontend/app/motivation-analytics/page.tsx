@@ -2,8 +2,7 @@
 
 import dynamic from "next/dynamic";
 import ModuleLayout from "../components/ModuleLayout";
-import LongitudinalChart from "../components/LongitudinalChart";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { logEvent } from "../lib/logEvent";
 import { MOTIVATIONAL_QUOTES } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
@@ -11,6 +10,7 @@ import type { AnalyticsPayload } from "../api/analytics/types";
 import { getSyntheticAnalyticsPayload, shouldUseSyntheticAnalytics } from "./demoData";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+const LongitudinalChart = dynamic(() => import("../components/LongitudinalChart"));
 
 function getRandomQuote(quotes: { quote: string; author: string }[]) {
   return quotes[Math.floor(Math.random() * quotes.length)];
@@ -32,12 +32,16 @@ export default function MotivationAnalyticsPage() {
     streak: 0,
     totalEntries: 0
   });
-  const [chartData, setChartData] = useState({
-    series: [{
+  const chartSeries = useMemo(
+    () => [{
       name: t("motivation.entries"),
-      data: [0, 0, 0, 0, 0, 0]
+      data: [stats.karma, stats.bhakti, stats.jnana, stats.dhyana, stats.vasana, stats.dharma],
     }],
-    options: {
+    [stats, t],
+  );
+
+  const chartOptions = useMemo(
+    () => ({
       chart: {
         type: "bar" as const,
         height: 350,
@@ -48,8 +52,8 @@ export default function MotivationAnalyticsPage() {
         bar: {
           borderRadius: 8,
           horizontal: false,
-          distributed: true
-        }
+          distributed: true,
+        },
       },
       dataLabels: { enabled: false },
       xaxis: {
@@ -59,26 +63,27 @@ export default function MotivationAnalyticsPage() {
           t("layout.module.jnana"),
           t("layout.module.dhyana"),
           t("layout.module.vasana"),
-          t("layout.module.dharma")
+          t("layout.module.dharma"),
         ],
-        labels: { style: { fontSize: "14px", fontWeight: 600, colors: ["var(--text-muted)"] } }
+        labels: { style: { fontSize: "14px", fontWeight: 600, colors: ["var(--text-muted)"] } },
       },
       yaxis: {
         title: { text: t("motivation.entries"), style: { color: "var(--text-muted)", fontWeight: 700 } },
-        labels: { style: { fontSize: "14px", colors: ["var(--text-muted)"] } }
+        labels: { style: { fontSize: "14px", colors: ["var(--text-muted)"] } },
       },
       colors: ["#B8860B", "#A33664", "#324A9A", "#2E7D5A", "#357A38", "#1D5FBF"],
       grid: { borderColor: "var(--border-soft)" },
       title: {
         text: t("motivation.moduleActivityOverview"),
         align: "center" as const,
-        style: { fontSize: "20px", color: "var(--text-muted)", fontWeight: 700 }
+        style: { fontSize: "20px", color: "var(--text-muted)", fontWeight: 700 },
       },
       tooltip: {
         theme: "light" as const,
       },
-    }
-  });
+    }),
+    [t],
+  );
 
   const fetchAnalytics = useCallback(async () => {
     setLoadingStats(true);
@@ -100,20 +105,6 @@ export default function MotivationAnalyticsPage() {
         totalEntries: data.totalEntries,
       };
       setStats(newStats);
-      setChartData((prev) => ({
-        ...prev,
-        series: [{
-          name: t("motivation.entries"),
-          data: [
-            newStats.karma,
-            newStats.bhakti,
-            newStats.jnana,
-            newStats.dhyana,
-            newStats.vasana,
-            newStats.dharma,
-          ],
-        }],
-      }));
       logEvent("analytics_fetch_success", {
         totalEntries: data.totalEntries,
         streak: data.streak,
@@ -133,62 +124,19 @@ export default function MotivationAnalyticsPage() {
         totalEntries: data.totalEntries,
       };
       setStats(newStats);
-      setChartData((prev) => ({
-        ...prev,
-        series: [{
-          name: t("motivation.entries"),
-          data: [
-            newStats.karma,
-            newStats.bhakti,
-            newStats.jnana,
-            newStats.dhyana,
-            newStats.vasana,
-            newStats.dharma,
-          ],
-        }],
-      }));
       logEvent("analytics_fetch_failed", { syntheticData: true });
     } finally {
       setLoadingStats(false);
     }
-  }, [t]);
+  }, []);
 
   useEffect(() => {
     fetchAnalytics();
   }, [fetchAnalytics]);
 
   useEffect(() => {
-    setChartData((prev) => ({
-      ...prev,
-      series: [{ ...prev.series[0], name: t("motivation.entries") }],
-      options: {
-        ...prev.options,
-        xaxis: {
-          ...prev.options.xaxis,
-          categories: [
-            t("layout.module.karma"),
-            t("layout.module.bhakti"),
-            t("layout.module.jnana"),
-            t("layout.module.dhyana"),
-            t("layout.module.vasana"),
-            t("layout.module.dharma"),
-          ],
-        },
-        yaxis: {
-          ...prev.options.yaxis,
-          title: {
-            ...prev.options.yaxis.title,
-            text: t("motivation.entries"),
-          },
-        },
-        title: {
-          ...prev.options.title,
-          text: t("motivation.moduleActivityOverview"),
-        },
-      },
-    }));
     setQuote(getRandomQuote(quotes));
-  }, [locale, t, quotes]);
+  }, [locale, quotes]);
 
   return (
     <ModuleLayout titleKey="module.motivation.title">
@@ -211,7 +159,7 @@ export default function MotivationAnalyticsPage() {
           <h3 className="app-panel-title text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-center">{t("motivation.chartTitle")}</h3>
           <div className="w-full h-52 sm:h-80">
             {typeof window !== "undefined" && Chart && (
-              <Chart options={chartData.options} series={chartData.series} type="bar" height={320} />
+              <Chart options={chartOptions} series={chartSeries} type="bar" height={320} />
             )}
           </div>
         </div>

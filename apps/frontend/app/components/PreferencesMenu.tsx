@@ -17,7 +17,7 @@ type PreferencesMenuProps = {
 };
 
 export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuProps) {
-  const { locale, locales, setLocale } = useI18n();
+  const { locale, locales, setLocale, t } = useI18n();
   const { status } = useSession();
   const [open, setOpen] = useState(!showTrigger);
   const [musicControlVisible, setMusicControlVisible] = useState(false);
@@ -129,18 +129,18 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
         <button
           type="button"
           className="app-preferences-trigger"
-          aria-label="Open preferences"
+          aria-label={t("preferences.openAria")}
           onClick={() => setOpen((prev: boolean) => !prev)}
         >
           <span aria-hidden>⚙️</span>
-          <span className="hidden sm:inline">Preferences</span>
+          <span className="hidden sm:inline">{t("preferences.title")}</span>
         </button>
       )}
 
       {open && (
-        <div className="app-preferences-panel" role="dialog" aria-label="Preferences">
+        <div className="app-preferences-panel" role="dialog" aria-label={t("preferences.title")}>
           <div className="app-preferences-row">
-            <label htmlFor="prefs-language" className="app-preferences-label">Default language</label>
+            <label htmlFor="prefs-language" className="app-preferences-label">{t("preferences.defaultLanguage")}</label>
             <div className="app-preferences-field-wrap">
               <select
                 id="prefs-language"
@@ -160,8 +160,8 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
           </div>
 
           <div className="app-preferences-row">
-            <p className="app-preferences-label">Music control</p>
-            <div className="app-preferences-toggle-group" role="radiogroup" aria-label="Music control visibility">
+            <p className="app-preferences-label">{t("preferences.musicControl")}</p>
+            <div className="app-preferences-toggle-group" role="radiogroup" aria-label={t("preferences.musicControlVisibility")}>
               <button
                 type="button"
                 role="radio"
@@ -173,10 +173,10 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
                 {isSaving && musicControlVisible ? (
                   <>
                     <span className="app-inline-spinner" aria-hidden="true" />
-                    <span>Show</span>
+                    <span>{t("preferences.show")}</span>
                   </>
                 ) : (
-                  "Show"
+                  t("preferences.show")
                 )}
               </button>
               <button
@@ -190,10 +190,10 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
                 {isSaving && !musicControlVisible ? (
                   <>
                     <span className="app-inline-spinner" aria-hidden="true" />
-                    <span>Hide</span>
+                    <span>{t("preferences.hide")}</span>
                   </>
                 ) : (
-                  "Hide"
+                  t("preferences.hide")
                 )}
               </button>
             </div>
@@ -202,7 +202,7 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
           {isSaving ? (
             <div className="app-preferences-status" role="status" aria-live="polite">
               <span className="app-inline-spinner" aria-hidden="true" />
-              <span>Saving your preferences...</span>
+              <span>{t("preferences.saving")}</span>
             </div>
           ) : null}
         </div>

@@ -20,7 +20,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
     {
       key: "home",
       icon: "🏠",
-      label: "Home",
+      label: t("nav.group.home"),
       items: [
         { key: "dashboard", icon: "🏠", href: "/", label: t("app.dashboard") },
       ],
@@ -28,7 +28,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
     {
       key: "practice",
       icon: "🧘",
-      label: "Practice",
+      label: t("nav.group.practice"),
       items: (["karma", "bhakti", "dhyana"] as const).map((moduleKey) => {
         const item = moduleByKey.get(moduleKey)!;
         return {
@@ -42,7 +42,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
     {
       key: "reflection",
       icon: "💭",
-      label: "Reflection",
+      label: t("nav.group.reflection"),
       items: (["jnana", "vasana"] as const).map((moduleKey) => {
         const item = moduleByKey.get(moduleKey)!;
         return {
@@ -56,7 +56,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
     {
       key: "insights",
       icon: "📊",
-      label: "Plan & Insights",
+      label: t("nav.group.insights"),
       items: (["dharma", "motivation"] as const).map((moduleKey) => {
         const item = moduleByKey.get(moduleKey)!;
         return {
@@ -123,9 +123,9 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
       {/* Skip-to-content: WCAG 2.4.1 Bypass Blocks (Level A) */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-9999 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[var(--primary)] focus:text-white focus:font-semibold focus:text-sm"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-9999 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-(--primary) focus:text-white focus:font-semibold focus:text-sm"
       >
-        Skip to main content
+        {t("nav.skipToMain")}
       </a>
       <div className="relative">
         {icon && (
@@ -145,7 +145,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
             </Link>
           </h1>
           {/* Desktop centered nav */}
-          <nav className="hidden md:flex items-center justify-center gap-2 text-sm font-medium app-copy app-top-nav" aria-label="Main navigation">
+          <nav className="hidden md:flex items-center justify-center gap-2 text-sm font-medium app-copy app-top-nav" aria-label={t("nav.mainAria")}>
             {menuGroups.map((group) => (
               <div
                 key={group.key}
@@ -156,14 +156,12 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
                 <button
                   type="button"
                   className="app-nav-group-trigger"
-                  aria-haspopup="menu"
-                  aria-expanded={desktopOpenGroup === group.key}
                   onClick={() => setDesktopOpenGroup((current) => (current === group.key ? null : group.key))}
                 >
                   <span className="app-nav-item-icon" aria-hidden>{group.icon}</span>
                   {group.label}
                 </button>
-                <div className="app-nav-submenu" aria-label={group.label} role="menu">
+                <div className="app-nav-submenu" aria-label={group.label}>
                   {group.items.map((item) => (
                     <Link
                       key={item.key}
@@ -188,7 +186,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
             <button
               onClick={() => setMobileNavOpen(true)}
               className="app-mobile-menu-btn md:hidden"
-              aria-label="Open menu"
+              aria-label={t("nav.openMenuAria")}
               aria-controls="mobile-nav-drawer"
             >
               <span className="app-hamburger-bar" />
@@ -225,11 +223,11 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
         <nav
           id="mobile-nav-drawer"
           className={`app-mobile-nav-drawer md:hidden${mobileNavOpen ? " app-mobile-nav-drawer--open" : ""}`}
-          aria-label="Site navigation"
+          aria-label={t("nav.siteAria")}
         >
           <div className="app-mobile-nav-header">
             <BuddhiAlignLogo className="h-9 w-auto" />
-            <button onClick={closeNav} className="app-mobile-nav-close" aria-label="Close menu">✕</button>
+            <button onClick={closeNav} className="app-mobile-nav-close" aria-label={t("nav.closeMenuAria")}>✕</button>
           </div>
           <ul className="app-mobile-nav-list">
             <li className="app-mobile-nav-quick-links">
@@ -272,7 +270,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
               </li>
             ))}
             <li className="app-mobile-nav-group app-mobile-nav-group--preferences">
-              <p className="app-mobile-nav-group-title">Preferences</p>
+              <p className="app-mobile-nav-group-title">{t("preferences.title")}</p>
               <div className="app-mobile-nav-preferences">
                 <PreferencesMenu showTrigger={false} />
               </div>
