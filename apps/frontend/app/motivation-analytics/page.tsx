@@ -220,6 +220,13 @@ export default function MotivationAnalyticsPage() {
             aria-label="Buddhi Align quickstart walkthrough video"
           >
             <source src="/videos/buddhi-app-quickstart.webm" type="video/webm" />
+            <track
+              src="/videos/buddhi-aarti-captions.vtt"
+              kind="captions"
+              srcLang="en"
+              label="English (Aarti)"
+              default
+            />
           </video>
         </div>
         <div className="w-full max-w-3xl flex justify-end mb-2">
