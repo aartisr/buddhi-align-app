@@ -193,6 +193,15 @@
   box-shadow: 0 12px 28px rgba(24, 24, 27, 0.12);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+  max-width: min(100%, 48rem);
+  overflow-x: auto;
+  overflow-y: visible;
+  justify-self: center;
+  scrollbar-width: none;
+}
+
+.app-top-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .app-nav-group {
@@ -315,6 +324,18 @@
   .app-nav-submenu-link:hover,
   .app-nav-submenu-link:focus-visible {
     background: rgba(29, 51, 43, 0.94);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .app-top-nav {
+    gap: 0.12rem;
+    padding-inline: 0.24rem;
+  }
+
+  .app-nav-group-trigger {
+    padding-inline: 0.72rem;
+    font-size: 0.84rem;
   }
 }
 

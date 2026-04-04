@@ -292,6 +292,7 @@
   max-width: calc(100vw - 1.5rem);
   pointer-events: auto;
   touch-action: manipulation;
+  flex-wrap: wrap;
 }
 
 @media (min-width: 480px) {
@@ -315,7 +316,7 @@
   font-weight: 600;
   cursor: pointer;
   min-height: 2.75rem;
-  white-space: nowrap;
+  white-space: normal;
   pointer-events: auto;
   touch-action: manipulation;
 }

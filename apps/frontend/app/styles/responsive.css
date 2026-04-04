@@ -1,6 +1,6 @@
 /* Main content wrapper */
 .app-main-content {
-  max-width: 42rem;
+  width: min(100%, 46rem);
   margin-left: auto;
   margin-right: auto;
   padding: 2rem 1rem 6rem;
@@ -11,7 +11,15 @@
 /* Main content wrapper responsive */
 @media (min-width: 640px) {
   .app-main-content {
+    width: min(100%, 54rem);
     padding: 3rem 2rem 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-main-content {
+    width: min(100%, 62rem);
+    padding-inline: 2.5rem;
   }
 }
 
