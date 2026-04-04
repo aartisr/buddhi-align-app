@@ -62,7 +62,7 @@ export default function LongitudinalChart() {
   if (loading) {
     return (
       <div className="app-surface-card w-full max-w-3xl rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 mx-auto">
-        <div className="app-stat-skeleton" style={{ height: "220px", width: "100%", borderRadius: "12px" }} />
+        <div className="app-stat-skeleton w-full h-56 rounded-xl" />
       </div>
     );
   }
@@ -138,12 +138,12 @@ export default function LongitudinalChart() {
       </div>
 
       {/* Consistency score bar */}
-      <div className="app-consistency-bar mb-5" aria-label={`Consistency ${data.consistencyScore}%`}>
-        <div
-          className="app-consistency-bar__fill"
-          style={{ width: `${data.consistencyScore}%` }}
-        />
-      </div>
+      <progress
+        className="app-consistency-progress mb-5"
+        value={data.consistencyScore}
+        max={100}
+        aria-label={`Consistency ${data.consistencyScore}%`}
+      />
 
       {/* Area chart */}
       <div className="w-full h-56 sm:h-72">

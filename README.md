@@ -4,6 +4,10 @@
 
 [![Shishu Bharati Logo](https://www.shishubharati.net/wp-content/uploads/2024/07/ShishuBharati-Logo-Transparent-HiRes-150x150.png)](https://www.shishubharati.net/)
 
+![Awaricon Platinum Readiness](https://img.shields.io/badge/Awaricon-Platinum%20Readiness-E5E4E2?style=for-the-badge&logo=sparkle&logoColor=1f2937&labelColor=8a8f98)
+
+Certification target: ForeverLotus Awaricon Platinum.
+
 This project is dedicated to **Shishubharati**.
 
 Website: [https://www.shishubharati.net/](https://www.shishubharati.net/)

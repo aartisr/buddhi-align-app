@@ -405,3 +405,82 @@ select::placeholder {
   }
 }
 
+.app-platinum-badge {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 85;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  align-items: flex-start;
+  text-decoration: none;
+  color: #101214;
+  background: linear-gradient(135deg, #f8f8fb 0%, #dcdde3 35%, #f9f9fb 100%);
+  border: 1px solid rgba(15, 23, 42, 0.2);
+  border-radius: 0.8rem;
+  padding: 0.45rem 0.65rem;
+  box-shadow: 0 12px 30px rgba(17, 24, 39, 0.22);
+  letter-spacing: 0.02em;
+}
+
+.app-platinum-badge__label {
+  font-size: 0.56rem;
+  font-weight: 800;
+  color: #5b6474;
+}
+
+.app-platinum-badge__title {
+  font-size: 0.78rem;
+  line-height: 1;
+  font-weight: 900;
+  color: #1f2937;
+}
+
+.app-platinum-badge__meta {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #3f4756;
+}
+
+@media (max-width: 640px) {
+  .app-platinum-badge {
+    top: 0.55rem;
+    right: 0.55rem;
+    padding: 0.35rem 0.5rem;
+  }
+
+  .app-platinum-badge__label,
+  .app-platinum-badge__meta {
+    font-size: 0.5rem;
+  }
+
+  .app-platinum-badge__title {
+    font-size: 0.7rem;
+  }
+}
+
+.app-consistency-progress {
+  width: 100%;
+  height: 0.7rem;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background-color: rgba(15, 23, 42, 0.12);
+}
+
+.app-consistency-progress::-webkit-progress-bar {
+  background-color: rgba(15, 23, 42, 0.12);
+  border-radius: 999px;
+}
+
+.app-consistency-progress::-webkit-progress-value {
+  background: linear-gradient(90deg, #0f766e, #d4af37);
+  border-radius: 999px;
+}
+
+.app-consistency-progress::-moz-progress-bar {
+  background: linear-gradient(90deg, #0f766e, #d4af37);
+  border-radius: 999px;
+}
+
