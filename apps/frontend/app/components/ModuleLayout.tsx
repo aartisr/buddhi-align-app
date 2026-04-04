@@ -300,6 +300,31 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
           <h2 className="app-panel-title text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-center px-2">
             {t(titleKey)}
           </h2>
+          {sequenceIndex >= 0 && (
+            <nav className="app-flow-rail" aria-label={t("nav.flowRailAria")}>
+              <p className="app-flow-rail-label">{t("nav.flowRailLabel")}</p>
+              <div className="app-flow-rail-track">
+                {recommendedSequence.map((moduleKey, index) => {
+                  const moduleItem = moduleByKey.get(moduleKey);
+                  if (!moduleItem) return null;
+                  const isCurrent = moduleItem.key === currentModule?.key;
+
+                  return (
+                    <Link
+                      key={moduleItem.key}
+                      href={moduleItem.href}
+                      className={`app-flow-rail-chip${isCurrent ? " is-current" : ""}`}
+                      aria-current={isCurrent ? "page" : undefined}
+                    >
+                      <span className="app-flow-rail-chip-index" aria-hidden>{index + 1}</span>
+                      <span aria-hidden>{moduleItem.icon}</span>
+                      <span>{getModuleLabel(moduleItem)}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </nav>
+          )}
           {children}
           {sequenceIndex >= 0 && (previousModule || nextModule) && (
             <nav className="app-sequence-nav" aria-label={t("nav.sequenceAria")}>
