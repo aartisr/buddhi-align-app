@@ -32,9 +32,7 @@ export const LOCALE_OPTIONS = LOCALE_DEFINITIONS.map((item) => ({
   label: `${item.nativeLabel} (${item.label})`,
 }));
 
-export type TranslationDict = Record<string, string>;
-
-const EN_MESSAGES: TranslationDict = {
+const EN_MESSAGES = {
   "app.title": "Buddhi Align App",
   "app.description": "A subtle, spiritual, and professional journaling and analytics app.",
   "app.brand": "Buddhi Align App",
@@ -70,6 +68,9 @@ const EN_MESSAGES: TranslationDict = {
   "dashboard.welcome": "Welcome, {{name}}",
   "dashboard.defaultUser": "Seeker",
   "dashboard.subtitle": "Your unified overview for self-development and spiritual growth.",
+  "dashboard.quickTourTitle": "New here? Take the one-minute guided tour.",
+  "dashboard.quickTourDescription": "See the daily flow, the key modules, and how to begin with calm clarity.",
+  "dashboard.quickTourButton": "Watch the tour",
   "module.karma.title": "Karma Yoga Tracker",
   "module.karma.description": "Track your selfless actions and service.",
   "module.bhakti.title": "Bhakti Journal",
@@ -128,6 +129,10 @@ const EN_MESSAGES: TranslationDict = {
   "motivation.chartTitle": "Module Activity Chart",
   "motivation.entries": "Entries",
   "motivation.moduleActivityOverview": "Module Activity Overview",
+  "motivation.quickTourTitle": "Quick guided tour",
+  "motivation.quickTourDescription": "A calm walkthrough with real app screens and voice guidance, ready instantly on this page.",
+  "motivation.quickTourAriaLabel": "Buddhi Align guided walkthrough video",
+  "motivation.quickTourClosing": "Begin with one reflection today and let steady practice build your momentum.",
   "motivation.streak": "Streak",
   "motivation.totalEntries": "Total Entries",
   "motivation.days": "days",
@@ -174,11 +179,21 @@ const EN_MESSAGES: TranslationDict = {
   "auth.persistHint": "To save your data permanently across devices, sign in or sign up with a provider.",
   "auth.anonymousBadge": "Anonymous mode",
   "auth.signInToSave": "Sign in to save",
-};
+} as const;
 
 export type TranslationKey = keyof typeof EN_MESSAGES;
+export type TranslationDict = Record<TranslationKey, string>;
+type TranslationOverrides = Partial<TranslationDict>;
 
-function createLocaleMessages(overrides: TranslationDict): TranslationDict {
+const LOCALE_DEFINITION_MAP: Record<Locale, (typeof LOCALE_DEFINITIONS)[number]> = LOCALE_DEFINITIONS.reduce(
+  (acc, definition) => {
+    acc[definition.code] = definition;
+    return acc;
+  },
+  {} as Record<Locale, (typeof LOCALE_DEFINITIONS)[number]>,
+);
+
+function createLocaleMessages(overrides: TranslationOverrides): TranslationDict {
   return {
     ...EN_MESSAGES,
     ...overrides,
@@ -607,8 +622,17 @@ export const MODULE_ICON_MAP: Record<TranslationKey, string> = MODULE_CATALOG.re
   return acc;
 }, {} as Record<TranslationKey, string>);
 
+export function isLocale(value: string | null | undefined): value is Locale {
+  if (!value) return false;
+  return value in LOCALE_DEFINITION_MAP;
+}
+
+export function resolveLocale(value: string | null | undefined): Locale {
+  return isLocale(value) ? value : DEFAULT_LOCALE;
+}
+
 export function getIntlLocale(locale: Locale): string {
-  return LOCALE_DEFINITIONS.find((item) => item.code === locale)?.htmlLang ?? "en-US";
+  return LOCALE_DEFINITION_MAP[locale]?.htmlLang ?? LOCALE_DEFINITION_MAP[DEFAULT_LOCALE].htmlLang;
 }
 
 function interpolate(template: string, vars?: Record<string, string | number>): string {

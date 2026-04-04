@@ -20,7 +20,7 @@ export default function SiteFooter() {
           className="site-footer__logo-link"
         >
           <ShishubharatiLogo alt={t("footer.logoAlt")} />
-          <span className="site-footer__logo-text">Shishubarati</span>
+          <span className="site-footer__logo-text">Shishubharati</span>
         </a>
         <span className="site-footer__dedication-prefix">.</span>
       </div>

@@ -35,7 +35,7 @@ export default function VasanaTrackerPage() {
         }}
         isSubmitting={isCreating}
         submitLabel={t("app.add")}
-        submitButtonClassName="app-button-primary app-button-primary--bhakti"
+        submitButtonClassName="app-button-primary app-button-primary--vasana"
       >
         {fields.map((field) => (
           <ModuleFormField

@@ -17,15 +17,15 @@ export default function Home() {
       <section className="app-surface-card max-w-4xl mx-auto mb-6 p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
-            <h2 className="app-panel-title text-lg sm:text-xl font-bold">New here? Take the 60-second quick tour.</h2>
-            <p className="app-copy-soft text-sm">Learn all pages and the full daily flow in one lightweight video.</p>
+            <h2 className="app-panel-title text-lg sm:text-xl font-bold">{t("dashboard.quickTourTitle")}</h2>
+            <p className="app-copy-soft text-sm">{t("dashboard.quickTourDescription")}</p>
           </div>
           <Link
             href="/motivation-analytics#quick-tour"
             className="app-button-primary px-4 py-2 rounded-lg whitespace-nowrap"
-            aria-label="Watch quick tour video"
+            aria-label={t("dashboard.quickTourButton")}
           >
-            Watch Quick Tour
+            {t("dashboard.quickTourButton")}
           </Link>
         </div>
       </section>

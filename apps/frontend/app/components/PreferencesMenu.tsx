@@ -164,6 +164,8 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
             <div className="app-preferences-toggle-group" role="radiogroup" aria-label="Music control visibility">
               <button
                 type="button"
+                role="radio"
+                aria-checked={musicControlVisible}
                 className={`app-preferences-toggle ${musicControlVisible ? "is-active" : ""}`}
                 disabled={isSaving}
                 onClick={() => handleMusicVisibility(true)}
@@ -179,6 +181,8 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
               </button>
               <button
                 type="button"
+                role="radio"
+                aria-checked={!musicControlVisible}
                 className={`app-preferences-toggle ${!musicControlVisible ? "is-active" : ""}`}
                 disabled={isSaving}
                 onClick={() => handleMusicVisibility(false)}

@@ -3,9 +3,11 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import {
   DEFAULT_LOCALE,
+  getIntlLocale,
   LOCALE_OPTIONS,
   MODULE_CATALOG,
   type Locale,
+  resolveLocale,
   type TranslationKey,
   translate,
 } from "./config";
@@ -23,10 +25,11 @@ const STORAGE_KEY = "buddhi-align-locale";
 
 function readStoredLocale(): Locale {
   if (typeof window === "undefined") return DEFAULT_LOCALE;
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  if (!stored) return DEFAULT_LOCALE;
-  const match = LOCALE_OPTIONS.find((option) => option.code === stored);
-  return (match?.code ?? DEFAULT_LOCALE) as Locale;
+  return resolveLocale(window.localStorage.getItem(STORAGE_KEY));
+}
+
+function syncDocumentLanguage(locale: Locale) {
+  document.documentElement.lang = getIntlLocale(locale);
 }
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
@@ -35,14 +38,14 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const storedLocale = readStoredLocale();
     setLocaleState(storedLocale);
-    document.documentElement.lang = storedLocale;
+    syncDocumentLanguage(storedLocale);
   }, []);
 
   const setLocale = (nextLocale: Locale) => {
     setLocaleState(nextLocale);
     if (typeof window !== "undefined") {
       window.localStorage.setItem(STORAGE_KEY, nextLocale);
-      document.documentElement.lang = nextLocale;
+      syncDocumentLanguage(nextLocale);
     }
   };
 

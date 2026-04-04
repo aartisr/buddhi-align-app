@@ -216,16 +216,16 @@ export default function MotivationAnalyticsPage() {
           </div>
         </div>
         <div id="quick-tour" className="app-surface-card w-full max-w-3xl rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 scroll-mt-24">
-          <h3 className="app-panel-title text-lg sm:text-xl font-bold mb-2 text-center">Quick Tour Video (1 min)</h3>
+          <h3 className="app-panel-title text-lg sm:text-xl font-bold mb-2 text-center">{t("motivation.quickTourTitle")}</h3>
             <p className="app-secondary-copy text-sm text-center mb-4">
-              Gentle spiritual walkthrough with real app screenshots and a soothing voice. No streaming.
+              {t("motivation.quickTourDescription")}
             </p>
           <video
             controls
             preload="metadata"
             playsInline
-            className="w-full rounded-xl border border-[var(--border-soft)]"
-            aria-label="Buddhi Align quickstart walkthrough video"
+            className="w-full rounded-xl border border-(--border-soft)"
+            aria-label={t("motivation.quickTourAriaLabel")}
           >
             <source src="/videos/buddhi-app-quickstart.mp4" type="video/mp4" />
             <source src="/videos/buddhi-app-quickstart.webm" type="video/webm" />
@@ -238,7 +238,7 @@ export default function MotivationAnalyticsPage() {
               />
           </video>
           <p className="app-secondary-copy text-sm text-center mt-3">
-            Begin now: add your first reflection today and build momentum one mindful step at a time.
+            {t("motivation.quickTourClosing")}
           </p>
         </div>
         <div className="w-full max-w-3xl flex justify-end mb-2">

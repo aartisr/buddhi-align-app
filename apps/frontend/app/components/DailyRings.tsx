@@ -58,7 +58,7 @@ export default function DailyRings() {
               aria-label={`${t(mod.labelKey)}${done ? " — completed today" : " — not yet logged today"}`}
             >
               <div className="relative">
-                <svg width="60" height="60" viewBox="0 0 60 60">
+                <svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true" focusable="false">
                   {/* Track */}
                   <circle cx="30" cy="30" r={RING_R} fill="none" stroke="#e5e7eb" strokeWidth="5" />
                   {/* Fill ring */}
@@ -73,7 +73,7 @@ export default function DailyRings() {
                     transform="rotate(-90 30 30)"
                   />
                   {/* Icon */}
-                  <text x="30" y="35" textAnchor="middle" fontSize="18" role="img" aria-hidden="true">
+                  <text x="30" y="35" textAnchor="middle" fontSize="18" aria-hidden="true">
                     {mod.icon}
                   </text>
                 </svg>
