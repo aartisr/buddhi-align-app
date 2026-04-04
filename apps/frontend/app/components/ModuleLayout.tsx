@@ -138,7 +138,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
         )}
 
         {/* ── Header ── */}
-        <header className="app-header-panel w-full px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-3 relative z-20">
+        <header className="app-header-panel w-full px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-3 relative z-40">
           <h1>
             <Link href="/" className="inline-flex items-center" aria-label={t("app.brand")}>
               <BuddhiAlignLogo className="h-10 sm:h-11 w-auto" />

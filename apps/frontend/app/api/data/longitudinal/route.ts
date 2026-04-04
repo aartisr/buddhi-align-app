@@ -80,14 +80,15 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     weeks.push({ weekStart: isoDate(weekStart), counts, total });
   }
 
-  // Consistency score: % of last 30 calendar days with activity
+  // Consistency score: % of last 30 calendar days with activity (including today)
   const activeDays = new Set<string>();
+  const todayDate = isoDate(today);
+  const consistencyStart = new Date(today);
+  consistencyStart.setDate(consistencyStart.getDate() - 29);
+  const consistencyStartDate = isoDate(consistencyStart);
   for (const mod of ANALYTICS_MODULES) {
     for (const e of allByModule[mod]) {
-      const d = new Date(e.date);
-      const cutoff = new Date(today);
-      cutoff.setDate(cutoff.getDate() - 30);
-      if (d >= cutoff) activeDays.add(e.date);
+      if (e.date >= consistencyStartDate && e.date <= todayDate) activeDays.add(e.date);
     }
   }
   const consistencyScore = Math.round((activeDays.size / 30) * 100);

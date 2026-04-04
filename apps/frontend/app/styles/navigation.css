@@ -194,10 +194,10 @@
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   max-width: min(100%, 48rem);
-  overflow-x: auto;
-  overflow-y: visible;
+  overflow: visible;
   justify-self: center;
-  scrollbar-width: none;
+  position: relative;
+  z-index: 220;
 }
 
 .app-top-nav::-webkit-scrollbar {
@@ -249,7 +249,7 @@
   box-shadow: 0 16px 36px rgba(24, 24, 27, 0.16);
   padding: 0.4rem;
   display: none;
-  z-index: 60;
+  z-index: 260;
 }
 
 .app-nav-group:hover .app-nav-submenu,

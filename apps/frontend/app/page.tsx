@@ -16,9 +16,14 @@ export default function Home() {
       <DailyRings />
       <section className="app-surface-card max-w-4xl mx-auto mb-6 p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div>
-            <h2 className="app-panel-title text-lg sm:text-xl font-bold">{t("dashboard.quickTourTitle")}</h2>
-            <p className="app-copy-soft text-sm">{t("dashboard.quickTourDescription")}</p>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <h2 className="app-panel-title text-lg sm:text-xl font-bold leading-tight">{t("dashboard.quickTourTitle")}</h2>
+            <details>
+              <summary className="app-copy-soft text-sm cursor-pointer select-none underline underline-offset-2">
+                {t("dashboard.quickTourMoreDetails")}
+              </summary>
+              <p className="app-copy-soft text-sm mt-2 max-w-xl">{t("dashboard.quickTourDescription")}</p>
+            </details>
           </div>
           <Link
             href="/motivation-analytics#quick-tour"

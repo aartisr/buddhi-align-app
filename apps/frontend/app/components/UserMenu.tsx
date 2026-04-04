@@ -34,12 +34,6 @@ export default function UserMenu() {
             {t("auth.anonymousBadge")}
           </span>
         )}
-        <Link
-          href="/sign-in"
-          className="text-sm font-medium px-3 py-1.5 rounded-lg app-user-signin-link transition-colors"
-        >
-          {isAnonymous ? t("auth.signInToSave") : t("auth.signIn")}
-        </Link>
       </div>
     );
   }

@@ -407,7 +407,7 @@ select::placeholder {
 
 .app-platinum-badge {
   position: fixed;
-  top: 0.75rem;
+  top: calc(env(safe-area-inset-top, 0px) + 5rem);
   right: 0.75rem;
   z-index: 85;
   display: inline-flex;
@@ -445,9 +445,10 @@ select::placeholder {
 
 @media (max-width: 640px) {
   .app-platinum-badge {
-    top: 0.55rem;
+    top: calc(env(safe-area-inset-top, 0px) + 4.35rem);
     right: 0.55rem;
     padding: 0.35rem 0.5rem;
+    z-index: 15;
   }
 
   .app-platinum-badge__label,
