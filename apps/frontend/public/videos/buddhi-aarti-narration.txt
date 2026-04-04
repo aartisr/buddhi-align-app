@@ -1,9 +1,0 @@
-Hi, I am Aarti, and I will quickly show you how to use Buddhi Align.
-Start on the Home dashboard. I check Daily Rings first, then jump into the module I want.
-In Karma Yoga, I log one action and the impact every day.
-In Bhakti Journal, I write one reflection and one gratitude point.
-In Motivation and Analytics, I review streak, total entries, and trend charts.
-In Settings, I manage language, music, and export or import my data.
-As owner, in Admin I review incidents, experiments, audit logs, and system errors.
-My daily routine is simple: dashboard, two entries, analytics review, one improvement step.
-Thanks for watching this quick tour. Let us grow with consistency.
