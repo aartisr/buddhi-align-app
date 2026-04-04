@@ -41,7 +41,8 @@ export default function MotivationAnalyticsPage() {
       chart: {
         type: "bar" as const,
         height: 350,
-        toolbar: { show: false }
+        toolbar: { show: false },
+        foreColor: "var(--text-muted)",
       },
       plotOptions: {
         bar: {
@@ -60,18 +61,22 @@ export default function MotivationAnalyticsPage() {
           t("layout.module.vasana"),
           t("layout.module.dharma")
         ],
-        labels: { style: { fontSize: "16px" } }
+        labels: { style: { fontSize: "14px", fontWeight: 600, colors: ["var(--text-muted)"] } }
       },
       yaxis: {
-        title: { text: t("motivation.entries") },
-        labels: { style: { fontSize: "16px" } }
+        title: { text: t("motivation.entries"), style: { color: "var(--text-muted)", fontWeight: 700 } },
+        labels: { style: { fontSize: "14px", colors: ["var(--text-muted)"] } }
       },
-      colors: ["#FFD700", "#FF69B4", "#4B0082", "#50C878", "#32CD32", "#1E90FF"],
+      colors: ["#B8860B", "#A33664", "#324A9A", "#2E7D5A", "#357A38", "#1D5FBF"],
+      grid: { borderColor: "var(--border-soft)" },
       title: {
         text: t("motivation.moduleActivityOverview"),
         align: "center" as const,
-        style: { fontSize: "20px", color: "#333" }
-      }
+        style: { fontSize: "20px", color: "var(--text-muted)", fontWeight: 700 }
+      },
+      tooltip: {
+        theme: "light" as const,
+      },
     }
   });
 

@@ -13,8 +13,8 @@
   --border-soft: rgba(63, 122, 96, 0.2);
   --border-strong: rgba(47, 93, 80, 0.34);
   --text-muted: #2e3f38;
-  --text-soft: #455b52;
-  --text-subtle: #60756d;
+  --text-soft: #3f544c;
+  --text-subtle: #50665e;
   --font-sans: 'Avenir Next', 'Nunito Sans', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -22,6 +22,11 @@
   :root {
     --background: #0f1d19;
     --foreground: #e6efe9;
+    --primary: #9fd3bc;
+    --accent: #7fb79f;
+    --gold: #e5cf9f;
+    --emerald: #89c2a9;
+    --rose: #d0a39a;
     --surface: #172923;
     --surface-strong: rgba(23, 41, 35, 0.94);
     --surface-soft: rgba(25, 45, 38, 0.9);
