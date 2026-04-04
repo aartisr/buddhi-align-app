@@ -8,6 +8,7 @@ import { logEvent } from "../lib/logEvent";
 import { MOTIVATIONAL_QUOTES } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 import type { AnalyticsPayload } from "../api/analytics/types";
+import { getSyntheticAnalyticsPayload, shouldUseSyntheticAnalytics } from "./demoData";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -79,7 +80,10 @@ export default function MotivationAnalyticsPage() {
     try {
       const res = await fetch("/api/analytics");
       if (!res.ok) throw new Error("analytics fetch failed");
-      const data: AnalyticsPayload = await res.json();
+      const apiData: AnalyticsPayload = await res.json();
+      const data = shouldUseSyntheticAnalytics(apiData)
+        ? getSyntheticAnalyticsPayload()
+        : apiData;
       const newStats = {
         karma: data.counts.karma,
         bhakti: data.counts.bhakti,
@@ -108,10 +112,37 @@ export default function MotivationAnalyticsPage() {
       logEvent("analytics_fetch_success", {
         totalEntries: data.totalEntries,
         streak: data.streak,
+        syntheticData: shouldUseSyntheticAnalytics(apiData),
       });
     } catch {
-      // Non-fatal: stats remain at zero if analytics API is unavailable.
-      logEvent("analytics_fetch_failed");
+      // Non-fatal: use synthetic analytics so the UX remains useful in empty/new setups.
+      const data = getSyntheticAnalyticsPayload();
+      const newStats = {
+        karma: data.counts.karma,
+        bhakti: data.counts.bhakti,
+        jnana: data.counts.jnana,
+        dhyana: data.counts.dhyana,
+        vasana: data.counts.vasana,
+        dharma: data.counts.dharma,
+        streak: data.streak,
+        totalEntries: data.totalEntries,
+      };
+      setStats(newStats);
+      setChartData((prev) => ({
+        ...prev,
+        series: [{
+          name: t("motivation.entries"),
+          data: [
+            newStats.karma,
+            newStats.bhakti,
+            newStats.jnana,
+            newStats.dhyana,
+            newStats.vasana,
+            newStats.dharma,
+          ],
+        }],
+      }));
+      logEvent("analytics_fetch_failed", { syntheticData: true });
     } finally {
       setLoadingStats(false);
     }
@@ -175,6 +206,21 @@ export default function MotivationAnalyticsPage() {
               <Chart options={chartData.options} series={chartData.series} type="bar" height={320} />
             )}
           </div>
+        </div>
+        <div className="app-surface-card w-full max-w-3xl rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10">
+          <h3 className="app-panel-title text-lg sm:text-xl font-bold mb-2 text-center">Quick Tour Video (1 min)</h3>
+          <p className="app-secondary-copy text-sm text-center mb-4">
+            Lightweight local guide for all pages. No streaming. Approx 96KB.
+          </p>
+          <video
+            controls
+            preload="metadata"
+            playsInline
+            className="w-full rounded-xl border border-[var(--border-soft)]"
+            aria-label="Buddhi Align quickstart walkthrough video"
+          >
+            <source src="/videos/buddhi-app-quickstart.webm" type="video/webm" />
+          </video>
         </div>
         <div className="w-full max-w-3xl flex justify-end mb-2">
           <button

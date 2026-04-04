@@ -1,0 +1,39 @@
+1
+00:00:00,000 --> 00:00:06,000
+Buddhi Align in 60 Seconds
+Track, reflect, and grow across all modules.
+
+2
+00:00:06,000 --> 00:00:13,000
+Home Dashboard
+See Daily Rings and jump into any module.
+
+3
+00:00:13,000 --> 00:00:20,000
+Karma, Bhakti, Jnana, Dhyana
+Add one entry per day to build momentum.
+
+4
+00:00:20,000 --> 00:00:27,000
+Vasana + Dharma
+Track habits and plan values-aligned actions.
+
+5
+00:00:27,000 --> 00:00:35,000
+Motivation Analytics
+Watch trends, streak, growth, and consistency.
+
+6
+00:00:35,000 --> 00:00:43,000
+Settings + Data Portability
+Set preferences and export/import your data.
+
+7
+00:00:43,000 --> 00:00:52,000
+Admin Center
+Review incidents, audits, experiments, and errors.
+
+8
+00:00:52,000 --> 00:01:00,000
+Daily flow
+Open app, log 2 entries, review analytics, improve.

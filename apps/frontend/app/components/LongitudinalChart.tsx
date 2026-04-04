@@ -6,6 +6,10 @@ import { useEffect, useState } from "react";
 import { useI18n } from "../i18n/provider";
 import type { LongitudinalPayload } from "../api/data/longitudinal/route";
 import { logEvent } from "../lib/logEvent";
+import {
+  getSyntheticLongitudinalPayload,
+  shouldUseSyntheticLongitudinal,
+} from "../motivation-analytics/demoData";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -28,17 +32,25 @@ export default function LongitudinalChart() {
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (d) {
-          setData(d);
+          const resolved = shouldUseSyntheticLongitudinal(d)
+            ? getSyntheticLongitudinalPayload()
+            : d;
+          setData(resolved);
           logEvent("longitudinal_fetch_success", {
-            consistencyScore: d.consistencyScore,
-            weeks: d.weeks?.length ?? 0,
+            consistencyScore: resolved.consistencyScore,
+            weeks: resolved.weeks?.length ?? 0,
+            syntheticData: shouldUseSyntheticLongitudinal(d),
           });
         } else {
-          logEvent("longitudinal_fetch_failed");
+          const fallback = getSyntheticLongitudinalPayload();
+          setData(fallback);
+          logEvent("longitudinal_fetch_failed", { syntheticData: true });
         }
       })
       .catch(() => {
-        logEvent("longitudinal_fetch_failed");
+        const fallback = getSyntheticLongitudinalPayload();
+        setData(fallback);
+        logEvent("longitudinal_fetch_failed", { syntheticData: true });
       })
       .finally(() => setLoading(false));
   }, []);
