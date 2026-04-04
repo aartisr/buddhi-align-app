@@ -229,6 +229,9 @@ export default function MotivationAnalyticsPage() {
                 default
               />
           </video>
+          <p className="app-secondary-copy text-sm text-center mt-3">
+            Begin now: add your first reflection today and build momentum one mindful step at a time.
+          </p>
         </div>
         <div className="w-full max-w-3xl flex justify-end mb-2">
           <button
