@@ -210,7 +210,7 @@ export default function MotivationAnalyticsPage() {
         <div id="quick-tour" className="app-surface-card w-full max-w-3xl rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 scroll-mt-24">
           <h3 className="app-panel-title text-lg sm:text-xl font-bold mb-2 text-center">Quick Tour Video (1 min)</h3>
           <p className="app-secondary-copy text-sm text-center mb-4">
-            Lightweight local guide for all pages. No streaming. Approx 96KB.
+            Owner-led (Aarti) local walkthrough with real app screenshots and voice. No streaming.
           </p>
           <video
             controls
