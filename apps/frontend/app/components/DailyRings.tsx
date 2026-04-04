@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useI18n } from "../i18n/provider";
 import type { AnalyticsPayload } from "../api/analytics/types";
 import type { TranslationKey } from "../i18n/config";
+import { cachedJsonFetch } from "../lib/clientFetchCache";
 
 const RING_R = 22;
 const RING_C = 2 * Math.PI * RING_R;
@@ -31,9 +32,8 @@ export default function DailyRings() {
   const [todayActivity, setTodayActivity] = useState<Record<string, boolean> | null>(null);
 
   useEffect(() => {
-    fetch("/api/analytics")
-      .then((r) => r.json())
-      .then((data: AnalyticsPayload) => setTodayActivity(data.todayActivity))
+    cachedJsonFetch<AnalyticsPayload>("analytics:summary", "/api/analytics", { ttlMs: 20_000 })
+      .then((data) => setTodayActivity(data.todayActivity))
       .catch(() => {});
   }, []);
 

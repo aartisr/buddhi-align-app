@@ -8,6 +8,8 @@ import { MOTIVATIONAL_QUOTES } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 import type { AnalyticsPayload } from "../api/analytics/types";
 import { getSyntheticAnalyticsPayload, shouldUseSyntheticAnalytics } from "./demoData";
+import { cachedJsonFetch, invalidateClientFetchCache } from "../lib/clientFetchCache";
+import DeferredRender from "../components/DeferredRender";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 const LongitudinalChart = dynamic(() => import("../components/LongitudinalChart"));
@@ -85,12 +87,18 @@ export default function MotivationAnalyticsPage() {
     [t],
   );
 
-  const fetchAnalytics = useCallback(async () => {
+  const fetchAnalytics = useCallback(async (forceRefresh = false) => {
     setLoadingStats(true);
     try {
-      const res = await fetch("/api/analytics");
-      if (!res.ok) throw new Error("analytics fetch failed");
-      const apiData: AnalyticsPayload = await res.json();
+      if (forceRefresh) {
+        invalidateClientFetchCache("analytics:summary");
+      }
+
+      const apiData = await cachedJsonFetch<AnalyticsPayload>(
+        "analytics:summary",
+        "/api/analytics",
+        { ttlMs: 20_000, forceRefresh },
+      );
       const data = shouldUseSyntheticAnalytics(apiData)
         ? getSyntheticAnalyticsPayload()
         : apiData;
@@ -163,36 +171,38 @@ export default function MotivationAnalyticsPage() {
             )}
           </div>
         </div>
-        <div id="quick-tour" className="app-surface-card w-full max-w-3xl rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 scroll-mt-24">
-          <h3 className="app-panel-title text-lg sm:text-xl font-bold mb-2 text-center">{t("motivation.quickTourTitle")}</h3>
-            <p className="app-secondary-copy text-sm text-center mb-4">
-              {t("motivation.quickTourDescription")}
+        <DeferredRender minHeightClassName="min-h-[280px]">
+          <div id="quick-tour" className="app-surface-card w-full max-w-3xl rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 scroll-mt-24">
+            <h3 className="app-panel-title text-lg sm:text-xl font-bold mb-2 text-center">{t("motivation.quickTourTitle")}</h3>
+              <p className="app-secondary-copy text-sm text-center mb-4">
+                {t("motivation.quickTourDescription")}
+              </p>
+            <video
+              controls
+              preload="metadata"
+              playsInline
+              className="w-full rounded-xl border border-(--border-soft)"
+              aria-label={t("motivation.quickTourAriaLabel")}
+            >
+              <source src="/videos/buddhi-app-quickstart.mp4" type="video/mp4" />
+              <source src="/videos/buddhi-app-quickstart.webm" type="video/webm" />
+                <track
+                  src="/videos/buddhi-spiritual-captions.vtt"
+                  kind="captions"
+                  srcLang="en"
+                  label="English"
+                  default
+                />
+            </video>
+            <p className="app-secondary-copy text-sm text-center mt-3">
+              {t("motivation.quickTourClosing")}
             </p>
-          <video
-            controls
-            preload="metadata"
-            playsInline
-            className="w-full rounded-xl border border-(--border-soft)"
-            aria-label={t("motivation.quickTourAriaLabel")}
-          >
-            <source src="/videos/buddhi-app-quickstart.mp4" type="video/mp4" />
-            <source src="/videos/buddhi-app-quickstart.webm" type="video/webm" />
-              <track
-                src="/videos/buddhi-spiritual-captions.vtt"
-                kind="captions"
-                srcLang="en"
-                label="English"
-                default
-              />
-          </video>
-          <p className="app-secondary-copy text-sm text-center mt-3">
-            {t("motivation.quickTourClosing")}
-          </p>
-        </div>
+          </div>
+        </DeferredRender>
         <div className="w-full max-w-3xl flex justify-end mb-2">
           <button
             className="app-analytics-refresh"
-            onClick={fetchAnalytics}
+            onClick={() => fetchAnalytics(true)}
             disabled={loadingStats}
             aria-label={t("motivation.refresh")}
           >
@@ -242,7 +252,9 @@ export default function MotivationAnalyticsPage() {
           </div>
         </div>
       </section>
-      <LongitudinalChart />
+      <DeferredRender minHeightClassName="min-h-[260px]">
+        <LongitudinalChart />
+      </DeferredRender>
       <section className="mt-10 sm:mt-12 max-w-2xl mx-auto text-center">
         <h3 className="app-panel-title text-lg sm:text-xl md:text-2xl font-bold mb-4">{t("motivation.howTo")}</h3>
         <ul className="app-list-copy list-disc list-inside text-base sm:text-lg space-y-2 text-left mx-auto max-w-xl">

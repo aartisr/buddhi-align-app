@@ -2,6 +2,7 @@
 
 import { SessionProvider } from "next-auth/react";
 import RequestFeedbackProvider from "./RequestFeedbackProvider";
+import WebVitalsReporter from "./WebVitalsReporter";
 
 /**
  * Client-side session provider wrapper.
@@ -10,6 +11,7 @@ import RequestFeedbackProvider from "./RequestFeedbackProvider";
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
+      <WebVitalsReporter />
       <RequestFeedbackProvider>{children}</RequestFeedbackProvider>
     </SessionProvider>
   );

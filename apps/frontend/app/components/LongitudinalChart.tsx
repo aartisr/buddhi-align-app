@@ -10,6 +10,7 @@ import {
   getSyntheticLongitudinalPayload,
   shouldUseSyntheticLongitudinal,
 } from "../motivation-analytics/demoData";
+import { cachedJsonFetch } from "../lib/clientFetchCache";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -28,8 +29,11 @@ export default function LongitudinalChart() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/data/longitudinal")
-      .then((r) => (r.ok ? r.json() : null))
+    cachedJsonFetch<LongitudinalPayload | null>(
+      "longitudinal:series",
+      "/api/data/longitudinal",
+      { ttlMs: 45_000 },
+    )
       .then((d) => {
         if (d) {
           const resolved = shouldUseSyntheticLongitudinal(d)
