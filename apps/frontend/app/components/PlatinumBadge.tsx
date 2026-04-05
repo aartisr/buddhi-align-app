@@ -1,10 +1,10 @@
-export default function PlatinumBadge() {
+export default function PlatinumBadge({ size = "header" }: { size?: "header" | "footer" }) {
   return (
     <a
       href="https://www.foreverlotus.com/awaricon/legal"
       target="_blank"
       rel="noopener noreferrer"
-      className="app-platinum-badge"
+      className={size === "footer" ? "app-awaricon-badge app-awaricon-badge--footer" : "app-platinum-badge"}
       aria-label="Awaricon Gold compliance badge"
     >
       <img
@@ -13,7 +13,7 @@ export default function PlatinumBadge() {
         width="180"
         height="180"
         loading="lazy"
-        className="app-platinum-badge__image"
+        className={size === "footer" ? "app-awaricon-badge__image" : "app-platinum-badge__image"}
       />
     </a>
   );

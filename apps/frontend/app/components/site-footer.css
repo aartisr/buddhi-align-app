@@ -52,9 +52,89 @@
   text-decoration: none;
 }
 
+/* ── Awaricon footer badge ── */
+.site-footer__awaricon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.site-footer__awaricon-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  margin: 0;
+}
+
+.app-awaricon-badge--footer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 0.22rem;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(255, 243, 201, 0.92) 0%, rgba(255, 243, 201, 0) 42%),
+    linear-gradient(135deg, #fff9e8 0%, #f0d38a 44%, #c59630 100%);
+  box-shadow:
+    0 6px 18px rgba(197, 150, 48, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.68);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.app-awaricon-badge--footer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(113, 76, 11, 0.3);
+  pointer-events: none;
+}
+
+.app-awaricon-badge--footer:hover,
+.app-awaricon-badge--footer:focus-visible {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    0 10px 24px rgba(197, 150, 48, 0.38),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.76);
+  outline: none;
+}
+
+.app-awaricon-badge--footer:focus-visible {
+  box-shadow:
+    0 10px 24px rgba(197, 150, 48, 0.38),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.76),
+    0 0 0 3px rgba(47, 93, 80, 0.22);
+}
+
+.app-awaricon-badge__image {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  display: block;
+  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.18);
+}
+
 @media (prefers-color-scheme: dark) {
   .site-footer {
     background: rgba(20, 34, 29, 0.9);
     border-top-color: rgba(178, 213, 198, 0.22);
+  }
+
+  .app-awaricon-badge--footer {
+    background:
+      radial-gradient(circle at 22% 18%, rgba(255, 233, 170, 0.3) 0%, rgba(255, 233, 170, 0) 45%),
+      linear-gradient(135deg, rgba(59, 48, 25, 0.96) 0%, rgba(148, 108, 34, 0.96) 100%);
+    box-shadow:
+      0 8px 20px rgba(0, 0, 0, 0.4),
+      inset 0 0 0 1px rgba(255, 245, 210, 0.18);
   }
 }
