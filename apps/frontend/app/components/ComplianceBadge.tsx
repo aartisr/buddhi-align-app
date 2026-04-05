@@ -119,18 +119,28 @@ export default function ComplianceBadge({
             </header>
 
             <p id={descriptionId} className="app-compliance-modal__description">
-              Viewing details in a popup keeps users on this page. If your browser blocks embedded content, use the
-              external link button below.
+              This popup keeps users on your site. Some external pages block iframe embedding for security, so we show
+              core details here and provide an official link below.
             </p>
 
-            <div className="app-compliance-modal__frame-wrap">
-              <iframe
-                src={href}
-                title="Awaricon compliance legal details"
-                className="app-compliance-modal__frame"
-                loading="lazy"
-                referrerPolicy="strict-origin-when-cross-origin"
-              />
+            <div className="app-compliance-modal__content">
+              <div className="app-compliance-modal__badge">
+                <Image
+                  src={src}
+                  alt={alt}
+                  width={88}
+                  height={88}
+                />
+                <div>
+                  <p className="app-compliance-modal__kicker">Certification</p>
+                  <p className="app-compliance-modal__value">Awaricon {tierTag ?? "Verified"}</p>
+                </div>
+              </div>
+              <ul className="app-compliance-modal__list">
+                <li>Badge authenticity is displayed on this page.</li>
+                <li>Legal and certification details are published on the official Awaricon site.</li>
+                <li>Use the button below to view full legal content in a secure new tab.</li>
+              </ul>
             </div>
 
             <div className="app-compliance-modal__actions">
