@@ -9,6 +9,8 @@ interface ModuleEntryFormProps {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
   children: ReactNode;
   submitLabel: string;
+  submitPendingLabel?: string;
+  helperText?: string;
   submitButtonClassName?: string;
   isSubmitting?: boolean;
 }
@@ -20,6 +22,8 @@ export default function ModuleEntryForm({
   onSubmit,
   children,
   submitLabel,
+  submitPendingLabel,
+  helperText,
   submitButtonClassName,
   isSubmitting = false,
 }: ModuleEntryFormProps) {
@@ -33,6 +37,7 @@ export default function ModuleEntryForm({
         <span className="text-3xl self-center" aria-hidden>
           {icon}
         </span>
+        {helperText ? <p className="app-copy-soft text-sm text-center -mt-1">{helperText}</p> : null}
         {children}
         <button
           type="submit"
@@ -42,10 +47,9 @@ export default function ModuleEntryForm({
             "app-button-primary app-button-primary--karma"
           }
           aria-label={submitLabel}
-          aria-busy={isSubmitting}
         >
           <span className="text-xl">{isSubmitting ? "⏳" : "➕"}</span>{" "}
-          <span className="font-bold">{isSubmitting ? `${submitLabel}...` : submitLabel}</span>
+          <span className="font-bold">{isSubmitting ? (submitPendingLabel ?? `${submitLabel}...`) : submitLabel}</span>
         </button>
       </div>
     </form>

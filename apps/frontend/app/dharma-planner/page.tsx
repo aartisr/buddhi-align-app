@@ -32,7 +32,9 @@ export default function DharmaPlannerPage() {
           setForm({ ...DHARMA_INITIAL_FORM_STATE });
         }}
         isSubmitting={isCreating}
-        submitLabel={t("app.add")}
+        submitLabel={t("form.saveEntry")}
+        submitPendingLabel={t("form.savingEntry")}
+        helperText={t("form.helperRequired")}
         submitButtonClassName="app-button-primary app-button-primary--dharma"
       >
         {fields.map((field) => (

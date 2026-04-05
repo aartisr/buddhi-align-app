@@ -22,9 +22,10 @@ interface BaseInputProps {
   tone: InputTone;
   required?: boolean;
   placeholder?: string;
+  describedBy?: string;
 }
 
-export function ModuleDateInput({ id, value, onChange, ariaLabel, tone, required = false }: Omit<BaseInputProps, "placeholder">) {
+export function ModuleDateInput({ id, value, onChange, ariaLabel, tone, required = false, describedBy }: Omit<BaseInputProps, "placeholder">) {
   return (
     <input
       id={id}
@@ -34,6 +35,7 @@ export function ModuleDateInput({ id, value, onChange, ariaLabel, tone, required
       onChange={(e) => onChange(e.target.value)}
       required={required}
       aria-label={ariaLabel}
+      aria-describedby={describedBy}
     />
   );
 }
@@ -46,6 +48,7 @@ export function ModuleTextInput({
   tone,
   required = false,
   placeholder,
+  describedBy,
 }: BaseInputProps) {
   return (
     <input
@@ -57,6 +60,7 @@ export function ModuleTextInput({
       required={required}
       placeholder={placeholder}
       aria-label={ariaLabel}
+      aria-describedby={describedBy}
     />
   );
 }
@@ -70,6 +74,7 @@ interface NumberInputProps {
   required?: boolean;
   min?: number;
   placeholder?: string;
+  describedBy?: string;
 }
 
 export function ModuleNumberInput({
@@ -81,6 +86,7 @@ export function ModuleNumberInput({
   required = false,
   min,
   placeholder,
+  describedBy,
 }: NumberInputProps) {
   return (
     <input
@@ -93,6 +99,7 @@ export function ModuleNumberInput({
       min={min}
       placeholder={placeholder}
       aria-label={ariaLabel}
+      aria-describedby={describedBy}
     />
   );
 }
@@ -134,11 +141,14 @@ export function ModuleFormField({
   onValueChange: (key: string, value: string | number) => void;
 }) {
   const inputId = `module-field-${field.key}`;
+  const hintText = "placeholder" in field ? field.placeholder : undefined;
+  const hintId = hintText ? `${inputId}-hint` : undefined;
+  const requiredMark = field.required ? <span className="text-rose-700"> *</span> : null;
 
   if (field.kind === "date") {
     return (
       <label htmlFor={inputId} className="app-form-field">
-        <span className="app-form-label">{field.ariaLabel}</span>
+        <span className="app-form-label">{field.ariaLabel}{requiredMark}</span>
         <ModuleDateInput
           id={inputId}
           tone={field.tone}
@@ -146,7 +156,9 @@ export function ModuleFormField({
           onChange={(value) => onValueChange(field.key, value)}
           ariaLabel={field.ariaLabel}
           required={field.required}
+          describedBy={hintId}
         />
+        {hintText && <span id={hintId} className="app-copy-soft text-xs mt-1">{hintText}</span>}
       </label>
     );
   }
@@ -154,7 +166,7 @@ export function ModuleFormField({
   if (field.kind === "number") {
     return (
       <label htmlFor={inputId} className="app-form-field">
-        <span className="app-form-label">{field.ariaLabel}</span>
+        <span className="app-form-label">{field.ariaLabel}{requiredMark}</span>
         <ModuleNumberInput
           id={inputId}
           tone={field.tone}
@@ -164,14 +176,16 @@ export function ModuleFormField({
           required={field.required}
           min={field.min}
           placeholder={field.placeholder}
+          describedBy={hintId}
         />
+        {hintText && <span id={hintId} className="app-copy-soft text-xs mt-1">{hintText}</span>}
       </label>
     );
   }
 
   return (
     <label htmlFor={inputId} className="app-form-field">
-      <span className="app-form-label">{field.ariaLabel}</span>
+      <span className="app-form-label">{field.ariaLabel}{requiredMark}</span>
       <ModuleTextInput
         id={inputId}
         tone={field.tone}
@@ -180,7 +194,9 @@ export function ModuleFormField({
         ariaLabel={field.ariaLabel}
         required={field.required}
         placeholder={field.placeholder}
+        describedBy={hintId}
       />
+      {hintText && <span id={hintId} className="app-copy-soft text-xs mt-1">{hintText}</span>}
     </label>
   );
 }
