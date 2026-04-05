@@ -38,8 +38,8 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       // Fonts are self-hosted via next/font at build time — no external CDN needed
       "font-src 'self' data:",
-      // Allow images from auth providers and the Shishu Bharati site
-      "img-src 'self' data: blob: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://graph.facebook.com https://www.shishubharati.net",
+      // Allow images from auth providers, Shishu Bharati, and Awaricon badge host
+      "img-src 'self' data: blob: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://graph.facebook.com https://www.shishubharati.net https://www.foreverlotus.com",
       // Supabase real-time + REST connections
       "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
       "frame-ancestors 'self'",
@@ -69,6 +69,7 @@ const nextConfig = {
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
       { protocol: "https", hostname: "graph.facebook.com" },
       { protocol: "https", hostname: "www.shishubharati.net" },
+      { protocol: "https", hostname: "www.foreverlotus.com" },
     ],
   },
 };
