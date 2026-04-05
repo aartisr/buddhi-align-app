@@ -15,8 +15,8 @@
   --border-soft: rgba(63, 122, 96, 0.2);
   --border-strong: rgba(47, 93, 80, 0.34);
   --text-muted: #2e3f38;
-  --text-soft: #3f544c;
-  --text-subtle: #50665e;
+  --text-soft: #31463f;
+  --text-subtle: #3d554c;
   --font-sans: 'Avenir Next', 'Nunito Sans', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -37,9 +37,9 @@
     --surface-muted: rgba(28, 52, 44, 0.82);
     --border-soft: rgba(178, 213, 198, 0.18);
     --border-strong: rgba(222, 196, 143, 0.34);
-    --text-muted: #d2e2da;
-    --text-soft: #bdd0c7;
-    --text-subtle: #95ada3;
+    --text-muted: #deebe5;
+    --text-soft: #cdddd5;
+    --text-subtle: #b8cbc2;
   }
 }
 
