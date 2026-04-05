@@ -33,7 +33,7 @@ export default function SiteFooter() {
       </div>
       <div className="site-footer__awaricon">
         <PlatinumBadge size="footer" />
-        <p className="site-footer__awaricon-label">Awaricon Gold Certified</p>
+        <p className="site-footer__awaricon-label">Awaricon Platinum Certified</p>
       </div>
     </footer>
   );
