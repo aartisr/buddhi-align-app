@@ -212,8 +212,8 @@ export default async function AdminPage() {
           ) : (
             <ul className="space-y-2 text-sm max-h-64 overflow-y-auto">
               {errorLog.slice(-20).reverse().map((entry) => (
-                <li key={entry.id} className="border-b border-[var(--border-soft)] pb-2 last:border-b-0">
-                  <p className="font-medium text-red-500 dark:text-red-400">{entry.errorName}: {entry.errorMessage}</p>
+                <li key={entry.id} className="border-b border-(--border-soft) pb-2 last:border-b-0">
+                  <p className="font-medium text-red-700 dark:text-red-300">{entry.errorName}: {entry.errorMessage}</p>
                   <p className="app-copy-soft text-xs">{entry.method} {entry.route}</p>
                   <p className="app-copy-soft text-xs">{formatTimestamp(entry.at)}</p>
                 </li>
@@ -242,7 +242,7 @@ export default async function AdminPage() {
             ) : (
               <ul className="space-y-2 text-sm">
                 {audits.slice(-6).reverse().map((item) => (
-                  <li key={item.id ?? `${item.action}-${item.at}`} className="border-b border-[var(--border-soft)] pb-2 last:border-b-0">
+                  <li key={item.id ?? `${item.action}-${item.at}`} className="border-b border-(--border-soft) pb-2 last:border-b-0">
                     <p className="font-medium">{item.action}</p>
                     <p className="app-copy-soft text-xs">{item.detail}</p>
                     <p className="app-copy-soft text-xs">{formatTimestamp(item.at)} · {item.severity}</p>
@@ -258,7 +258,7 @@ export default async function AdminPage() {
             <h4 className="font-semibold mb-3">Log Incident</h4>
             <form action={logIncident} className="space-y-2">
               <input name="title" className="app-input w-full" placeholder="Incident title" required />
-              <select name="severity" className="app-input w-full" defaultValue="warning">
+              <select name="severity" className="app-input w-full" defaultValue="warning" aria-label="Incident severity">
                 <option value="info">Info</option>
                 <option value="warning">Warning</option>
                 <option value="critical">Critical</option>
@@ -288,7 +288,7 @@ export default async function AdminPage() {
             ) : (
               <ul className="space-y-2 text-sm">
                 {incidents.slice(-6).reverse().map((incident) => (
-                  <li key={incident.id ?? `${incident.title}-${incident.createdAt}`} className="border-b border-[var(--border-soft)] pb-2 last:border-b-0">
+                  <li key={incident.id ?? `${incident.title}-${incident.createdAt}`} className="border-b border-(--border-soft) pb-2 last:border-b-0">
                     <p className="font-medium">{incident.title ?? "Untitled"}</p>
                     <p className="app-copy-soft text-xs">{incident.severity} · {incident.status ?? "open"}</p>
                     <p className="app-copy-soft text-xs">{formatTimestamp(incident.createdAt)}</p>
@@ -305,7 +305,7 @@ export default async function AdminPage() {
             ) : (
               <ul className="space-y-2 text-sm">
                 {experiments.slice(-6).reverse().map((experiment) => (
-                  <li key={experiment.id ?? `${experiment.name}-${experiment.createdAt}`} className="border-b border-[var(--border-soft)] pb-2 last:border-b-0">
+                  <li key={experiment.id ?? `${experiment.name}-${experiment.createdAt}`} className="border-b border-(--border-soft) pb-2 last:border-b-0">
                     <p className="font-medium">{experiment.name ?? "Untitled"}</p>
                     <p className="app-copy-soft text-xs">{experiment.metric ?? "Metric n/a"} · {experiment.status ?? "planned"}</p>
                     <p className="app-copy-soft text-xs">{formatTimestamp(experiment.createdAt)}</p>

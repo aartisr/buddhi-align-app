@@ -33,12 +33,13 @@
 
 .app-user-action {
   border: 1px solid var(--border-soft);
-  color: var(--text-soft);
-  background: transparent;
+  color: var(--text-muted);
+  background: var(--surface-soft);
 }
 
 .app-user-action:hover {
-  background: var(--surface-soft);
+  background: var(--surface-strong);
+  border-color: var(--border-strong);
 }
 
 .app-language-switcher {
