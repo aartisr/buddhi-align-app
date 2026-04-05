@@ -113,9 +113,10 @@
 .app-awaricon-badge--footer {
   position: relative;
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: 0.18rem;
   text-decoration: none;
   transition: transform 0.2s ease, filter 0.2s ease;
 }
@@ -127,8 +128,8 @@
   height: 0.52rem;
   border-radius: 999px;
   background: radial-gradient(circle, rgba(255, 246, 196, 1) 0%, rgba(255, 246, 196, 0.18) 65%, rgba(255, 246, 196, 0) 100%);
-  left: 2.85rem;
-  top: 0.16rem;
+  left: calc(50% + 0.72rem);
+  top: 0.18rem;
   pointer-events: none;
   opacity: 0;
   animation: app-footer-badge-sparkle-once 1.4s ease-out 0.42s 1 both;
@@ -162,7 +163,7 @@
   text-transform: uppercase;
   color: color-mix(in srgb, var(--text-muted) 72%, #5f4708 28%);
   line-height: 1;
-  transform: translateY(1px);
+  transform: none;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -182,7 +183,7 @@
 
 @media (max-width: 640px) {
   .app-awaricon-badge--footer {
-    gap: 0.24rem;
+    gap: 0.2rem;
   }
 
   .app-awaricon-badge__tag {

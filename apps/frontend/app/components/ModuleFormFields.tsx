@@ -12,7 +12,7 @@ const TONE_CLASS: Record<InputTone, string> = {
 };
 
 const BASE_CLASS =
-  "app-form-input border-2 bg-surface rounded-xl px-3 py-2 w-full focus:outline-none focus:ring-2 text-lg shadow-sm";
+  "app-form-input border-2 bg-surface rounded-xl px-3 py-2 w-full max-w-full min-w-0 focus:outline-none focus:ring-2 text-lg shadow-sm";
 
 interface BaseInputProps {
   id: string;
@@ -147,7 +147,7 @@ export function ModuleFormField({
 
   if (field.kind === "date") {
     return (
-      <label htmlFor={inputId} className="app-form-field">
+      <label htmlFor={inputId} className="app-form-field flex w-full min-w-0 flex-col">
         <span className="app-form-label">{field.ariaLabel}{requiredMark}</span>
         <ModuleDateInput
           id={inputId}
@@ -165,7 +165,7 @@ export function ModuleFormField({
 
   if (field.kind === "number") {
     return (
-      <label htmlFor={inputId} className="app-form-field">
+      <label htmlFor={inputId} className="app-form-field flex w-full min-w-0 flex-col">
         <span className="app-form-label">{field.ariaLabel}{requiredMark}</span>
         <ModuleNumberInput
           id={inputId}
@@ -184,7 +184,7 @@ export function ModuleFormField({
   }
 
   return (
-    <label htmlFor={inputId} className="app-form-field">
+    <label htmlFor={inputId} className="app-form-field flex w-full min-w-0 flex-col">
       <span className="app-form-label">{field.ariaLabel}{requiredMark}</span>
       <ModuleTextInput
         id={inputId}

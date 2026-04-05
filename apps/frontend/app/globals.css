@@ -861,7 +861,8 @@ select::placeholder {
 
 .app-platinum-badge--header {
   position: relative;
-  gap: 0.34rem;
+  flex-direction: column;
+  gap: 0.18rem;
 }
 
 .app-platinum-badge::before {
@@ -879,8 +880,8 @@ select::placeholder {
   height: 0.52rem;
   border-radius: 999px;
   background: radial-gradient(circle, rgba(255, 246, 196, 1) 0%, rgba(255, 246, 196, 0.18) 65%, rgba(255, 246, 196, 0) 100%);
-  left: 2.6rem;
-  top: 0.08rem;
+  left: calc(50% + 0.72rem);
+  top: 0.14rem;
   pointer-events: none;
   opacity: 0;
   animation: app-badge-sparkle-once 1.4s ease-out 0.45s 1 both;
@@ -917,7 +918,7 @@ select::placeholder {
   text-transform: uppercase;
   color: color-mix(in srgb, var(--text-muted) 72%, #5f4708 28%);
   line-height: 1;
-  transform: translateY(1px);
+  transform: none;
 }
 
 @media (max-width: 640px) {
@@ -929,13 +930,18 @@ select::placeholder {
     transform-origin: center;
   }
 
+  .app-platinum-badge__image {
+    width: 2.45rem;
+    height: 2.45rem;
+  }
+
   .app-platinum-badge--header {
     gap: 0.22rem;
   }
 
   .app-platinum-badge__label {
-    font-size: 0.52rem;
-    letter-spacing: 0.06em;
+    font-size: 0.48rem;
+    letter-spacing: 0.05em;
   }
 }
 

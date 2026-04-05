@@ -198,7 +198,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
               </div>
             ))}
           </nav>
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 justify-self-end min-w-0">
             <div className="hidden sm:block">
               <PreferencesMenu />
             </div>

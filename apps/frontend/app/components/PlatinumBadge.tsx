@@ -12,7 +12,7 @@ export default function PlatinumBadge({ size = "header" }: PlatinumBadgeProps) {
       src="/awaricon-platinum.svg"
       alt="Awaricon Platinum compliance badge"
       ariaLabel="Awaricon Platinum compliance badge"
-      tierTag="Platinum"
+      tierTag={size === "header" ? "Platinum" : undefined}
     />
   );
 }

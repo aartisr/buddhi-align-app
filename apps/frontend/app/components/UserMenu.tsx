@@ -38,7 +38,7 @@ export default function UserMenu() {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5 sm:gap-2">
       {session.user?.image ? (
         <Image
           src={session.user.image}
@@ -57,10 +57,17 @@ export default function UserMenu() {
       </span>
       <button
         onClick={() => signOut({ callbackUrl: "/sign-in" })}
-        className="text-xs px-2 py-1 rounded app-user-action transition-colors"
+        className="text-xs px-2 py-1 rounded app-user-action app-user-action--mobile-icon transition-colors"
         aria-label={t("auth.signOut")}
       >
-        {t("auth.signOut")}
+        <span className="app-user-action__icon" aria-hidden>
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path d="M7.5 4.16666H5.83333C5.39131 4.16666 4.96738 4.34225 4.65482 4.65481C4.34226 4.96737 4.16667 5.3913 4.16667 5.83332V14.1667C4.16667 14.6087 4.34226 15.0326 4.65482 15.3452C4.96738 15.6577 5.39131 15.8333 5.83333 15.8333H7.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M11.6667 12.5L15 9.99998L11.6667 7.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M15 10H7.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </span>
+        <span className="hidden sm:inline">{t("auth.signOut")}</span>
       </button>
     </div>
   );

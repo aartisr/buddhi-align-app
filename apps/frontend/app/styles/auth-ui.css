@@ -42,6 +42,36 @@
   border-color: var(--border-strong);
 }
 
+.app-user-action--mobile-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-width: 2.2rem;
+  min-height: 2.2rem;
+}
+
+.app-user-action__icon {
+  width: 1rem;
+  height: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.app-user-action__icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (max-width: 640px) {
+  .app-user-action--mobile-icon {
+    padding: 0.46rem;
+    border-radius: 0.55rem;
+  }
+}
+
 .app-language-switcher {
   color: var(--text-soft);
 }
