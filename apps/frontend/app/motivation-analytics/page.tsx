@@ -11,8 +11,14 @@ import { getSyntheticAnalyticsPayload, shouldUseSyntheticAnalytics } from "./dem
 import { cachedJsonFetch, invalidateClientFetchCache } from "../lib/clientFetchCache";
 import DeferredRender from "../components/DeferredRender";
 
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
-const LongitudinalChart = dynamic(() => import("../components/LongitudinalChart"));
+const Chart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+  loading: () => <div className="app-stat-skeleton w-full h-52 sm:h-80 rounded-xl" aria-hidden="true" />,
+});
+const LongitudinalChart = dynamic(() => import("../components/LongitudinalChart"), {
+  ssr: false,
+  loading: () => <div className="app-stat-skeleton w-full max-w-3xl h-56 sm:h-72 rounded-2xl mx-auto" aria-hidden="true" />,
+});
 
 function getRandomQuote(quotes: { quote: string; author: string }[]) {
   return quotes[Math.floor(Math.random() * quotes.length)];
@@ -23,6 +29,7 @@ export default function MotivationAnalyticsPage() {
   const quotes = MOTIVATIONAL_QUOTES[locale] ?? MOTIVATIONAL_QUOTES.en;
   const [quote, setQuote] = useState(getRandomQuote(quotes));
   const [loadingStats, setLoadingStats] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   const [stats, setStats] = useState({
     karma: 0,
@@ -143,6 +150,10 @@ export default function MotivationAnalyticsPage() {
   }, [fetchAnalytics]);
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
     setQuote(getRandomQuote(quotes));
   }, [locale, quotes]);
 
@@ -166,8 +177,10 @@ export default function MotivationAnalyticsPage() {
         <div className="app-surface-card w-full max-w-3xl rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10">
           <h3 className="app-panel-title text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-center">{t("motivation.chartTitle")}</h3>
           <div className="w-full h-52 sm:h-80">
-            {typeof window !== "undefined" && Chart && (
+            {isMounted ? (
               <Chart options={chartOptions} series={chartSeries} type="bar" height={320} />
+            ) : (
+              <div className="app-stat-skeleton w-full h-52 sm:h-80 rounded-xl" aria-hidden="true" />
             )}
           </div>
         </div>

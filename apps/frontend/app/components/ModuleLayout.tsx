@@ -7,6 +7,7 @@ import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonym
 
 import UserMenu from "./UserMenu";
 import BuddhiAlignLogo from "./BuddhiAlignLogo";
+import PlatinumBadge from "./PlatinumBadge";
 import PreferencesMenu from "./PreferencesMenu";
 import { MODULE_CATALOG, type TranslationKey } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
@@ -156,11 +157,14 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
 
         {/* ── Header ── */}
         <header className="app-header-panel w-full px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-3 relative z-40">
-          <h1>
-            <Link href="/" className="inline-flex items-center" aria-label={t("app.brand")}>
-              <BuddhiAlignLogo className="h-10 sm:h-11 w-auto" />
-            </Link>
-          </h1>
+          <div className="app-brand-lockup">
+            <h1>
+              <Link href="/" className="inline-flex items-center" aria-label={t("app.brand")}>
+                <BuddhiAlignLogo className="h-10 sm:h-11 w-auto" />
+              </Link>
+            </h1>
+            <PlatinumBadge />
+          </div>
           {/* Desktop centered nav */}
           <nav className="hidden md:flex items-center justify-center gap-2 text-sm font-medium app-copy app-top-nav" aria-label={t("nav.mainAria")}>
             {menuGroups.map((group) => (

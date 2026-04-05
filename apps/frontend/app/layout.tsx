@@ -14,7 +14,6 @@ import "./styles/responsive.css";
 import "./components/buddhi-bg.css";
 
 import BackgroundMusic from "./components/BackgroundMusic";
-import PlatinumBadge from "./components/PlatinumBadge";
 import SiteFooter from "./components/SiteFooter";
 import { I18nProvider } from "./i18n/provider";
 import { DEFAULT_LOCALE, translate } from "./i18n/config";
@@ -101,7 +100,6 @@ export default function RootLayout({
         <Providers>
           <I18nProvider>
             <div className="buddhi-bg-gradient" aria-hidden="true"></div>
-            <PlatinumBadge />
             <BackgroundMusic />
             {children}
             <SiteFooter />

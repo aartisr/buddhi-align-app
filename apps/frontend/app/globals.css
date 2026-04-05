@@ -745,59 +745,149 @@ select::placeholder {
   }
 }
 
-.app-platinum-badge {
-  position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 5rem);
-  right: 0.75rem;
-  z-index: 85;
+.app-brand-lockup {
   display: inline-flex;
-  flex-direction: column;
-  gap: 0.05rem;
-  align-items: flex-start;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+@keyframes app-badge-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow:
+      0 8px 20px rgba(197, 150, 48, 0.35),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.72);
+  }
+
+  50% {
+    transform: scale(1.02);
+    box-shadow:
+      0 10px 24px rgba(197, 150, 48, 0.42),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.76);
+  }
+}
+
+@keyframes app-badge-glint {
+  0% {
+    transform: translateX(-135%) rotate(18deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.75;
+  }
+
+  24% {
+    transform: translateX(145%) rotate(18deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(145%) rotate(18deg);
+    opacity: 0;
+  }
+}
+
+.app-platinum-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
-  color: #101214;
-  background: linear-gradient(135deg, #f8f8fb 0%, #dcdde3 35%, #f9f9fb 100%);
-  border: 1px solid rgba(15, 23, 42, 0.2);
-  border-radius: 0.8rem;
-  padding: 0.45rem 0.65rem;
-  box-shadow: 0 12px 30px rgba(17, 24, 39, 0.22);
-  letter-spacing: 0.02em;
+  border-radius: 999px;
+  padding: 0.18rem;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(255, 243, 201, 0.92) 0%, rgba(255, 243, 201, 0) 42%),
+    linear-gradient(135deg, #fff9e8 0%, #f0d38a 44%, #c59630 100%);
+  box-shadow:
+    0 8px 20px rgba(197, 150, 48, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.72);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  animation: app-badge-pulse 3.2s ease-in-out infinite;
+  overflow: hidden;
 }
 
-.app-platinum-badge__label {
-  font-size: 0.56rem;
-  font-weight: 800;
-  color: #5b6474;
+.app-platinum-badge::before {
+  content: "";
+  position: absolute;
+  top: -25%;
+  bottom: -25%;
+  left: -55%;
+  width: 48%;
+  background: linear-gradient(110deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0));
+  animation: app-badge-glint 4.8s linear infinite;
+  pointer-events: none;
 }
 
-.app-platinum-badge__title {
-  font-size: 0.78rem;
-  line-height: 1;
-  font-weight: 900;
-  color: #1f2937;
+.app-platinum-badge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(113, 76, 11, 0.36);
+  pointer-events: none;
 }
 
-.app-platinum-badge__meta {
-  font-size: 0.58rem;
-  font-weight: 700;
-  color: #3f4756;
+.app-platinum-badge:hover,
+.app-platinum-badge:focus-visible {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow:
+    0 12px 28px rgba(197, 150, 48, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.78);
+  filter: saturate(1.06);
+  outline: none;
+}
+
+.app-platinum-badge:focus-visible {
+  box-shadow:
+    0 12px 28px rgba(197, 150, 48, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.78),
+    0 0 0 3px rgba(47, 93, 80, 0.22);
+}
+
+.app-platinum-badge__image {
+  width: clamp(2.15rem, 3.9vw, 3rem);
+  height: clamp(2.15rem, 3.9vw, 3rem);
+  border-radius: 999px;
+  display: block;
+  box-shadow: 0 2px 6px rgba(17, 24, 39, 0.16);
 }
 
 @media (max-width: 640px) {
+  .app-brand-lockup {
+    gap: 0.45rem;
+  }
+
   .app-platinum-badge {
-    top: calc(env(safe-area-inset-top, 0px) + 4.35rem);
-    right: 0.55rem;
-    padding: 0.35rem 0.5rem;
-    z-index: 15;
+    padding: 0.15rem;
   }
 
-  .app-platinum-badge__label,
-  .app-platinum-badge__meta {
-    font-size: 0.5rem;
+  .app-platinum-badge__image {
+    width: 1.92rem;
+    height: 1.92rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-platinum-badge {
+    background:
+      radial-gradient(circle at 22% 18%, rgba(255, 233, 170, 0.32) 0%, rgba(255, 233, 170, 0) 45%),
+      linear-gradient(135deg, rgba(59, 48, 25, 0.96) 0%, rgba(148, 108, 34, 0.96) 100%);
+    box-shadow:
+      0 10px 22px rgba(0, 0, 0, 0.42),
+      inset 0 0 0 1px rgba(255, 245, 210, 0.2);
   }
 
-  .app-platinum-badge__title {
-    font-size: 0.7rem;
+  .app-platinum-badge::before {
+    background: linear-gradient(110deg, rgba(255, 255, 255, 0), rgba(255, 247, 225, 0.44), rgba(255, 255, 255, 0));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-platinum-badge,
+  .app-platinum-badge::before {
+    animation: none;
   }
 }
 

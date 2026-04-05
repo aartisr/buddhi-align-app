@@ -27,6 +27,11 @@ export default function LongitudinalChart() {
   const { t } = useI18n();
   const [data, setData] = useState<LongitudinalPayload | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     cachedJsonFetch<LongitudinalPayload | null>(
@@ -147,8 +152,10 @@ export default function LongitudinalChart() {
 
       {/* Area chart */}
       <div className="w-full h-56 sm:h-72">
-        {typeof window !== "undefined" && (
+        {isMounted ? (
           <Chart options={chartOptions} series={series} type="area" height={280} />
+        ) : (
+          <div className="app-stat-skeleton w-full h-56 sm:h-72 rounded-xl" aria-hidden="true" />
         )}
       </div>
     </div>

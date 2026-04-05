@@ -1,17 +1,20 @@
-import Link from "next/link";
-
 export default function PlatinumBadge() {
   return (
-    <Link
-      href="https://foreverlotus.com/awaricon"
+    <a
+      href="https://www.foreverlotus.com/awaricon/legal"
       target="_blank"
       rel="noopener noreferrer"
       className="app-platinum-badge"
-      aria-label="Awaricon Platinum readiness badge"
+      aria-label="Awaricon Platinum compliance badge"
     >
-      <span className="app-platinum-badge__label">AWARICON</span>
-      <strong className="app-platinum-badge__title">PLATINUM</strong>
-      <span className="app-platinum-badge__meta">Readiness</span>
-    </Link>
+      <img
+        src="https://www.foreverlotus.com/api/awaricon/badge?tier=platinum"
+        alt="Awaricon Platinum compliance badge"
+        width="180"
+        height="180"
+        loading="lazy"
+        className="app-platinum-badge__image"
+      />
+    </a>
   );
 }
