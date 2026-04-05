@@ -5,11 +5,11 @@ export default function PlatinumBadge() {
       target="_blank"
       rel="noopener noreferrer"
       className="app-platinum-badge"
-      aria-label="Awaricon Platinum compliance badge"
+      aria-label="Awaricon Gold compliance badge"
     >
       <img
-        src="https://www.foreverlotus.com/api/awaricon/badge?tier=platinum"
-        alt="Awaricon Platinum compliance badge"
+        src="https://www.foreverlotus.com/api/awaricon/badge?tier=gold&site=buddhi-align.foreverlotus.com&exp=1777946923&sig=e1d3477e464e147d953ae2b173763c38f5c7f1e92f6fc144e2fc7e0171e8cc4a"
+        alt="Awaricon Gold compliance badge"
         width="180"
         height="180"
         loading="lazy"
