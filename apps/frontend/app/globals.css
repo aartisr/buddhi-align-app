@@ -999,3 +999,122 @@ select::placeholder {
   border-radius: 999px;
 }
 
+.app-compliance-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(12, 23, 19, 0.62);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.app-compliance-modal {
+  width: min(58rem, 100%);
+  max-height: min(90vh, 52rem);
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-strong);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.35);
+  padding: 0.95rem;
+}
+
+.app-compliance-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.app-compliance-modal__header h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--primary);
+}
+
+.app-compliance-modal__close {
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.6rem;
+  background: var(--surface-soft);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.app-compliance-modal__description {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.86rem;
+}
+
+.app-compliance-modal__frame-wrap {
+  min-height: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.app-compliance-modal__frame {
+  width: 100%;
+  height: 100%;
+  min-height: 19rem;
+  border: 0;
+}
+
+.app-compliance-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.app-compliance-modal__primary,
+.app-compliance-modal__secondary {
+  border-radius: 0.6rem;
+  padding: 0.52rem 0.82rem;
+  border: 1px solid var(--border-soft);
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+.app-compliance-modal__secondary {
+  background: var(--surface-soft);
+  color: var(--text-muted);
+}
+
+.app-compliance-modal__primary {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  border-color: transparent;
+}
+
+@media (max-width: 640px) {
+  .app-compliance-modal {
+    padding: 0.8rem;
+    border-radius: 0.85rem;
+    max-height: 92vh;
+  }
+
+  .app-compliance-modal__frame {
+    min-height: 15.5rem;
+  }
+
+  .app-compliance-modal__actions {
+    justify-content: stretch;
+  }
+
+  .app-compliance-modal__primary,
+  .app-compliance-modal__secondary {
+    flex: 1;
+  }
+}
+
