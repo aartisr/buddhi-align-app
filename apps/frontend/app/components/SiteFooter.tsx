@@ -29,7 +29,7 @@ export default function SiteFooter() {
         {t("footer.gratitude")}
       </div>
       <div className="site-footer__copyright">
-        &copy; {new Date().getFullYear()} <a href="https://aartisr.netlify.app/" target="_blank" rel="noopener noreferrer" className="site-footer__author-link">Aarti Sri Ravikumar</a>. {t("footer.rights")}
+        &copy; {new Date().getFullYear()} <a href="https://aartisr.foreverlotus.com" target="_blank" rel="noopener noreferrer" className="site-footer__author-link">Aarti Sri Ravikumar</a>. {t("footer.rights")}
       </div>
       <div className="site-footer__awaricon">
         <PlatinumBadge size="footer" />
