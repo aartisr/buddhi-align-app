@@ -41,11 +41,30 @@ This document defines a generic, reusable trust architecture for compliance prog
 
 - Evaluator and types: `apps/frontend/app/lib/compliance-attestation.ts`
 - Unit tests: `apps/frontend/app/lib/compliance-attestation.test.ts`
+- Admin API (step-up protected): `apps/frontend/app/api/admin/compliance/attestation/route.ts`
+- API tests: `apps/frontend/app/api/admin/compliance/attestation/route.test.ts`
 
 The evaluator intentionally separates:
 
 - trust checks (issuer, validity, anchor)
 - compliance checks (required claim presence and claim type mapping)
+
+## API Contract
+
+`POST /api/admin/compliance/attestation`
+
+Request body:
+
+- `controls`: `ComplianceControl[]`
+- `attestations`: `AttestationEnvelope[]`
+- `nowMs` (optional): deterministic evaluation timestamp
+
+Response body:
+
+- `generatedAt`: server timestamp
+- `report`: `ComplianceEvaluationReport`
+
+The route is admin-only and requires recent step-up authentication.
 
 ## Awaricon Mapping Pattern
 
