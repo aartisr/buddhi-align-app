@@ -74,6 +74,19 @@ function sanitizeCallbackUrl(callbackUrl?: string): string {
   return callbackUrl;
 }
 
+function getSignInErrorMessage(error: string): string {
+  if (error === "OAuthSignin" || error === "OAuthCallback") {
+    return t("auth.error.signInFailed");
+  }
+  if (error === "OIDCRequired") {
+    return t("auth.error.oidcRequired");
+  }
+  if (error === "StepUpRequired") {
+    return t("auth.error.stepUpRequired");
+  }
+  return t("auth.error.generic", { error });
+}
+
 export default function SignInPage({
   searchParams,
 }: {
@@ -100,9 +113,7 @@ export default function SignInPage({
         {/* Error message */}
         {error && (
           <div className="mb-4 px-4 py-3 rounded-lg text-sm text-center app-alert-error__text app-alert-error" role="alert">
-            {error === "OAuthSignin" || error === "OAuthCallback"
-              ? t("auth.error.signInFailed")
-              : t("auth.error.generic", { error })}
+            {getSignInErrorMessage(error)}
           </div>
         )}
 

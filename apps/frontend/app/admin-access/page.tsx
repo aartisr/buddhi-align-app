@@ -9,6 +9,7 @@ import {
   isAdminCookieValid,
   verifyAdminPassword,
 } from "@/app/auth/admin";
+import { hasOidcConfidence } from "@/app/auth/auth-confidence";
 import { writeAdminAudit } from "@/app/admin/_audit";
 
 function sanitizeCallbackUrl(callbackUrl?: string): string {
@@ -27,6 +28,9 @@ export default async function AdminAccessPage({
   if (!session) {
     redirect("/sign-in?callbackUrl=%2Fadmin-access");
   }
+  if (!hasOidcConfidence(session)) {
+    redirect("/sign-in?callbackUrl=%2Fadmin-access&error=OIDCRequired");
+  }
 
   const callbackUrl = sanitizeCallbackUrl(searchParams?.callbackUrl);
   const existingCookie = cookies().get(ADMIN_COOKIE_NAME)?.value;
@@ -43,6 +47,9 @@ export default async function AdminAccessPage({
     const session = await auth();
     if (!session) {
       redirect("/sign-in?callbackUrl=%2Fadmin-access");
+    }
+    if (!hasOidcConfidence(session)) {
+      redirect("/sign-in?callbackUrl=%2Fadmin-access&error=OIDCRequired");
     }
 
     const callback = sanitizeCallbackUrl(String(formData.get("callbackUrl") ?? "/admin"));

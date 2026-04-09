@@ -1,3 +1,16 @@
 {
-  "extends": ["next/core-web-vitals"]
+  "extends": ["next/core-web-vitals"],
+  "overrides": [
+    {
+      "files": ["app/**/*.{ts,tsx}"],
+      "rules": {
+        "complexity": ["error", 14],
+        "max-depth": ["error", 4],
+        "max-lines-per-function": ["error", { "max": 180, "skipBlankLines": true, "skipComments": true }],
+        "no-implicit-coercion": "error",
+        "no-console": ["error", { "allow": ["info", "warn", "error"] }],
+        "no-else-return": "error"
+      }
+    }
+  ]
 }

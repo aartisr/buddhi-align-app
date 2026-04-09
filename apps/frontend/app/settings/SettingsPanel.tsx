@@ -1,10 +1,14 @@
 "use client";
 
 import PreferencesMenu from "../components/PreferencesMenu";
-import DataPortability from "../components/DataPortability";
 import { useI18n } from "../i18n/provider";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
+
+const DataPortability = dynamic(() => import("../components/DataPortability"), {
+  loading: () => <p className="app-copy-soft text-sm mt-6">Loading data tools...</p>,
+});
 
 export default function SettingsPanel() {
   const { t } = useI18n();

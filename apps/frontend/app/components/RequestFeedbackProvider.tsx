@@ -132,10 +132,7 @@ function getModuleName(pathname: string): string | null {
   return moduleName && moduleName in MODULE_REQUEST_COPY ? moduleName : null;
 }
 
-function describeRequest({ method, pathname }: RequestDescriptor): RequestMeta {
-  const moduleName = getModuleName(pathname);
-  const moduleCopy = moduleName ? MODULE_REQUEST_COPY[moduleName] : null;
-
+function describeSpecialRequest(pathname: string, method: string): RequestMeta | null {
   if (pathname === "/api/preferences" && method === "PUT") {
     return {
       announce: true,
@@ -163,51 +160,75 @@ function describeRequest({ method, pathname }: RequestDescriptor): RequestMeta {
     };
   }
 
-  if (/^\/api\/[a-z-]+$/.test(pathname)) {
-    if (method === "POST" && moduleCopy) {
-      return {
-        announce: true,
-        startTitle: moduleCopy.createStart,
-        successTitle: moduleCopy.createSuccess,
-        errorTitle: `Could not save your ${moduleCopy.noun.toLowerCase()}`,
-      };
-    }
+  return null;
+}
 
+function describeCollectionRequest(method: string, moduleCopy: ModuleCopy | null): RequestMeta {
+  if (method !== "POST" || !moduleCopy) {
     return { announce: false };
   }
 
-  if (/^\/api\/[a-z-]+\/.+/.test(pathname)) {
-    if (method === "PUT" && moduleCopy) {
-      return {
-        announce: true,
-        startTitle: moduleCopy.updateStart,
-        successTitle: moduleCopy.updateSuccess,
-        errorTitle: `Could not update your ${moduleCopy.noun.toLowerCase()}`,
-      };
-    }
+  return {
+    announce: true,
+    startTitle: moduleCopy.createStart,
+    successTitle: moduleCopy.createSuccess,
+    errorTitle: `Could not save your ${moduleCopy.noun.toLowerCase()}`,
+  };
+}
 
-    if (method === "DELETE" && moduleCopy) {
-      return {
-        announce: true,
-        startTitle: moduleCopy.deleteStart,
-        successTitle: moduleCopy.deleteSuccess,
-        errorTitle: `Could not remove your ${moduleCopy.noun.toLowerCase()}`,
-      };
-    }
-
+function describeResourceRequest(method: string, moduleCopy: ModuleCopy | null): RequestMeta {
+  if (!moduleCopy) {
     return { announce: false };
   }
 
-  if (method !== "GET" && method !== "HEAD") {
+  if (method === "PUT") {
     return {
       announce: true,
-      startTitle: "Sending request",
-      successTitle: "Request completed",
-      errorTitle: "Request failed",
+      startTitle: moduleCopy.updateStart,
+      successTitle: moduleCopy.updateSuccess,
+      errorTitle: `Could not update your ${moduleCopy.noun.toLowerCase()}`,
+    };
+  }
+
+  if (method === "DELETE") {
+    return {
+      announce: true,
+      startTitle: moduleCopy.deleteStart,
+      successTitle: moduleCopy.deleteSuccess,
+      errorTitle: `Could not remove your ${moduleCopy.noun.toLowerCase()}`,
     };
   }
 
   return { announce: false };
+}
+
+function describeRequest({ method, pathname }: RequestDescriptor): RequestMeta {
+  const moduleName = getModuleName(pathname);
+  const moduleCopy = moduleName ? MODULE_REQUEST_COPY[moduleName] : null;
+  const special = describeSpecialRequest(pathname, method);
+
+  if (special) {
+    return special;
+  }
+
+  if (/^\/api\/[a-z-]+$/.test(pathname)) {
+    return describeCollectionRequest(method, moduleCopy);
+  }
+
+  if (/^\/api\/[a-z-]+\/.+/.test(pathname)) {
+    return describeResourceRequest(method, moduleCopy);
+  }
+
+  if (method === "GET" || method === "HEAD") {
+    return { announce: false };
+  }
+
+  return {
+    announce: true,
+    startTitle: "Sending request",
+    successTitle: "Request completed",
+    errorTitle: "Request failed",
+  };
 }
 
 async function getErrorDetail(response: Response): Promise<string | undefined> {
@@ -228,6 +249,144 @@ function PrayerSpinner({ label }: { label: string }) {
       <div className="app-request-spinner__center">ॐ</div>
     </div>
   );
+}
+
+function ToastStack({
+  toasts,
+  dismissToast,
+}: {
+  toasts: ToastItem[];
+  dismissToast: (id: string) => void;
+}) {
+  return (
+    <div className="app-request-toast-stack" aria-live="polite" aria-atomic="true">
+      {toasts.map((toast) => (
+        toast.tone === "error" ? (
+          <div key={toast.id} className={`app-request-toast app-request-toast--${toast.tone}`} role="alert">
+            <div className="app-request-toast__row">
+              <span className="app-request-toast__badge" aria-hidden="true">!</span>
+              <div className="app-request-toast__copy">
+                <strong>{toast.title}</strong>
+                {toast.detail ? <span>{toast.detail}</span> : null}
+              </div>
+              <button
+                type="button"
+                className="app-request-toast__dismiss"
+                aria-label="Dismiss notification"
+                onClick={() => dismissToast(toast.id)}
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div key={toast.id} className={`app-request-toast app-request-toast--${toast.tone}`} role="status">
+            <div className="app-request-toast__row">
+              <span className="app-request-toast__badge" aria-hidden="true">
+                {toast.tone === "info" ? "⋯" : "✓"}
+              </span>
+              <div className="app-request-toast__copy">
+                <strong>{toast.title}</strong>
+                {toast.detail ? <span>{toast.detail}</span> : null}
+              </div>
+              <button
+                type="button"
+                className="app-request-toast__dismiss"
+                aria-label="Dismiss notification"
+                onClick={() => dismissToast(toast.id)}
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )
+      ))}
+    </div>
+  );
+}
+
+function queueStartToast(
+  toastId: string | null,
+  requestMeta: RequestMeta,
+  descriptor: RequestDescriptor,
+  queueToast: (toast: ToastItem) => void,
+) {
+  if (!toastId || !requestMeta.startTitle) {
+    return;
+  }
+
+  queueToast({
+    id: toastId,
+    tone: "info",
+    title: requestMeta.startTitle,
+    detail: descriptor.method === "GET" ? "Talking to the server..." : "One moment while we sync your changes.",
+  });
+}
+
+function queueFailureToast(
+  toastId: string | null,
+  requestMeta: RequestMeta,
+  detail: string | undefined,
+  queueToast: (toast: ToastItem) => void,
+) {
+  if (!toastId || !requestMeta.errorTitle) {
+    return;
+  }
+
+  queueToast({
+    id: toastId,
+    tone: "error",
+    title: requestMeta.errorTitle,
+    detail,
+  });
+}
+
+function queueSuccessToast(
+  toastId: string | null,
+  requestMeta: RequestMeta,
+  queueToast: (toast: ToastItem) => void,
+) {
+  if (!toastId || !requestMeta.successTitle) {
+    return;
+  }
+
+  queueToast({
+    id: toastId,
+    tone: "success",
+    title: requestMeta.successTitle,
+  });
+}
+
+async function executeTrackedRequest({
+  originalFetch,
+  input,
+  init,
+  toastId,
+  requestMeta,
+  queueToast,
+}: {
+  originalFetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+  input: RequestInfo | URL;
+  init?: RequestInit;
+  toastId: string | null;
+  requestMeta: RequestMeta;
+  queueToast: (toast: ToastItem) => void;
+}): Promise<Response> {
+  try {
+    const response = await originalFetch(input, init);
+    if (response.ok) {
+      queueSuccessToast(toastId, requestMeta, queueToast);
+      return response;
+    }
+
+    const detail = await getErrorDetail(response);
+    queueFailureToast(toastId, requestMeta, detail ?? `Server responded with ${response.status}.`, queueToast);
+    return response;
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : "Please try again.";
+    queueFailureToast(toastId, requestMeta, detail, queueToast);
+    throw error;
+  }
 }
 
 export default function RequestFeedbackProvider({ children }: { children: React.ReactNode }) {
@@ -309,53 +468,17 @@ export default function RequestFeedbackProvider({ children }: { children: React.
         setPendingCount((count) => count + 1);
       }
 
-      if (toastId && requestMeta.startTitle) {
-        queueToast({
-          id: toastId,
-          tone: "info",
-          title: requestMeta.startTitle,
-          detail: descriptor.method === "GET" ? "Talking to the server..." : "One moment while we sync your changes.",
-        });
-      }
+      queueStartToast(toastId, requestMeta, descriptor, queueToast);
 
       try {
-        const response = await originalFetch(input, init);
-
-        if (!response.ok) {
-          const detail = await getErrorDetail(response);
-
-          if (toastId && requestMeta.errorTitle) {
-            queueToast({
-              id: toastId,
-              tone: "error",
-              title: requestMeta.errorTitle,
-              detail: detail ?? `Server responded with ${response.status}.`,
-            });
-          }
-
-          return response;
-        }
-
-        if (toastId && requestMeta.successTitle) {
-          queueToast({
-            id: toastId,
-            tone: "success",
-            title: requestMeta.successTitle,
-          });
-        }
-
-        return response;
-      } catch (error) {
-        if (toastId && requestMeta.errorTitle) {
-          queueToast({
-            id: toastId,
-            tone: "error",
-            title: requestMeta.errorTitle,
-            detail: error instanceof Error ? error.message : "Please try again.",
-          });
-        }
-
-        throw error;
+        return await executeTrackedRequest({
+          originalFetch,
+          input,
+          init,
+          toastId,
+          requestMeta,
+          queueToast,
+        });
       } finally {
         if (shouldAffectOverlay) {
           setPendingCount((count) => Math.max(0, count - 1));
@@ -375,59 +498,7 @@ export default function RequestFeedbackProvider({ children }: { children: React.
   return (
     <>
       {children}
-      <div className="app-request-toast-stack" aria-live="polite" aria-atomic="true">
-        {toasts.map((toast) => (
-          toast.tone === "error" ? (
-            <div
-              key={toast.id}
-              className={`app-request-toast app-request-toast--${toast.tone}`}
-              role="alert"
-            >
-              <div className="app-request-toast__row">
-                <span className="app-request-toast__badge" aria-hidden="true">
-                  !
-                </span>
-                <div className="app-request-toast__copy">
-                  <strong>{toast.title}</strong>
-                  {toast.detail ? <span>{toast.detail}</span> : null}
-                </div>
-                <button
-                  type="button"
-                  className="app-request-toast__dismiss"
-                  aria-label="Dismiss notification"
-                  onClick={() => dismissToast(toast.id)}
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div
-              key={toast.id}
-              className={`app-request-toast app-request-toast--${toast.tone}`}
-              role="status"
-            >
-              <div className="app-request-toast__row">
-                <span className="app-request-toast__badge" aria-hidden="true">
-                  {toast.tone === "info" ? "⋯" : "✓"}
-                </span>
-                <div className="app-request-toast__copy">
-                  <strong>{toast.title}</strong>
-                  {toast.detail ? <span>{toast.detail}</span> : null}
-                </div>
-                <button
-                  type="button"
-                  className="app-request-toast__dismiss"
-                  aria-label="Dismiss notification"
-                  onClick={() => dismissToast(toast.id)}
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-          )
-        ))}
-      </div>
+      <ToastStack toasts={toasts} dismissToast={dismissToast} />
       <div
         className={`app-request-overlay ${overlayVisible ? "app-request-overlay--visible" : ""}`}
       >

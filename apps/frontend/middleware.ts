@@ -1,5 +1,7 @@
 import { auth } from "@/auth";
 import { ANONYMOUS_COOKIE_NAME, isAnonymousCookie } from "@/app/auth/anonymous";
+import { hasOidcConfidence, isOidcSensitivePath } from "@/app/auth/auth-confidence";
+import { hasRecentStepUp, isStepUpSensitivePath } from "@/app/auth/step-up";
 import { NextResponse } from "next/server";
 
 /**
@@ -17,6 +19,20 @@ export default auth((req) => {
   if (!req.auth && !isPublic && !isAnonymous) {
     const signInUrl = new URL("/sign-in", req.nextUrl.origin);
     signInUrl.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(signInUrl);
+  }
+
+  if (req.auth && isOidcSensitivePath(pathname) && !hasOidcConfidence(req.auth)) {
+    const signInUrl = new URL("/sign-in", req.nextUrl.origin);
+    signInUrl.searchParams.set("callbackUrl", pathname);
+    signInUrl.searchParams.set("error", "OIDCRequired");
+    return NextResponse.redirect(signInUrl);
+  }
+
+  if (req.auth && isStepUpSensitivePath(pathname) && !hasRecentStepUp(req.auth as { user?: { authAt?: string | number } })) {
+    const signInUrl = new URL("/sign-in", req.nextUrl.origin);
+    signInUrl.searchParams.set("callbackUrl", pathname);
+    signInUrl.searchParams.set("error", "StepUpRequired");
     return NextResponse.redirect(signInUrl);
   }
 

@@ -47,7 +47,14 @@ vi.mock("@/app/auth/anonymous", () => ({
 }));
 
 vi.mock("@/auth", () => ({
-  auth: vi.fn(async () => ({ user: { id: authState.currentUserId } })),
+  auth: vi.fn(async () => ({
+    user: {
+      id: authState.currentUserId,
+      provider: "google",
+      authConfidence: "oidc",
+      authAt: Date.now(),
+    },
+  })),
 }));
 
 vi.mock("@buddhi-align/data-access", () => ({

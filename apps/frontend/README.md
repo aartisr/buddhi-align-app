@@ -129,3 +129,6 @@ Supported module names: `karma`, `bhakti`, `jnana`, `dhyana`, `vasana`, `dharma`
 
 - Root project guide: `../../README.md`
 - Improvement log: `../../IMPROVEMENTS.md`
+- OIDC hardening checklist: `docs/oidc-hardening-checklist.md`
+- Component/page engineering standards: `docs/component-engineering-standards.md`
+- Refactor hotspot backlog: `docs/refactor-hotspot-backlog.md`

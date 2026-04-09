@@ -9,6 +9,9 @@ import {
   getConfiguredOAuthProviders,
   type OAuthProviderId,
 } from "./app/auth/provider-catalog";
+import { getAuthConfidenceForProvider } from "./app/auth/auth-confidence";
+
+const OIDC_BASE_SCOPE = "openid profile email";
 
 function getValidatedAuthUrl(url?: string): string | undefined {
   if (!url) return undefined;
@@ -78,6 +81,13 @@ const providerFactory: Record<OAuthProviderId, () => Provider> = {
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      checks: ["pkce", "state", "nonce"],
+      authorization: {
+        params: {
+          scope: OIDC_BASE_SCOPE,
+          prompt: "select_account",
+        },
+      },
     }),
   "microsoft-entra-id": () =>
     MicrosoftEntraId({
@@ -86,21 +96,38 @@ const providerFactory: Record<OAuthProviderId, () => Provider> = {
       issuer: process.env.AUTH_MICROSOFT_ENTRA_TENANT_ID
         ? `https://login.microsoftonline.com/${process.env.AUTH_MICROSOFT_ENTRA_TENANT_ID}/v2.0`
         : "https://login.microsoftonline.com/common/v2.0",
+      checks: ["pkce", "state", "nonce"],
+      authorization: {
+        params: {
+          scope: `${OIDC_BASE_SCOPE} offline_access`,
+        },
+      },
     }),
   github: () =>
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
+      authorization: {
+        params: {
+          scope: "read:user user:email",
+        },
+      },
     }),
   apple: () =>
     Apple({
       clientId: process.env.AUTH_APPLE_ID,
       clientSecret: process.env.AUTH_APPLE_SECRET,
+      checks: ["state", "nonce"],
     }),
   facebook: () =>
     Facebook({
       clientId: process.env.AUTH_FACEBOOK_ID,
       clientSecret: process.env.AUTH_FACEBOOK_SECRET,
+      authorization: {
+        params: {
+          scope: "email public_profile",
+        },
+      },
     }),
 };
 
@@ -130,10 +157,42 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user && token.provider) {
         (session.user as typeof session.user & { provider?: string }).provider = token.provider as string;
       }
+      if (session.user && token.identityKey) {
+        (
+          session.user as typeof session.user & {
+            identityKey?: string;
+          }
+        ).identityKey = token.identityKey as string;
+      }
+      if (session.user && token.authConfidence) {
+        (
+          session.user as typeof session.user & {
+            authConfidence?: string;
+          }
+        ).authConfidence = token.authConfidence as string;
+      }
+      if (session.user && token.authAt) {
+        (
+          session.user as typeof session.user & {
+            authAt?: number;
+          }
+        ).authAt = token.authAt as number;
+      }
       return session;
     },
     async jwt({ token, account }) {
-      if (account?.provider) token.provider = account.provider;
+      if (account?.provider) {
+        token.provider = account.provider;
+        token.authConfidence = getAuthConfidenceForProvider(account.provider);
+        token.authAt = Date.now();
+      }
+      if (!token.authAt && typeof token.iat === "number") {
+        token.authAt = token.iat * 1000;
+      }
+      if (account?.provider && account.providerAccountId) {
+        // Keep legacy token.sub behavior unchanged and add a provider-scoped key for safer joins/audits.
+        token.identityKey = `${account.provider}:${account.providerAccountId}`;
+      }
       return token;
     },
   },

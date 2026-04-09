@@ -1,4 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+const { recordObservabilityEventMock } = vi.hoisted(() => ({
+  recordObservabilityEventMock: vi.fn(),
+}));
+
+vi.mock("@/app/lib/server-observability", () => ({
+  inferObservabilitySeverity: () => "info",
+  recordObservabilityEvent: recordObservabilityEventMock,
+}));
 
 import { POST } from "./route";
 

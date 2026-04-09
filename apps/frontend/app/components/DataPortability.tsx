@@ -6,6 +6,14 @@ import { logEvent } from "../lib/logEvent";
 
 type ImportStatus = "idle" | "loading" | "success" | "error";
 
+const MAX_IMPORT_FILE_BYTES = 2 * 1024 * 1024;
+const IMPORT_TIMEOUT_MS = 15_000;
+
+function isReauthError(error?: string): boolean {
+  if (!error) return false;
+  return /OIDC|re-authentication/i.test(error);
+}
+
 export default function DataPortability() {
   const { t } = useI18n();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -32,21 +40,37 @@ export default function DataPortability() {
     setImportStatus("loading");
     setImportMessage("");
 
+    if (file.size > MAX_IMPORT_FILE_BYTES) {
+      setImportStatus("error");
+      setImportMessage(t("settings.import.errorTooLarge"));
+      logEvent("data_import_failed", { reason: "file_too_large", bytes: file.size });
+      return;
+    }
+
     try {
       const text = await file.text();
       const archive = JSON.parse(text);
+
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), IMPORT_TIMEOUT_MS);
 
       const res = await fetch("/api/data/export", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(archive),
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
 
       const result = await res.json();
 
       if (!res.ok) {
         setImportStatus("error");
-        setImportMessage(result.error ?? t("settings.import.errorGeneric"));
+        if (res.status === 401 || res.status === 403 || isReauthError(result.error)) {
+          setImportMessage(t("settings.import.reauthRequired"));
+        } else {
+          setImportMessage(result.error ?? t("settings.import.errorGeneric"));
+        }
         logEvent("data_import_failed", { reason: result.error ?? "http_error" });
         return;
       }
@@ -58,15 +82,20 @@ export default function DataPortability() {
       setImportStatus("success");
       setImportMessage(t("settings.import.success").replace("{{count}}", String(totalImported)));
       logEvent("data_import_success", { totalImported });
-    } catch {
+    } catch (error) {
       setImportStatus("error");
-      setImportMessage(t("settings.import.errorGeneric"));
-      logEvent("data_import_failed", { reason: "exception" });
+      if (error instanceof DOMException && error.name === "AbortError") {
+        setImportMessage(t("settings.import.errorTimeout"));
+        logEvent("data_import_failed", { reason: "timeout" });
+      } else {
+        setImportMessage(t("settings.import.errorGeneric"));
+        logEvent("data_import_failed", { reason: "exception" });
+      }
     }
   };
 
   return (
-    <div className="app-data-portability mt-6 pt-6 border-t border-[var(--border-soft)]">
+    <div className="app-data-portability mt-6 pt-6 border-t border-(--border-soft)">
       <h4 className="app-panel-title font-bold text-base mb-1">{t("settings.data.title")}</h4>
       <p className="app-copy-soft text-sm mb-4">{t("settings.data.subtitle")}</p>
 
@@ -75,6 +104,7 @@ export default function DataPortability() {
         <button
           className="app-data-export-btn"
           onClick={handleExport}
+          disabled={importStatus === "loading"}
           aria-label={t("settings.export.label")}
         >
           ⬇ {t("settings.export.label")}

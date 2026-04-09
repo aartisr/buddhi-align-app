@@ -17,6 +17,103 @@ type PreferencesMenuProps = {
   showTrigger?: boolean;
 };
 
+type PreferencesPanelProps = {
+  locale: Locale;
+  locales: Array<{ code: string; label: string }>;
+  musicControlVisible: boolean;
+  isSaving: boolean;
+  showTrigger: boolean;
+  t: ReturnType<typeof useI18n>["t"];
+  handleLocaleChange: (nextLocale: Locale) => void;
+  handleMusicVisibility: (nextValue: boolean) => void;
+  closeOnSettingsClick: () => void;
+};
+
+function PreferencesPanel({
+  locale,
+  locales,
+  musicControlVisible,
+  isSaving,
+  showTrigger,
+  t,
+  handleLocaleChange,
+  handleMusicVisibility,
+  closeOnSettingsClick,
+}: PreferencesPanelProps) {
+  return (
+    <div className="app-preferences-panel" role="dialog" aria-label={t("app.settings.link")}>
+      <div className="app-preferences-row app-preferences-row--compact">
+        <Link href="/settings" className="app-preferences-settings-link" onClick={closeOnSettingsClick}>
+          <span aria-hidden>⚙️</span>
+          <span>{t("app.settings.link")}</span>
+        </Link>
+      </div>
+      <div className="app-preferences-row">
+        <label htmlFor="prefs-language" className="app-preferences-label">{t("preferences.defaultLanguage")}</label>
+        <div className="app-preferences-field-wrap">
+          <select
+            id="prefs-language"
+            className="app-preferences-select"
+            value={locale}
+            disabled={isSaving}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => handleLocaleChange(event.target.value as Locale)}
+          >
+            {locales.map((option: { code: string; label: string }) => (
+              <option key={option.code} value={option.code}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          {isSaving ? <span className="app-inline-spinner app-preferences-spinner" aria-hidden="true" /> : null}
+        </div>
+      </div>
+
+      <div className="app-preferences-row">
+        <p className="app-preferences-label">{t("preferences.musicControl")}</p>
+        <div className="app-preferences-toggle-group" aria-label={t("preferences.musicControlVisibility")}>
+          <button
+            type="button"
+            className={`app-preferences-toggle ${musicControlVisible ? "is-active" : ""}`}
+            disabled={isSaving}
+            onClick={() => handleMusicVisibility(true)}
+          >
+            {isSaving && musicControlVisible ? (
+              <>
+                <span className="app-inline-spinner" aria-hidden="true" />
+                <span>{t("preferences.show")}</span>
+              </>
+            ) : (
+              t("preferences.show")
+            )}
+          </button>
+          <button
+            type="button"
+            className={`app-preferences-toggle ${!musicControlVisible ? "is-active" : ""}`}
+            disabled={isSaving}
+            onClick={() => handleMusicVisibility(false)}
+          >
+            {isSaving && !musicControlVisible ? (
+              <>
+                <span className="app-inline-spinner" aria-hidden="true" />
+                <span>{t("preferences.hide")}</span>
+              </>
+            ) : (
+              t("preferences.hide")
+            )}
+          </button>
+        </div>
+      </div>
+
+      {isSaving ? (
+        <div className="app-preferences-status" role="status" aria-live="polite">
+          <span className="app-inline-spinner" aria-hidden="true" />
+          <span>{t("preferences.saving")}</span>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuProps) {
   const { locale, locales, setLocale, t } = useI18n();
   const { status } = useSession();
@@ -139,82 +236,19 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
       )}
 
       {open && (
-        <div className="app-preferences-panel" role="dialog" aria-label={t("app.settings.link")}>
-          <div className="app-preferences-row app-preferences-row--compact">
-            <Link
-              href="/settings"
-              className="app-preferences-settings-link"
-              onClick={() => {
-                if (showTrigger) setOpen(false);
-              }}
-            >
-              <span aria-hidden>⚙️</span>
-              <span>{t("app.settings.link")}</span>
-            </Link>
-          </div>
-          <div className="app-preferences-row">
-            <label htmlFor="prefs-language" className="app-preferences-label">{t("preferences.defaultLanguage")}</label>
-            <div className="app-preferences-field-wrap">
-              <select
-                id="prefs-language"
-                className="app-preferences-select"
-                value={locale}
-                disabled={isSaving}
-                onChange={(event: ChangeEvent<HTMLSelectElement>) => handleLocaleChange(event.target.value as Locale)}
-              >
-                {locales.map((option: { code: string; label: string }) => (
-                  <option key={option.code} value={option.code}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              {isSaving ? <span className="app-inline-spinner app-preferences-spinner" aria-hidden="true" /> : null}
-            </div>
-          </div>
-
-          <div className="app-preferences-row">
-            <p className="app-preferences-label">{t("preferences.musicControl")}</p>
-            <div className="app-preferences-toggle-group" aria-label={t("preferences.musicControlVisibility")}>
-              <button
-                type="button"
-                className={`app-preferences-toggle ${musicControlVisible ? "is-active" : ""}`}
-                disabled={isSaving}
-                onClick={() => handleMusicVisibility(true)}
-              >
-                {isSaving && musicControlVisible ? (
-                  <>
-                    <span className="app-inline-spinner" aria-hidden="true" />
-                    <span>{t("preferences.show")}</span>
-                  </>
-                ) : (
-                  t("preferences.show")
-                )}
-              </button>
-              <button
-                type="button"
-                className={`app-preferences-toggle ${!musicControlVisible ? "is-active" : ""}`}
-                disabled={isSaving}
-                onClick={() => handleMusicVisibility(false)}
-              >
-                {isSaving && !musicControlVisible ? (
-                  <>
-                    <span className="app-inline-spinner" aria-hidden="true" />
-                    <span>{t("preferences.hide")}</span>
-                  </>
-                ) : (
-                  t("preferences.hide")
-                )}
-              </button>
-            </div>
-          </div>
-
-          {isSaving ? (
-            <div className="app-preferences-status" role="status" aria-live="polite">
-              <span className="app-inline-spinner" aria-hidden="true" />
-              <span>{t("preferences.saving")}</span>
-            </div>
-          ) : null}
-        </div>
+        <PreferencesPanel
+          locale={locale}
+          locales={locales}
+          musicControlVisible={musicControlVisible}
+          isSaving={isSaving}
+          showTrigger={showTrigger}
+          t={t}
+          handleLocaleChange={handleLocaleChange}
+          handleMusicVisibility={handleMusicVisibility}
+          closeOnSettingsClick={() => {
+            if (showTrigger) setOpen(false);
+          }}
+        />
       )}
     </div>
   );

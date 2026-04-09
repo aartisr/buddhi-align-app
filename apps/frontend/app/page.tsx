@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { BuddhiDashboard } from "@buddhi-align/shared-ui";
 import Link from "next/link";
 import ModuleLayout from "./components/ModuleLayout";
@@ -11,33 +11,40 @@ import { useI18n, useLocalizedModules } from "./i18n/provider";
 export default function Home() {
   const { t } = useI18n();
   const modules = useLocalizedModules();
-  const moduleByKey = new Map(MODULE_CATALOG.map((item) => [item.key, item]));
-  const flowSteps = [
-    {
-      key: "plan",
-      icon: "📜",
-      title: t("dashboard.flow.plan.title"),
-      description: t("dashboard.flow.plan.description"),
-      href: moduleByKey.get("dharma")?.href ?? "/dharma-planner",
-      cta: t("dashboard.flow.plan.cta"),
-    },
-    {
-      key: "practice",
-      icon: "🙏",
-      title: t("dashboard.flow.practice.title"),
-      description: t("dashboard.flow.practice.description"),
-      href: moduleByKey.get("karma")?.href ?? "/karma-yoga",
-      cta: t("dashboard.flow.practice.cta"),
-    },
-    {
-      key: "reflect",
-      icon: "🧘‍♂️",
-      title: t("dashboard.flow.reflect.title"),
-      description: t("dashboard.flow.reflect.description"),
-      href: moduleByKey.get("jnana")?.href ?? "/jnana-reflection",
-      cta: t("dashboard.flow.reflect.cta"),
-    },
-  ] as const;
+  const moduleByKey = useMemo(
+    () => new Map(MODULE_CATALOG.map((item) => [item.key, item])),
+    [],
+  );
+  const flowSteps = useMemo(
+    () =>
+      [
+        {
+          key: "plan",
+          icon: "📜",
+          title: t("dashboard.flow.plan.title"),
+          description: t("dashboard.flow.plan.description"),
+          href: moduleByKey.get("dharma")?.href ?? "/dharma-planner",
+          cta: t("dashboard.flow.plan.cta"),
+        },
+        {
+          key: "practice",
+          icon: "🙏",
+          title: t("dashboard.flow.practice.title"),
+          description: t("dashboard.flow.practice.description"),
+          href: moduleByKey.get("karma")?.href ?? "/karma-yoga",
+          cta: t("dashboard.flow.practice.cta"),
+        },
+        {
+          key: "reflect",
+          icon: "🧘‍♂️",
+          title: t("dashboard.flow.reflect.title"),
+          description: t("dashboard.flow.reflect.description"),
+          href: moduleByKey.get("jnana")?.href ?? "/jnana-reflection",
+          cta: t("dashboard.flow.reflect.cta"),
+        },
+      ] as const,
+    [moduleByKey, t],
+  );
 
   return (
     <ModuleLayout titleKey="app.dashboard">

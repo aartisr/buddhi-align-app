@@ -4,10 +4,14 @@ const {
   isAnonymousCookieMock,
   createDataProviderMock,
   listAnonymousEntriesMock,
+  authMock,
+  recordObservabilityEventMock,
 } = vi.hoisted(() => ({
   isAnonymousCookieMock: vi.fn(),
   createDataProviderMock: vi.fn(),
   listAnonymousEntriesMock: vi.fn(),
+  authMock: vi.fn(),
+  recordObservabilityEventMock: vi.fn(),
 }));
 
 vi.mock("@/app/auth/anonymous", () => ({
@@ -20,7 +24,11 @@ vi.mock("@buddhi-align/data-access", () => ({
 }));
 
 vi.mock("@/auth", () => ({
-  auth: vi.fn(async () => ({ user: { id: "user-1" } })),
+  auth: authMock,
+}));
+
+vi.mock("@/app/lib/server-observability", () => ({
+  recordObservabilityEvent: recordObservabilityEventMock,
 }));
 
 vi.mock("../../_anonymous-module-store", () => ({
@@ -44,6 +52,14 @@ function makeRequest(body?: unknown) {
 describe("/api/data/export route", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    authMock.mockResolvedValue({
+      user: {
+        id: "user-1",
+        provider: "google",
+        authConfidence: "oidc",
+        authAt: Date.now(),
+      },
+    });
   });
 
   it("GET returns archive payload with all modules", async () => {
@@ -92,6 +108,76 @@ describe("/api/data/export route", () => {
     expect(payload.error).toContain("anonymous mode");
   });
 
+  it("GET blocks export for non-OIDC sessions", async () => {
+    isAnonymousCookieMock.mockReturnValue(false);
+    authMock.mockResolvedValue({
+      user: {
+        id: "user-1",
+        provider: "github",
+        authConfidence: "oauth",
+      },
+    });
+
+    const res = await GET(makeRequest());
+    const payload = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(payload.error).toContain("OIDC authentication required");
+  });
+
+  it("POST blocks import for non-OIDC sessions", async () => {
+    isAnonymousCookieMock.mockReturnValue(false);
+    authMock.mockResolvedValue({
+      user: {
+        id: "user-1",
+        provider: "github",
+        authConfidence: "oauth",
+      },
+    });
+
+    const res = await POST(makeRequest({ modules: {} }));
+    const payload = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(payload.error).toContain("OIDC authentication required");
+  });
+
+  it("GET blocks export when re-authentication is stale", async () => {
+    isAnonymousCookieMock.mockReturnValue(false);
+    authMock.mockResolvedValue({
+      user: {
+        id: "user-1",
+        provider: "google",
+        authConfidence: "oidc",
+        authAt: Date.now() - 1000 * 60 * 60,
+      },
+    });
+
+    const res = await GET(makeRequest());
+    const payload = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(payload.error).toContain("re-authentication required");
+  });
+
+  it("POST blocks import when re-authentication is stale", async () => {
+    isAnonymousCookieMock.mockReturnValue(false);
+    authMock.mockResolvedValue({
+      user: {
+        id: "user-1",
+        provider: "google",
+        authConfidence: "oidc",
+        authAt: Date.now() - 1000 * 60 * 60,
+      },
+    });
+
+    const res = await POST(makeRequest({ modules: {} }));
+    const payload = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(payload.error).toContain("re-authentication required");
+  });
+
   it("POST rejects invalid JSON", async () => {
     isAnonymousCookieMock.mockReturnValue(false);
 
@@ -105,7 +191,7 @@ describe("/api/data/export route", () => {
   it("POST imports entries and strips id field", async () => {
     isAnonymousCookieMock.mockReturnValue(false);
 
-    const create = vi.fn(async (_module: string, entry: unknown) => ({ id: "new", ...entry }));
+    const create = vi.fn(async (_module: string, entry: Record<string, unknown>) => ({ id: "new", ...entry }));
     createDataProviderMock.mockReturnValue({
       list: vi.fn(),
       create,

@@ -5,10 +5,23 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { createDataProvider } from "@buddhi-align/data-access";
 import { ADMIN_COOKIE_NAME, isAdminCookieValid } from "@/app/auth/admin";
+import { hasOidcConfidence } from "@/app/auth/auth-confidence";
 import ModuleLayout from "../components/ModuleLayout";
+import AdminDashboardView from "./AdminDashboardView";
 import { ADMIN_AUDIT_MODULE, type AdminAuditEntry, writeAdminAudit } from "./_audit";
 import { APP_ERROR_LOG_MODULE, type AppErrorEntry } from "@/app/lib/server-error-log";
+import {
+  OBSERVABILITY_EVENT_MODULE,
+  type ObservabilityEventEntry,
+} from "@/app/lib/server-observability";
+import { buildObservabilitySummary } from "@/app/lib/observability-summary";
 import { ANALYTICS_MODULES } from "@/app/api/analytics/types";
+import {
+  deriveIncidentStats,
+  resolveIncidentFilter,
+  syncCriticalAlertIncidents,
+  type IncidentFilter,
+} from "./incident-operations";
 
 // Use the shared ANALYTICS_MODULES constant as the single source of truth.
 const PRACTICE_MODULES = ANALYTICS_MODULES;
@@ -18,27 +31,27 @@ const ADMIN_INCIDENT_MODULE = "__admin_incident";
 type BasicEntry = {
   id: string;
   createdAt?: string;
+  resolvedAt?: string;
   title?: string;
   severity?: "info" | "warning" | "critical";
   status?: string;
   name?: string;
   metric?: string;
+  note?: string;
+  alertKey?: string;
+  createdBy?: string;
   [key: string]: unknown;
 };
 
 export const dynamic = "force-dynamic";
 
-function formatTimestamp(iso?: string): string {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleString();
-}
-
 async function requireAdminSession() {
   const session = await auth();
   if (!session?.user?.id) {
     redirect("/sign-in?callbackUrl=%2Fadmin");
+  }
+  if (!hasOidcConfidence(session as { user?: unknown })) {
+    redirect("/sign-in?callbackUrl=%2Fadmin&error=OIDCRequired");
   }
 
   const adminCookie = cookies().get(ADMIN_COOKIE_NAME)?.value;
@@ -49,12 +62,10 @@ async function requireAdminSession() {
   return session.user.id;
 }
 
-export default async function AdminPage() {
-  const actorUserId = await requireAdminSession();
-
+async function loadAdminDashboardData(incidentFilter: IncidentFilter) {
   const provider = createDataProvider();
 
-  const [practiceCounts, audits, incidents, experiments, errorLog] = await Promise.all([
+  const [practiceCounts, audits, incidents, experiments, errorLog, observabilityEvents] = await Promise.all([
     Promise.all(
       PRACTICE_MODULES.map(async (module) => {
         const rows = await provider.list<BasicEntry>(module);
@@ -65,19 +76,80 @@ export default async function AdminPage() {
     provider.list<BasicEntry>(ADMIN_INCIDENT_MODULE),
     provider.list<BasicEntry>(ADMIN_EXPERIMENT_MODULE),
     provider.list<AppErrorEntry>(APP_ERROR_LOG_MODULE),
+    provider.list<ObservabilityEventEntry>(OBSERVABILITY_EVENT_MODULE),
   ]);
 
-  const severityPenalty = incidents.reduce((penalty, incident) => {
+  const observabilitySummary = buildObservabilitySummary(observabilityEvents);
+  const criticalAlerts = observabilitySummary.alerts.filter((alert) => alert.level === "critical");
+  const autoCreatedIncidents = await syncCriticalAlertIncidents<BasicEntry>({
+    incidents,
+    criticalAlerts,
+    createIncident: async (incident) => {
+      await provider.create<BasicEntry>(ADMIN_INCIDENT_MODULE, incident);
+    },
+    writeAutoAudit: async (alertKey, at) => {
+      await writeAdminAudit({
+        actor: "system:observability",
+        action: "incident.auto_create",
+        detail: `Auto-created incident for alert ${alertKey}`,
+        severity: "critical",
+        at,
+      });
+    },
+  });
+
+  const incidentsWithAuto = autoCreatedIncidents.length > 0
+    ? [...incidents, ...autoCreatedIncidents]
+    : incidents;
+  const incidentStats = deriveIncidentStats(incidentsWithAuto, incidentFilter);
+
+  const severityPenalty = incidentsWithAuto.reduce((penalty, incident) => {
     if (incident.severity === "critical") return penalty + 12;
     if (incident.severity === "warning") return penalty + 4;
     return penalty + 1;
   }, 0);
 
-  const reliabilityScore = Math.max(0, 100 - severityPenalty);
-  const errorBudgetRemaining = Math.max(0, 100 - severityPenalty);
-  const activeExperiments = experiments.filter((exp) => exp.status === "active").length;
+  return {
+    practiceCounts,
+    audits,
+    experiments,
+    errorLog,
+    observabilityEvents,
+    observabilitySummary,
+    autoCreatedIncidents,
+    incidentsWithAuto,
+    incidentStats,
+    reliabilityScore: Math.max(0, 100 - severityPenalty),
+    errorBudgetRemaining: Math.max(0, 100 - severityPenalty),
+    activeExperiments: experiments.filter((exp) => exp.status === "active").length,
+    totalCount: practiceCounts.reduce((sum, item) => sum + item.count, 0),
+  };
+}
 
-  const totalCount = practiceCounts.reduce((sum, item) => sum + item.count, 0);
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams?: {
+    incidents?: string;
+  };
+}) {
+  const actorUserId = await requireAdminSession();
+  const incidentFilter = resolveIncidentFilter(searchParams?.incidents);
+  const {
+    practiceCounts,
+    audits,
+    experiments,
+    errorLog,
+    observabilityEvents,
+    observabilitySummary,
+    autoCreatedIncidents,
+    incidentsWithAuto,
+    incidentStats,
+    reliabilityScore,
+    errorBudgetRemaining,
+    activeExperiments,
+    totalCount,
+  } = await loadAdminDashboardData(incidentFilter);
 
   async function lockAdmin() {
     "use server";
@@ -167,155 +239,68 @@ export default async function AdminPage() {
     revalidatePath("/admin");
   }
 
+  async function resolveIncident(formData: FormData) {
+    "use server";
+    const actor = await requireAdminSession();
+
+    const incidentId = String(formData.get("incidentId") ?? "").trim();
+    if (!incidentId) {
+      return;
+    }
+
+    const actionProvider = createDataProvider();
+    const existingIncidents = await actionProvider.list<BasicEntry>(ADMIN_INCIDENT_MODULE);
+    const incident = existingIncidents.find((item) => item.id === incidentId);
+
+    if (!incident || incident.status === "resolved") {
+      return;
+    }
+
+    const resolvedAt = new Date().toISOString();
+    await actionProvider.update<BasicEntry>(
+      ADMIN_INCIDENT_MODULE,
+      incidentId,
+      {
+        status: "resolved",
+        resolvedAt,
+        resolvedBy: actor,
+      },
+    );
+
+    await writeAdminAudit({
+      actor,
+      action: "incident.resolve",
+      detail: `Resolved incident: ${incident.title ?? incidentId}`,
+      severity: "info",
+      at: resolvedAt,
+    });
+
+    revalidatePath("/admin");
+  }
+
   return (
     <ModuleLayout titleKey="admin.title">
-      <section className="app-surface-card max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h3 className="app-panel-title text-xl sm:text-2xl font-bold">Admin Control Center</h3>
-            <p className="app-copy-soft text-sm">
-              World-class operations: metrics, incident discipline, and experiment rigor.
-            </p>
-            <p className="app-copy-soft text-xs mt-1">Admin actor: {actorUserId}</p>
-          </div>
-          <form action={lockAdmin}>
-            <button type="submit" className="app-user-action px-3 py-2 rounded-lg text-sm">
-              Lock Admin
-            </button>
-          </form>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-          <article className="app-record-card">
-            <p className="text-xs app-copy-soft uppercase tracking-wide">Reliability Score</p>
-            <p className="text-2xl font-bold mt-1">{reliabilityScore}</p>
-          </article>
-          <article className="app-record-card">
-            <p className="text-xs app-copy-soft uppercase tracking-wide">Error Budget Left</p>
-            <p className="text-2xl font-bold mt-1">{errorBudgetRemaining}%</p>
-          </article>
-          <article className="app-record-card">
-            <p className="text-xs app-copy-soft uppercase tracking-wide">Active Experiments</p>
-            <p className="text-2xl font-bold mt-1">{activeExperiments}</p>
-          </article>
-          <article className="app-record-card">
-            <p className="text-xs app-copy-soft uppercase tracking-wide">Practice Entries</p>
-            <p className="text-2xl font-bold mt-1">{totalCount}</p>
-          </article>
-        </div>
-
-        {/* Server Error Log */}
-        <article className="app-record-card">
-          <h4 className="font-semibold mb-2">Server Error Log <span className="text-xs app-copy-soft font-normal ml-1">({errorLog.length} total)</span></h4>
-          {errorLog.length === 0 ? (
-            <p className="text-sm app-copy-soft">No server errors recorded. 🎉</p>
-          ) : (
-            <ul className="space-y-2 text-sm max-h-64 overflow-y-auto">
-              {errorLog.slice(-20).reverse().map((entry) => (
-                <li key={entry.id} className="border-b border-(--border-soft) pb-2 last:border-b-0">
-                  <p className="font-medium text-red-700 dark:text-red-300">{entry.errorName}: {entry.errorMessage}</p>
-                  <p className="app-copy-soft text-xs">{entry.method} {entry.route}</p>
-                  <p className="app-copy-soft text-xs">{formatTimestamp(entry.at)}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </article>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <article className="app-record-card">
-            <h4 className="font-semibold mb-2">Module Footprint</h4>
-            <ul className="space-y-1 text-sm app-copy-soft">
-              {practiceCounts.map((stat) => (
-                <li key={stat.module} className="flex items-center justify-between">
-                  <span>{stat.module}</span>
-                  <strong className="app-copy">{stat.count}</strong>
-                </li>
-              ))}
-            </ul>
-          </article>
-
-          <article className="app-record-card">
-            <h4 className="font-semibold mb-2">Recent Audit Trail</h4>
-            {audits.length === 0 ? (
-              <p className="text-sm app-copy-soft">No admin audit events yet.</p>
-            ) : (
-              <ul className="space-y-2 text-sm">
-                {audits.slice(-6).reverse().map((item) => (
-                  <li key={item.id ?? `${item.action}-${item.at}`} className="border-b border-(--border-soft) pb-2 last:border-b-0">
-                    <p className="font-medium">{item.action}</p>
-                    <p className="app-copy-soft text-xs">{item.detail}</p>
-                    <p className="app-copy-soft text-xs">{formatTimestamp(item.at)} · {item.severity}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </article>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <article className="app-record-card">
-            <h4 className="font-semibold mb-3">Log Incident</h4>
-            <form action={logIncident} className="space-y-2">
-              <input name="title" className="app-input w-full" placeholder="Incident title" required />
-              <select name="severity" className="app-input w-full" defaultValue="warning" aria-label="Incident severity">
-                <option value="info">Info</option>
-                <option value="warning">Warning</option>
-                <option value="critical">Critical</option>
-              </select>
-              <textarea name="note" className="app-input w-full" placeholder="Notes / impact" rows={3} />
-              <button type="submit" className="app-button-primary px-3 py-2 rounded-lg text-sm">Create Incident</button>
-            </form>
-          </article>
-
-          <article className="app-record-card">
-            <h4 className="font-semibold mb-3">Plan Experiment</h4>
-            <form action={createExperiment} className="space-y-2">
-              <input name="name" className="app-input w-full" placeholder="Experiment name" required />
-              <input name="metric" className="app-input w-full" placeholder="Metric (e.g. 7-day retention)" required />
-              <input name="target" className="app-input w-full" placeholder="Target (e.g. +8%)" required />
-              <textarea name="hypothesis" className="app-input w-full" placeholder="Hypothesis" rows={3} required />
-              <button type="submit" className="app-button-primary px-3 py-2 rounded-lg text-sm">Create Experiment</button>
-            </form>
-          </article>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <article className="app-record-card">
-            <h4 className="font-semibold mb-2">Recent Incidents</h4>
-            {incidents.length === 0 ? (
-              <p className="text-sm app-copy-soft">No incidents logged.</p>
-            ) : (
-              <ul className="space-y-2 text-sm">
-                {incidents.slice(-6).reverse().map((incident) => (
-                  <li key={incident.id ?? `${incident.title}-${incident.createdAt}`} className="border-b border-(--border-soft) pb-2 last:border-b-0">
-                    <p className="font-medium">{incident.title ?? "Untitled"}</p>
-                    <p className="app-copy-soft text-xs">{incident.severity} · {incident.status ?? "open"}</p>
-                    <p className="app-copy-soft text-xs">{formatTimestamp(incident.createdAt)}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </article>
-
-          <article className="app-record-card">
-            <h4 className="font-semibold mb-2">Recent Experiments</h4>
-            {experiments.length === 0 ? (
-              <p className="text-sm app-copy-soft">No experiments created.</p>
-            ) : (
-              <ul className="space-y-2 text-sm">
-                {experiments.slice(-6).reverse().map((experiment) => (
-                  <li key={experiment.id ?? `${experiment.name}-${experiment.createdAt}`} className="border-b border-(--border-soft) pb-2 last:border-b-0">
-                    <p className="font-medium">{experiment.name ?? "Untitled"}</p>
-                    <p className="app-copy-soft text-xs">{experiment.metric ?? "Metric n/a"} · {experiment.status ?? "planned"}</p>
-                    <p className="app-copy-soft text-xs">{formatTimestamp(experiment.createdAt)}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </article>
-        </div>
-      </section>
+      <AdminDashboardView
+        actorUserId={actorUserId}
+        reliabilityScore={reliabilityScore}
+        errorBudgetRemaining={errorBudgetRemaining}
+        activeExperiments={activeExperiments}
+        totalCount={totalCount}
+        observabilitySummary={observabilitySummary}
+        autoCreatedIncidents={autoCreatedIncidents}
+        errorLog={errorLog}
+        observabilityEvents={observabilityEvents}
+        practiceCounts={practiceCounts}
+        audits={audits}
+        incidentsWithAuto={incidentsWithAuto}
+        incidentFilter={incidentFilter}
+        incidentStats={incidentStats}
+        experiments={experiments}
+        lockAdmin={lockAdmin}
+        logIncident={logIncident}
+        createExperiment={createExperiment}
+        resolveIncident={resolveIncident}
+      />
     </ModuleLayout>
   );
 }

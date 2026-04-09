@@ -247,6 +247,8 @@ Deployment notes:
 
 - Frontend-specific guide: `apps/frontend/README.md`
 - Quality and resilience notes: `IMPROVEMENTS.md`
+- Elite quality scorecard: `docs/elite-quality-scorecard.md`
+- World-class certification checklist: `docs/world-class-certification-checklist.md`
 - Music shortlist: `docs/spiritual-music-shortlist.md`
 - Music source comparison: `docs/spiritual-music-source-comparison.md`
 

@@ -19,7 +19,7 @@ interface AdminExperimentEntry {
 }
 
 export async function POST(req: NextRequest) {
-  const authResult = await requireAdminApiAccess();
+  const authResult = await requireAdminApiAccess({ requireStepUp: true });
   if (!authResult.ok) return authResult.response;
 
   let body: Partial<AdminExperimentEntry>;

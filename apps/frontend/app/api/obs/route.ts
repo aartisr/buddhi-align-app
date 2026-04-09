@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { inferObservabilitySeverity, recordObservabilityEvent } from "@/app/lib/server-observability";
 
 interface ObservationEvent {
   event: string;
@@ -29,6 +30,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     event: payload.event,
     data: payload.data ?? {},
     timestamp: payload.timestamp ?? new Date().toISOString(),
+  });
+
+  await recordObservabilityEvent({
+    event: payload.event,
+    source: "client",
+    severity: inferObservabilitySeverity(payload.event),
+    data: payload.data,
+    at: payload.timestamp,
   });
 
   return NextResponse.json({ ok: true });
