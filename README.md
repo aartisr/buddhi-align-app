@@ -249,6 +249,10 @@ Deployment notes:
 - Quality and resilience notes: `IMPROVEMENTS.md`
 - Elite quality scorecard: `docs/elite-quality-scorecard.md`
 - World-class certification checklist: `docs/world-class-certification-checklist.md`
+- Blockchain best-value strategy: `docs/blockchain-best-value-strategy.md`
+- Generic blockchain trust model: `docs/blockchain-trust-attestation-generic.md`
+- Blockchain operational runbook: `docs/blockchain-operational-runbook.md`
+- Blockchain monthly cost model: `docs/blockchain-monthly-cost-model.md`
 - Music shortlist: `docs/spiritual-music-shortlist.md`
 - Music source comparison: `docs/spiritual-music-source-comparison.md`
 

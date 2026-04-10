@@ -1,5 +1,8 @@
 # Generic Blockchain Trust and Attestation Model
 
+See also: `docs/blockchain-best-value-strategy.md` for decision rationale, KPIs, and a phased rollout plan focused on highest-value blockchain usage in this repository.
+See also: `docs/blockchain-operational-runbook.md` for KPI signal mapping, ownership, and incident playbooks.
+
 This document defines a generic, reusable trust architecture for compliance programs (including Awaricon) without locking implementation to one framework or one blockchain.
 
 ## Design Goals
