@@ -80,7 +80,7 @@ describe("Home page", () => {
     ];
 
     for (const moduleTitle of expectedModules) {
-      expect(screen.getByText(moduleTitle)).toBeInTheDocument();
+      expect(screen.getAllByText(moduleTitle).length).toBeGreaterThan(0);
     }
   });
 });

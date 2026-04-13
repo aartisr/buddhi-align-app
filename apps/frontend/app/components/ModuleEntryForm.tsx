@@ -1,6 +1,10 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import React, { type ReactNode } from "react";
+import { logEvent } from "@/app/lib/logEvent";
+
+const INVITE_FIRST_ENTRY_SESSION_KEY = "invite_first_entry_submitted";
 
 interface ModuleEntryFormProps {
   title: string;
@@ -27,10 +31,42 @@ export default function ModuleEntryForm({
   submitButtonClassName,
   isSubmitting = false,
 }: ModuleEntryFormProps) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const inviteSource = searchParams?.get("source")?.trim();
+  const inviteModule = searchParams?.get("module")?.trim();
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    await onSubmit(event);
+
+    if (inviteSource !== "invite") {
+      return;
+    }
+
+    const eventData = {
+      source: inviteSource,
+      module: inviteModule || undefined,
+      path: pathname || "/",
+    };
+
+    try {
+      const alreadyLogged = window.sessionStorage.getItem(INVITE_FIRST_ENTRY_SESSION_KEY) === "1";
+      if (alreadyLogged) {
+        return;
+      }
+
+      logEvent("invite_first_entry_submitted", eventData);
+      window.sessionStorage.setItem(INVITE_FIRST_ENTRY_SESSION_KEY, "1");
+    } catch {
+      logEvent("invite_first_entry_submitted", eventData);
+    }
+  }
+
   return (
     <form
+      id="quick-start-form"
       className={className}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
       aria-label={title}
     >
       <div className="flex flex-col gap-4 w-full">

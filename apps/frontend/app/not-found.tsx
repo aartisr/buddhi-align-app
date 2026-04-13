@@ -1,10 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
 
 export const metadata: Metadata = {
-  title: "Page Not Found | Buddhi Align App",
-  description: "This page could not be found. Return to the Buddhi Align dashboard.",
+  title: `${translate(DEFAULT_LOCALE, "route.notFound.title")} | Buddhi Align App`,
+  description: translate(DEFAULT_LOCALE, "route.notFound.subtitle"),
 };
 
 export default function NotFound() {
@@ -25,26 +26,25 @@ export default function NotFound() {
           id="not-found-heading"
           className="app-route-loading__title"
         >
-          Page not found
+          {translate(DEFAULT_LOCALE, "route.notFound.title")}
         </h1>
         <p className="app-route-loading__subtitle">
-          This path doesn&rsquo;t exist or has been moved. Let&rsquo;s get you
-          back on track.
+          {translate(DEFAULT_LOCALE, "route.notFound.subtitle")}
         </p>
         <div className="flex flex-wrap gap-3 mt-6 justify-center">
           <Link
             href="/"
             className="px-5 py-2 rounded-xl text-sm font-semibold bg-(--primary) text-white hover:bg-(--primary-dark,#24493e) transition"
-            aria-label="Return to the Buddhi Align dashboard"
+            aria-label={translate(DEFAULT_LOCALE, "route.notFound.homeAria")}
           >
-            Back to dashboard
+            {translate(DEFAULT_LOCALE, "route.notFound.home")}
           </Link>
           <Link
             href="/sign-in"
             className="px-5 py-2 rounded-xl text-sm font-semibold border border-(--border-strong) text-(--primary) hover:bg-(--surface-soft) transition"
-            aria-label="Go to the sign-in page"
+            aria-label={translate(DEFAULT_LOCALE, "route.notFound.signInAria")}
           >
-            Sign in
+            {translate(DEFAULT_LOCALE, "route.notFound.signIn")}
           </Link>
         </div>
       </div>

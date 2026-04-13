@@ -11,6 +11,10 @@ import {
 } from "@/app/auth/admin";
 import { hasOidcConfidence } from "@/app/auth/auth-confidence";
 import { writeAdminAudit } from "@/app/admin/_audit";
+import { translate, DEFAULT_LOCALE, type TranslationKey } from "@/app/i18n/config";
+
+const t = (key: TranslationKey, vars?: Record<string, string | number>) =>
+  translate(DEFAULT_LOCALE, key, vars);
 
 function sanitizeCallbackUrl(callbackUrl?: string): string {
   if (!callbackUrl || !callbackUrl.startsWith("/") || callbackUrl.startsWith("//")) {
@@ -84,20 +88,20 @@ export default async function AdminAccessPage({
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-10">
       <section className="app-surface-card w-full max-w-md p-6 sm:p-8">
-        <h1 className="app-panel-title text-2xl font-bold mb-2">Admin Access</h1>
+        <h1 className="app-panel-title text-2xl font-bold mb-2">{t("admin.access.title")}</h1>
         <p className="app-copy-soft mb-6">
-          Enter the admin password to unlock the protected admin module.
+          {t("admin.access.subtitle")}
         </p>
 
         {!configured ? (
           <p className="app-alert-error text-sm p-3 rounded-lg" role="alert">
-            Admin access is not configured. Set ADMIN_PASSWORD in environment variables.
+            {t("admin.access.notConfigured")}
           </p>
         ) : (
           <form action={unlockAdmin} className="space-y-4">
             <input type="hidden" name="callbackUrl" value={callbackUrl} />
             <div>
-              <label htmlFor="admin-password" className="block text-sm font-medium mb-1">Password</label>
+              <label htmlFor="admin-password" className="block text-sm font-medium mb-1">{t("admin.access.passwordLabel")}</label>
               <input
                 id="admin-password"
                 name="password"
@@ -105,18 +109,18 @@ export default async function AdminAccessPage({
                 autoComplete="current-password"
                 required
                 className="app-input w-full"
-                placeholder="Enter admin password"
+                placeholder={t("admin.access.passwordPlaceholder")}
               />
             </div>
 
             {hasError ? (
               <p className="app-alert-error text-sm p-3 rounded-lg" role="alert">
-                Invalid admin password.
+                {t("admin.access.invalidPassword")}
               </p>
             ) : null}
 
             <button type="submit" className="app-button-primary w-full">
-              Unlock Admin Module
+              {t("admin.access.unlock")}
             </button>
           </form>
         )}

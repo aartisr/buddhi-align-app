@@ -113,7 +113,7 @@ function QuickTour({ t }: { t: Translate }) {
             src="/videos/buddhi-spiritual-captions.vtt"
             kind="captions"
             srcLang="en"
-            label="English"
+            label={t("motivation.quickTourCaptionLabel")}
             default
           />
         </video>

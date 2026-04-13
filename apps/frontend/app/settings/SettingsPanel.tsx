@@ -2,12 +2,17 @@
 
 import PreferencesMenu from "../components/PreferencesMenu";
 import { useI18n } from "../i18n/provider";
+import { translate, DEFAULT_LOCALE } from "../i18n/config";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 
 const DataPortability = dynamic(() => import("../components/DataPortability"), {
-  loading: () => <p className="app-copy-soft text-sm mt-6">Loading data tools...</p>,
+  loading: () => (
+    <p className="app-copy-soft text-sm mt-6">
+      {translate(DEFAULT_LOCALE, "settings.data.loadingTools")}
+    </p>
+  ),
 });
 
 export default function SettingsPanel() {

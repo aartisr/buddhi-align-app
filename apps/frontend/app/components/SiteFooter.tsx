@@ -21,7 +21,7 @@ export default function SiteFooter() {
           className="site-footer__logo-link"
         >
           <ShishubharatiLogo alt={t("footer.logoAlt")} />
-          <span className="site-footer__logo-text">Shishubharati</span>
+          <span className="site-footer__logo-text">{t("footer.schoolName")}</span>
         </a>
         <span className="site-footer__dedication-prefix">.</span>
       </div>
@@ -29,7 +29,7 @@ export default function SiteFooter() {
         {t("footer.gratitude")}
       </div>
       <div className="site-footer__copyright">
-        &copy; {new Date().getFullYear()} <a href="https://aartisr.foreverlotus.com" target="_blank" rel="noopener noreferrer" className="site-footer__author-link">Aarti Sri Ravikumar</a>. {t("footer.rights")}
+        &copy; {new Date().getFullYear()} <a href="https://aartisr.foreverlotus.com" target="_blank" rel="noopener noreferrer" className="site-footer__author-link">{t("footer.authorName")}</a>. {t("footer.rights")}
       </div>
       <div className="site-footer__awaricon">
         <PlatinumBadge size="footer" />

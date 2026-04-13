@@ -5,6 +5,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
+import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
 
 export default function Error({
   error,
@@ -29,14 +30,13 @@ export default function Error({
         <div className="text-5xl mb-4 select-none" aria-hidden="true">
           🙏
         </div>
-        <p className="app-route-loading__title">Something went wrong</p>
+        <p className="app-route-loading__title">{translate(DEFAULT_LOCALE, "route.error.title")}</p>
         <p className="app-route-loading__subtitle">
-          An unexpected error occurred in this section. You can try again or
-          return to the dashboard.
+          {translate(DEFAULT_LOCALE, "route.error.subtitle")}
         </p>
         {error.digest && (
           <p className="app-route-loading__subtitle mt-1 opacity-60 text-xs">
-            Reference:{" "}
+            {translate(DEFAULT_LOCALE, "route.error.reference")}{" "}
             <code>{error.digest}</code>
           </p>
         )}
@@ -45,16 +45,16 @@ export default function Error({
             type="button"
             onClick={reset}
             className="px-5 py-2 rounded-xl text-sm font-semibold bg-(--primary) text-white hover:bg-(--primary-dark,#24493e) transition"
-            aria-label="Try loading this section again"
+            aria-label={translate(DEFAULT_LOCALE, "route.error.retryAria")}
           >
-            Try again
+            {translate(DEFAULT_LOCALE, "route.error.retry")}
           </button>
           <Link
             href="/"
             className="px-5 py-2 rounded-xl text-sm font-semibold border border-(--border-strong) text-(--primary) hover:bg-(--surface-soft) transition"
-            aria-label="Return to dashboard"
+            aria-label={translate(DEFAULT_LOCALE, "route.error.homeAria")}
           >
-            Go home
+            {translate(DEFAULT_LOCALE, "route.error.home")}
           </Link>
         </div>
       </div>

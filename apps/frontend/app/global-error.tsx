@@ -9,6 +9,7 @@
 // Using inline styles ensures meaningful fallback UI regardless of bundled CSS state.
 
 import React, { useEffect } from "react";
+import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
 
 export default function GlobalError({
   error,
@@ -52,7 +53,7 @@ export default function GlobalError({
               color: "#2e3f38",
             }}
           >
-            Something went wrong
+            {translate(DEFAULT_LOCALE, "route.globalError.title")}
           </h1>
           <p
             style={{
@@ -62,8 +63,7 @@ export default function GlobalError({
               lineHeight: 1.6,
             }}
           >
-            A critical error occurred. Our team has been notified. Please
-            refresh the page to try again.
+            {translate(DEFAULT_LOCALE, "route.globalError.subtitle")}
           </p>
           {error.digest && (
             <p
@@ -74,7 +74,7 @@ export default function GlobalError({
                 fontFamily: "monospace",
               }}
             >
-              Ref: {error.digest}
+              {translate(DEFAULT_LOCALE, "route.globalError.reference")} {error.digest}
             </p>
           )}
           <button
@@ -97,9 +97,9 @@ export default function GlobalError({
             onMouseOut={(e) =>
               ((e.currentTarget as HTMLButtonElement).style.background = "#2f5d50")
             }
-            aria-label="Reload the application"
+            aria-label={translate(DEFAULT_LOCALE, "route.globalError.reloadAria")}
           >
-            Reload
+            {translate(DEFAULT_LOCALE, "route.globalError.reload")}
           </button>
         </div>
       </body>

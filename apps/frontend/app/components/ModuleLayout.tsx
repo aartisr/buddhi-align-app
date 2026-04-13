@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
+import { logEvent } from "@/app/lib/logEvent";
 
 import UserMenu from "./UserMenu";
 import BuddhiAlignLogo from "./BuddhiAlignLogo";
 import PlatinumBadge from "./PlatinumBadge";
 import PreferencesMenu from "./PreferencesMenu";
+import CommunityLink from "./CommunityLink";
 import { MODULE_CATALOG, type TranslationKey } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 import {
@@ -98,6 +100,47 @@ function AnonymousModeBanner({ t, signInHref }: { t: Translate; signInHref: stri
         <Link href={signInHref} className="app-anonymous-banner-cta">
           {t("auth.signInToSave")}
         </Link>
+      </div>
+    </div>
+  );
+}
+
+function InviteArrivalBanner({
+  t,
+  moduleLabel,
+  moduleKey,
+  startHref,
+}: {
+  t: Translate;
+  moduleLabel?: string;
+  moduleKey?: string;
+  startHref?: string;
+}) {
+  return (
+    <div className="px-4 sm:px-6 py-3 relative z-20" role="status" aria-live="polite">
+      <div className="app-surface-card max-w-4xl mx-auto p-3 sm:p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold app-copy">{t("invite.welcomeTitle")}</p>
+          <p className="text-xs app-copy-soft mt-1">
+            {moduleLabel
+              ? t("invite.welcomeBodyWithModule", { module: moduleLabel })
+              : t("invite.welcomeBody")}
+          </p>
+        </div>
+        {startHref ? (
+          <Link
+            href={startHref}
+            className="app-anonymous-banner-cta self-start sm:self-auto"
+            onClick={() => {
+              logEvent("invite_start_now_clicked", {
+                module: moduleKey,
+                startHref,
+              });
+            }}
+          >
+            {t("invite.startNow")}
+          </Link>
+        ) : null}
       </div>
     </div>
   );
@@ -281,6 +324,7 @@ function SequenceNavigation({
 export default function ModuleLayout({ titleKey, children }: { titleKey: TranslationKey; children: React.ReactNode }) {
   const { t } = useI18n();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const currentModule = MODULE_CATALOG.find((item) => item.titleKey === titleKey) ?? null;
   const icon = currentModule?.icon ?? "";
   const { sequenceIndex, previousModuleKey, nextModuleKey } = getAdjacentModuleKeys(currentModule?.key);
@@ -378,7 +422,15 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
   const getModuleLabel = (moduleItem: ModuleItem) => t(moduleItem.navKey ?? moduleItem.titleKey);
 
   const closeNav = () => setMobileNavOpen(false);
-  const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(pathname || "/")}`;
+  const currentPathWithSearch = `${pathname || "/"}${searchParams?.toString() ? `?${searchParams.toString()}` : ""}`;
+  const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(currentPathWithSearch)}`;
+  const isInviteArrival = searchParams?.get("source") === "invite";
+  const inviteModule = searchParams?.get("module")?.trim();
+  const inviteModuleItem = inviteModule
+    ? MODULE_BY_KEY.get(inviteModule as RecommendedModuleKey)
+    : null;
+  const inviteStartModule = inviteModuleItem ?? currentModule;
+  const inviteStartHref = inviteStartModule ? `${inviteStartModule.href}#quick-start-form` : undefined;
 
   return (
     <div className="app-shell relative font-sans">
@@ -436,6 +488,14 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
         </header>
 
         {isAnonymous ? <AnonymousModeBanner t={t} signInHref={signInHref} /> : null}
+        {isInviteArrival ? (
+          <InviteArrivalBanner
+            t={t}
+            moduleLabel={inviteStartModule ? getModuleLabel(inviteStartModule) : undefined}
+            moduleKey={inviteStartModule?.key}
+            startHref={inviteStartHref}
+          />
+        ) : null}
 
         <MobileNavigation
           t={t}
@@ -450,6 +510,11 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
           <h2 className="app-panel-title text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-center px-2">
             {t(titleKey)}
           </h2>
+          {currentModule ? (
+            <div className="flex justify-center mb-4">
+              <CommunityLink moduleKey={currentModule.key} />
+            </div>
+          ) : null}
           {sequenceIndex >= 0 ? (
             <FlowRail t={t} currentModule={currentModule} getModuleLabel={getModuleLabel} />
           ) : null}
