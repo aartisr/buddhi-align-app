@@ -5,12 +5,17 @@ import { BuddhiDashboard } from "@buddhi-align/shared-ui";
 import Link from "next/link";
 import ModuleLayout from "./components/ModuleLayout";
 import DailyRings from "./components/DailyRings";
+import EasyInviteCard from "./components/EasyInviteCard";
 import { MODULE_CATALOG } from "./i18n/config";
 import { useI18n, useLocalizedModules } from "./i18n/provider";
 
 export default function Home() {
   const { t } = useI18n();
   const modules = useLocalizedModules();
+  const inviteModuleOptions = useMemo(
+    () => modules.map((item) => ({ key: item.key, href: item.href, label: item.navLabel })),
+    [modules],
+  );
   const moduleByKey = useMemo(
     () => new Map(MODULE_CATALOG.map((item) => [item.key, item])),
     [],
@@ -96,6 +101,24 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      <EasyInviteCard
+        title={t("invite.title")}
+        subtitle={t("invite.subtitle")}
+        moduleOptions={inviteModuleOptions}
+        moduleSelectorLabel={t("invite.moduleSelector")}
+        homeOptionLabel={t("invite.homeOption")}
+        emailFieldLabel={t("invite.emailOptional")}
+        phoneFieldLabel={t("invite.phoneOptional")}
+        emailPlaceholder={t("invite.emailPlaceholder")}
+        phonePlaceholder={t("invite.phonePlaceholder")}
+        emailCta={t("invite.email")}
+        smsCta={t("invite.sms")}
+        copyCta={t("invite.copy")}
+        shareCta={t("invite.share")}
+        copiedLabel={t("invite.copied")}
+      />
+
       <BuddhiDashboard
         userName={t("dashboard.defaultUser")}
         heading={t("app.dashboard")}

@@ -70,6 +70,9 @@ npm run build
 
 Providers without required env vars are automatically excluded from the sign-in page.
 
+When exactly one OAuth provider is configured, the sign-in route auto-forwards users to that provider for near one-tap access.
+Use `/sign-in?mode=manual` to force the provider-choice screen.
+
 ### Background Music
 
 - `NEXT_PUBLIC_BGM_URL`: single URL fallback/primary track
@@ -80,6 +83,49 @@ Example:
 ```bash
 NEXT_PUBLIC_BGM_URLS=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.mp3,https://example.com/track-2.mp3
 ```
+
+### Community Integration (Feature-Flagged, Plug-and-Play)
+
+- `COMMUNITY_INTEGRATION_PROVIDER`: `none` (default) or `discourse`
+- Legacy compatibility: `DISCOURSE_INTEGRATION_ENABLED=true` also enables the Discourse provider when explicit provider is unset
+- `DISCOURSE_BASE_URL`: Discourse instance base URL (required when enabled)
+- `NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL`: public community URL for client-side links
+- `DISCOURSE_API_USERNAME`: API user for server-side Discourse calls
+- `DISCOURSE_API_KEY`: API key for server-side Discourse calls
+- `DISCOURSE_SSO_SECRET`: signing secret for Discourse SSO (Phase 3)
+- `DISCOURSE_SSO_DEFAULT_GROUPS`: comma-separated groups added for every SSO user
+- `DISCOURSE_SSO_ADMIN_GROUPS`: comma-separated groups added when app admin cookie is present
+- `DISCOURSE_SSO_MODERATOR_GROUPS`: comma-separated groups added when app admin cookie is present
+- `DISCOURSE_SSO_ALLOWED_GROUPS`: optional comma-separated allowlist; when set, only listed groups may be emitted
+- `DISCOURSE_SSO_DENIED_GROUPS`: optional comma-separated denylist; denied groups are always filtered out
+- `DISCOURSE_SSO_GRANT_ADMIN_FROM_APP_ADMIN`: `true` to set Discourse `admin=true` for app admins
+- `DISCOURSE_SSO_GRANT_MODERATOR_FROM_APP_ADMIN`: `true` to set Discourse `moderator=true` for app admins
+- `DISCOURSE_SSO_GROUP_SYNC_MODE`: `add` (default, only appends groups) or `sync` (sets full `groups` list on each login)
+- `DISCOURSE_DEFAULT_CATEGORY_SLUG`: optional default category slug
+- `DISCOURSE_REQUEST_TIMEOUT_MS`: optional timeout override for server requests
+
+## Invite And Growth UX
+
+- Home and sign-in screens include an invite widget for rapid sharing.
+- Users can invite friends through:
+  - Email (`mailto:`)
+  - SMS (`sms:`)
+  - Copy link
+  - Native share sheet (when supported by browser/device)
+- Invite links are deep links with onboarding/context params (for example module-specific links).
+- Auth middleware preserves deep-link query params in `callbackUrl`, so users return to the exact invite destination after sign-in.
+
+### Discourse SSO (DiscourseConnect)
+
+To complete SSO, configure your Discourse admin settings:
+
+- Enable `discourse connect`
+- Set `discourse connect secret` to the same value as `DISCOURSE_SSO_SECRET`
+- Set `discourse connect url` to:
+  - `http://localhost:3000/api/community/discourse/sso` (local)
+  - `https://<your-app-domain>/api/community/discourse/sso` (production)
+
+The app validates the incoming signed payload (`sso` + `sig`), requires a signed-in user, and redirects back to Discourse with a signed user payload.
 
 ## API Routes in This App
 
@@ -132,3 +178,4 @@ Supported module names: `karma`, `bhakti`, `jnana`, `dhyana`, `vasana`, `dharma`
 - OIDC hardening checklist: `docs/oidc-hardening-checklist.md`
 - Component/page engineering standards: `docs/component-engineering-standards.md`
 - Refactor hotspot backlog: `docs/refactor-hotspot-backlog.md`
+- Community integration phased plan: `docs/discourse-integration-phased-plan.md`

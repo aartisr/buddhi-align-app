@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useId, useMemo, useState } from "react";
+import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
 
 type ComplianceBadgeVariant = "header" | "footer";
 
@@ -107,20 +108,19 @@ export default function ComplianceBadge({
             aria-describedby={descriptionId}
           >
             <header className="app-compliance-modal__header">
-              <h2 id={titleId}>Awaricon Compliance Details</h2>
+              <h2 id={titleId}>{translate(DEFAULT_LOCALE, "compliance.title")}</h2>
               <button
                 type="button"
                 className="app-compliance-modal__close"
                 onClick={() => setIsDialogOpen(false)}
-                aria-label="Close compliance details"
+                aria-label={translate(DEFAULT_LOCALE, "compliance.closeAria")}
               >
                 ×
               </button>
             </header>
 
             <p id={descriptionId} className="app-compliance-modal__description">
-              This popup keeps users on your site. Some external pages block iframe embedding for security, so we show
-              core details here and provide an official link below.
+              {translate(DEFAULT_LOCALE, "compliance.description")}
             </p>
 
             <div className="app-compliance-modal__content">
@@ -132,14 +132,16 @@ export default function ComplianceBadge({
                   height={88}
                 />
                 <div>
-                  <p className="app-compliance-modal__kicker">Certification</p>
-                  <p className="app-compliance-modal__value">Awaricon {tierTag ?? "Verified"}</p>
+                  <p className="app-compliance-modal__kicker">{translate(DEFAULT_LOCALE, "compliance.kicker")}</p>
+                  <p className="app-compliance-modal__value">
+                    Awaricon {tierTag ?? translate(DEFAULT_LOCALE, "compliance.verified")}
+                  </p>
                 </div>
               </div>
               <ul className="app-compliance-modal__list">
-                <li>Badge authenticity is displayed on this page.</li>
-                <li>Legal and certification details are published on the official Awaricon site.</li>
-                <li>Use the button below to view full legal content in a secure new tab.</li>
+                <li>{translate(DEFAULT_LOCALE, "compliance.list.item1")}</li>
+                <li>{translate(DEFAULT_LOCALE, "compliance.list.item2")}</li>
+                <li>{translate(DEFAULT_LOCALE, "compliance.list.item3")}</li>
               </ul>
             </div>
 
@@ -149,14 +151,14 @@ export default function ComplianceBadge({
                 className="app-compliance-modal__secondary"
                 onClick={() => setIsDialogOpen(false)}
               >
-                Close
+                {translate(DEFAULT_LOCALE, "compliance.close")}
               </button>
               <button
                 type="button"
                 className="app-compliance-modal__primary"
                 onClick={openOfficialPage}
               >
-                Open official page
+                {translate(DEFAULT_LOCALE, "compliance.openOfficial")}
               </button>
             </div>
           </section>

@@ -1,6 +1,6 @@
 import { signIn } from "@/auth";
 import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
-import { translate, DEFAULT_LOCALE, type TranslationKey } from "@/app/i18n/config";
+import { translate, DEFAULT_LOCALE, MODULE_CATALOG, type TranslationKey } from "@/app/i18n/config";
 import {
   getConfiguredOAuthProviders,
   type OAuthProviderId,
@@ -8,6 +8,7 @@ import {
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
+import EasyInviteCard from "@/app/components/EasyInviteCard";
 
 /** Brand colours for providers */
 const PROVIDER_THEME: Record<
@@ -74,6 +75,16 @@ function sanitizeCallbackUrl(callbackUrl?: string): string {
   return callbackUrl;
 }
 
+function sanitizeChoiceMode(mode?: string): "manual" | "auto" {
+  return mode === "manual" ? "manual" : "auto";
+}
+
+function buildOAuthStartPath(providerId: OAuthProviderId, callbackUrl: string): string {
+  const params = new URLSearchParams();
+  params.set("callbackUrl", callbackUrl);
+  return `/api/auth/signin/${providerId}?${params.toString()}`;
+}
+
 function getSignInErrorMessage(error: string): string {
   if (error === "OAuthSignin" || error === "OAuthCallback") {
     return t("auth.error.signInFailed");
@@ -90,11 +101,21 @@ function getSignInErrorMessage(error: string): string {
 export default function SignInPage({
   searchParams,
 }: {
-  searchParams?: { callbackUrl?: string; error?: string };
+  searchParams?: { callbackUrl?: string; error?: string; mode?: string };
 }) {
   const configuredProviders = getConfiguredOAuthProviders();
   const callbackUrl = sanitizeCallbackUrl(searchParams?.callbackUrl);
+  const mode = sanitizeChoiceMode(searchParams?.mode);
   const error = searchParams?.error;
+  const inviteModuleOptions = MODULE_CATALOG.map((item) => ({
+    key: item.key,
+    href: item.href,
+    label: t(item.navKey ?? item.titleKey),
+  }));
+
+  if (!error && mode !== "manual" && configuredProviders.length === 1) {
+    redirect(buildOAuthStartPath(configuredProviders[0].id, callbackUrl));
+  }
 
   return (
     <div className="app-signin-shell min-h-screen flex items-center justify-center px-4">
@@ -108,6 +129,11 @@ export default function SignInPage({
           <p className="app-signin-subtitle mt-2 text-sm">
             {t("auth.chooseProvider")}
           </p>
+          {configuredProviders.length === 1 ? (
+            <p className="app-copy-soft text-xs mt-2">
+              {t("auth.instantAccess")}. {t("auth.instantAccessBody")}
+            </p>
+          ) : null}
         </div>
 
         {/* Error message */}
@@ -195,12 +221,42 @@ export default function SignInPage({
           <p className="app-copy-subtle text-[11px] leading-relaxed text-center pt-2">
             {t("auth.persistHint")}
           </p>
+
+          {configuredProviders.length === 1 ? (
+            <p className="text-center pt-2">
+              <a
+                href={`/sign-in?mode=manual&callbackUrl=${encodeURIComponent(callbackUrl)}`}
+                className="app-copy-soft text-xs underline underline-offset-2"
+              >
+                {t("auth.instantAccessManage")}
+              </a>
+            </p>
+          ) : null}
+        </div>
+
+        <div className="mt-6">
+          <EasyInviteCard
+            title={t("invite.title")}
+            subtitle={t("invite.subtitle")}
+            moduleOptions={inviteModuleOptions}
+            moduleSelectorLabel={t("invite.moduleSelector")}
+            homeOptionLabel={t("invite.homeOption")}
+            emailFieldLabel={t("invite.emailOptional")}
+            phoneFieldLabel={t("invite.phoneOptional")}
+            emailPlaceholder={t("invite.emailPlaceholder")}
+            phonePlaceholder={t("invite.phonePlaceholder")}
+            emailCta={t("invite.email")}
+            smsCta={t("invite.sms")}
+            copyCta={t("invite.copy")}
+            shareCta={t("invite.share")}
+            copiedLabel={t("invite.copied")}
+          />
         </div>
 
         {/* Footer note */}
         <p className="app-copy-subtle mt-6 text-center text-xs">
           {t("footer.dedicatedTo")}{" "}
-          <span className="app-inline-brand font-medium">Shishu Bharati</span>.{" "}
+          <span className="app-inline-brand font-medium">{t("footer.schoolName")}</span>.{" "}
           {t("footer.gratitude")}
         </p>
       </div>

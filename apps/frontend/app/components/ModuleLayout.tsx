@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
+import { logEvent } from "@/app/lib/logEvent";
 
 import UserMenu from "./UserMenu";
 import BuddhiAlignLogo from "./BuddhiAlignLogo";
 import PlatinumBadge from "./PlatinumBadge";
 import PreferencesMenu from "./PreferencesMenu";
+import CommunityLink from "./CommunityLink";
 import { MODULE_CATALOG, type TranslationKey } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 import {
@@ -98,6 +100,47 @@ function AnonymousModeBanner({ t, signInHref }: { t: Translate; signInHref: stri
         <Link href={signInHref} className="app-anonymous-banner-cta">
           {t("auth.signInToSave")}
         </Link>
+      </div>
+    </div>
+  );
+}
+
+function InviteArrivalBanner({
+  t,
+  moduleLabel,
+  moduleKey,
+  startHref,
+}: {
+  t: Translate;
+  moduleLabel?: string;
+  moduleKey?: string;
+  startHref?: string;
+}) {
+  return (
+    <div className="px-4 sm:px-6 py-3 relative z-20" role="status" aria-live="polite">
+      <div className="app-surface-card max-w-4xl mx-auto p-3 sm:p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold app-copy">{t("invite.welcomeTitle")}</p>
+          <p className="text-xs app-copy-soft mt-1">
+            {moduleLabel
+              ? t("invite.welcomeBodyWithModule", { module: moduleLabel })
+              : t("invite.welcomeBody")}
+          </p>
+        </div>
+        {startHref ? (
+          <Link
+            href={startHref}
+            className="app-anonymous-banner-cta self-start sm:self-auto"
+            onClick={() => {
+              logEvent("invite_start_now_clicked", {
+                module: moduleKey,
+                startHref,
+              });
+            }}
+          >
+            {t("invite.startNow")}
+          </Link>
+        ) : null}
       </div>
     </div>
   );
@@ -278,16 +321,8 @@ function SequenceNavigation({
   );
 }
 
-export default function ModuleLayout({ titleKey, children }: { titleKey: TranslationKey; children: React.ReactNode }) {
-  const { t } = useI18n();
-  const pathname = usePathname();
-  const currentModule = MODULE_CATALOG.find((item) => item.titleKey === titleKey) ?? null;
-  const icon = currentModule?.icon ?? "";
-  const { sequenceIndex, previousModuleKey, nextModuleKey } = getAdjacentModuleKeys(currentModule?.key);
-  const previousModule = previousModuleKey ? MODULE_BY_KEY.get(previousModuleKey) ?? null : null;
-  const nextModule = nextModuleKey ? MODULE_BY_KEY.get(nextModuleKey) ?? null : null;
-
-  const menuGroups = useMemo(() => {
+function useModuleMenuGroups(t: Translate): MenuGroup[] {
+  return useMemo(() => {
     const mapModuleLinks = (keys: readonly RecommendedModuleKey[]) =>
       keys
         .map((moduleKey) => MODULE_BY_KEY.get(moduleKey))
@@ -328,8 +363,9 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
       },
     ] as MenuGroup[];
   }, [t]);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [desktopOpenGroup, setDesktopOpenGroup] = useState<string | null>(null);
+}
+
+function useAnonymousModeFlag() {
   const [isAnonymous, setIsAnonymous] = useState(false);
 
   useEffect(() => {
@@ -337,20 +373,42 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
     setIsAnonymous(document.cookie.includes(`${ANONYMOUS_COOKIE_NAME}=${ANONYMOUS_COOKIE_VALUE}`));
   }, []);
 
+  return isAnonymous;
+}
+
+function usePathActive(pathname: string | null): PathActive {
+  return useCallback((href: string) => {
+    if (!pathname) return href === "/";
+    if (href === "/") return pathname === "/";
+    return pathname === href || pathname.startsWith(`${href}/`);
+  }, [pathname]);
+}
+
+function useNavEffects({
+  pathname,
+  mobileNavOpen,
+  desktopOpenGroup,
+  setMobileNavOpen,
+  setDesktopOpenGroup,
+}: {
+  pathname: string | null;
+  mobileNavOpen: boolean;
+  desktopOpenGroup: string | null;
+  setMobileNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDesktopOpenGroup: React.Dispatch<React.SetStateAction<string | null>>;
+}) {
   useEffect(() => {
     setDesktopOpenGroup(null);
     setMobileNavOpen(false);
-  }, [pathname]);
+  }, [pathname, setDesktopOpenGroup, setMobileNavOpen]);
 
-  // Close drawer on Escape key
   useEffect(() => {
     if (!mobileNavOpen) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMobileNavOpen(false); };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [mobileNavOpen]);
+  }, [mobileNavOpen, setMobileNavOpen]);
 
-  // Prevent body scroll when drawer is open
   useEffect(() => {
     document.body.style.overflow = mobileNavOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -367,22 +425,83 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [desktopOpenGroup]);
+  }, [desktopOpenGroup, setDesktopOpenGroup]);
+}
 
-  const isPathActive = useCallback((href: string) => {
-    if (!pathname) return href === "/";
-    if (href === "/") return pathname === "/";
-    return pathname === href || pathname.startsWith(`${href}/`);
-  }, [pathname]);
+function useInviteContext({
+  pathname,
+  searchParams,
+  currentModule,
+}: {
+  pathname: string | null;
+  searchParams: ReturnType<typeof useSearchParams>;
+  currentModule: ModuleItem | null;
+}) {
+  const currentPathWithSearch = `${pathname || "/"}${searchParams?.toString() ? `?${searchParams.toString()}` : ""}`;
+  const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(currentPathWithSearch)}`;
+  const isInviteArrival = searchParams?.get("source") === "invite";
+  const inviteModule = searchParams?.get("module")?.trim();
+  const inviteModuleItem = inviteModule
+    ? MODULE_BY_KEY.get(inviteModule as RecommendedModuleKey)
+    : null;
+  const inviteStartModule = inviteModuleItem ?? currentModule;
+  const inviteStartHref = inviteStartModule ? `${inviteStartModule.href}#quick-start-form` : undefined;
 
-  const getModuleLabel = (moduleItem: ModuleItem) => t(moduleItem.navKey ?? moduleItem.titleKey);
+  return {
+    signInHref,
+    isInviteArrival,
+    inviteStartModule,
+    inviteStartHref,
+  };
+}
 
-  const closeNav = () => setMobileNavOpen(false);
-  const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(pathname || "/")}`;
-
+function ModuleLayoutView({
+  t,
+  titleKey,
+  children,
+  icon,
+  menuGroups,
+  desktopOpenGroup,
+  setDesktopOpenGroup,
+  isPathActive,
+  setMobileNavOpen,
+  isAnonymous,
+  signInHref,
+  isInviteArrival,
+  inviteStartModule,
+  inviteStartHref,
+  closeNav,
+  mobileNavOpen,
+  currentModule,
+  sequenceIndex,
+  getModuleLabel,
+  previousModule,
+  nextModule,
+}: {
+  t: Translate;
+  titleKey: TranslationKey;
+  children: React.ReactNode;
+  icon: string;
+  menuGroups: MenuGroup[];
+  desktopOpenGroup: string | null;
+  setDesktopOpenGroup: React.Dispatch<React.SetStateAction<string | null>>;
+  isPathActive: PathActive;
+  setMobileNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isAnonymous: boolean;
+  signInHref: string;
+  isInviteArrival: boolean;
+  inviteStartModule: ModuleItem | null;
+  inviteStartHref?: string;
+  closeNav: () => void;
+  mobileNavOpen: boolean;
+  currentModule: ModuleItem | null;
+  sequenceIndex: number;
+  getModuleLabel: (moduleItem: ModuleItem) => string;
+  previousModule: ModuleItem | null;
+  nextModule: ModuleItem | null;
+}) {
   return (
     <div className="app-shell relative font-sans">
-      {/* Skip-to-content: WCAG 2.4.1 Bypass Blocks (Level A) */}
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-9999 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-(--primary) focus:text-white focus:font-semibold focus:text-sm"
@@ -399,7 +518,6 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
           </div>
         )}
 
-        {/* ── Header ── */}
         <header className="app-header-panel w-full px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-3 relative z-40">
           <div className="app-brand-lockup">
             <h1>
@@ -421,7 +539,6 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
               <PreferencesMenu />
             </div>
             <UserMenu />
-            {/* Mobile hamburger */}
             <button
               onClick={() => setMobileNavOpen(true)}
               className="app-mobile-menu-btn md:hidden"
@@ -436,6 +553,14 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
         </header>
 
         {isAnonymous ? <AnonymousModeBanner t={t} signInHref={signInHref} /> : null}
+        {isInviteArrival ? (
+          <InviteArrivalBanner
+            t={t}
+            moduleLabel={inviteStartModule ? getModuleLabel(inviteStartModule) : undefined}
+            moduleKey={inviteStartModule?.key}
+            startHref={inviteStartHref}
+          />
+        ) : null}
 
         <MobileNavigation
           t={t}
@@ -445,11 +570,15 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
           isPathActive={isPathActive}
         />
 
-        {/* ── Main content ── */}
         <main id="main-content" className="app-main-content" tabIndex={-1}>
           <h2 className="app-panel-title text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-center px-2">
             {t(titleKey)}
           </h2>
+          {currentModule ? (
+            <div className="flex justify-center mb-4">
+              <CommunityLink moduleKey={currentModule.key} />
+            </div>
+          ) : null}
           {sequenceIndex >= 0 ? (
             <FlowRail t={t} currentModule={currentModule} getModuleLabel={getModuleLabel} />
           ) : null}
@@ -467,5 +596,65 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
       </div>
       <div className="app-backdrop-panel" />
     </div>
+  );
+}
+
+export default function ModuleLayout({ titleKey, children }: { titleKey: TranslationKey; children: React.ReactNode }) {
+  const { t } = useI18n();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentModule = MODULE_CATALOG.find((item) => item.titleKey === titleKey) ?? null;
+  const icon = currentModule?.icon ?? "";
+  const { sequenceIndex, previousModuleKey, nextModuleKey } = getAdjacentModuleKeys(currentModule?.key);
+  const previousModule = previousModuleKey ? MODULE_BY_KEY.get(previousModuleKey) ?? null : null;
+  const nextModule = nextModuleKey ? MODULE_BY_KEY.get(nextModuleKey) ?? null : null;
+  const menuGroups = useModuleMenuGroups(t);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [desktopOpenGroup, setDesktopOpenGroup] = useState<string | null>(null);
+  const isAnonymous = useAnonymousModeFlag();
+  useNavEffects({
+    pathname,
+    mobileNavOpen,
+    desktopOpenGroup,
+    setMobileNavOpen,
+    setDesktopOpenGroup,
+  });
+
+  const isPathActive = usePathActive(pathname);
+
+  const getModuleLabel = (moduleItem: ModuleItem) => t(moduleItem.navKey ?? moduleItem.titleKey);
+
+  const closeNav = () => setMobileNavOpen(false);
+  const { signInHref, isInviteArrival, inviteStartModule, inviteStartHref } = useInviteContext({
+    pathname,
+    searchParams,
+    currentModule,
+  });
+
+  return (
+    <ModuleLayoutView
+      t={t}
+      titleKey={titleKey}
+      icon={icon}
+      menuGroups={menuGroups}
+      desktopOpenGroup={desktopOpenGroup}
+      setDesktopOpenGroup={setDesktopOpenGroup}
+      isPathActive={isPathActive}
+      setMobileNavOpen={setMobileNavOpen}
+      isAnonymous={isAnonymous}
+      signInHref={signInHref}
+      isInviteArrival={isInviteArrival}
+      inviteStartModule={inviteStartModule}
+      inviteStartHref={inviteStartHref}
+      closeNav={closeNav}
+      mobileNavOpen={mobileNavOpen}
+      currentModule={currentModule}
+      sequenceIndex={sequenceIndex}
+      getModuleLabel={getModuleLabel}
+      previousModule={previousModule}
+      nextModule={nextModule}
+    >
+      {children}
+    </ModuleLayoutView>
   );
 }

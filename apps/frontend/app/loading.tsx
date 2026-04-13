@@ -1,3 +1,5 @@
+import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
+
 export default function Loading() {
   return (
     <div className="app-route-loading" role="status" aria-live="polite">
@@ -8,8 +10,8 @@ export default function Loading() {
           <div className="app-request-spinner__ring app-request-spinner__ring--inner" />
           <div className="app-request-spinner__center">ॐ</div>
         </div>
-        <p className="app-route-loading__title">Preparing your space</p>
-        <p className="app-route-loading__subtitle">A fresh view is loading.</p>
+        <p className="app-route-loading__title">{translate(DEFAULT_LOCALE, "route.loading.title")}</p>
+        <p className="app-route-loading__subtitle">{translate(DEFAULT_LOCALE, "route.loading.subtitle")}</p>
       </div>
     </div>
   );

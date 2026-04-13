@@ -23,6 +23,14 @@ import {
   type IncidentFilter,
 } from "./incident-operations";
 
+type ObservabilityFilter = "all" | "discourse-sso" | "invite-funnel";
+
+function resolveObservabilityFilter(value: string | undefined): ObservabilityFilter {
+  if (value === "discourse-sso") return "discourse-sso";
+  if (value === "invite-funnel") return "invite-funnel";
+  return "all";
+}
+
 // Use the shared ANALYTICS_MODULES constant as the single source of truth.
 const PRACTICE_MODULES = ANALYTICS_MODULES;
 const ADMIN_EXPERIMENT_MODULE = "__admin_experiment";
@@ -131,10 +139,12 @@ export default async function AdminPage({
 }: {
   searchParams?: {
     incidents?: string;
+    obs?: string;
   };
 }) {
   const actorUserId = await requireAdminSession();
   const incidentFilter = resolveIncidentFilter(searchParams?.incidents);
+  const observabilityFilter = resolveObservabilityFilter(searchParams?.obs);
   const {
     practiceCounts,
     audits,
@@ -294,6 +304,7 @@ export default async function AdminPage({
         audits={audits}
         incidentsWithAuto={incidentsWithAuto}
         incidentFilter={incidentFilter}
+        observabilityFilter={observabilityFilter}
         incidentStats={incidentStats}
         experiments={experiments}
         lockAdmin={lockAdmin}

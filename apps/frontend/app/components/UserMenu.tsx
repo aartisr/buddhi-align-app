@@ -22,7 +22,7 @@ export default function UserMenu() {
   }, []);
 
   if (status === "loading") {
-    return <div className="w-8 h-8 rounded-full app-user-skeleton animate-pulse" aria-label="Loading session" />;
+    return <div className="w-8 h-8 rounded-full app-user-skeleton animate-pulse" aria-label={t("user.loadingSession")} />;
   }
 
   if (!session) {
@@ -42,7 +42,7 @@ export default function UserMenu() {
       {session.user?.image ? (
         <Image
           src={session.user.image}
-          alt={session.user.name ?? "User avatar"}
+          alt={session.user.name ?? t("user.avatarAlt")}
           width={32}
           height={32}
           className="rounded-full app-user-avatar-ring"

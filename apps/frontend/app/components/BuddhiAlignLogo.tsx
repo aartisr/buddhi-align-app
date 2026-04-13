@@ -1,11 +1,12 @@
 import React from "react";
+import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
 
 export default function BuddhiAlignLogo({ className = "" }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 140 44"
       role="img"
-      aria-label="Buddhi Align logo"
+      aria-label={translate(DEFAULT_LOCALE, "logo.buddhiAlignAria")}
       className={className}
       xmlns="http://www.w3.org/2000/svg"
     >

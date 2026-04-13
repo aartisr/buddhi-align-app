@@ -9,29 +9,32 @@ import { NextResponse } from "next/server";
  * Public routes: /sign-in and all NextAuth API routes.
  */
 export default auth((req) => {
-  const { pathname } = req.nextUrl;
+  const { pathname, search } = req.nextUrl;
+  const callbackUrl = `${pathname}${search}`;
   const isAnonymous = isAnonymousCookie(req.cookies.get(ANONYMOUS_COOKIE_NAME)?.value);
 
   const isPublic =
     pathname.startsWith("/sign-in") ||
-    pathname.startsWith("/api/auth");
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/api/community/link") ||
+    pathname.startsWith("/api/community/discourse/sso");
 
   if (!req.auth && !isPublic && !isAnonymous) {
     const signInUrl = new URL("/sign-in", req.nextUrl.origin);
-    signInUrl.searchParams.set("callbackUrl", pathname);
+    signInUrl.searchParams.set("callbackUrl", callbackUrl);
     return NextResponse.redirect(signInUrl);
   }
 
   if (req.auth && isOidcSensitivePath(pathname) && !hasOidcConfidence(req.auth)) {
     const signInUrl = new URL("/sign-in", req.nextUrl.origin);
-    signInUrl.searchParams.set("callbackUrl", pathname);
+    signInUrl.searchParams.set("callbackUrl", callbackUrl);
     signInUrl.searchParams.set("error", "OIDCRequired");
     return NextResponse.redirect(signInUrl);
   }
 
   if (req.auth && isStepUpSensitivePath(pathname) && !hasRecentStepUp(req.auth as { user?: { authAt?: string | number } })) {
     const signInUrl = new URL("/sign-in", req.nextUrl.origin);
-    signInUrl.searchParams.set("callbackUrl", pathname);
+    signInUrl.searchParams.set("callbackUrl", callbackUrl);
     signInUrl.searchParams.set("error", "StepUpRequired");
     return NextResponse.redirect(signInUrl);
   }

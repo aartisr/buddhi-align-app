@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
 
 type ToastTone = "info" | "success" | "error";
 
@@ -35,58 +36,58 @@ interface ModuleCopy {
 
 const MODULE_REQUEST_COPY: Record<string, ModuleCopy> = {
   karma: {
-    noun: "Karma Yoga entry",
-    createStart: "Saving your Karma Yoga entry",
-    createSuccess: "Karma Yoga entry saved",
-    updateStart: "Updating your Karma Yoga entry",
-    updateSuccess: "Karma Yoga entry updated",
-    deleteStart: "Removing your Karma Yoga entry",
-    deleteSuccess: "Karma Yoga entry removed",
+    noun: translate(DEFAULT_LOCALE, "request.module.karma.noun"),
+    createStart: translate(DEFAULT_LOCALE, "request.module.karma.createStart"),
+    createSuccess: translate(DEFAULT_LOCALE, "request.module.karma.createSuccess"),
+    updateStart: translate(DEFAULT_LOCALE, "request.module.karma.updateStart"),
+    updateSuccess: translate(DEFAULT_LOCALE, "request.module.karma.updateSuccess"),
+    deleteStart: translate(DEFAULT_LOCALE, "request.module.karma.deleteStart"),
+    deleteSuccess: translate(DEFAULT_LOCALE, "request.module.karma.deleteSuccess"),
   },
   bhakti: {
-    noun: "Bhakti reflection",
-    createStart: "Saving your Bhakti reflection",
-    createSuccess: "Bhakti reflection saved",
-    updateStart: "Updating your Bhakti reflection",
-    updateSuccess: "Bhakti reflection updated",
-    deleteStart: "Removing your Bhakti reflection",
-    deleteSuccess: "Bhakti reflection removed",
+    noun: translate(DEFAULT_LOCALE, "request.module.bhakti.noun"),
+    createStart: translate(DEFAULT_LOCALE, "request.module.bhakti.createStart"),
+    createSuccess: translate(DEFAULT_LOCALE, "request.module.bhakti.createSuccess"),
+    updateStart: translate(DEFAULT_LOCALE, "request.module.bhakti.updateStart"),
+    updateSuccess: translate(DEFAULT_LOCALE, "request.module.bhakti.updateSuccess"),
+    deleteStart: translate(DEFAULT_LOCALE, "request.module.bhakti.deleteStart"),
+    deleteSuccess: translate(DEFAULT_LOCALE, "request.module.bhakti.deleteSuccess"),
   },
   jnana: {
-    noun: "Jnana reflection",
-    createStart: "Saving your Jnana reflection",
-    createSuccess: "Jnana reflection saved",
-    updateStart: "Updating your Jnana reflection",
-    updateSuccess: "Jnana reflection updated",
-    deleteStart: "Removing your Jnana reflection",
-    deleteSuccess: "Jnana reflection removed",
+    noun: translate(DEFAULT_LOCALE, "request.module.jnana.noun"),
+    createStart: translate(DEFAULT_LOCALE, "request.module.jnana.createStart"),
+    createSuccess: translate(DEFAULT_LOCALE, "request.module.jnana.createSuccess"),
+    updateStart: translate(DEFAULT_LOCALE, "request.module.jnana.updateStart"),
+    updateSuccess: translate(DEFAULT_LOCALE, "request.module.jnana.updateSuccess"),
+    deleteStart: translate(DEFAULT_LOCALE, "request.module.jnana.deleteStart"),
+    deleteSuccess: translate(DEFAULT_LOCALE, "request.module.jnana.deleteSuccess"),
   },
   dhyana: {
-    noun: "Dhyana session",
-    createStart: "Saving your Dhyana session",
-    createSuccess: "Dhyana session saved",
-    updateStart: "Updating your Dhyana session",
-    updateSuccess: "Dhyana session updated",
-    deleteStart: "Removing your Dhyana session",
-    deleteSuccess: "Dhyana session removed",
+    noun: translate(DEFAULT_LOCALE, "request.module.dhyana.noun"),
+    createStart: translate(DEFAULT_LOCALE, "request.module.dhyana.createStart"),
+    createSuccess: translate(DEFAULT_LOCALE, "request.module.dhyana.createSuccess"),
+    updateStart: translate(DEFAULT_LOCALE, "request.module.dhyana.updateStart"),
+    updateSuccess: translate(DEFAULT_LOCALE, "request.module.dhyana.updateSuccess"),
+    deleteStart: translate(DEFAULT_LOCALE, "request.module.dhyana.deleteStart"),
+    deleteSuccess: translate(DEFAULT_LOCALE, "request.module.dhyana.deleteSuccess"),
   },
   vasana: {
-    noun: "Vasana note",
-    createStart: "Saving your Vasana note",
-    createSuccess: "Vasana note saved",
-    updateStart: "Updating your Vasana note",
-    updateSuccess: "Vasana note updated",
-    deleteStart: "Removing your Vasana note",
-    deleteSuccess: "Vasana note removed",
+    noun: translate(DEFAULT_LOCALE, "request.module.vasana.noun"),
+    createStart: translate(DEFAULT_LOCALE, "request.module.vasana.createStart"),
+    createSuccess: translate(DEFAULT_LOCALE, "request.module.vasana.createSuccess"),
+    updateStart: translate(DEFAULT_LOCALE, "request.module.vasana.updateStart"),
+    updateSuccess: translate(DEFAULT_LOCALE, "request.module.vasana.updateSuccess"),
+    deleteStart: translate(DEFAULT_LOCALE, "request.module.vasana.deleteStart"),
+    deleteSuccess: translate(DEFAULT_LOCALE, "request.module.vasana.deleteSuccess"),
   },
   dharma: {
-    noun: "Dharma plan",
-    createStart: "Saving your Dharma plan",
-    createSuccess: "Dharma plan saved",
-    updateStart: "Updating your Dharma plan",
-    updateSuccess: "Dharma plan updated",
-    deleteStart: "Removing your Dharma plan",
-    deleteSuccess: "Dharma plan removed",
+    noun: translate(DEFAULT_LOCALE, "request.module.dharma.noun"),
+    createStart: translate(DEFAULT_LOCALE, "request.module.dharma.createStart"),
+    createSuccess: translate(DEFAULT_LOCALE, "request.module.dharma.createSuccess"),
+    updateStart: translate(DEFAULT_LOCALE, "request.module.dharma.updateStart"),
+    updateSuccess: translate(DEFAULT_LOCALE, "request.module.dharma.updateSuccess"),
+    deleteStart: translate(DEFAULT_LOCALE, "request.module.dharma.deleteStart"),
+    deleteSuccess: translate(DEFAULT_LOCALE, "request.module.dharma.deleteSuccess"),
   },
 };
 
@@ -136,27 +137,27 @@ function describeSpecialRequest(pathname: string, method: string): RequestMeta |
   if (pathname === "/api/preferences" && method === "PUT") {
     return {
       announce: true,
-      startTitle: "Saving your preferences",
-      successTitle: "Preferences updated",
-      errorTitle: "Could not save preferences",
+      startTitle: translate(DEFAULT_LOCALE, "request.preferences.saving"),
+      successTitle: translate(DEFAULT_LOCALE, "request.preferences.saved"),
+      errorTitle: translate(DEFAULT_LOCALE, "request.preferences.failed"),
     };
   }
 
   if (pathname === "/api/data/export" && method === "POST") {
     return {
       announce: true,
-      startTitle: "Importing your archive",
-      successTitle: "Archive imported",
-      errorTitle: "Import failed",
+      startTitle: translate(DEFAULT_LOCALE, "request.import.saving"),
+      successTitle: translate(DEFAULT_LOCALE, "request.import.saved"),
+      errorTitle: translate(DEFAULT_LOCALE, "request.import.failed"),
     };
   }
 
   if (pathname === "/api/data/export" && method === "GET") {
     return {
       announce: true,
-      startTitle: "Preparing your export",
-      successTitle: "Export is ready",
-      errorTitle: "Export failed",
+      startTitle: translate(DEFAULT_LOCALE, "request.export.saving"),
+      successTitle: translate(DEFAULT_LOCALE, "request.export.saved"),
+      errorTitle: translate(DEFAULT_LOCALE, "request.export.failed"),
     };
   }
 
@@ -172,7 +173,9 @@ function describeCollectionRequest(method: string, moduleCopy: ModuleCopy | null
     announce: true,
     startTitle: moduleCopy.createStart,
     successTitle: moduleCopy.createSuccess,
-    errorTitle: `Could not save your ${moduleCopy.noun.toLowerCase()}`,
+    errorTitle: translate(DEFAULT_LOCALE, "request.module.error.save", {
+      noun: moduleCopy.noun.toLowerCase(),
+    }),
   };
 }
 
@@ -186,7 +189,9 @@ function describeResourceRequest(method: string, moduleCopy: ModuleCopy | null):
       announce: true,
       startTitle: moduleCopy.updateStart,
       successTitle: moduleCopy.updateSuccess,
-      errorTitle: `Could not update your ${moduleCopy.noun.toLowerCase()}`,
+      errorTitle: translate(DEFAULT_LOCALE, "request.module.error.update", {
+        noun: moduleCopy.noun.toLowerCase(),
+      }),
     };
   }
 
@@ -195,7 +200,9 @@ function describeResourceRequest(method: string, moduleCopy: ModuleCopy | null):
       announce: true,
       startTitle: moduleCopy.deleteStart,
       successTitle: moduleCopy.deleteSuccess,
-      errorTitle: `Could not remove your ${moduleCopy.noun.toLowerCase()}`,
+      errorTitle: translate(DEFAULT_LOCALE, "request.module.error.remove", {
+        noun: moduleCopy.noun.toLowerCase(),
+      }),
     };
   }
 
@@ -225,9 +232,9 @@ function describeRequest({ method, pathname }: RequestDescriptor): RequestMeta {
 
   return {
     announce: true,
-    startTitle: "Sending request",
-    successTitle: "Request completed",
-    errorTitle: "Request failed",
+    startTitle: translate(DEFAULT_LOCALE, "request.generic.sending"),
+    successTitle: translate(DEFAULT_LOCALE, "request.generic.completed"),
+    errorTitle: translate(DEFAULT_LOCALE, "request.generic.failed"),
   };
 }
 
@@ -272,7 +279,7 @@ function ToastStack({
               <button
                 type="button"
                 className="app-request-toast__dismiss"
-                aria-label="Dismiss notification"
+                aria-label={translate(DEFAULT_LOCALE, "request.dismiss")}
                 onClick={() => dismissToast(toast.id)}
               >
                 ×
@@ -292,7 +299,7 @@ function ToastStack({
               <button
                 type="button"
                 className="app-request-toast__dismiss"
-                aria-label="Dismiss notification"
+                aria-label={translate(DEFAULT_LOCALE, "request.dismiss")}
                 onClick={() => dismissToast(toast.id)}
               >
                 ×
@@ -319,7 +326,9 @@ function queueStartToast(
     id: toastId,
     tone: "info",
     title: requestMeta.startTitle,
-    detail: descriptor.method === "GET" ? "Talking to the server..." : "One moment while we sync your changes.",
+    detail: descriptor.method === "GET"
+      ? translate(DEFAULT_LOCALE, "request.detail.read")
+      : translate(DEFAULT_LOCALE, "request.detail.write"),
   });
 }
 
@@ -380,10 +389,15 @@ async function executeTrackedRequest({
     }
 
     const detail = await getErrorDetail(response);
-    queueFailureToast(toastId, requestMeta, detail ?? `Server responded with ${response.status}.`, queueToast);
+    queueFailureToast(
+      toastId,
+      requestMeta,
+      detail ?? translate(DEFAULT_LOCALE, "request.error.serverStatus", { status: response.status }),
+      queueToast,
+    );
     return response;
   } catch (error) {
-    const detail = error instanceof Error ? error.message : "Please try again.";
+    const detail = error instanceof Error ? error.message : translate(DEFAULT_LOCALE, "request.error.tryAgain");
     queueFailureToast(toastId, requestMeta, detail, queueToast);
     throw error;
   }
@@ -503,9 +517,9 @@ export default function RequestFeedbackProvider({ children }: { children: React.
         className={`app-request-overlay ${overlayVisible ? "app-request-overlay--visible" : ""}`}
       >
         <div className="app-request-overlay__panel">
-          <PrayerSpinner label="Waiting for the server" />
-          <p className="app-request-overlay__title">Connecting with the server</p>
-          <p className="app-request-overlay__subtitle">Your latest changes are on their way.</p>
+          <PrayerSpinner label={translate(DEFAULT_LOCALE, "request.overlay.waiting")} />
+          <p className="app-request-overlay__title">{translate(DEFAULT_LOCALE, "request.overlay.title")}</p>
+          <p className="app-request-overlay__subtitle">{translate(DEFAULT_LOCALE, "request.overlay.subtitle")}</p>
         </div>
       </div>
     </>
