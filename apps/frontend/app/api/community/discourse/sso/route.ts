@@ -8,7 +8,11 @@ import {
   buildDiscourseSsoRedirectUrl,
   isValidDiscourseSsoSignature,
   parseDiscourseSsoRequest,
+  type DiscourseSsoRequest,
 } from "@/app/lib/discourse-sso";
+import type { CommunityConfig } from "@/app/lib/community-config";
+
+type ConfiguredDiscourse = NonNullable<CommunityConfig["discourse"]> & { ssoSecret: string };
 
 function buildSignInRedirect(req: NextRequest): NextResponse {
   const callbackUrl = `${req.nextUrl.pathname}${req.nextUrl.search}`;
@@ -46,7 +50,9 @@ function applyGroupPolicy(
   });
 }
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
+function getRequiredSsoQuery(req: NextRequest):
+  | { sso: string; sig: string }
+  | NextResponse {
   const sso = req.nextUrl.searchParams.get("sso") ?? "";
   const sig = req.nextUrl.searchParams.get("sig") ?? "";
 
@@ -54,14 +60,27 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Missing required sso and sig query parameters." }, { status: 400 });
   }
 
-  const config = getCommunityConfig();
+  return { sso, sig };
+}
+
+function getValidatedDiscourseConfig(config: CommunityConfig):
+  | { discourse: ConfiguredDiscourse }
+  | NextResponse {
   const validation = validateCommunityConfig(config);
 
   if (!validation.ok || config.provider !== "discourse" || !config.discourse?.ssoSecret) {
     return NextResponse.json({ error: "Discourse SSO is not configured." }, { status: 503 });
   }
 
-  if (!isValidDiscourseSsoSignature(sso, sig, config.discourse.ssoSecret)) {
+  return { discourse: config.discourse as ConfiguredDiscourse };
+}
+
+function parseValidatedSsoRequest(
+  sso: string,
+  sig: string,
+  ssoSecret: string,
+): DiscourseSsoRequest | NextResponse {
+  if (!isValidDiscourseSsoSignature(sso, sig, ssoSecret)) {
     return NextResponse.json({ error: "Invalid SSO signature." }, { status: 403 });
   }
 
@@ -69,6 +88,48 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   if (!request) {
     return NextResponse.json({ error: "Invalid SSO payload." }, { status: 400 });
   }
+
+  return request;
+}
+
+function buildMappedRolesAndGroups(discourseConfig: ConfiguredDiscourse) {
+  const adminCookie = cookies().get(ADMIN_COOKIE_NAME)?.value;
+  const hasAppAdminAccess = isAdminCookieValid(adminCookie);
+  const mergedGroups = mergeUniqueGroups(
+    discourseConfig.ssoDefaultGroups,
+    hasAppAdminAccess ? discourseConfig.ssoAdminGroups : undefined,
+    hasAppAdminAccess ? discourseConfig.ssoModeratorGroups : undefined,
+  );
+  const mappedGroups = applyGroupPolicy(
+    mergedGroups,
+    discourseConfig.ssoAllowedGroups,
+    discourseConfig.ssoDeniedGroups,
+  );
+
+  return {
+    hasAppAdminAccess,
+    mergedGroups,
+    mappedGroups,
+    admin: hasAppAdminAccess && discourseConfig.ssoGrantAdminFromAppAdmin,
+    moderator: hasAppAdminAccess && discourseConfig.ssoGrantModeratorFromAppAdmin,
+    shouldSyncGroups: discourseConfig.ssoGroupSyncMode === "sync",
+  };
+}
+
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  const query = getRequiredSsoQuery(req);
+  if (query instanceof NextResponse) return query;
+
+  const config = getCommunityConfig();
+  const validatedConfig = getValidatedDiscourseConfig(config);
+  if (validatedConfig instanceof NextResponse) return validatedConfig;
+
+  const request = parseValidatedSsoRequest(
+    query.sso,
+    query.sig,
+    validatedConfig.discourse.ssoSecret,
+  );
+  if (request instanceof NextResponse) return request;
 
   const session = await auth();
   if (!session?.user?.id) {
@@ -79,21 +140,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Signed-in user must have an email for Discourse SSO." }, { status: 400 });
   }
 
-  const adminCookie = cookies().get(ADMIN_COOKIE_NAME)?.value;
-  const hasAppAdminAccess = isAdminCookieValid(adminCookie);
-  const mergedGroups = mergeUniqueGroups(
-    config.discourse.ssoDefaultGroups,
-    hasAppAdminAccess ? config.discourse.ssoAdminGroups : undefined,
-    hasAppAdminAccess ? config.discourse.ssoModeratorGroups : undefined,
-  );
-  const mappedGroups = applyGroupPolicy(
-    mergedGroups,
-    config.discourse.ssoAllowedGroups,
-    config.discourse.ssoDeniedGroups,
-  );
-  const admin = hasAppAdminAccess && config.discourse.ssoGrantAdminFromAppAdmin;
-  const moderator = hasAppAdminAccess && config.discourse.ssoGrantModeratorFromAppAdmin;
-  const shouldSyncGroups = config.discourse.ssoGroupSyncMode === "sync";
+  const roleMapping = buildMappedRolesAndGroups(validatedConfig.discourse);
 
   const redirectUrl = buildDiscourseSsoRedirectUrl(
     request,
@@ -102,12 +149,12 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       email: session.user.email,
       username: session.user.name ?? session.user.email.split("@")[0],
       name: session.user.name ?? undefined,
-      admin,
-      moderator,
-      groups: shouldSyncGroups ? mappedGroups : undefined,
-      addGroups: shouldSyncGroups ? undefined : mappedGroups,
+      admin: roleMapping.admin,
+      moderator: roleMapping.moderator,
+      groups: roleMapping.shouldSyncGroups ? roleMapping.mappedGroups : undefined,
+      addGroups: roleMapping.shouldSyncGroups ? undefined : roleMapping.mappedGroups,
     },
-    config.discourse.ssoSecret,
+    validatedConfig.discourse.ssoSecret,
   );
 
   await recordObservabilityEvent({
@@ -115,13 +162,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     source: "server",
     userId: session.user.id,
     data: {
-      syncMode: config.discourse.ssoGroupSyncMode,
-      hasAppAdminAccess,
-      admin,
-      moderator,
-      mappedGroups,
-      prePolicyGroupCount: mergedGroups.length,
-      mappedGroupCount: mappedGroups.length,
+      syncMode: validatedConfig.discourse.ssoGroupSyncMode,
+      hasAppAdminAccess: roleMapping.hasAppAdminAccess,
+      admin: roleMapping.admin,
+      moderator: roleMapping.moderator,
+      mappedGroups: roleMapping.mappedGroups,
+      prePolicyGroupCount: roleMapping.mergedGroups.length,
+      mappedGroupCount: roleMapping.mappedGroups.length,
     },
   });
 

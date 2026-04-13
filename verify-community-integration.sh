@@ -3,7 +3,7 @@ set -euo pipefail
 
 APP_URL="${APP_URL:-http://localhost:3000}"
 COMMUNITY_URL="${COMMUNITY_URL:-https://community.foreverlotus.com}"
-MODULE="${MODULE:-bhakti-journal}"
+MODULE="${MODULE:-bhakti}"
 ENV_FILE="apps/frontend/.env.local"
 CURL_INSECURE="${CURL_INSECURE:-0}"
 CURL_CA_BUNDLE_PATH="${CURL_CA_BUNDLE_PATH:-}"

@@ -235,6 +235,14 @@ describe("/api/community/discourse/sso route", () => {
       "secret",
     );
   });
+});
+
+describe("/api/community/discourse/sso route group policy", () => {
+  beforeEach(() => {
+    cookiesMock.mockReturnValue({ get: vi.fn().mockReturnValue(undefined) });
+    isAdminCookieValidMock.mockReturnValue(false);
+    recordObservabilityEventMock.mockReset();
+  });
 
   it("uses groups field in strict sync mode", async () => {
     getCommunityConfigMock.mockReturnValue({
