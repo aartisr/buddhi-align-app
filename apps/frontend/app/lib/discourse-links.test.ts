@@ -55,4 +55,20 @@ describe("community-links", () => {
 
     expect(url).toBe("https://community.example.org/c/buddhi-align/dhyana-meditation");
   });
+
+  it("preserves community subpath for reverse proxy deployments", () => {
+    const url = buildCommunityUrl("bhakti", {
+      enabled: true,
+      provider: "discourse",
+      discourse: {
+        enabled: true,
+        baseUrl: "https://community.example.org",
+        communityUrl: "https://buddhi-align.example.org/community",
+        parentCategorySlug: "buddhi-align",
+        requestTimeoutMs: 4000,
+      },
+    });
+
+    expect(url).toBe("https://buddhi-align.example.org/community/c/buddhi-align/bhakti-journal");
+  });
 });

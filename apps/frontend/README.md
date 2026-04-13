@@ -105,6 +105,12 @@ NEXT_PUBLIC_BGM_URLS=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.m
 - `DISCOURSE_DEFAULT_CATEGORY_SLUG`: optional default category slug
 - `DISCOURSE_REQUEST_TIMEOUT_MS`: optional timeout override for server requests
 
+Reverse proxy note:
+- If Discourse is served under a subpath (for example `https://buddhi-align.foreverlotus.com/community`), set `NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL` to that full subpath base.
+- Community links will preserve that base path and resolve as:
+  - `/community/c/<subcategory>`
+  - `/community/c/<parent>/<subcategory>` when `DISCOURSE_PARENT_CATEGORY_SLUG` is set.
+
 ## Invite And Growth UX
 
 - Home and sign-in screens include an invite widget for rapid sharing.
@@ -180,3 +186,4 @@ Supported module names: `karma`, `bhakti`, `jnana`, `dhyana`, `vasana`, `dharma`
 - Component/page engineering standards: `docs/component-engineering-standards.md`
 - Refactor hotspot backlog: `docs/refactor-hotspot-backlog.md`
 - Community integration phased plan: `docs/discourse-integration-phased-plan.md`
+- Discourse reverse proxy setup: `docs/discourse-reverse-proxy-setup.md`

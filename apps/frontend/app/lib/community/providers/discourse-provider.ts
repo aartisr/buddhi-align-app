@@ -14,6 +14,21 @@ function isSafeHttpUrl(value?: string): boolean {
   }
 }
 
+function joinUrlPath(basePathname: string, suffixPathname: string): string {
+  const normalizedBase = basePathname.endsWith("/")
+    ? basePathname.slice(0, -1)
+    : basePathname;
+  const normalizedSuffix = suffixPathname.startsWith("/")
+    ? suffixPathname
+    : `/${suffixPathname}`;
+
+  if (!normalizedBase || normalizedBase === "/") {
+    return normalizedSuffix;
+  }
+
+  return `${normalizedBase}${normalizedSuffix}`;
+}
+
 export function buildDiscourseCommunityUrl(
   moduleKey: CommunityModuleKey,
   config: CommunityConfig,
@@ -24,14 +39,19 @@ export function buildDiscourseCommunityUrl(
   }
 
   const base = discourseConfig.communityUrl ?? discourseConfig.baseUrl;
-  if (!isSafeHttpUrl(base)) return undefined;
+  if (!base || !isSafeHttpUrl(base)) return undefined;
 
   const categorySlug = getModuleCategorySlug(moduleKey) || discourseConfig.defaultCategorySlug || "community";
   const parentCategorySlug = discourseConfig.parentCategorySlug?.trim();
-  const categoryPath = parentCategorySlug
+  const categoryPathSuffix = parentCategorySlug
     ? `/c/${encodeURIComponent(parentCategorySlug)}/${encodeURIComponent(categorySlug)}`
     : `/c/${encodeURIComponent(categorySlug)}`;
-  const resolved = new URL(categoryPath, base);
+  const parsedBase = new URL(base);
+  const categoryPath = joinUrlPath(parsedBase.pathname, categoryPathSuffix);
+  const resolved = new URL(parsedBase.toString());
+  resolved.pathname = categoryPath;
+  resolved.search = "";
+  resolved.hash = "";
   return resolved.toString().replace(/\/$/, "");
 }
 
