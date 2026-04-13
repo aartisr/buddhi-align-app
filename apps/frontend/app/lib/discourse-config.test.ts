@@ -23,6 +23,7 @@ describe("discourse-config", () => {
       DISCOURSE_INTEGRATION_ENABLED: "true",
       DISCOURSE_BASE_URL: "https://community.example.org/",
       NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL: "https://community.example.org/c/practice",
+      DISCOURSE_PARENT_CATEGORY_SLUG: "Buddhi-Align",
       DISCOURSE_API_USERNAME: "system",
       DISCOURSE_API_KEY: "secret",
       DISCOURSE_SSO_DEFAULT_GROUPS: "community-members, seekers ",
@@ -40,6 +41,7 @@ describe("discourse-config", () => {
     expect(config.enabled).toBe(true);
     expect(config.baseUrl).toBe("https://community.example.org");
     expect(config.communityUrl).toBe("https://community.example.org/c/practice");
+    expect(config.parentCategorySlug).toBe("buddhi-align");
     expect(config.apiUsername).toBe("system");
     expect(config.apiKey).toBe("secret");
     expect(config.ssoDefaultGroups).toEqual(["community-members", "seekers"]);

@@ -40,4 +40,19 @@ describe("community-links", () => {
 
     expect(url).toBe("https://community.example.org/c/dhyana-meditation");
   });
+
+  it("builds parent/subcategory URLs when parent category slug is configured", () => {
+    const url = buildCommunityUrl("dhyana", {
+      enabled: true,
+      provider: "discourse",
+      discourse: {
+        enabled: true,
+        baseUrl: "https://community.example.org",
+        parentCategorySlug: "buddhi-align",
+        requestTimeoutMs: 4000,
+      },
+    });
+
+    expect(url).toBe("https://community.example.org/c/buddhi-align/dhyana-meditation");
+  });
 });

@@ -27,7 +27,11 @@ export function buildDiscourseCommunityUrl(
   if (!isSafeHttpUrl(base)) return undefined;
 
   const categorySlug = getModuleCategorySlug(moduleKey) || discourseConfig.defaultCategorySlug || "community";
-  const resolved = new URL(`/c/${encodeURIComponent(categorySlug)}`, base);
+  const parentCategorySlug = discourseConfig.parentCategorySlug?.trim();
+  const categoryPath = parentCategorySlug
+    ? `/c/${encodeURIComponent(parentCategorySlug)}/${encodeURIComponent(categorySlug)}`
+    : `/c/${encodeURIComponent(categorySlug)}`;
+  const resolved = new URL(categoryPath, base);
   return resolved.toString().replace(/\/$/, "");
 }
 

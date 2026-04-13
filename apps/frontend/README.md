@@ -90,6 +90,7 @@ NEXT_PUBLIC_BGM_URLS=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.m
 - Legacy compatibility: `DISCOURSE_INTEGRATION_ENABLED=true` also enables the Discourse provider when explicit provider is unset
 - `DISCOURSE_BASE_URL`: Discourse instance base URL (required when enabled)
 - `NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL`: public community URL for client-side links
+- `DISCOURSE_PARENT_CATEGORY_SLUG`: optional parent category slug; when set, links resolve as `/c/<parent>/<subcategory>`
 - `DISCOURSE_API_USERNAME`: API user for server-side Discourse calls
 - `DISCOURSE_API_KEY`: API key for server-side Discourse calls
 - `DISCOURSE_SSO_SECRET`: signing secret for Discourse SSO (Phase 3)

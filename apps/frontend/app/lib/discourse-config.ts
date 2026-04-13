@@ -2,6 +2,7 @@ export interface DiscourseConfig {
   enabled: boolean;
   baseUrl?: string;
   communityUrl?: string;
+  parentCategorySlug?: string;
   apiUsername?: string;
   apiKey?: string;
   ssoSecret?: string;
@@ -80,6 +81,7 @@ export function getDiscourseConfig(env: EnvMap = process.env): DiscourseConfig {
     enabled: parseBooleanEnv(env.DISCOURSE_INTEGRATION_ENABLED),
     baseUrl: normalizeUrl(env.DISCOURSE_BASE_URL),
     communityUrl: normalizeUrl(env.NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL),
+    parentCategorySlug: normalizeOptional(env.DISCOURSE_PARENT_CATEGORY_SLUG)?.toLowerCase(),
     apiUsername: normalizeOptional(env.DISCOURSE_API_USERNAME),
     apiKey: normalizeOptional(env.DISCOURSE_API_KEY),
     ssoSecret: normalizeOptional(env.DISCOURSE_SSO_SECRET),
