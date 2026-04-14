@@ -130,6 +130,7 @@ describe("AutographExchangePage", () => {
     fireEvent.click(screen.getByRole("button", { name: /Open signing form/i }));
 
     expect(screen.getByTestId("sign-editor")).toBeInTheDocument();
+    expect(screen.getByTestId("signature-preview")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Confirm signature" })).toBeInTheDocument();
   });
 

@@ -48,8 +48,10 @@ export async function GET(_req: NextRequest) {
 
     return NextResponse.json(toPublicPreferences(latest));
   } catch (err) {
-    console.error("GET /api/preferences", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    // Preferences are non-critical for page render. If backing storage has
+    // a transient connectivity issue, return safe defaults instead of 500.
+    console.warn("GET /api/preferences fallback to defaults", err);
+    return NextResponse.json(toPublicPreferences(null));
   }
 }
 

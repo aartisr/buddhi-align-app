@@ -2,25 +2,27 @@
 
 import React from "react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import ModuleLayout from "@/app/components/ModuleLayout";
 import { useI18n } from "@/app/i18n/provider";
 import { useAutographExchange } from "@/app/hooks/useAutographExchange";
 import type { AutographProfile, AutographRequest, AutographRole } from "@/app/lib/autographs/types";
+import SignaturePreview from "./SignaturePreview";
+import type { SignaturePreset } from "./signature-generator";
+import {
+  useAutographExchangeViewModel,
+  type ArchiveSort,
+  type ProfileFormState,
+  type RequestFormState,
+  type RoleOption,
+} from "./useAutographExchangeViewModel";
 import "./autograph-exchange.css";
 
 const INPUT_CLASS =
   "app-form-input border-2 border-primary bg-surface rounded-xl px-3 py-2 w-full max-w-full min-w-0 focus:outline-none focus:ring-2 focus:ring-primary text-base shadow-sm";
 
 type Translate = ReturnType<typeof useI18n>["t"];
-
-type ProfileFormState = { displayName: string; role: AutographRole };
-type RequestFormState = { signerUserId: string; message: string };
-
-type RoleOption = { value: AutographRole; label: string };
-
-type ArchiveSort = "newest" | "oldest";
 
 function LoadingState({ t }: { t: Translate }) {
   return (
@@ -213,6 +215,7 @@ function InboxColumn({
   expandedRequestId,
   setExpandedRequestId,
   lastSignedRequestId,
+  signaturePreset,
   onSign,
 }: {
   t: Translate;
@@ -223,6 +226,7 @@ function InboxColumn({
   expandedRequestId: string | null;
   setExpandedRequestId: React.Dispatch<React.SetStateAction<string | null>>;
   lastSignedRequestId: string | null;
+  signaturePreset: SignaturePreset;
   onSign: (requestId: string) => Promise<void>;
 }) {
   return (
@@ -260,6 +264,7 @@ function InboxColumn({
 
             {expandedRequestId === item.id ? (
               <div className="autograph-sign-panel" data-testid="sign-editor">
+                <SignaturePreview preset={signaturePreset} previewId={item.id} />
                 <label className="flex flex-col gap-1">
                   <span className="app-form-label">{t("autograph.sign.label")}</span>
                   <textarea
@@ -272,6 +277,13 @@ function InboxColumn({
                 </label>
                 <div className="autograph-sign-footer">
                   <span className="autograph-char-count">{(signatureDrafts[item.id] ?? "").trim().length}/240</span>
+                  <button
+                    className="autograph-secondary-btn"
+                    onClick={() => setSignatureDrafts((prev) => ({ ...prev, [item.id]: `Signed by ${signaturePreset.label}` }))}
+                    type="button"
+                  >
+                    Use generated signature
+                  </button>
                   <button
                     className="app-button-primary"
                     onClick={() => void onSign(item.id)}
@@ -398,99 +410,46 @@ export default function AutographExchangePage() {
     signAutograph,
   } = useAutographExchange(userId);
 
-  const [profileForm, setProfileForm] = useState<{ displayName: string; role: AutographRole }>({
-    displayName: "",
-    role: "student",
+  const {
+    profileForm,
+    setProfileForm,
+    requestForm,
+    setRequestForm,
+    signatureDrafts,
+    setSignatureDrafts,
+    expandedRequestId,
+    setExpandedRequestId,
+    archiveFilter,
+    setArchiveFilter,
+    archiveSort,
+    setArchiveSort,
+    lastSignedRequestId,
+    roleOptions,
+    filteredArchive,
+    signaturePreset,
+    effectiveProfileName,
+    effectiveProfileRole,
+    handleProfileSubmit,
+    handleRequestSubmit,
+    handleSign,
+  } = useAutographExchangeViewModel({
+    t,
+    userId,
+    sessionName: session?.user?.name,
+    sessionEmail: session?.user?.email,
+    profileDisplayName: myProfile?.displayName,
+    profileRole: myProfile?.role,
+    archive,
+    saveProfile,
+    requestAutograph,
+    signAutograph,
   });
-  const [requestForm, setRequestForm] = useState({ signerUserId: "", message: "" });
-  const [signatureDrafts, setSignatureDrafts] = useState<Record<string, string>>({});
-  const [expandedRequestId, setExpandedRequestId] = useState<string | null>(null);
-  const [archiveFilter, setArchiveFilter] = useState("");
-  const [archiveSort, setArchiveSort] = useState<ArchiveSort>("newest");
-  const [lastSignedRequestId, setLastSignedRequestId] = useState<string | null>(null);
-
-  const roleOptions = useMemo(
-    () => [
-      { value: "student" as const, label: t("autograph.profile.role.student") },
-      { value: "teacher" as const, label: t("autograph.profile.role.teacher") },
-    ],
-    [t],
-  );
-
-  const filteredArchive = useMemo(() => {
-    const normalized = archiveFilter.trim().toLowerCase();
-    const base = archive.filter((item) => {
-      if (!normalized) return true;
-      return (
-        item.requesterDisplayName.toLowerCase().includes(normalized)
-        || item.signerDisplayName.toLowerCase().includes(normalized)
-        || item.message.toLowerCase().includes(normalized)
-        || (item.signatureText ?? "").toLowerCase().includes(normalized)
-      );
-    });
-
-    return [...base].sort((a, b) => {
-      const left = new Date(a.signedAt ?? a.createdAt).getTime();
-      const right = new Date(b.signedAt ?? b.createdAt).getTime();
-      return archiveSort === "newest" ? right - left : left - right;
-    });
-  }, [archive, archiveFilter, archiveSort]);
-
-  useEffect(() => {
-    if (!lastSignedRequestId) return;
-    const timer = window.setTimeout(() => setLastSignedRequestId(null), 2200);
-    return () => window.clearTimeout(timer);
-  }, [lastSignedRequestId]);
 
   if (!mounted || status === "loading") {
     return <LoadingState t={t} />;
   }
-
   if (!userId) {
     return <SignedOutState t={t} />;
-  }
-
-  const effectiveProfileName = myProfile?.displayName ?? session.user?.name ?? session.user?.email ?? "";
-  const effectiveProfileRole = myProfile?.role ?? "student";
-
-  async function handleProfileSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const displayName = (profileForm.displayName || effectiveProfileName).trim();
-    const role = profileForm.role || effectiveProfileRole;
-    try {
-      await saveProfile({ displayName, role });
-    } catch {
-      return;
-    }
-    setProfileForm({ displayName: "", role });
-  }
-
-  async function handleRequestSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    try {
-      await requestAutograph(requestForm);
-    } catch {
-      return;
-    }
-    setRequestForm({ signerUserId: "", message: "" });
-  }
-
-  async function handleSign(requestId: string) {
-    try {
-      await signAutograph({
-        requestId,
-        signatureText: signatureDrafts[requestId] ?? "",
-      });
-    } catch {
-      return;
-    }
-    setSignatureDrafts((prev) => {
-      const next = { ...prev };
-      delete next[requestId];
-      return next;
-    });
-    setExpandedRequestId(null);
-    setLastSignedRequestId(requestId);
   }
 
   return (
@@ -551,6 +510,7 @@ export default function AutographExchangePage() {
             expandedRequestId={expandedRequestId}
             setExpandedRequestId={setExpandedRequestId}
             lastSignedRequestId={lastSignedRequestId}
+            signaturePreset={signaturePreset}
             onSign={handleSign}
           />
           <ArchiveColumn

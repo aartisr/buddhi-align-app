@@ -357,6 +357,37 @@
   gap: 0.55rem;
 }
 
+.autograph-signature-preview {
+  border: 1px solid color-mix(in srgb, var(--autograph-tone-border), white 36%);
+  border-radius: 0.75rem;
+  padding: 0.55rem 0.65rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.74) 0%, rgba(255, 255, 255, 0.5) 100%);
+  display: grid;
+  gap: 0.3rem;
+}
+
+.autograph-signature-preview-label {
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--autograph-tone-copy);
+}
+
+.autograph-signature-svg {
+  width: 100%;
+  height: 4.1rem;
+  display: block;
+}
+
+.autograph-signature-preview-name {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--autograph-tone-heading);
+}
+
 .autograph-sign-footer {
   display: flex;
   align-items: center;
@@ -643,6 +674,10 @@
   .autograph-tone-sent .autograph-outbox-card {
     border-color: color-mix(in srgb, var(--autograph-tone-border), white 20%);
     background: linear-gradient(180deg, rgba(72, 55, 28, 0.84) 0%, rgba(54, 42, 24, 0.8) 100%);
+  }
+
+  .autograph-signature-preview {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
   }
 }
 
