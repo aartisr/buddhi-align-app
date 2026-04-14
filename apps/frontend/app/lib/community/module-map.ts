@@ -10,6 +10,7 @@ export const MODULE_CATEGORY_SLUGS: Record<CommunityModuleKey, string> = {
   vasana: "vasana-tracker",
   dharma: "dharma-planner",
   motivation: "motivation-analytics",
+  autograph: "autograph-exchange",
 };
 
 export function isCommunityModuleKey(value: string | null | undefined): value is CommunityModuleKey {

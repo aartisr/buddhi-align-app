@@ -6,8 +6,7 @@ export interface ObservationEvent {
 
 /**
  * Emit a structured product event.
- * In development, this logs to console for quick debugging.
- * In production, this posts to /api/obs (best-effort, no throw).
+ * Posts to /api/obs from the browser (best-effort, no throw).
  */
 export function logEvent(event: string, data?: Record<string, unknown>): void {
   const payload: ObservationEvent = {
@@ -15,12 +14,6 @@ export function logEvent(event: string, data?: Record<string, unknown>): void {
     data,
     timestamp: new Date().toISOString(),
   };
-
-  if (process.env.NODE_ENV !== "production") {
-    // eslint-disable-next-line no-console
-    console.info("[obs]", payload);
-    return;
-  }
 
   // Browser-side best effort delivery.
   if (typeof window !== "undefined") {
@@ -41,9 +34,4 @@ export function logEvent(event: string, data?: Record<string, unknown>): void {
       return;
     }
   }
-
-  // Server-side: cannot self-call via HTTP without knowing the deployment URL.
-  // Emit to stdout so the platform's log aggregator (Vercel, Supabase, etc.) captures it.
-  console.info('[obs:server]', JSON.stringify(payload));
-  return;
 }

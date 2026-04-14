@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
 import { logEvent } from "@/app/lib/logEvent";
+import { buildSignInHref, sanitizeRelativeCallbackUrl } from "@/app/auth/navigation";
 
 import UserMenu from "./UserMenu";
 import BuddhiAlignLogo from "./BuddhiAlignLogo";
@@ -437,8 +438,11 @@ function useInviteContext({
   searchParams: ReturnType<typeof useSearchParams>;
   currentModule: ModuleItem | null;
 }) {
-  const currentPathWithSearch = `${pathname || "/"}${searchParams?.toString() ? `?${searchParams.toString()}` : ""}`;
-  const signInHref = `/sign-in?callbackUrl=${encodeURIComponent(currentPathWithSearch)}`;
+  const currentPathWithSearch = sanitizeRelativeCallbackUrl(
+    `${pathname || "/"}${searchParams?.toString() ? `?${searchParams.toString()}` : ""}`,
+    "/",
+  );
+  const signInHref = buildSignInHref(currentPathWithSearch);
   const isInviteArrival = searchParams?.get("source") === "invite";
   const inviteModule = searchParams?.get("module")?.trim();
   const inviteModuleItem = inviteModule

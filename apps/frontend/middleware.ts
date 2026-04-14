@@ -1,42 +1,53 @@
 import { auth } from "@/auth";
-import { ANONYMOUS_COOKIE_NAME, isAnonymousCookie } from "@/app/auth/anonymous";
+import { ANONYMOUS_COOKIE_NAME, getAnonymousCookieOptions, isAnonymousCookie } from "@/app/auth/anonymous";
 import { hasOidcConfidence, isOidcSensitivePath } from "@/app/auth/auth-confidence";
 import { hasRecentStepUp, isStepUpSensitivePath } from "@/app/auth/step-up";
 import { NextResponse } from "next/server";
 
+function buildSignInRedirect(origin: string, callbackUrl: string, error?: "OIDCRequired" | "StepUpRequired") {
+  const signInUrl = new URL("/sign-in", origin);
+  signInUrl.searchParams.set("callbackUrl", callbackUrl);
+  if (error) {
+    signInUrl.searchParams.set("error", error);
+  }
+  return NextResponse.redirect(signInUrl);
+}
+
 /**
- * Auth middleware: redirects unauthenticated users to /sign-in.
- * Public routes: /sign-in and all NextAuth API routes.
+ * Auth middleware: redirects unauthenticated users to /sign-in for protected routes.
+ * Public routes: /sign-in and auth/community callback APIs.
+ * First-time visitors to / are automatically placed in anonymous mode.
  */
 export default auth((req) => {
   const { pathname, search } = req.nextUrl;
   const callbackUrl = `${pathname}${search}`;
   const isAnonymous = isAnonymousCookie(req.cookies.get(ANONYMOUS_COOKIE_NAME)?.value);
+  const isHomePage = pathname === "/";
+  const isRootPublicAsset = !pathname.startsWith("/api/") && /\.[^/]+$/.test(pathname);
 
   const isPublic =
+    isRootPublicAsset ||
     pathname.startsWith("/sign-in") ||
     pathname.startsWith("/api/auth") ||
     pathname.startsWith("/api/community/link") ||
     pathname.startsWith("/api/community/discourse/sso");
 
+  if (!req.auth && !isAnonymous && isHomePage) {
+    const response = NextResponse.next();
+    response.cookies.set(getAnonymousCookieOptions());
+    return response;
+  }
+
   if (!req.auth && !isPublic && !isAnonymous) {
-    const signInUrl = new URL("/sign-in", req.nextUrl.origin);
-    signInUrl.searchParams.set("callbackUrl", callbackUrl);
-    return NextResponse.redirect(signInUrl);
+    return buildSignInRedirect(req.nextUrl.origin, callbackUrl);
   }
 
   if (req.auth && isOidcSensitivePath(pathname) && !hasOidcConfidence(req.auth)) {
-    const signInUrl = new URL("/sign-in", req.nextUrl.origin);
-    signInUrl.searchParams.set("callbackUrl", callbackUrl);
-    signInUrl.searchParams.set("error", "OIDCRequired");
-    return NextResponse.redirect(signInUrl);
+    return buildSignInRedirect(req.nextUrl.origin, callbackUrl, "OIDCRequired");
   }
 
   if (req.auth && isStepUpSensitivePath(pathname) && !hasRecentStepUp(req.auth as { user?: { authAt?: string | number } })) {
-    const signInUrl = new URL("/sign-in", req.nextUrl.origin);
-    signInUrl.searchParams.set("callbackUrl", callbackUrl);
-    signInUrl.searchParams.set("error", "StepUpRequired");
-    return NextResponse.redirect(signInUrl);
+    return buildSignInRedirect(req.nextUrl.origin, callbackUrl, "StepUpRequired");
   }
 
   return NextResponse.next();

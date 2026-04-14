@@ -1,28 +1,28 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ANONYMOUS_COOKIE_NAME, isAnonymousCookie } from '@/app/auth/anonymous';
-import { auth } from '@/auth';
-import { createDataProvider } from '@buddhi-align/data-access';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import { createDataProvider } from "@buddhi-align/data-access";
 import {
   createAnonymousEntry,
   listAnonymousEntries,
-} from '../_anonymous-module-store';
-import { ANALYTICS_MODULES } from '../analytics/types';
-import { logServerError } from '@/app/lib/server-error-log';
-
-// Single source of truth for permitted practice module names.
-// Derived from ANALYTICS_MODULES to avoid duplicate declarations.
-const VALID_MODULES = new Set<string>(ANALYTICS_MODULES);
+} from "../_anonymous-module-store";
+import {
+  buildModuleRoute,
+  isAnonymousRequest,
+  isValidPracticeModule,
+  parseJsonObjectBody,
+  serverErrorResponse,
+} from "../_module-route-utils";
 
 /** GET /api/[module] — list all entries */
 export async function GET(
   req: NextRequest,
   { params }: { params: { module: string } },
 ) {
-  if (!VALID_MODULES.has(params.module)) {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  if (!isValidPracticeModule(params.module)) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  if (isAnonymousCookie(req.cookies.get(ANONYMOUS_COOKIE_NAME)?.value)) {
+  if (isAnonymousRequest(req)) {
     return NextResponse.json(listAnonymousEntries(params.module));
   }
 
@@ -33,9 +33,7 @@ export async function GET(
     });
     return NextResponse.json(data);
   } catch (err) {
-    void logServerError(`/api/${params.module}`, 'GET', err);
-    console.error(`GET /api/${params.module}`, err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return serverErrorResponse(buildModuleRoute(params.module), "GET", err);
   }
 }
 
@@ -44,38 +42,34 @@ export async function POST(
   req: NextRequest,
   { params }: { params: { module: string } },
 ) {
-  if (!VALID_MODULES.has(params.module)) {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  if (!isValidPracticeModule(params.module)) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  let body: Record<string, unknown>;
+  let parsedBody: unknown;
   try {
-    body = await req.json();
+    parsedBody = await req.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  if (typeof body !== 'object' || body === null || Array.isArray(body)) {
-    return NextResponse.json(
-      { error: 'Request body must be a non-null object' },
-      { status: 400 },
-    );
+  const parsedObject = parseJsonObjectBody(parsedBody);
+  if (!parsedObject.ok) {
+    return parsedObject.response;
   }
 
-  if (isAnonymousCookie(req.cookies.get(ANONYMOUS_COOKIE_NAME)?.value)) {
-    const entry = createAnonymousEntry(params.module, body);
+  if (isAnonymousRequest(req)) {
+    const entry = createAnonymousEntry(params.module, parsedObject.data);
     return NextResponse.json(entry, { status: 201 });
   }
 
   try {
     const session = await auth();
-    const entry = await createDataProvider().create(params.module, body, {
+    const entry = await createDataProvider().create(params.module, parsedObject.data, {
       userId: session?.user?.id,
     });
     return NextResponse.json(entry, { status: 201 });
   } catch (err) {
-    void logServerError(`/api/${params.module}`, 'POST', err);
-    console.error(`POST /api/${params.module}`, err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return serverErrorResponse(buildModuleRoute(params.module), "POST", err);
   }
 }

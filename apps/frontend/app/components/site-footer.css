@@ -161,7 +161,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--text-muted) 72%, #5f4708 28%);
+  color: #6e5a1e;
   line-height: 1;
   transform: none;
 }
@@ -177,7 +177,7 @@
   }
 
   .app-awaricon-badge__tag {
-    color: color-mix(in srgb, var(--text-muted) 90%, #d8b75d 10%);
+    color: #b8aa84;
   }
 }
 

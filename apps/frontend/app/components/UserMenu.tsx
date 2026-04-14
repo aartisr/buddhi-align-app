@@ -1,6 +1,6 @@
 "use client";
 
-import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
+import { hasAnonymousCookieInHeader } from "@/app/auth/anonymous";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -18,7 +18,7 @@ export default function UserMenu() {
 
   useEffect(() => {
     if (typeof document === "undefined") return;
-    setIsAnonymous(document.cookie.includes(`${ANONYMOUS_COOKIE_NAME}=${ANONYMOUS_COOKIE_VALUE}`));
+    setIsAnonymous(hasAnonymousCookieInHeader(document.cookie));
   }, []);
 
   if (status === "loading") {

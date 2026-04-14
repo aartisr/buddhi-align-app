@@ -12,16 +12,10 @@ import {
 import { hasOidcConfidence } from "@/app/auth/auth-confidence";
 import { writeAdminAudit } from "@/app/admin/_audit";
 import { translate, DEFAULT_LOCALE, type TranslationKey } from "@/app/i18n/config";
+import { buildSignInHref, sanitizeRelativeCallbackUrl } from "@/app/auth/navigation";
 
 const t = (key: TranslationKey, vars?: Record<string, string | number>) =>
   translate(DEFAULT_LOCALE, key, vars);
-
-function sanitizeCallbackUrl(callbackUrl?: string): string {
-  if (!callbackUrl || !callbackUrl.startsWith("/") || callbackUrl.startsWith("//")) {
-    return "/admin";
-  }
-  return callbackUrl;
-}
 
 export default async function AdminAccessPage({
   searchParams,
@@ -30,13 +24,13 @@ export default async function AdminAccessPage({
 }) {
   const session = await auth();
   if (!session) {
-    redirect("/sign-in?callbackUrl=%2Fadmin-access");
+    redirect(buildSignInHref("/admin-access"));
   }
   if (!hasOidcConfidence(session)) {
-    redirect("/sign-in?callbackUrl=%2Fadmin-access&error=OIDCRequired");
+    redirect(buildSignInHref("/admin-access", { error: "OIDCRequired" }));
   }
 
-  const callbackUrl = sanitizeCallbackUrl(searchParams?.callbackUrl);
+  const callbackUrl = sanitizeRelativeCallbackUrl(searchParams?.callbackUrl, "/admin");
   const existingCookie = cookies().get(ADMIN_COOKIE_NAME)?.value;
   if (isAdminCookieValid(existingCookie)) {
     redirect(callbackUrl);
@@ -50,13 +44,13 @@ export default async function AdminAccessPage({
 
     const session = await auth();
     if (!session) {
-      redirect("/sign-in?callbackUrl=%2Fadmin-access");
+      redirect(buildSignInHref("/admin-access"));
     }
     if (!hasOidcConfidence(session)) {
-      redirect("/sign-in?callbackUrl=%2Fadmin-access&error=OIDCRequired");
+      redirect(buildSignInHref("/admin-access", { error: "OIDCRequired" }));
     }
 
-    const callback = sanitizeCallbackUrl(String(formData.get("callbackUrl") ?? "/admin"));
+    const callback = sanitizeRelativeCallbackUrl(String(formData.get("callbackUrl") ?? "/admin"), "/admin");
     const password = String(formData.get("password") ?? "");
 
     if (!isAdminConfigured() || !verifyAdminPassword(password)) {

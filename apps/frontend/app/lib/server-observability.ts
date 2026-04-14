@@ -43,11 +43,19 @@ export function inferObservabilitySeverity(eventName: string): ObservabilitySeve
   return "info";
 }
 
+function shouldPersistObservabilityEvents(): boolean {
+  return process.env.OBS_PERSIST_TO_DB === "1";
+}
+
 /**
  * Best-effort event sink used by server routes and server actions.
  * This helper must never throw so it cannot break primary request handling.
  */
 export async function recordObservabilityEvent(input: RecordObservabilityEventInput): Promise<void> {
+  if (!shouldPersistObservabilityEvents()) {
+    return;
+  }
+
   try {
     const provider = createDataProvider();
     await provider.create<ObservabilityEventEntry>(OBSERVABILITY_EVENT_MODULE, {

@@ -1,5 +1,6 @@
 import { signIn } from "@/auth";
-import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
+import { getAnonymousCookieClearOptions, getAnonymousCookieOptions } from "@/app/auth/anonymous";
+import { sanitizeRelativeCallbackUrl } from "@/app/auth/navigation";
 import { translate, DEFAULT_LOCALE, MODULE_CATALOG, type TranslationKey } from "@/app/i18n/config";
 import {
   getConfiguredOAuthProviders,
@@ -68,13 +69,6 @@ const PROVIDER_THEME: Record<
 const t = (key: TranslationKey, vars?: Record<string, string | number>) =>
   translate(DEFAULT_LOCALE, key, vars);
 
-function sanitizeCallbackUrl(callbackUrl?: string): string {
-  if (!callbackUrl) return "/";
-  if (!callbackUrl.startsWith("/")) return "/";
-  if (callbackUrl.startsWith("//")) return "/";
-  return callbackUrl;
-}
-
 function sanitizeChoiceMode(mode?: string): "manual" | "auto" {
   return mode === "manual" ? "manual" : "auto";
 }
@@ -104,7 +98,7 @@ export default function SignInPage({
   searchParams?: { callbackUrl?: string; error?: string; mode?: string };
 }) {
   const configuredProviders = getConfiguredOAuthProviders();
-  const callbackUrl = sanitizeCallbackUrl(searchParams?.callbackUrl);
+  const callbackUrl = sanitizeRelativeCallbackUrl(searchParams?.callbackUrl, "/");
   const mode = sanitizeChoiceMode(searchParams?.mode);
   const error = searchParams?.error;
   const inviteModuleOptions = MODULE_CATALOG.map((item) => ({
@@ -160,14 +154,7 @@ export default function SignInPage({
               className="mt-3"
               action={async () => {
                 "use server";
-                cookies().set({
-                  name: ANONYMOUS_COOKIE_NAME,
-                  value: ANONYMOUS_COOKIE_VALUE,
-                  sameSite: "lax",
-                  secure: process.env.NODE_ENV === "production",
-                  path: "/",
-                  maxAge: 60 * 60 * 24 * 7,
-                });
+                cookies().set(getAnonymousCookieOptions());
                 redirect(callbackUrl);
               }}
             >
@@ -190,12 +177,7 @@ export default function SignInPage({
                 key={provider.id}
                 action={async () => {
                   "use server";
-                  cookies().set({
-                    name: ANONYMOUS_COOKIE_NAME,
-                    value: "",
-                    path: "/",
-                    maxAge: 0,
-                  });
+                  cookies().set(getAnonymousCookieClearOptions());
                   await signIn(provider.id, { redirectTo: callbackUrl });
                 }}
               >

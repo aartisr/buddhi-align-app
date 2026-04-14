@@ -9,8 +9,7 @@ interface ObservationEvent {
 
 /**
  * Lightweight observability collector.
- * This intentionally logs server-side for now; wire to your preferred
- * sink (OpenTelemetry, Datadog, etc.) when production infra is ready.
+ * Accepts best-effort client telemetry without emitting console logs.
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   let payload: ObservationEvent;
@@ -24,13 +23,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (!payload || typeof payload.event !== "string" || payload.event.length === 0) {
     return NextResponse.json({ error: "Invalid event payload" }, { status: 400 });
   }
-
-  // eslint-disable-next-line no-console
-  console.info("[obs:api]", {
-    event: payload.event,
-    data: payload.data ?? {},
-    timestamp: payload.timestamp ?? new Date().toISOString(),
-  });
 
   await recordObservabilityEvent({
     event: payload.event,

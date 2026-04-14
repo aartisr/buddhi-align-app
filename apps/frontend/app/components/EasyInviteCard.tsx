@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MODULE_CATALOG, translate, DEFAULT_LOCALE } from "@/app/i18n/config";
 
 type EasyInviteCardProps = {
@@ -93,11 +93,6 @@ function buildTemplateUrl(template: InviteTemplate): string {
   return query ? `${template.path}?${query}` : template.path;
 }
 
-function makeAbsoluteUrl(path: string): string {
-  if (typeof window === "undefined") return path;
-  return `${window.location.origin}${path}`;
-}
-
 function buildInviteMessage(url: string): string {
   return translate(DEFAULT_LOCALE, "invite.messageTemplate", { url });
 }
@@ -141,10 +136,15 @@ export default function EasyInviteCard({
   const [emailTo, setEmailTo] = useState("");
   const [phoneTo, setPhoneTo] = useState("");
   const [copied, setCopied] = useState(false);
+  const [canNativeShare, setCanNativeShare] = useState(false);
 
-  const inviteUrl = useMemo(() => makeAbsoluteUrl(invitePath), [invitePath]);
+  // Keep render-time value deterministic between SSR and CSR to avoid hydration mismatch.
+  const inviteUrl = invitePath;
   const inviteMessage = useMemo(() => buildInviteMessage(inviteUrl), [inviteUrl]);
-  const hasNativeShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
+
+  useEffect(() => {
+    setCanNativeShare(typeof navigator !== "undefined" && typeof navigator.share === "function");
+  }, []);
 
   const emailHref = useMemo(() => {
     const params = new URLSearchParams();
@@ -162,7 +162,8 @@ export default function EasyInviteCard({
 
   async function copyInviteLink() {
     try {
-      await navigator.clipboard.writeText(inviteUrl);
+      const absoluteUrl = `${window.location.origin}${invitePath}`;
+      await navigator.clipboard.writeText(absoluteUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 1600);
     } catch {
@@ -171,12 +172,12 @@ export default function EasyInviteCard({
   }
 
   async function shareInviteLink() {
-    if (!hasNativeShare) return;
+    if (!canNativeShare) return;
     try {
       await navigator.share({
         title: title,
         text: translate(DEFAULT_LOCALE, "invite.shareText"),
-        url: inviteUrl,
+        url: `${window.location.origin}${invitePath}`,
       });
     } catch {
       // User cancel should remain silent.
@@ -237,7 +238,7 @@ export default function EasyInviteCard({
           <button type="button" onClick={copyInviteLink} className="app-user-action px-3 py-2 rounded-lg text-sm">
             {copied ? copiedLabel : copyCta}
           </button>
-          {hasNativeShare ? (
+          {canNativeShare ? (
             <button type="button" onClick={shareInviteLink} className="app-button-primary px-3 py-2 rounded-lg text-sm">
               {shareCta}
             </button>

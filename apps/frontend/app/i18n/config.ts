@@ -226,6 +226,7 @@ const EN_MESSAGES = {
   "layout.module.dhyana": "Dhyana Meditation",
   "layout.module.vasana": "Vasana Tracker",
   "layout.module.dharma": "Dharma Planner",
+  "layout.module.autograph": "Autograph Exchange",
   "nav.group.home": "Home",
   "nav.group.practice": "Practice",
   "nav.group.reflection": "Reflection",
@@ -307,6 +308,34 @@ const EN_MESSAGES = {
   "module.dharma.description": "Align goals and actions with your purpose.",
   "module.motivation.title": "Motivation & Analytics",
   "module.motivation.description": "Deep insights and inspiration.",
+  "module.autograph.title": "Autograph Exchange",
+  "module.autograph.description": "Request and sign meaningful autographs between students and teachers.",
+  "autograph.profile.title": "Your autograph profile",
+  "autograph.profile.subtitle": "Set your display name and role once. Others use this to request your autograph.",
+  "autograph.profile.displayName": "Display name",
+  "autograph.profile.role": "Role",
+  "autograph.profile.role.student": "Student",
+  "autograph.profile.role.teacher": "Teacher",
+  "autograph.profile.save": "Save profile",
+  "autograph.profile.saving": "Saving profile...",
+  "autograph.request.title": "Ask for an autograph",
+  "autograph.request.signer": "Choose signer",
+  "autograph.request.message": "Your message",
+  "autograph.request.submit": "Send request",
+  "autograph.request.submitting": "Sending request...",
+  "autograph.request.messagePlaceholder": "Share why their guidance or friendship matters to you.",
+  "autograph.inbox.title": "Requests for you",
+  "autograph.outbox.title": "Requests you sent",
+  "autograph.archive.title": "Signed autographs",
+  "autograph.sign.label": "Your autograph",
+  "autograph.sign.placeholder": "Write your autograph message here.",
+  "autograph.sign.submit": "Sign now",
+  "autograph.empty.profiles": "No other profiles yet. Ask others to save their autograph profile.",
+  "autograph.empty.inbox": "No autograph requests for you yet.",
+  "autograph.empty.outbox": "You have not requested any autographs yet.",
+  "autograph.empty.archive": "No signed autographs yet.",
+  "autograph.status.pending": "Pending",
+  "autograph.status.signed": "Signed",
   "form.date": "Date",
   "form.helperRequired": "Fields marked * are required.",
   "form.saveEntry": "Save entry",
@@ -866,7 +895,7 @@ export const MESSAGES: Record<Locale, TranslationDict> = {
 };
 
 export interface ModuleCatalogItem {
-  key: "karma" | "bhakti" | "jnana" | "dhyana" | "vasana" | "dharma" | "motivation";
+  key: "karma" | "bhakti" | "jnana" | "dhyana" | "vasana" | "dharma" | "motivation" | "autograph";
   icon: string;
   href: string;
   titleKey: TranslationKey;
@@ -882,6 +911,7 @@ export const MODULE_CATALOG: ModuleCatalogItem[] = [
   { key: "vasana", icon: "🌱", href: "/vasana-tracker", titleKey: "module.vasana.title", descriptionKey: "module.vasana.description", navKey: "layout.module.vasana" },
   { key: "dharma", icon: "📜", href: "/dharma-planner", titleKey: "module.dharma.title", descriptionKey: "module.dharma.description", navKey: "layout.module.dharma" },
   { key: "motivation", icon: "🏆", href: "/motivation-analytics", titleKey: "module.motivation.title", descriptionKey: "module.motivation.description" },
+  { key: "autograph", icon: "✍️", href: "/autograph-exchange", titleKey: "module.autograph.title", descriptionKey: "module.autograph.description", navKey: "layout.module.autograph" },
 ];
 
 export const MODULE_ICON_MAP: Record<TranslationKey, string> = MODULE_CATALOG.reduce((acc, item) => {
