@@ -203,6 +203,7 @@
   border: 1px solid var(--autograph-card-border);
   box-shadow: var(--autograph-shadow-soft);
   display: grid;
+  align-content: start;
   gap: 0.8rem;
   position: relative;
   overflow: hidden;
@@ -668,6 +669,29 @@
     --autograph-tone-accent: rgba(129, 178, 223, 0.76);
     --autograph-tone-heading: #e3effb;
     --autograph-tone-copy: #cadff3;
+  }
+
+  /* Explicit card fallbacks for dark mode to avoid low-contrast rendering in browsers
+     that inconsistently apply color-mix() layered backgrounds. */
+  .autograph-tone-inbox .autograph-request-card {
+    border-color: rgba(132, 202, 171, 0.44);
+    background: linear-gradient(180deg, rgba(30, 66, 54, 0.9) 0%, rgba(23, 54, 43, 0.84) 100%);
+  }
+
+  .autograph-tone-archive .autograph-archive-card {
+    border-color: rgba(129, 178, 223, 0.44);
+    background: linear-gradient(180deg, rgba(30, 53, 75, 0.9) 0%, rgba(23, 44, 63, 0.84) 100%);
+  }
+
+  .autograph-tone-inbox .autograph-request-card :is(.text-sm.font-medium, .app-copy-soft, .autograph-request-pair, .autograph-request-time, .autograph-char-count),
+  .autograph-tone-archive .autograph-archive-card :is(.text-sm.font-medium, .app-copy-soft, .autograph-request-pair, .autograph-request-time, .autograph-char-count) {
+    color: var(--autograph-tone-heading);
+  }
+
+  .autograph-tone-archive .autograph-signature-quote {
+    background: rgba(13, 27, 40, 0.52);
+    border-left-color: rgba(129, 178, 223, 0.5);
+    color: var(--autograph-tone-heading);
   }
 
   .autograph-tone-sent.autograph-outbox-card,
