@@ -5,7 +5,6 @@ export const RECOMMENDED_SEQUENCE = [
   "karma",
   "bhakti",
   "dhyana",
-  "autograph",
   "jnana",
   "vasana",
   "motivation",
@@ -16,7 +15,7 @@ export type RecommendedModuleKey = (typeof RECOMMENDED_SEQUENCE)[number];
 export const MODULE_KEYS_BY_GROUP = {
   home: ["dashboard"] as const,
   practice: ["karma", "bhakti", "dhyana"] as const,
-  reflection: ["autograph", "jnana", "vasana"] as const,
+  reflection: ["jnana", "vasana"] as const,
   insights: ["dharma", "motivation"] as const,
 } as const;
 

@@ -455,12 +455,15 @@ select::placeholder {
   gap: 0.5rem;
   width: 100%;
   padding: 0.75rem 1.25rem;
-  border: 0;
+  border: 1px solid rgba(29, 65, 53, 0.24);
   border-radius: 0.95rem;
   color: #fff;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  cursor: pointer;
   font-weight: 700;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
   box-shadow: 0 14px 30px rgba(47, 93, 80, 0.2);
-  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease, opacity 0.16s ease;
 }
 
 .app-button-primary:hover {
@@ -468,9 +471,35 @@ select::placeholder {
   filter: saturate(1.05);
 }
 
+.app-button-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(47, 93, 80, 0.24);
+}
+
 .app-button-primary:focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
+}
+
+.app-button-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(0.12);
+  box-shadow: 0 6px 14px rgba(47, 93, 80, 0.14);
+}
+
+@media (forced-colors: active) {
+  .app-button-primary {
+    background: ButtonFace;
+    color: ButtonText;
+    border-color: ButtonText;
+    box-shadow: none;
+    text-shadow: none;
+  }
+
+  .app-button-primary:focus-visible {
+    outline-color: Highlight;
+  }
 }
 
 .app-button-primary--karma,

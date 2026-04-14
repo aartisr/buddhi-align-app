@@ -56,6 +56,8 @@ npm run build
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `NEXT_PUBLIC_API_URL` (optional; defaults to same-origin API routing)
+- `NEXT_PUBLIC_OBSERVABILITY_CLIENT` (optional; set to `1` to enable client telemetry posts)
+- `NEXT_PUBLIC_OBSERVABILITY_SAMPLE_RATE` (optional; `0..1`, defaults to `1` when telemetry is enabled)
 
 ### Authentication Variables
 
