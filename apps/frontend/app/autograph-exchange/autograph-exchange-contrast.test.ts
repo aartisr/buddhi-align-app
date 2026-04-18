@@ -1,7 +1,8 @@
 import { readFileSync } from "node:fs";
+import { describe, expect, it } from "vitest";
 
 describe("autograph-exchange dark-mode contrast guardrails", () => {
-  const css = readFileSync("app/autograph-exchange/autograph-exchange.css", "utf8");
+  const css = readFileSync("../../external/autograph-exchange/packages/autograph-feature/styles.css", "utf8");
 
   it("keeps explicit dark-mode fallback backgrounds for inbox and archive cards", () => {
     expect(css).toContain(".autograph-tone-inbox .autograph-request-card {");
@@ -22,5 +23,31 @@ describe("autograph-exchange dark-mode contrast guardrails", () => {
 
     expect(css).toContain(".autograph-tone-archive .autograph-signature-quote {");
     expect(css).toContain("color: var(--autograph-tone-heading);");
+  });
+
+  it("uses semantic foreground tokens for helper text and dark-mode readability", () => {
+    expect(css).toContain("--autograph-heading-color:");
+    expect(css).toContain("--autograph-copy-color:");
+    expect(css).toContain(".autograph-section-step");
+    expect(css).toContain("color: var(--autograph-heading-color);");
+    expect(css).toContain(".autograph-inline-note");
+    expect(css).toContain(".autograph-context-detail");
+    expect(css).toContain(".autograph-suggestion-chip");
+  });
+
+  it("defines page-scoped contrast tokens for all autograph buttons", () => {
+    expect(css).toContain("--autograph-button-primary-text:");
+    expect(css).toContain("--autograph-button-secondary-text:");
+    expect(css).toContain(".autograph-shell .app-button-primary {");
+    expect(css).toContain(".autograph-secondary-btn {");
+    expect(css).toContain(".autograph-suggestion-chip {");
+  });
+
+  it("defines page-scoped contrast tokens for autograph badges", () => {
+    expect(css).toContain("--autograph-badge-accent-text:");
+    expect(css).toContain("--autograph-badge-success-text:");
+    expect(css).toContain(".autograph-setup-badge {");
+    expect(css).toContain(".autograph-status-pill.is-pending {");
+    expect(css).toContain(".autograph-status-pill.is-signed {");
   });
 });

@@ -1,47 +1,17 @@
-export const AUTOGRAPH_PROFILES_MODULE = "autograph_profiles";
-export const AUTOGRAPH_REQUESTS_MODULE = "autograph_requests";
-
-export type AutographRole = "student" | "teacher";
-export type AutographStatus = "pending" | "signed";
-
-export interface AutographProfile {
-  id: string;
-  userId: string;
-  displayName: string;
-  role: AutographRole;
-  updatedAt: string;
-}
-
-export interface AutographRequest {
-  id: string;
-  requesterUserId: string;
-  requesterDisplayName: string;
-  requesterRole: AutographRole;
-  signerUserId: string;
-  signerDisplayName: string;
-  signerRole: AutographRole;
-  message: string;
-  status: AutographStatus;
-  signatureText?: string;
-  createdAt: string;
-  signedAt?: string;
-}
-
-export interface UpsertAutographProfileInput {
-  displayName: string;
-  role: AutographRole;
-}
-
-export interface CreateAutographRequestInput {
-  signerUserId: string;
-  message: string;
-}
-
-export interface SignAutographRequestInput {
-  signatureText: string;
-}
-
-export interface AutographDashboardData {
-  profiles: AutographProfile[];
-  requests: AutographRequest[];
-}
+export {
+  AUTOGRAPH_API,
+  AUTOGRAPH_PROFILES_MODULE,
+  AUTOGRAPH_REQUESTS_MODULE,
+} from "@autograph-exchange/contract";
+export type {
+  AutographDashboardData,
+  AutographErrorResponse,
+  AutographProfile,
+  AutographRequest,
+  AutographRole,
+  AutographStatus,
+  AutographVisibility,
+  CreateAutographRequestInput,
+  SignAutographRequestInput,
+  UpsertAutographProfileInput,
+} from "@autograph-exchange/contract";

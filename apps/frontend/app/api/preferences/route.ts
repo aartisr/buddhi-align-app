@@ -12,6 +12,20 @@ type PreferenceEntry = {
 };
 
 const PREFERENCES_MODULE = "preferences";
+const PREFERENCES_FALLBACK_LOG_INTERVAL_MS = 60_000;
+
+let lastPreferencesFallbackLogAt = 0;
+
+function maybeLogPreferencesFallback(err: unknown) {
+  const now = Date.now();
+  if (now - lastPreferencesFallbackLogAt < PREFERENCES_FALLBACK_LOG_INTERVAL_MS) {
+    return;
+  }
+
+  lastPreferencesFallbackLogAt = now;
+  const reason = err instanceof Error ? err.message : "unknown error";
+  console.warn(`GET /api/preferences using defaults (backing store unavailable): ${reason}`);
+}
 
 function toPublicPreferences(entry: PreferenceEntry | null) {
   if (!entry) {
@@ -50,7 +64,7 @@ export async function GET(_req: NextRequest) {
   } catch (err) {
     // Preferences are non-critical for page render. If backing storage has
     // a transient connectivity issue, return safe defaults instead of 500.
-    console.warn("GET /api/preferences fallback to defaults", err);
+    maybeLogPreferencesFallback(err);
     return NextResponse.json(toPublicPreferences(null));
   }
 }

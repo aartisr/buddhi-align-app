@@ -28,6 +28,7 @@ export default auth((req) => {
   const isPublic =
     isRootPublicAsset ||
     pathname.startsWith("/sign-in") ||
+    pathname.startsWith("/autograph-exchange") ||
     pathname.startsWith("/api/auth") ||
     pathname.startsWith("/api/obs") ||
     pathname.startsWith("/api/community/link") ||

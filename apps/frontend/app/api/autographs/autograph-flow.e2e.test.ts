@@ -144,7 +144,7 @@ describe("autograph exchange API end-to-end flow", () => {
     expect(teacherInbox[0].signerUserId).toBe("teacher-1");
 
     const signRes = await signRequest(
-      makeJsonRequest({ signatureText: "Blessings and strength." }),
+      makeJsonRequest({ signatureText: "Blessings and strength.", visibility: "public" }),
       { params: { id: createdPayload.id } },
     );
     const signedPayload = await signRes.json();
@@ -152,6 +152,7 @@ describe("autograph exchange API end-to-end flow", () => {
     expect(signRes.status).toBe(200);
     expect(signedPayload.status).toBe("signed");
     expect(signedPayload.signatureText).toBe("Blessings and strength.");
+    expect(signedPayload.visibility).toBe("public");
     expect(typeof signedPayload.signedAt).toBe("string");
 
     const teacherSignedRes = await getRequests();
@@ -255,5 +256,35 @@ describe("autograph exchange API end-to-end flow", () => {
 
     expect(missingSignerProfileRes.status).toBe(400);
     expect(missingSignerProfilePayload.error).toContain("does not have an autograph profile");
+  });
+
+  it("returns one visible profile per user even when duplicate rows exist", async () => {
+    setCurrentUser("student-1");
+    await putProfiles(makeJsonRequest({ displayName: "Aarti Ravikumar", role: "student" }));
+
+    setCurrentUser("teacher-1");
+    await putProfiles(makeJsonRequest({ displayName: "Ravikumar Raman", role: "teacher" }));
+
+    const provider = createDataProviderMock();
+    await provider.create("autograph_profiles", {
+      userId: "student-1",
+      displayName: "Aarti Ravikumar",
+      role: "student",
+      updatedAt: "2026-01-01T00:00:00.000Z",
+    });
+    await provider.create("autograph_profiles", {
+      userId: "teacher-1",
+      displayName: "Ravikumar Raman",
+      role: "teacher",
+      updatedAt: "2026-01-01T00:00:00.000Z",
+    });
+
+    setCurrentUser("student-1");
+    const profilesRes = await getProfiles();
+    const profilesPayload = await profilesRes.json();
+
+    expect(profilesRes.status).toBe(200);
+    expect(profilesPayload.filter((profile: { userId: string }) => profile.userId === "student-1")).toHaveLength(1);
+    expect(profilesPayload.filter((profile: { userId: string }) => profile.userId === "teacher-1")).toHaveLength(1);
   });
 });

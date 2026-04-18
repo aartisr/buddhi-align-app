@@ -1,4 +1,4 @@
-import { useModuleData } from "@buddhi-align/site-config";
+import { useModuleData } from "@buddhi-align/site-config/client";
 
 export interface KarmaYogaEntry {
   id?: string;

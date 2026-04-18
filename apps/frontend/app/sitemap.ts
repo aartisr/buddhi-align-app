@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { AUTOGRAPH_FEATURE_ENABLED, AUTOGRAPH_ROUTE } from "./lib/autographs/feature";
 import { getSiteUrl } from "./lib/site-url";
 
 const baseUrl = getSiteUrl();
@@ -55,11 +56,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.7,
     },
-    {
-      url: `${baseUrl}/autograph-exchange`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.7,
-    },
+    ...(AUTOGRAPH_FEATURE_ENABLED
+      ? [
+          {
+            url: `${baseUrl}${AUTOGRAPH_ROUTE}`,
+            lastModified: now,
+            changeFrequency: "weekly" as const,
+            priority: 0.7,
+          },
+        ]
+      : []),
   ];
 }

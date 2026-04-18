@@ -6,6 +6,9 @@ export const siteConfig = {
     available: ["light", "dark"],
     primaryColor: "forest",
   },
+  features: {
+    autographExchange: true,
+  },
   prompts: {
     welcome: "Welcome to Buddhi Align App!",
     dashboard: "Your unified overview for self-development and spiritual growth.",

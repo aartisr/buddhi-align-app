@@ -1,3 +1,10 @@
+import {
+  AUTOGRAPH_FEATURE_KEY,
+  AUTOGRAPH_FEATURE_ENABLED,
+  AUTOGRAPH_ICON,
+  AUTOGRAPH_ROUTE,
+} from "@/app/lib/autographs/feature";
+
 export const SHISHUBHARATI_LANGUAGE_RESEARCH = {
   lastVerified: "2026-03-27",
   primarySource: "https://www.shishubharati.net/classes/",
@@ -309,26 +316,26 @@ const EN_MESSAGES = {
   "module.motivation.title": "Motivation & Analytics",
   "module.motivation.description": "Deep insights and inspiration.",
   "module.autograph.title": "Autograph Exchange",
-  "module.autograph.description": "Request and sign meaningful autographs between students and teachers.",
+  "module.autograph.description": "Ask for and give thoughtful autographs without confusion.",
   "autograph.profile.title": "Your autograph profile",
-  "autograph.profile.subtitle": "Set your display name and role once. Others use this to request your autograph.",
+  "autograph.profile.subtitle": "Set your display name and role once so people can ask you for an autograph.",
   "autograph.profile.displayName": "Display name",
   "autograph.profile.role": "Role",
   "autograph.profile.role.student": "Student",
   "autograph.profile.role.teacher": "Teacher",
   "autograph.profile.save": "Save profile",
   "autograph.profile.saving": "Saving profile...",
-  "autograph.request.title": "Ask for an autograph",
+  "autograph.request.title": "Ask someone for an autograph",
   "autograph.request.signer": "Choose signer",
   "autograph.request.message": "Your message",
   "autograph.request.submit": "Send request",
   "autograph.request.submitting": "Sending request...",
-  "autograph.request.messagePlaceholder": "Share why their guidance or friendship matters to you.",
+  "autograph.request.messagePlaceholder": "Say why you are asking and what you would love them to write.",
   "autograph.inbox.title": "Requests for you",
   "autograph.outbox.title": "Requests you sent",
   "autograph.archive.title": "Signed autographs",
   "autograph.sign.label": "Your autograph",
-  "autograph.sign.placeholder": "Write your autograph message here.",
+  "autograph.sign.placeholder": "Write the autograph you want to give them.",
   "autograph.sign.submit": "Sign now",
   "autograph.empty.profiles": "No other profiles yet. Ask others to save their autograph profile.",
   "autograph.empty.inbox": "No autograph requests for you yet.",
@@ -903,7 +910,7 @@ export interface ModuleCatalogItem {
   navKey?: TranslationKey;
 }
 
-export const MODULE_CATALOG: ModuleCatalogItem[] = [
+const BASE_MODULE_CATALOG: ModuleCatalogItem[] = [
   { key: "karma", icon: "🙏", href: "/karma-yoga", titleKey: "module.karma.title", descriptionKey: "module.karma.description", navKey: "layout.module.karma" },
   { key: "bhakti", icon: "🌸", href: "/bhakti-journal", titleKey: "module.bhakti.title", descriptionKey: "module.bhakti.description", navKey: "layout.module.bhakti" },
   { key: "jnana", icon: "🧘‍♂️", href: "/jnana-reflection", titleKey: "module.jnana.title", descriptionKey: "module.jnana.description", navKey: "layout.module.jnana" },
@@ -911,8 +918,20 @@ export const MODULE_CATALOG: ModuleCatalogItem[] = [
   { key: "vasana", icon: "🌱", href: "/vasana-tracker", titleKey: "module.vasana.title", descriptionKey: "module.vasana.description", navKey: "layout.module.vasana" },
   { key: "dharma", icon: "📜", href: "/dharma-planner", titleKey: "module.dharma.title", descriptionKey: "module.dharma.description", navKey: "layout.module.dharma" },
   { key: "motivation", icon: "🏆", href: "/motivation-analytics", titleKey: "module.motivation.title", descriptionKey: "module.motivation.description" },
-  { key: "autograph", icon: "✍️", href: "/autograph-exchange", titleKey: "module.autograph.title", descriptionKey: "module.autograph.description", navKey: "layout.module.autograph" },
 ];
+
+const AUTOGRAPH_MODULE_CATALOG_ITEM: ModuleCatalogItem = {
+  key: AUTOGRAPH_FEATURE_KEY,
+  icon: AUTOGRAPH_ICON,
+  href: AUTOGRAPH_ROUTE,
+  titleKey: "module.autograph.title",
+  descriptionKey: "module.autograph.description",
+  navKey: "layout.module.autograph",
+};
+
+export const MODULE_CATALOG: ModuleCatalogItem[] = AUTOGRAPH_FEATURE_ENABLED
+  ? [...BASE_MODULE_CATALOG, AUTOGRAPH_MODULE_CATALOG_ITEM]
+  : BASE_MODULE_CATALOG;
 
 export const MODULE_ICON_MAP: Record<TranslationKey, string> = MODULE_CATALOG.reduce((acc, item) => {
   acc[item.titleKey] = item.icon;

@@ -28,6 +28,7 @@ import { createClient } from '@supabase/supabase-js';
 import type { DataAccessContext, DataProvider, ModuleEntry } from './provider';
 
 const OWNER_ID_KEY = '__ownerId';
+const DEFAULT_SUPABASE_FETCH_TIMEOUT_MS = 2500;
 
 type ModuleRow = {
   id: string;
@@ -66,6 +67,20 @@ function decodeJwtPayload(token: string): Record<string, unknown> | null {
   }
 }
 
+async function fetchWithTimeout(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), DEFAULT_SUPABASE_FETCH_TIMEOUT_MS);
+
+  try {
+    return await fetch(input, {
+      ...init,
+      signal: init?.signal ?? controller.signal,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export function createSupabaseDataProvider(): DataProvider {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -88,6 +103,9 @@ export function createSupabaseDataProvider(): DataProvider {
   // Server-side client — session persistence is not needed.
   const client = createClient(url, key, {
     auth: { persistSession: false },
+    global: {
+      fetch: fetchWithTimeout,
+    },
   });
 
   return {

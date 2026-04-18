@@ -1,8 +1,9 @@
 import type { ModuleCatalogItem } from "@/app/i18n/config";
+import { AUTOGRAPH_COMMUNITY_SLUG, AUTOGRAPH_FEATURE_ENABLED } from "@/app/lib/autographs/feature";
 
 export type CommunityModuleKey = ModuleCatalogItem["key"];
 
-export const MODULE_CATEGORY_SLUGS: Record<CommunityModuleKey, string> = {
+export const MODULE_CATEGORY_SLUGS: Partial<Record<CommunityModuleKey, string>> = {
   karma: "karma-yoga",
   bhakti: "bhakti-journal",
   jnana: "jnana-reflection",
@@ -10,7 +11,7 @@ export const MODULE_CATEGORY_SLUGS: Record<CommunityModuleKey, string> = {
   vasana: "vasana-tracker",
   dharma: "dharma-planner",
   motivation: "motivation-analytics",
-  autograph: "autograph-exchange",
+  ...(AUTOGRAPH_FEATURE_ENABLED ? { autograph: AUTOGRAPH_COMMUNITY_SLUG } : {}),
 };
 
 export function isCommunityModuleKey(value: string | null | undefined): value is CommunityModuleKey {
@@ -19,5 +20,9 @@ export function isCommunityModuleKey(value: string | null | undefined): value is
 }
 
 export function getModuleCategorySlug(moduleKey: CommunityModuleKey): string {
-  return MODULE_CATEGORY_SLUGS[moduleKey];
+  const slug = MODULE_CATEGORY_SLUGS[moduleKey];
+  if (!slug) {
+    throw new Error(`Community module "${moduleKey}" is not enabled.`);
+  }
+  return slug;
 }

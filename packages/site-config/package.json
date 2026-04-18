@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "main": "index.ts",
   "types": "index.d.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./client": "./client.ts",
+    "./siteConfig": "./siteConfig.ts",
+    "./apiClient": "./apiClient.ts",
+    "./apiConfig": "./apiConfig.ts"
+  },
   "private": true,
   "description": "Centralized config, themes, and prompts for Buddhi Align App."
 }

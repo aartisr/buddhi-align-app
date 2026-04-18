@@ -4,7 +4,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { apiFetch, APIClientError } from '@buddhi-align/site-config';
+import { apiFetch, APIClientError } from './apiClient';
 
 export interface UseModuleDataOptions {
   autoLoad?: boolean;

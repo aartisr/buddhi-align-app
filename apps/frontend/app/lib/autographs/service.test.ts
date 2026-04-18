@@ -51,6 +51,8 @@ vi.mock("@buddhi-align/data-access", () => ({
 
 import {
   createAutographRequest,
+  listAutographProfiles,
+  listVisibleAutographRequests,
   signAutographRequest,
   upsertAutographProfile,
 } from "./service";
@@ -102,5 +104,67 @@ describe("autograph service", () => {
 
     expect(signed.status).toBe("signed");
     expect(signed.signatureText).toBe("Keep shining");
+    expect(signed.visibility).toBe("private");
+  });
+
+  it("shows public signed autographs to non-participants", async () => {
+    await upsertAutographProfile("student-1", {
+      displayName: "Student One",
+      role: "student",
+    });
+    await upsertAutographProfile("teacher-1", {
+      displayName: "Teacher One",
+      role: "teacher",
+    });
+    await upsertAutographProfile("observer-1", {
+      displayName: "Observer One",
+      role: "student",
+    });
+
+    const request = await createAutographRequest("student-1", {
+      signerUserId: "teacher-1",
+      message: "You helped me graduate",
+    });
+
+    await signAutographRequest("teacher-1", request.id, {
+      signatureText: "Proud of your journey",
+      visibility: "public",
+    });
+
+    const visibleToObserver = await listVisibleAutographRequests("observer-1");
+    expect(visibleToObserver).toHaveLength(1);
+    expect(visibleToObserver[0]?.visibility).toBe("public");
+  });
+
+  it("deduplicates profiles by user so signers appear once", async () => {
+    await upsertAutographProfile("student-1", {
+      displayName: "Aarti Ravikumar",
+      role: "student",
+    });
+
+    await upsertAutographProfile("teacher-1", {
+      displayName: "Ravikumar Raman",
+      role: "teacher",
+    });
+
+    await createDataProviderMock().create("autograph_profiles", {
+      userId: "student-1",
+      displayName: "Aarti Ravikumar",
+      role: "student",
+      updatedAt: "2026-01-01T00:00:00.000Z",
+    });
+
+    await createDataProviderMock().create("autograph_profiles", {
+      userId: "teacher-1",
+      displayName: "Ravikumar Raman",
+      role: "teacher",
+      updatedAt: "2026-01-01T00:00:00.000Z",
+    });
+
+    const profiles = await listAutographProfiles();
+
+    expect(profiles).toHaveLength(2);
+    expect(profiles.filter((profile) => profile.userId === "student-1")).toHaveLength(1);
+    expect(profiles.filter((profile) => profile.userId === "teacher-1")).toHaveLength(1);
   });
 });
