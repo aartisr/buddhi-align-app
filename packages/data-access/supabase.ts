@@ -77,6 +77,15 @@ function isMissingRpcFunctionError(message: string): boolean {
   );
 }
 
+function isRpcAmbiguousColumnError(message: string): boolean {
+  const m = message.toLowerCase();
+  return m.includes('column reference') && m.includes('is ambiguous');
+}
+
+function shouldFallbackFromRpc(message: string): boolean {
+  return isMissingRpcFunctionError(message) || isRpcAmbiguousColumnError(message);
+}
+
 function isMissingColumnError(message: string): boolean {
   return message.toLowerCase().includes('column') && message.toLowerCase().includes('does not exist');
 }
@@ -199,7 +208,7 @@ export function createSupabaseDataProvider(): DataProvider {
         return stripInternalFields<T>(row);
       }
 
-      if (!isMissingRpcFunctionError(rpcRes.error.message)) {
+      if (!shouldFallbackFromRpc(rpcRes.error.message)) {
         throw new Error(`Supabase create error: ${rpcRes.error.message}`);
       }
 
@@ -259,7 +268,7 @@ export function createSupabaseDataProvider(): DataProvider {
         return stripInternalFields<T>(row);
       }
 
-      if (!isMissingRpcFunctionError(rpcRes.error.message)) {
+      if (!shouldFallbackFromRpc(rpcRes.error.message)) {
         throw new Error(`Supabase update error: ${rpcRes.error.message}`);
       }
 
@@ -316,7 +325,7 @@ export function createSupabaseDataProvider(): DataProvider {
         return;
       }
 
-      if (!isMissingRpcFunctionError(rpcRes.error.message)) {
+      if (!shouldFallbackFromRpc(rpcRes.error.message)) {
         throw new Error(`Supabase delete error: ${rpcRes.error.message}`);
       }
 

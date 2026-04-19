@@ -336,15 +336,15 @@ AS $$
 DECLARE
   v_entry module_entries%ROWTYPE;
 BEGIN
-  UPDATE module_entries
+  UPDATE module_entries AS me
   SET
     data = COALESCE(p_data, '{}'::jsonb),
     event_at = NOW(),
     deleted_at = NULL,
     status = 'active'
-  WHERE id = p_entry_id
-    AND module = p_module
-    AND tenant_id = COALESCE(NULLIF(p_tenant_id, ''), 'default')
+  WHERE me.id = p_entry_id
+    AND me.module = p_module
+    AND me.tenant_id = COALESCE(NULLIF(p_tenant_id, ''), 'default')
   RETURNING * INTO v_entry;
 
   IF NOT FOUND THEN
@@ -420,15 +420,15 @@ AS $$
 DECLARE
   v_entry module_entries%ROWTYPE;
 BEGIN
-  UPDATE module_entries
+  UPDATE module_entries AS me
   SET
     deleted_at = NOW(),
     status = 'deleted',
     event_at = NOW()
-  WHERE id = p_entry_id
-    AND module = p_module
-    AND tenant_id = COALESCE(NULLIF(p_tenant_id, ''), 'default')
-    AND deleted_at IS NULL
+  WHERE me.id = p_entry_id
+    AND me.module = p_module
+    AND me.tenant_id = COALESCE(NULLIF(p_tenant_id, ''), 'default')
+    AND me.deleted_at IS NULL
   RETURNING * INTO v_entry;
 
   IF NOT FOUND THEN
