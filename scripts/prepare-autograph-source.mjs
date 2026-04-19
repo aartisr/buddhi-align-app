@@ -27,9 +27,17 @@ function resolveRepoRef() {
 }
 
 function ensureDirectoryRemoved(dirPath) {
-  if (fs.existsSync(dirPath)) {
-    fs.rmSync(dirPath, { recursive: true, force: true });
+  const stat = fs.lstatSync(dirPath, { throwIfNoEntry: false });
+  if (!stat) {
+    return;
   }
+
+  if (stat.isDirectory()) {
+    fs.rmSync(dirPath, { recursive: true, force: true });
+    return;
+  }
+
+  fs.unlinkSync(dirPath);
 }
 
 function ensureDirectory(dirPath) {
@@ -54,17 +62,17 @@ function validateSourceTree(rootPath) {
 }
 
 function prepareFromGitClone(repoUrl, ref) {
-  try {
-    execFileSync("git", ["clone", "--depth=1", "--branch", ref, repoUrl, TARGET_DIR], {
-      stdio: "inherit",
-    });
-  } catch (error) {
-    // Vercel can occasionally retain this path from a cached workspace restore.
-    ensureDirectoryRemoved(TARGET_DIR);
-    execFileSync("git", ["clone", "--depth=1", "--branch", ref, repoUrl, TARGET_DIR], {
-      stdio: "inherit",
-    });
-  }
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "autograph-clone-"));
+  const cloneDir = path.join(tempRoot, "repo");
+
+  execFileSync("git", ["clone", "--depth=1", "--branch", ref, repoUrl, cloneDir], {
+    stdio: "inherit",
+  });
+
+  ensureDirectory(path.dirname(TARGET_DIR));
+  ensureDirectoryRemoved(TARGET_DIR);
+  fs.cpSync(cloneDir, TARGET_DIR, { recursive: true });
+  fs.rmSync(tempRoot, { recursive: true, force: true });
 }
 
 function prepareFromGithubTarball(ref) {
@@ -92,6 +100,7 @@ function prepareFromGithubTarball(ref) {
   }
 
   const extractedPath = path.join(extractDir, extractedRoot.name);
+  ensureDirectory(path.dirname(TARGET_DIR));
   ensureDirectoryRemoved(TARGET_DIR);
   fs.cpSync(extractedPath, TARGET_DIR, { recursive: true });
   fs.rmSync(tempRoot, { recursive: true, force: true });
