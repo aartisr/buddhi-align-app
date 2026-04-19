@@ -54,9 +54,17 @@ function validateSourceTree(rootPath) {
 }
 
 function prepareFromGitClone(repoUrl, ref) {
-  execFileSync("git", ["clone", "--depth=1", "--branch", ref, repoUrl, TARGET_DIR], {
-    stdio: "inherit",
-  });
+  try {
+    execFileSync("git", ["clone", "--depth=1", "--branch", ref, repoUrl, TARGET_DIR], {
+      stdio: "inherit",
+    });
+  } catch (error) {
+    // Vercel can occasionally retain this path from a cached workspace restore.
+    ensureDirectoryRemoved(TARGET_DIR);
+    execFileSync("git", ["clone", "--depth=1", "--branch", ref, repoUrl, TARGET_DIR], {
+      stdio: "inherit",
+    });
+  }
 }
 
 function prepareFromGithubTarball(ref) {
@@ -83,7 +91,9 @@ function prepareFromGithubTarball(ref) {
     throw new Error("Tarball extraction failed: missing root directory.");
   }
 
-  fs.renameSync(path.join(extractDir, extractedRoot.name), TARGET_DIR);
+  const extractedPath = path.join(extractDir, extractedRoot.name);
+  ensureDirectoryRemoved(TARGET_DIR);
+  fs.cpSync(extractedPath, TARGET_DIR, { recursive: true });
   fs.rmSync(tempRoot, { recursive: true, force: true });
 }
 
