@@ -20,10 +20,7 @@ async function prepareTempNpmConfig() {
   return { userConfigPath, globalConfigPath };
 }
 
-function createSanitizedEnv({
-  userConfigPath,
-  globalConfigPath,
-}) {
+function createSanitizedEnv({ userConfigPath, globalConfigPath }) {
   const env = { ...process.env };
 
   for (const key of [
@@ -79,18 +76,4 @@ function run(command, args, env) {
 const tempConfig = await prepareTempNpmConfig();
 const env = createSanitizedEnv(tempConfig);
 
-await run(NPM_COMMAND, ["run", "prepare:autograph-source"], env);
-await run(
-  NPM_COMMAND,
-  [
-    "install",
-    "--workspaces",
-    "--include-workspace-root",
-    "--include=dev",
-    "--no-audit",
-    "--no-fund",
-    "--registry",
-    PUBLIC_NPM_REGISTRY,
-  ],
-  env,
-);
+await run(NPM_COMMAND, ["run", "install:with-autograph-source"], env);

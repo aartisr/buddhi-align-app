@@ -234,6 +234,8 @@ Why this works:
 - autograph packages resolve from local file dependencies under `external/autograph-exchange/packages/*`
 - the deploy no longer depends on `external/` sibling paths or local proprietary package references
 
+If your Vercel project uses `apps/frontend` as the root directory, that folder now includes its own `vercel.json` and `scripts/vercel-install.mjs` so the same sanitized install flow still works from the app subdirectory.
+
 Recommended Vercel environment variables:
 
 - `NEXT_PUBLIC_SITE_URL` = your production domain (for canonical metadata + sitemap)
