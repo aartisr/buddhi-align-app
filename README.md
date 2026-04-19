@@ -16,6 +16,10 @@ Website: [https://www.shishubharati.net/](https://www.shishubharati.net/)
 
 This documentation was refreshed on **2026-03-30** to match the current codebase.
 
+### Autograph Integration
+
+- Source sync and package-link flow: [docs/autograph-source-sync.md](docs/autograph-source-sync.md)
+
 ## What This App Is
 
 Buddhi Align is a monorepo centered on a Next.js App Router application that helps users build contemplative practice through structured modules:
@@ -68,6 +72,8 @@ npm run install:with-autograph-source
 ```
 
 By default this pulls `autograph-exchange` from the public GitHub repository.
+
+See [Autograph Exchange Source Sync](docs/autograph-source-sync.md) for the full fetch/link/deploy flow.
 
 For local alternate-source installs, set environment overrides when running install:
 
