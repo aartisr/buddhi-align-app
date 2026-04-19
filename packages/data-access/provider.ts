@@ -12,6 +12,8 @@ export type ModuleEntry = { id: string; [key: string]: unknown };
 
 export interface DataAccessContext {
   userId?: string;
+  tenantId?: string;
+  source?: string;
 }
 
 export interface DataProvider {

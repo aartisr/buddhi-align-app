@@ -40,8 +40,7 @@ packages/
   site-config/             API client/config utilities + reusable hooks
   shared-ui/               Shared React UI components
 supabase/
-  schema.sql               Core schema
-  schema_user_scoped.sql   User-scoped/RLS-oriented schema variant
+  schema.sql               Core schema (generic table + events + projections)
 ```
 
 Note: There is no standalone `apps/backend` service in this repository. API behavior is implemented via Next.js route handlers under `apps/frontend/app/api`.
