@@ -1,4 +1,4 @@
 {
-  "installCommand": "rm -rf external/autograph-exchange && git clone --depth=1 --branch=main https://github.com/aartisr/autograph-exchange.git external/autograph-exchange && npm install --workspaces --include-workspace-root --no-audit --no-fund",
+  "installCommand": "npm run install:with-autograph-source",
   "buildCommand": "npm run verify:no-private-repo && npm run build"
 }

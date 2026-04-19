@@ -7,6 +7,8 @@
     "node": ">=20"
   },
   "scripts": {
+    "prepare:autograph-source": "node scripts/prepare-autograph-source.mjs",
+    "install:with-autograph-source": "npm run prepare:autograph-source && npm install --workspaces --include-workspace-root --no-audit --no-fund",
     "test": "npm --workspace=apps/frontend run test",
     "test:frontend": "npm --workspace=apps/frontend run test",
     "lint": "npm --workspace=apps/frontend run lint",

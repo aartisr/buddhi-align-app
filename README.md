@@ -65,7 +65,15 @@ Note: There is no standalone `apps/backend` service in this repository. API beha
 ### Install
 
 ```bash
-npm install
+npm run install:with-autograph-source
+```
+
+By default this pulls `autograph-exchange` from the public GitHub repository.
+
+For local alternate-source installs, set environment overrides when running install:
+
+```bash
+AUTOGRAPH_EXCHANGE_REPO_URL=<your-alternate-repo-url> AUTOGRAPH_EXCHANGE_REPO_REF=main npm run install:with-autograph-source
 ```
 
 Create local env file from the template:
@@ -214,9 +222,11 @@ Why this works:
 
 - the frontend build is driven by the root workspace script
 - standard dependencies resolve from `registry.npmjs.org`
-- Vercel install clones the latest public `aartisr/autograph-exchange` `main` branch into `external/autograph-exchange`
+- install first prepares `external/autograph-exchange` via `scripts/prepare-autograph-source.mjs`
+- Vercel uses default public source (`https://github.com/aartisr/autograph-exchange.git`) with no private URL in tracked config
+- local development can override source URL and ref through environment variables when needed
 - autograph packages resolve from local file dependencies under `external/autograph-exchange/packages/*`
-- the deploy no longer depends on `external/` sibling paths or private local package references
+- the deploy no longer depends on `external/` sibling paths or local proprietary package references
 
 Recommended Vercel environment variables:
 
