@@ -224,7 +224,7 @@ const EN_MESSAGES = {
   "footer.schoolName": "Shishubharati",
   "footer.authorName": "Aarti Sri Ravikumar",
   "footer.logoAlt": "Shishu Bharati School Logo",
-  "footer.gratitude": "Grateful to its teachers and volunteers.",
+  "footer.gratitude": "Grateful to its Teachers, Volunteers and Students",
   "footer.rights": "All rights reserved.",
   "layout.home": "Home",
   "layout.module.karma": "Karma Yoga",

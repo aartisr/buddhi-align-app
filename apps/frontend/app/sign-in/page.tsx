@@ -239,7 +239,9 @@ export default function SignInPage({
         <p className="app-copy-subtle mt-6 text-center text-xs">
           {t("footer.dedicatedTo")}{" "}
           <span className="app-inline-brand font-medium">{t("footer.schoolName")}</span>.{" "}
-          {t("footer.gratitude")}
+          <a href="/autograph-exchange" className="underline underline-offset-2">
+            {t("footer.gratitude")}
+          </a>
         </p>
       </div>
     </div>

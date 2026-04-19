@@ -36,6 +36,10 @@
   color: var(--text-soft) !important;
 }
 
+.autograph-shell :is(.autograph-tone-inbox, .autograph-tone-archive) .autograph-empty {
+  color: var(--foreground) !important;
+}
+
 .autograph-shell :is(.autograph-card-title, .autograph-feature-title, .autograph-section-step, .autograph-signature-quote) {
   color: var(--text-muted) !important;
 }

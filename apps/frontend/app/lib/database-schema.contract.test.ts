@@ -83,12 +83,15 @@ describe("Supabase schema contract", () => {
     expect(schemaSql).toContain("module_entry_projections_current_status_valid");
   });
 
-  it("documents optional tenant-aware RLS blueprint and claim helpers", () => {
+  it("enables RLS hardening with deny-client default policies", () => {
     expect(schemaSql).toMatch(/CREATE OR REPLACE FUNCTION buddhi_current_tenant\(\)/i);
     expect(schemaSql).toMatch(/CREATE OR REPLACE FUNCTION buddhi_current_subject\(\)/i);
     expect(schemaSql).toMatch(/ALTER TABLE module_entries ENABLE ROW LEVEL SECURITY/i);
-    expect(schemaSql).toMatch(/CREATE POLICY module_entries_tenant_select/i);
-    expect(schemaSql).toMatch(/CREATE POLICY module_entries_tenant_modify/i);
+    expect(schemaSql).toMatch(/ALTER TABLE module_entry_events ENABLE ROW LEVEL SECURITY/i);
+    expect(schemaSql).toMatch(/ALTER TABLE module_entry_projections ENABLE ROW LEVEL SECURITY/i);
+    expect(schemaSql).toMatch(/CREATE POLICY module_entries_deny_client_access/i);
+    expect(schemaSql).toMatch(/CREATE POLICY module_entry_events_deny_client_access/i);
+    expect(schemaSql).toMatch(/CREATE POLICY module_entry_projections_deny_client_access/i);
   });
 
   it("defines transactional RPC write functions for entry, event, and projection consistency", () => {

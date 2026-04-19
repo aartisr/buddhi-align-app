@@ -10,11 +10,16 @@ const {
   };
 
   const provider = {
-    list: vi.fn(async (module: string) => rows[module] ?? []),
+    list: vi.fn(async (module: string, context?: { userId?: string }) => {
+      const moduleRows = rows[module] ?? [];
+      if (!context?.userId) return moduleRows;
+      return moduleRows.filter((row) => row.userId === context.userId);
+    }),
     create: vi.fn(async (module: string, payload: Record<string, unknown>) => {
+      const { id: _ignored, ...rest } = payload;
       const entry = {
+        ...rest,
         id: `${module}-${(rows[module]?.length ?? 0) + 1}`,
-        ...payload,
       };
       rows[module] = [...(rows[module] ?? []), entry];
       return entry;

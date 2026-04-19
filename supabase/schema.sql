@@ -499,7 +499,7 @@ FROM module_entries
 WHERE deleted_at IS NULL;
 
 -- ------------------------------------------------------------
--- Optional tenant-aware RLS blueprint
+-- RLS hardening (secure-by-default)
 -- ------------------------------------------------------------
 -- Supabase puts JWT claims under request.jwt.claims. These helpers make
 -- policy definitions concise and centralized.
@@ -513,23 +513,50 @@ RETURNS TEXT LANGUAGE sql STABLE AS $$
   SELECT NULLIF(current_setting('request.jwt.claims', true), '')::jsonb->>'sub';
 $$;
 
--- RLS stays disabled by default for compatibility with service-role API routes.
--- Enable and tune only if you query tables with anon/authenticated keys.
---
--- ALTER TABLE module_entries ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE module_entry_events ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE module_entry_projections ENABLE ROW LEVEL SECURITY;
+-- Service-role API calls remain functional because service_role bypasses RLS.
+-- Direct anon/authenticated access is denied by default.
+ALTER TABLE module_entries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE module_entry_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE module_entry_projections ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS module_entries_deny_client_access ON module_entries;
+CREATE POLICY module_entries_deny_client_access
+  ON module_entries
+  FOR ALL
+  TO anon, authenticated
+  USING (false)
+  WITH CHECK (false);
+
+DROP POLICY IF EXISTS module_entry_events_deny_client_access ON module_entry_events;
+CREATE POLICY module_entry_events_deny_client_access
+  ON module_entry_events
+  FOR ALL
+  TO anon, authenticated
+  USING (false)
+  WITH CHECK (false);
+
+DROP POLICY IF EXISTS module_entry_projections_deny_client_access ON module_entry_projections;
+CREATE POLICY module_entry_projections_deny_client_access
+  ON module_entry_projections
+  FOR ALL
+  TO anon, authenticated
+  USING (false)
+  WITH CHECK (false);
+
+-- Optional tenant-aware policies if you intentionally allow direct client access:
 --
 -- DROP POLICY IF EXISTS module_entries_tenant_select ON module_entries;
 -- CREATE POLICY module_entries_tenant_select
 --   ON module_entries
 --   FOR SELECT
+--   TO authenticated
 --   USING (tenant_id = buddhi_current_tenant() AND deleted_at IS NULL);
 --
 -- DROP POLICY IF EXISTS module_entries_tenant_modify ON module_entries;
 -- CREATE POLICY module_entries_tenant_modify
 --   ON module_entries
 --   FOR ALL
+--   TO authenticated
 --   USING (tenant_id = buddhi_current_tenant())
 --   WITH CHECK (
 --     tenant_id = buddhi_current_tenant()

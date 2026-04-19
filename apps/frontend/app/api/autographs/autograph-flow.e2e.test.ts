@@ -41,7 +41,8 @@ const {
     }),
     create: vi.fn(async (module: string, payload: Record<string, unknown>) => {
       const nextId = `${module}-${(store[module]?.length ?? 0) + 1}`;
-      const entry: GenericEntry = { id: nextId, ...payload };
+      const { id: _ignored, ...rest } = payload;
+      const entry: GenericEntry = { ...rest, id: nextId };
       store[module] = [...(store[module] ?? []), entry];
       return entry;
     }),

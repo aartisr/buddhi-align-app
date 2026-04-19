@@ -3,6 +3,7 @@ import type { AppErrorEntry } from "@/app/lib/server-error-log";
 import type { ObservabilitySummary } from "@/app/lib/observability-summary";
 import type { ObservabilityEventEntry } from "@/app/lib/server-observability";
 import type { IncidentFilter } from "./incident-operations";
+import AutographDiagnosticsPanel from "./AutographDiagnosticsPanel";
 import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
 
 const t = (key: Parameters<typeof translate>[1], vars?: Record<string, string | number>) =>
@@ -562,6 +563,7 @@ export default function AdminDashboardView(props: AdminDashboardProps) {
       />
 
       <ObservabilityCards observabilitySummary={props.observabilitySummary} />
+      <AutographDiagnosticsPanel />
       <ObservabilityAlertsCard
         observabilitySummary={props.observabilitySummary}
         autoCreatedIncidents={props.autoCreatedIncidents}

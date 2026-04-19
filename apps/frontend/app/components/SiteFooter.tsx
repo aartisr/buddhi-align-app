@@ -26,7 +26,9 @@ export default function SiteFooter() {
         <span className="site-footer__dedication-prefix">.</span>
       </div>
       <div className="site-footer__gratitude">
-        {t("footer.gratitude")}
+        <a href="/autograph-exchange" className="site-footer__author-link">
+          {t("footer.gratitude")}
+        </a>
       </div>
       <div className="site-footer__copyright">
         &copy; {new Date().getFullYear()} <a href="https://aartisr.foreverlotus.com" target="_blank" rel="noopener noreferrer" className="site-footer__author-link">{t("footer.authorName")}</a>. {t("footer.rights")}

@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 describe("autograph-exchange dark-mode contrast guardrails", () => {
   const require = createRequire(import.meta.url);
   const css = readFileSync(require.resolve("@aartisr/autograph-feature/styles.css"), "utf8");
+  const appContrastOverrides = readFileSync(require.resolve("../styles/contrast-overrides.css"), "utf8");
 
   it("keeps explicit dark-mode fallback backgrounds for inbox and archive cards", () => {
     expect(css).toContain(".autograph-tone-inbox .autograph-request-card {");
@@ -51,5 +52,12 @@ describe("autograph-exchange dark-mode contrast guardrails", () => {
     expect(css).toContain(".autograph-setup-badge {");
     expect(css).toContain(".autograph-status-pill.is-pending {");
     expect(css).toContain(".autograph-status-pill.is-signed {");
+  });
+
+  it("keeps explicit empty-state text contrast overrides for inbox and archive lanes", () => {
+    expect(appContrastOverrides).toContain(
+      ".autograph-shell :is(.autograph-tone-inbox, .autograph-tone-archive) .autograph-empty {",
+    );
+    expect(appContrastOverrides).toContain("color: var(--foreground) !important;");
   });
 });

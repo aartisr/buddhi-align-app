@@ -73,7 +73,9 @@ Primary indexes were selected for expected hot paths:
 ### Default runtime mode
 
 - App API uses service-role key server-side.
-- RLS is disabled by default for backward compatibility and operational simplicity.
+- RLS is enabled by default.
+- Anon/authenticated direct table access is denied by default via explicit deny policies.
+- Server-side service-role traffic continues to function for API routes.
 
 ### Optional strict mode (if querying via anon/authenticated keys)
 
