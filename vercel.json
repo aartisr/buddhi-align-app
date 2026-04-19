@@ -1,4 +1,4 @@
 {
-  "installCommand": "npm install --no-audit --no-fund",
-  "buildCommand": "npm run build"
+  "installCommand": "npm install --workspaces --include-workspace-root --no-audit --no-fund",
+  "buildCommand": "npm run verify:no-private-repo && npm run build"
 }
