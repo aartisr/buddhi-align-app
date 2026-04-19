@@ -213,8 +213,8 @@ Recommended Vercel project settings:
 Why this works:
 
 - the frontend build is driven by the root workspace script
-- public npm dependencies resolve from `registry.npmjs.org`
-- the published autograph packages resolve from public npmjs
+- standard dependencies resolve from `registry.npmjs.org`
+- autograph packages resolve from the public `aartisr/autograph-exchange` GitHub repository
 - the deploy no longer depends on `external/` sibling paths or private local package references
 
 Recommended Vercel environment variables:
