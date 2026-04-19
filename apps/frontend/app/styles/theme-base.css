@@ -17,6 +17,12 @@
   --text-muted: #2e3f38;
   --text-soft: #31463f;
   --text-subtle: #3d554c;
+  --on-primary: #f7fbf8;
+  --on-accent: #f7fbf8;
+  --danger: #8f3e34;
+  --on-danger: #fff7f5;
+  --warning-surface: #fff6dd;
+  --warning-text: #6f4c16;
   --font-sans: 'Avenir Next', 'Nunito Sans', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -40,6 +46,12 @@
     --text-muted: #deebe5;
     --text-soft: #cdddd5;
     --text-subtle: #b8cbc2;
+    --on-primary: #0f1d19;
+    --on-accent: #0f1d19;
+    --danger: #f0a99d;
+    --on-danger: #1a0f0d;
+    --warning-surface: #2b2412;
+    --warning-text: #f2d89c;
   }
 }
 
@@ -52,6 +64,7 @@ body {
   padding: 0;
   transition: background 0.5s, color 0.5s;
   position: relative;
+  color-scheme: light dark;
 }
 
 .spiritual-bg {
@@ -68,11 +81,11 @@ body {
 }
 
 .text-on-spiritual {
-  color: #18181b !important;
+  color: var(--foreground) !important;
 }
 
 .dark .text-on-spiritual {
-  color: #fff085 !important;
+  color: var(--foreground) !important;
 }
 
 h1,

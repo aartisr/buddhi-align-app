@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useSession } from "next-auth/react";
-import { AutographExchangeFeature } from "@autograph-exchange/feature";
+import { AutographExchangeFeature } from "@aartisr/autograph-feature";
 import ModuleLayout from "@/app/components/ModuleLayout";
 import { useI18n } from "@/app/i18n/provider";
 

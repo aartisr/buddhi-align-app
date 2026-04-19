@@ -10,6 +10,6 @@
     "./apiClient": "./apiClient.ts",
     "./apiConfig": "./apiConfig.ts"
   },
-  "private": true,
+  "private": false,
   "description": "Centralized config, themes, and prompts for Buddhi Align App."
 }

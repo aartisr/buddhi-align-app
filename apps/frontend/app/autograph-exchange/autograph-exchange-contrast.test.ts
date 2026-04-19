@@ -1,8 +1,10 @@
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { describe, expect, it } from "vitest";
 
 describe("autograph-exchange dark-mode contrast guardrails", () => {
-  const css = readFileSync("../../external/autograph-exchange/packages/autograph-feature/styles.css", "utf8");
+  const require = createRequire(import.meta.url);
+  const css = readFileSync(require.resolve("@aartisr/autograph-feature/styles.css"), "utf8");
 
   it("keeps explicit dark-mode fallback backgrounds for inbox and archive cards", () => {
     expect(css).toContain(".autograph-tone-inbox .autograph-request-card {");
@@ -14,10 +16,10 @@ describe("autograph-exchange dark-mode contrast guardrails", () => {
 
   it("keeps high-contrast text overrides on inner cards in dark mode", () => {
     expect(css).toContain(
-      ".autograph-tone-inbox .autograph-request-card :is(.text-sm.font-medium, .app-copy-soft, .autograph-request-pair, .autograph-request-time, .autograph-char-count),",
+      ".autograph-tone-inbox .autograph-request-card :is(.autograph-card-title, .app-copy-soft, .autograph-request-pair, .autograph-request-time, .autograph-char-count),",
     );
     expect(css).toContain(
-      ".autograph-tone-archive .autograph-archive-card :is(.text-sm.font-medium, .app-copy-soft, .autograph-request-pair, .autograph-request-time, .autograph-char-count) {",
+      ".autograph-tone-archive .autograph-archive-card :is(.autograph-card-title, .app-copy-soft, .autograph-request-pair, .autograph-request-time, .autograph-char-count) {",
     );
     expect(css).toContain("color: var(--autograph-tone-heading);");
 

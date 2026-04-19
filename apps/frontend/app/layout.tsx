@@ -1,6 +1,5 @@
 
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 
 import "./globals.css";
 import "./styles/theme-base.css";
@@ -11,6 +10,7 @@ import "./styles/widgets.css";
 import "./styles/records.css";
 import "./styles/navigation.css";
 import "./styles/responsive.css";
+import "./styles/contrast-overrides.css";
 import "./components/buddhi-bg.css";
 
 import BackgroundMusic from "./components/BackgroundMusic";
@@ -19,12 +19,6 @@ import { I18nProvider } from "./i18n/provider";
 import { DEFAULT_LOCALE, translate } from "./i18n/config";
 import Providers from "./components/Providers";
 import { getSiteUrl } from "./lib/site-url";
-
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
 
 const siteUrl = getSiteUrl();
 
@@ -91,7 +85,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+      <body className="antialiased">
         <Providers>
           <I18nProvider>
             <div className="buddhi-bg-gradient" aria-hidden="true"></div>

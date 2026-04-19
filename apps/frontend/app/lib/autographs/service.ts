@@ -1,5 +1,5 @@
 import { createDataProvider } from "@buddhi-align/data-access";
-import { createAutographService, createModuleAutographStorage } from "@autograph-exchange/core";
+import { createAutographService, createModuleAutographStorage } from "@aartisr/autograph-core";
 
 const service = createAutographService(createModuleAutographStorage(createDataProvider()));
 

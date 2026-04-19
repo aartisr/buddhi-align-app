@@ -43,7 +43,7 @@ vi.mock("@/app/components/ModuleLayout", () => ({
   default: ({ children }: { children: React.ReactNode }) => <div data-testid="module-layout">{children}</div>,
 }));
 
-vi.mock("@autograph-exchange/feature", () => ({
+vi.mock("@aartisr/autograph-feature", () => ({
   AutographExchangeFeature: (props: Record<string, unknown>) => {
     autographFeatureSpy(props);
     return <div data-testid="autograph-feature-root">{String(props.authStatus)}</div>;

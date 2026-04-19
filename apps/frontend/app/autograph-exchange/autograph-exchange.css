@@ -1,1 +1,35 @@
-@import "@autograph-exchange/feature/styles.css";
+@import "@aartisr/autograph-feature/styles.css";
+
+.autograph-shell {
+	color: var(--foreground);
+}
+
+.autograph-shell .autograph-feature-card,
+.autograph-shell .autograph-request-card,
+.autograph-shell .autograph-archive-card,
+.autograph-shell .autograph-momentum-card {
+	background: var(--surface-strong);
+	border-color: var(--border-soft);
+}
+
+.autograph-shell :is(.autograph-feature-title, .autograph-card-title, .autograph-section-step, .autograph-signature-quote) {
+	color: var(--text-muted) !important;
+}
+
+.autograph-shell :is(input, textarea, select, .app-form-input, .autograph-input) {
+	background: var(--surface) !important;
+	color: var(--foreground) !important;
+	border-color: var(--border-strong) !important;
+}
+
+.autograph-shell :is(input, textarea, select, .app-form-input, .autograph-input)::placeholder {
+	color: var(--text-soft) !important;
+	opacity: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+	.autograph-shell :is(input, textarea, select, .app-form-input, .autograph-input) {
+		background: rgba(20, 34, 29, 0.96) !important;
+		border-color: rgba(178, 213, 198, 0.38) !important;
+	}
+}

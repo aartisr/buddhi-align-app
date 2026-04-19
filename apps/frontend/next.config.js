@@ -62,7 +62,7 @@ const nextConfig = {
   },
 
   // Ensure local workspace packages written in TypeScript are transpiled by Next.js.
-  transpilePackages: ['@autograph-exchange/contract', '@autograph-exchange/core', '@autograph-exchange/feature', '@buddhi-align/data-access', '@buddhi-align/site-config', '@buddhi-align/shared-ui'],
+  transpilePackages: ['@aartisr/autograph-contract', '@aartisr/autograph-core', '@aartisr/autograph-feature', '@buddhi-align/data-access', '@buddhi-align/site-config', '@buddhi-align/shared-ui'],
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "lh3.googleusercontent.com" },

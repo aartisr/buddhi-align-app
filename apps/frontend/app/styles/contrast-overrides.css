@@ -1,0 +1,88 @@
+.app-user-signin-link,
+.app-user-avatar,
+.app-user-avatar-fallback,
+.app-alert-error__button,
+.app-records-count,
+.app-analytics-refresh:hover:not(:disabled),
+.app-breathwork-preset-btn--active,
+.app-breathwork-preset-btn:hover,
+.app-breathwork-btn--start,
+.app-breathwork-btn--pause {
+  color: var(--on-primary) !important;
+}
+
+.app-provider-btn--deep {
+  color: var(--on-primary) !important;
+}
+
+.app-reflection-prompt-card {
+  background: var(--warning-surface);
+}
+
+.app-reflection-prompt-label,
+.app-reflection-prompt-text {
+  color: var(--warning-text);
+}
+
+.app-request-spinner__center {
+  color: var(--primary);
+}
+
+.autograph-shell {
+  color: var(--foreground);
+}
+
+.autograph-shell :is(.app-copy-soft, .autograph-inline-note, .autograph-context-detail, .autograph-request-time, .autograph-char-count) {
+  color: var(--text-soft) !important;
+}
+
+.autograph-shell :is(.autograph-card-title, .autograph-feature-title, .autograph-section-step, .autograph-signature-quote) {
+  color: var(--text-muted) !important;
+}
+
+.autograph-shell :is(input, textarea, select, .app-form-input, .autograph-input) {
+  background: var(--surface) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border-strong) !important;
+}
+
+.autograph-shell :is(input, textarea, select, .app-form-input, .autograph-input)::placeholder {
+  color: var(--text-soft) !important;
+  opacity: 1;
+}
+
+.autograph-shell :is(.app-button-primary, .autograph-primary-btn) {
+  color: var(--on-primary) !important;
+}
+
+.autograph-shell :is(.autograph-secondary-btn, .app-button-secondary, .autograph-suggestion-chip) {
+  color: var(--text-muted) !important;
+  background: var(--surface-soft) !important;
+  border-color: var(--border-strong) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-reflection-prompt-card {
+    background: var(--warning-surface);
+    border-color: rgba(242, 216, 156, 0.35);
+  }
+
+  .app-insight-chip--indigo,
+  .app-insight-chip--emerald {
+    color: var(--text-muted);
+  }
+
+  .autograph-shell {
+    color: var(--foreground);
+  }
+
+  .autograph-shell :is(input, textarea, select, .app-form-input, .autograph-input) {
+    background: rgba(20, 34, 29, 0.96) !important;
+    color: var(--foreground) !important;
+    border-color: rgba(178, 213, 198, 0.38) !important;
+  }
+
+  .autograph-shell :is(.autograph-secondary-btn, .app-button-secondary, .autograph-suggestion-chip) {
+    background: rgba(27, 46, 39, 0.96) !important;
+  }
+}

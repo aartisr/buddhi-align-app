@@ -1,1 +1,1 @@
-export { SignaturePreview as default } from "@autograph-exchange/feature";
+export { SignaturePreview as default } from "@aartisr/autograph-feature";

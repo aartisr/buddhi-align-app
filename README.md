@@ -201,12 +201,21 @@ CI workflow (`.github/workflows/ci.yml`) runs:
 
 The included `netlify.toml` deploys `apps/frontend` with `@netlify/plugin-nextjs`.
 
-For Vercel deployment, use the existing root-level `vercel.json` and configure these project settings in Vercel:
+For Vercel deployment, use the existing root-level `vercel.json`.
+
+Recommended Vercel project settings:
 
 - Framework preset: `Next.js`
 - Root directory: repository root
-- Build command: from `vercel.json` (already configured)
-- Install command: from `vercel.json` (already configured)
+- Install command: from `vercel.json` (`npm install --no-audit --no-fund`)
+- Build command: from `vercel.json` (`npm run build`)
+
+Why this works:
+
+- the frontend build is driven by the root workspace script
+- public npm dependencies resolve from `registry.npmjs.org`
+- the published autograph packages resolve from public npmjs
+- the deploy no longer depends on `external/` sibling paths or private local package references
 
 Recommended Vercel environment variables:
 

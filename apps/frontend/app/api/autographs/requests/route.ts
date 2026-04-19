@@ -1,7 +1,7 @@
 import {
   createAutographRequestsGetHandler,
   createAutographRequestsPostHandler,
-} from "@autograph-exchange/core";
+} from "@aartisr/autograph-core";
 import { autographRouteConfig } from "../_config";
 
 export const GET = createAutographRequestsGetHandler(autographRouteConfig);

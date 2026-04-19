@@ -1,2 +1,2 @@
-export { buildSignaturePreset } from "@autograph-exchange/feature";
-export type { SignaturePreset } from "@autograph-exchange/feature";
+export { buildSignaturePreset } from "@aartisr/autograph-feature";
+export type { SignaturePreset } from "@aartisr/autograph-feature";

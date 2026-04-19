@@ -1,3 +1,3 @@
 "use client";
 
-export { useAutographExchange } from "@autograph-exchange/feature";
+export { useAutographExchange } from "@aartisr/autograph-feature";

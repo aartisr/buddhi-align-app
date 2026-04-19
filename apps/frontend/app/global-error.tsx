@@ -28,8 +28,8 @@ export default function GlobalError({
         style={{
           margin: 0,
           fontFamily: "system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-          background: "#fcfefb",
-          color: "#2e3f38",
+          background: "Canvas",
+          color: "CanvasText",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -50,7 +50,7 @@ export default function GlobalError({
               fontSize: "1.5rem",
               fontWeight: 700,
               margin: "0 0 0.5rem",
-              color: "#2e3f38",
+              color: "CanvasText",
             }}
           >
             {translate(DEFAULT_LOCALE, "route.globalError.title")}
@@ -58,9 +58,10 @@ export default function GlobalError({
           <p
             style={{
               fontSize: "0.95rem",
-              color: "#60756d",
+              color: "CanvasText",
               margin: "0 0 1.5rem",
               lineHeight: 1.6,
+              opacity: 0.85,
             }}
           >
             {translate(DEFAULT_LOCALE, "route.globalError.subtitle")}
@@ -69,9 +70,10 @@ export default function GlobalError({
             <p
               style={{
                 fontSize: "0.75rem",
-                color: "#95ada3",
+                color: "CanvasText",
                 marginBottom: "1.5rem",
                 fontFamily: "monospace",
+                opacity: 0.7,
               }}
             >
               {translate(DEFAULT_LOCALE, "route.globalError.reference")} {error.digest}
@@ -81,9 +83,9 @@ export default function GlobalError({
             type="button"
             onClick={reset}
             style={{
-              background: "#2f5d50",
-              color: "#ffffff",
-              border: "none",
+              background: "ButtonFace",
+              color: "ButtonText",
+              border: "1px solid ButtonBorder",
               borderRadius: "0.875rem",
               padding: "0.65rem 1.75rem",
               fontSize: "0.9rem",
@@ -92,10 +94,10 @@ export default function GlobalError({
               transition: "background 0.15s",
             }}
             onMouseOver={(e) =>
-              ((e.currentTarget as HTMLButtonElement).style.background = "#24493e")
+              ((e.currentTarget as HTMLButtonElement).style.filter = "brightness(0.96)")
             }
             onMouseOut={(e) =>
-              ((e.currentTarget as HTMLButtonElement).style.background = "#2f5d50")
+              ((e.currentTarget as HTMLButtonElement).style.filter = "none")
             }
             aria-label={translate(DEFAULT_LOCALE, "route.globalError.reloadAria")}
           >

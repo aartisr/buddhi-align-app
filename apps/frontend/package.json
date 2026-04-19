@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "clean": "rm -rf .next",
     "dev": "next dev",
@@ -11,9 +11,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@autograph-exchange/contract": "file:../../external/autograph-exchange/packages/autograph-contract",
-    "@autograph-exchange/core": "file:../../external/autograph-exchange/packages/autograph-core",
-    "@autograph-exchange/feature": "file:../../external/autograph-exchange/packages/autograph-feature",
+    "@aartisr/autograph-contract": "^0.1.0",
+    "@aartisr/autograph-core": "^0.1.0",
+    "@aartisr/autograph-feature": "^0.1.0",
     "@buddhi-align/data-access": "*",
     "@buddhi-align/shared-ui": "*",
     "@buddhi-align/site-config": "*",

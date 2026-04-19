@@ -2,7 +2,7 @@ export {
   AUTOGRAPH_API,
   AUTOGRAPH_PROFILES_MODULE,
   AUTOGRAPH_REQUESTS_MODULE,
-} from "@autograph-exchange/contract";
+} from "@aartisr/autograph-contract";
 export type {
   AutographDashboardData,
   AutographErrorResponse,
@@ -14,4 +14,4 @@ export type {
   CreateAutographRequestInput,
   SignAutographRequestInput,
   UpsertAutographProfileInput,
-} from "@autograph-exchange/contract";
+} from "@aartisr/autograph-contract";
