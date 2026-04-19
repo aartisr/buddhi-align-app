@@ -10,6 +10,7 @@ import {
   type OAuthProviderId,
 } from "./app/auth/provider-catalog";
 import { getAuthConfidenceForProvider } from "./app/auth/auth-confidence";
+import { buildStableIdentityKey, resolveSessionSubject } from "./app/auth/identity";
 
 const OIDC_BASE_SCOPE = "openid profile email";
 
@@ -151,8 +152,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   callbacks: {
     async session({ session, token }) {
-      if (session.user && token.sub) {
-        session.user.id = token.sub;
+      if (session.user) {
+        const subject = resolveSessionSubject(token.sub, token.identityKey);
+        if (subject) {
+          session.user.id = subject;
+        }
       }
       if (session.user && token.provider) {
         (session.user as typeof session.user & { provider?: string }).provider = token.provider as string;
@@ -189,9 +193,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (!token.authAt && typeof token.iat === "number") {
         token.authAt = token.iat * 1000;
       }
-      if (account?.provider && account.providerAccountId) {
-        // Keep legacy token.sub behavior unchanged and add a provider-scoped key for safer joins/audits.
-        token.identityKey = `${account.provider}:${account.providerAccountId}`;
+      const identityKey = buildStableIdentityKey(account?.provider, account?.providerAccountId);
+      if (identityKey) {
+        token.identityKey = identityKey;
+      }
+
+      const stableSubject = resolveSessionSubject(token.sub, token.identityKey);
+      if (stableSubject) {
+        token.sub = stableSubject;
       }
       return token;
     },
