@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Buddhi Align maskable icon</title>
+  <desc id="desc">A lotus-inspired icon centered on a deep green field for maskable launch surfaces.</desc>
+  <rect width="512" height="512" rx="128" fill="#1b4332"/>
+  <circle cx="256" cy="256" r="168" fill="#2d6a4f"/>
+  <path d="M256 126c28 33 42 63 42 91 0 44-21 70-42 81-21-11-42-37-42-81 0-28 14-58 42-91Z" fill="#fefae0"/>
+  <path d="M160 288c39-57 90-86 96-86s57 29 96 86c-23 39-59 72-96 85-37-13-73-46-96-85Z" fill="#d8f3dc"/>
+  <path d="M122 322c41-22 86-28 134-19-21 34-54 67-93 81-20-13-34-33-41-62Z" fill="#95d5b2"/>
+  <path d="M390 322c-7 29-21 49-41 62-39-14-72-47-93-81 48-9 93-3 134 19Z" fill="#95d5b2"/>
+  <circle cx="256" cy="258" r="16" fill="#52b788"/>
+</svg>

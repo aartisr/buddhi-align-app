@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Buddhi Align icon</title>
+  <desc id="desc">A green lotus-inspired icon with a centered calm flame.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#d8f3dc"/>
+      <stop offset="100%" stop-color="#2d6a4f"/>
+    </linearGradient>
+    <linearGradient id="petal" x1="50%" x2="50%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#95d5b2"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="120" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="172" fill="#1b4332" opacity="0.16"/>
+  <path d="M256 114c28 34 42 66 42 96 0 47-22 74-42 86-20-12-42-39-42-86 0-30 14-62 42-96Z" fill="#fefae0"/>
+  <path d="M156 282c41-61 94-92 100-92s59 31 100 92c-24 41-62 78-100 92-38-14-76-51-100-92Z" fill="url(#petal)"/>
+  <path d="M109 316c45-26 94-33 147-23-24 37-59 73-101 88-22-14-38-36-46-65Z" fill="#74c69d"/>
+  <path d="M403 316c-8 29-24 51-46 65-42-15-77-51-101-88 53-10 102-3 147 23Z" fill="#74c69d"/>
+  <circle cx="256" cy="257" r="18" fill="#2d6a4f"/>
+</svg>

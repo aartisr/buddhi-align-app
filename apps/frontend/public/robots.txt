@@ -1,8 +1,10 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /admin
+Disallow: /admin-access
 Disallow: /sign-in
 Disallow: /settings
 
 # Sitemap location
-Sitemap: /sitemap.xml
+Sitemap: https://buddhi-align.foreverlotus.com/sitemap.xml

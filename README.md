@@ -229,6 +229,7 @@ Why this works:
 - standard dependencies resolve from `registry.npmjs.org`
 - install first prepares `external/autograph-exchange` via `scripts/prepare-autograph-source.mjs`
 - Vercel uses default public source (`https://github.com/aartisr/autograph-exchange.git`) with no private URL in tracked config
+- Vercel install runs through `scripts/vercel-install.mjs`, which forces the public npm registry and strips stale npm auth variables before workspace install
 - local development can override source URL and ref through environment variables when needed
 - autograph packages resolve from local file dependencies under `external/autograph-exchange/packages/*`
 - the deploy no longer depends on `external/` sibling paths or local proprietary package references

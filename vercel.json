@@ -1,4 +1,4 @@
 {
-  "installCommand": "npm run install:with-autograph-source",
+  "installCommand": "node scripts/vercel-install.mjs",
   "buildCommand": "npm run verify:no-private-repo && npm run build"
 }

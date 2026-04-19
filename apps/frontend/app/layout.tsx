@@ -18,35 +18,57 @@ import SiteFooter from "./components/SiteFooter";
 import { I18nProvider } from "./i18n/provider";
 import { DEFAULT_LOCALE, translate } from "./i18n/config";
 import Providers from "./components/Providers";
-import { getSiteUrl } from "./lib/site-url";
-
-const siteUrl = getSiteUrl();
+import {
+  authorName,
+  authorUrl,
+  buildPageMetadata,
+  organizationId,
+  organizationName,
+  siteJsonLd,
+  siteKeywords,
+  siteName,
+  siteUrl,
+  websiteId,
+} from "./lib/seo";
 
 const title = translate(DEFAULT_LOCALE, "app.title");
 const description = translate(DEFAULT_LOCALE, "app.description");
 
 export const metadata: Metadata = {
+  ...buildPageMetadata({
+    title,
+    description,
+  }),
   title: {
     default: title,
-    template: `%s | ${title}`,
+    template: `%s | ${siteName}`,
   },
-  description,
   metadataBase: new URL(siteUrl),
   applicationName: title,
   manifest: "/manifest.json",
-  keywords: [
-    "spiritual journaling",
-    "meditation tracker",
-    "karma yoga",
-    "bhakti journal",
-    "dhyana meditation",
-    "jnana reflection",
-    "self-development",
-    "mindfulness",
-    "Indian philosophy",
-  ],
-  authors: [{ name: "Aarti Sri Ravikumar", url: "https://aartisr.netlify.app/" }],
-  creator: "Aarti Sri Ravikumar",
+  keywords: siteKeywords,
+  authors: [{ name: authorName, url: authorUrl }],
+  creator: authorName,
+  publisher: organizationName,
+  category: "health",
+  classification: "Spiritual journaling and personal growth analytics",
+  formatDetection: {
+    address: false,
+    email: false,
+    telephone: false,
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/buddhi-align-icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/buddhi-align-icon.svg" }],
+    shortcut: ["/favicon.ico"],
+  },
+  appleWebApp: {
+    capable: true,
+    title,
+  },
   robots: {
     index: true,
     follow: true,
@@ -59,7 +81,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    siteName: title,
+    siteName,
     title,
     description,
     images: [
@@ -79,44 +101,6 @@ export const metadata: Metadata = {
   },
 };
 
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://foreverlotus.com/#organization",
-      name: "ForeverLotus",
-      url: "https://foreverlotus.com",
-    },
-    {
-      "@type": "WebSite",
-      "@id": `${siteUrl}/#website`,
-      name: title,
-      url: siteUrl,
-      description,
-      inLanguage: "en-US",
-      publisher: {
-        "@id": "https://foreverlotus.com/#organization",
-      },
-    },
-    {
-      "@type": "WebApplication",
-      "@id": `${siteUrl}/#webapp`,
-      name: title,
-      url: siteUrl,
-      description,
-      applicationCategory: "HealthApplication",
-      operatingSystem: "Web",
-      inLanguage: "en-US",
-      isAccessibleForFree: true,
-      publisher: {
-        "@id": "https://foreverlotus.com/#organization",
-      },
-    },
-  ],
-};
-
-
 export const viewport: Viewport = {
   themeColor: "#2f5d50",
   colorScheme: "light dark",
@@ -134,7 +118,23 @@ export default function RootLayout({
       <body className="antialiased">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              ...siteJsonLd,
+              "@graph": siteJsonLd["@graph"].map((entry) => {
+                if (entry["@id"] === websiteId || entry["@id"] === organizationId) {
+                  return {
+                    ...entry,
+                    name: entry["@id"] === websiteId ? title : organizationName,
+                    description:
+                      entry["@id"] === websiteId ? description : undefined,
+                  };
+                }
+
+                return entry;
+              }),
+            }),
+          }}
         />
         <Providers>
           <I18nProvider>

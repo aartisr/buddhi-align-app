@@ -1,7 +1,7 @@
 {
   "name": "Buddhi Align App",
   "short_name": "Buddhi Align",
-  "description": "A subtle, spiritual, and professional journaling and analytics app for self-development and spiritual growth.",
+  "description": "A spiritual journaling, meditation, and analytics app for steady self-development and reflective practice.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -19,13 +19,13 @@
       "purpose": "any"
     },
     {
-      "src": "/file.svg",
+      "src": "/buddhi-align-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/next.svg",
+      "src": "/buddhi-align-icon-maskable.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
@@ -38,21 +38,21 @@
       "short_name": "Karma Yoga",
       "description": "Log your karma yoga practice",
       "url": "/karma-yoga",
-      "icons": [{ "src": "/favicon.ico", "sizes": "16x16" }]
+      "icons": [{ "src": "/buddhi-align-icon.svg", "sizes": "any" }]
     },
     {
       "name": "Bhakti Journal",
       "short_name": "Bhakti",
       "description": "Journal your devotional practice",
       "url": "/bhakti-journal",
-      "icons": [{ "src": "/favicon.ico", "sizes": "16x16" }]
+      "icons": [{ "src": "/buddhi-align-icon.svg", "sizes": "any" }]
     },
     {
       "name": "Dhyana Meditation",
       "short_name": "Dhyana",
       "description": "Track your meditation sessions",
       "url": "/dhyana-meditation",
-      "icons": [{ "src": "/favicon.ico", "sizes": "16x16" }]
+      "icons": [{ "src": "/buddhi-align-icon.svg", "sizes": "any" }]
     }
   ]
 }
