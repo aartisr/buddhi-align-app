@@ -57,6 +57,7 @@ function validateDependencies() {
   const pkg = readJson(FRONTEND_PACKAGE_JSON);
   const dependencies = pkg.dependencies || {};
   const errors = [];
+  const allowedFilePrefix = "file:../../external/autograph-exchange/packages/";
 
   for (const packageName of REQUIRED_PACKAGES) {
     const declared = dependencies[packageName];
@@ -65,14 +66,16 @@ function validateDependencies() {
       continue;
     }
 
-    if (
-      declared.startsWith("file:")
-      || declared.startsWith("link:")
-      || declared.startsWith("workspace:")
-      || declared.startsWith("../")
-      || declared.startsWith("./")
-    ) {
-      errors.push(`Dependency ${packageName} must use a published version range, found ${declared}.`);
+    if (declared.startsWith("file:")) {
+      if (!declared.startsWith(allowedFilePrefix)) {
+        errors.push(`Dependency ${packageName} uses unsupported local source ${declared}.`);
+      }
+
+      continue;
+    }
+
+    if (declared.startsWith("link:") || declared.startsWith("workspace:") || declared.startsWith("../") || declared.startsWith("./")) {
+      errors.push(`Dependency ${packageName} must use approved source (public version/tag or external GitHub mirror), found ${declared}.`);
     }
   }
 

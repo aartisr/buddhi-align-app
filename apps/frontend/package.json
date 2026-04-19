@@ -11,9 +11,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@aartisr/autograph-contract": "github:aartisr/autograph-exchange#path:packages/autograph-contract",
-    "@aartisr/autograph-core": "github:aartisr/autograph-exchange#path:packages/autograph-core",
-    "@aartisr/autograph-feature": "github:aartisr/autograph-exchange#path:packages/autograph-feature",
+    "@aartisr/autograph-contract": "file:../../external/autograph-exchange/packages/autograph-contract",
+    "@aartisr/autograph-core": "file:../../external/autograph-exchange/packages/autograph-core",
+    "@aartisr/autograph-feature": "file:../../external/autograph-exchange/packages/autograph-feature",
     "@buddhi-align/data-access": "*",
     "@buddhi-align/shared-ui": "*",
     "@buddhi-align/site-config": "*",

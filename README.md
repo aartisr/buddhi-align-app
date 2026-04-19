@@ -214,7 +214,8 @@ Why this works:
 
 - the frontend build is driven by the root workspace script
 - standard dependencies resolve from `registry.npmjs.org`
-- autograph packages resolve from the public `aartisr/autograph-exchange` GitHub repository
+- Vercel install clones the latest public `aartisr/autograph-exchange` `main` branch into `external/autograph-exchange`
+- autograph packages resolve from local file dependencies under `external/autograph-exchange/packages/*`
 - the deploy no longer depends on `external/` sibling paths or private local package references
 
 Recommended Vercel environment variables:
