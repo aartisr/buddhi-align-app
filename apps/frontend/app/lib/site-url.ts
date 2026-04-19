@@ -1,4 +1,4 @@
-const FALLBACK_SITE_URL = "https://buddhi-align.vercel.app";
+const FALLBACK_SITE_URL = "https://buddhi-align.foreverlotus.com";
 
 function normalizeUrl(url: string): string {
   return url.replace(/\/$/, "");

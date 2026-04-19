@@ -62,12 +62,58 @@ export const metadata: Metadata = {
     siteName: title,
     title,
     description,
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: `${title} social preview`,
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title,
     description,
+    images: ["/twitter-image"],
   },
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://foreverlotus.com/#organization",
+      name: "ForeverLotus",
+      url: "https://foreverlotus.com",
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      name: title,
+      url: siteUrl,
+      description,
+      inLanguage: "en-US",
+      publisher: {
+        "@id": "https://foreverlotus.com/#organization",
+      },
+    },
+    {
+      "@type": "WebApplication",
+      "@id": `${siteUrl}/#webapp`,
+      name: title,
+      url: siteUrl,
+      description,
+      applicationCategory: "HealthApplication",
+      operatingSystem: "Web",
+      inLanguage: "en-US",
+      isAccessibleForFree: true,
+      publisher: {
+        "@id": "https://foreverlotus.com/#organization",
+      },
+    },
+  ],
 };
 
 
@@ -86,6 +132,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <Providers>
           <I18nProvider>
             <div className="buddhi-bg-gradient" aria-hidden="true"></div>

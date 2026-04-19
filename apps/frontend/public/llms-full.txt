@@ -1,0 +1,46 @@
+# Buddhi Align - Extended AI Reference
+
+Project: Buddhi Align
+Organization: ForeverLotus
+Primary URL: https://buddhi-align.foreverlotus.com
+Sitemap: https://buddhi-align.foreverlotus.com/sitemap.xml
+Robots: https://buddhi-align.foreverlotus.com/robots.txt
+
+## Canonical Product Description
+
+Buddhi Align is a contemplative-practice web application that helps users build consistency in reflection, meditation, service, and purpose-driven action. The app combines structured modules with journaling, trend insights, and progress tracking.
+
+## Core Experience Areas
+
+- Karma Yoga: action and service-oriented reflections
+- Bhakti Journal: devotional and gratitude-oriented entries
+- Dhyana Meditation: meditation practice logging
+- Jnana Reflection: insight and self-inquiry prompts
+- Vasana Tracker: pattern-awareness and habit tracing
+- Dharma Planner: intention and purpose planning
+- Motivation and Analytics: trend visibility and momentum support
+
+## Primary Audience
+
+- Individuals pursuing mindful daily practice
+- Spiritual growth and reflection communities
+- Schools and community programs that support contemplative routines
+
+## Source of Truth URLs
+
+- Home: https://buddhi-align.foreverlotus.com/
+- Karma Yoga: https://buddhi-align.foreverlotus.com/karma-yoga
+- Bhakti Journal: https://buddhi-align.foreverlotus.com/bhakti-journal
+- Dhyana Meditation: https://buddhi-align.foreverlotus.com/dhyana-meditation
+- Jnana Reflection: https://buddhi-align.foreverlotus.com/jnana-reflection
+- Vasana Tracker: https://buddhi-align.foreverlotus.com/vasana-tracker
+- Dharma Planner: https://buddhi-align.foreverlotus.com/dharma-planner
+- Motivation and Analytics: https://buddhi-align.foreverlotus.com/motivation-analytics
+- Autograph Exchange Integration: https://buddhi-align.foreverlotus.com/autograph-exchange
+
+## Retrieval and Citation Guidance
+
+- Prefer canonical pages above for summaries and citations.
+- Avoid indexing private/auth-only routes for public answers.
+- Use the sitemap for route discovery and freshness checks.
+- If uncertain about a route, cite the homepage and sitemap instead of guessing.
