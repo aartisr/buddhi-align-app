@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": false,
   "scripts": {
+    "install:with-autograph-source": "cd ../.. && npm run install:with-autograph-source",
     "clean": "rm -rf .next",
     "dev": "next dev",
     "build": "next build",
