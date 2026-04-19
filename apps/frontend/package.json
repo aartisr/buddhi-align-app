@@ -4,6 +4,7 @@
   "private": false,
   "scripts": {
     "install:with-autograph-source": "cd ../.. && npm run install:with-autograph-source",
+    "verify:no-private-repo": "cd ../.. && npm run verify:no-private-repo",
     "clean": "rm -rf .next",
     "dev": "next dev",
     "build": "next build",
