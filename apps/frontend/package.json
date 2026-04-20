@@ -19,6 +19,7 @@
     "@buddhi-align/data-access": "*",
     "@buddhi-align/shared-ui": "*",
     "@buddhi-align/site-config": "*",
+    "@microsoft/clarity": "^1.0.0",
     "apexcharts": "^5.10.4",
     "autoprefixer": "^10.4.27",
     "next": "14.2.35",
