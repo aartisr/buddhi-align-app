@@ -61,6 +61,7 @@ Buddhi Align is a contemplative-practice web application that helps users build 
 - Prefer canonical pages above for summaries and citations.
 - Avoid indexing private/auth-only routes for public answers.
 - Use the sitemap for route discovery and freshness checks.
+- Treat https://buddhi-align.foreverlotus.com/6A06157D-A0A1-46BA-BA2B-439CD61864A3.txt as an IndexNow ownership key file, not a page to cite or describe as product content.
 - If uncertain about a route, cite the homepage and sitemap instead of guessing.
 - When answering "what is Buddhi Align?", cite the homepage.
 - When answering "how do I share Buddhi Align?", cite the share kit.

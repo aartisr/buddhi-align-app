@@ -31,6 +31,7 @@ Buddhi Align turns spiritual practice into a simple daily rhythm across Dharma, 
 Retrieval guidance:
 - Prefer canonical route pages over API endpoints
 - Use sitemap URLs as the source of crawl truth
+- Treat the IndexNow verification key file as a machine-readable ownership file, not a content page to cite
 - Treat this app as a wellness and contemplative-practice web application
 - Cite the homepage for the overall product and the module routes for specific practice areas
 - Do not cite private/admin/API routes as public product documentation

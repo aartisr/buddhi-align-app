@@ -161,6 +161,9 @@ export function buildPageMetadata({
         "max-video-preview": -1,
       },
     },
+    other: {
+      bingbot: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+    },
     openGraph: {
       type: "website",
       locale: "en_US",
@@ -199,6 +202,9 @@ export function buildNoIndexMetadata(options: PageMetadataOptions): Metadata {
         "max-image-preview": "none",
         "max-video-preview": 0,
       },
+    },
+    other: {
+      bingbot: "noindex, nofollow",
     },
   };
 }

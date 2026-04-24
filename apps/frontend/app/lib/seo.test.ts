@@ -8,7 +8,12 @@ import {
   publicPageProfiles,
   publicShareDestinations,
 } from "./public-content";
-import { buildHomePageJsonLd, buildPageMetadata, buildSharePageJsonLd } from "./seo";
+import {
+  buildHomePageJsonLd,
+  buildNoIndexMetadata,
+  buildPageMetadata,
+  buildSharePageJsonLd,
+} from "./seo";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -45,9 +50,25 @@ describe("SEO public route metadata", () => {
     expect(metadata.alternates?.canonical).toContain("/karma-yoga");
     expect(metadata.openGraph?.url).toContain("/karma-yoga");
     expect(metadata.twitter?.card).toBe("summary_large_image");
+    expect(metadata.other?.bingbot).toContain("max-image-preview:large");
     expect(metadata.keywords).toEqual(
       expect.arrayContaining(["karma yoga tracker", "service reflection app", "daily seva"]),
     );
+  });
+
+  it("marks protected app surfaces as noindex for major crawlers", () => {
+    const metadata = buildNoIndexMetadata({
+      title: "Buddhi Align Private Settings and Preferences",
+      description:
+        "Review private Buddhi Align settings for profile preferences, account details, notification choices, and personalized practice configuration after signing in.",
+      path: "/settings",
+    });
+
+    expect(metadata.robots).toMatchObject({
+      index: false,
+      follow: false,
+    });
+    expect(metadata.other?.bingbot).toBe("noindex, nofollow");
   });
 
   it("publishes homepage FAQ and module ItemList structured data", () => {
