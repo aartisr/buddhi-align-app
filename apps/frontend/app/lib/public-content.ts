@@ -8,6 +8,7 @@ export type PublicPageProfile = {
   title: string;
   description: string;
   summary: string;
+  lastModified: string;
   inviteModuleKey?: string;
   keywords: string[];
   audience: string[];
@@ -16,13 +17,17 @@ export type PublicPageProfile = {
   priority: number;
 };
 
+type PublicPageProfileDefinition = Omit<PublicPageProfile, "lastModified">;
+
+export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-04-23";
+
 const moduleAudience = [
   "mindfulness practitioners",
   "spiritual reflection communities",
   "students building steady routines",
 ];
 
-const corePublicPageProfiles: PublicPageProfile[] = [
+const corePublicPageProfiles = ([
   {
     path: "/",
     title: "Buddhi Align App",
@@ -157,11 +162,15 @@ const corePublicPageProfiles: PublicPageProfile[] = [
     changeFrequency: "monthly",
     priority: 0.7,
   },
-];
+] satisfies PublicPageProfileDefinition[]).map((profile): PublicPageProfile => ({
+  ...profile,
+  lastModified: PUBLIC_CONTENT_LAST_MODIFIED,
+}));
 
 const autographPageProfile: PublicPageProfile = {
   path: AUTOGRAPH_ROUTE,
   title: "Autograph Exchange",
+  lastModified: PUBLIC_CONTENT_LAST_MODIFIED,
   inviteModuleKey: "autograph",
   description:
     "Collect thoughtful autograph messages and keepsakes inside the calm Buddhi Align experience.",

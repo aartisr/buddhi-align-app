@@ -4,6 +4,7 @@ import robots from "../robots";
 import sitemap from "../sitemap";
 import {
   homepageFaq,
+  PUBLIC_CONTENT_LAST_MODIFIED,
   publicPageProfiles,
   publicShareDestinations,
 } from "./public-content";
@@ -27,6 +28,7 @@ describe("SEO public route metadata", () => {
       expect(profile.title).toBeTruthy();
       expect(profile.description.length).toBeGreaterThan(60);
       expect(profile.summary.length).toBeGreaterThan(80);
+      expect(profile.lastModified).toBe(PUBLIC_CONTENT_LAST_MODIFIED);
       expect(profile.keywords.length).toBeGreaterThanOrEqual(3);
     }
   });
@@ -70,22 +72,34 @@ describe("SEO public route metadata", () => {
   });
 
   it("keeps sitemap generated from the public page profile catalog", () => {
-    const urls = sitemap().map((entry) => new URL(entry.url).pathname);
+    const sitemapEntries = sitemap();
+    const urls = sitemapEntries.map((entry) => new URL(entry.url).pathname);
     const profilePaths = publicPageProfiles.map((profile) => profile.path);
 
     expect(urls).toEqual(profilePaths);
+    expect(sitemapEntries.map((entry) => entry.lastModified)).toEqual(
+      publicPageProfiles.map((profile) => profile.lastModified),
+    );
     expect(urls).toContain("/share");
     expect(urls).not.toContain("/settings");
     expect(urls).not.toContain("/admin");
   });
 
   it("keeps private and API routes out of crawler access", () => {
-    const rules = robots().rules[0];
+    const robotRules = Array.isArray(robots().rules) ? robots().rules : [robots().rules];
+    const bingbotRule = robotRules.find((rule) => rule.userAgent === "Bingbot");
+    const wildcardRule = robotRules.find((rule) => rule.userAgent === "*");
+    const rules = bingbotRule ?? wildcardRule;
+    expect(bingbotRule).toBeTruthy();
+    expect(wildcardRule).toBeTruthy();
+
     const disallow = Array.isArray(rules.disallow) ? rules.disallow : [rules.disallow];
+    const allow = Array.isArray(rules.allow) ? rules.allow : [rules.allow];
 
     expect(disallow).toEqual(
       expect.arrayContaining(["/api/", "/admin/", "/admin", "/admin-access", "/settings", "/sign-in"]),
     );
+    expect(allow).toEqual(expect.arrayContaining(["/", "/llms.txt", "/llms-full.txt"]));
     expect(robots().sitemap).toContain("/sitemap.xml");
   });
 });
