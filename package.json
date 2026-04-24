@@ -1,7 +1,7 @@
 {
   "name": "buddhi-align-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Buddhi Align is a contemplative-practice web app for dharma planning, meditation tracking, service journaling, reflection, and spiritual growth analytics.",
   "main": "index.js",
   "engines": {
     "node": ">=20"
@@ -30,7 +30,15 @@
     "perf:budget": "node scripts/check-performance-budget.mjs apps/frontend/.lighthouseci/report.json",
     "perf:ci": "npm run start:frontend >/tmp/buddhi-start.log 2>&1 & echo $! >/tmp/buddhi-start.pid; i=0; until curl -fsS http://127.0.0.1:3000 >/dev/null; do i=$((i+1)); if [ $i -ge 60 ]; then echo 'Server failed to start'; kill $(cat /tmp/buddhi-start.pid) 2>/dev/null || true; exit 1; fi; sleep 2; done; npm run perf:lighthouse; lh_status=$?; if [ $lh_status -eq 0 ] && [ -f apps/frontend/.lighthouseci/report.json ]; then npm run perf:budget; budget_status=$?; else echo '[perf:ci] Lighthouse report unavailable; skipping perf:budget outside strict CI.'; budget_status=0; fi; if [ $lh_status -ne 0 ]; then status=$lh_status; elif [ $budget_status -ne 0 ]; then status=$budget_status; else status=0; fi; kill $(cat /tmp/buddhi-start.pid) 2>/dev/null || true; exit $status"
   },
-  "keywords": [],
+  "keywords": [
+    "spiritual journaling",
+    "meditation tracker",
+    "dharma planner",
+    "karma yoga",
+    "mindfulness",
+    "personal growth analytics",
+    "contemplative practice"
+  ],
   "author": "Aarti Sri Ravikumar",
   "license": "ISC",
   "workspaces": [

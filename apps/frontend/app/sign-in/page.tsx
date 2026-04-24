@@ -1,12 +1,12 @@
 import { signIn } from "@/auth";
 import { getAnonymousCookieClearOptions, getAnonymousCookieOptions } from "@/app/auth/anonymous";
-import { sanitizeRelativeCallbackUrl } from "@/app/auth/navigation";
+import { getRelativeCallbackUrlFromReferer, sanitizeRelativeCallbackUrl } from "@/app/auth/navigation";
 import { translate, DEFAULT_LOCALE, MODULE_CATALOG, type TranslationKey } from "@/app/i18n/config";
 import {
   getConfiguredOAuthProviders,
   type OAuthProviderId,
 } from "@/app/auth/provider-catalog";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import EasyInviteCard from "@/app/components/EasyInviteCard";
@@ -79,6 +79,19 @@ function buildOAuthStartPath(providerId: OAuthProviderId, callbackUrl: string): 
   return `/api/auth/signin/${providerId}?${params.toString()}`;
 }
 
+function firstHeaderValue(value: string | null): string | undefined {
+  return value?.split(",")[0]?.trim() || undefined;
+}
+
+function getRequestOrigin(): string | undefined {
+  const headerList = headers();
+  const host = firstHeaderValue(headerList.get("x-forwarded-host")) ?? firstHeaderValue(headerList.get("host"));
+  if (!host) return undefined;
+
+  const protocol = firstHeaderValue(headerList.get("x-forwarded-proto")) ?? (host.startsWith("localhost") ? "http" : "https");
+  return `${protocol}://${host}`;
+}
+
 function getSignInErrorMessage(error: string): string {
   if (error === "OAuthSignin" || error === "OAuthCallback") {
     return t("auth.error.signInFailed");
@@ -98,7 +111,11 @@ export default function SignInPage({
   searchParams?: { callbackUrl?: string; error?: string; mode?: string };
 }) {
   const configuredProviders = getConfiguredOAuthProviders();
-  const callbackUrl = sanitizeRelativeCallbackUrl(searchParams?.callbackUrl, "/");
+  const requestOrigin = getRequestOrigin();
+  const refererFallback = getRelativeCallbackUrlFromReferer(headers().get("referer"), requestOrigin, "/");
+  const callbackUrl = sanitizeRelativeCallbackUrl(searchParams?.callbackUrl, refererFallback, {
+    origin: requestOrigin,
+  });
   const mode = sanitizeChoiceMode(searchParams?.mode);
   const error = searchParams?.error;
   const inviteModuleOptions = MODULE_CATALOG.map((item) => ({

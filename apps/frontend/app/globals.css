@@ -211,6 +211,156 @@
   outline: none;
 }
 
+.app-public-story,
+.app-faq-section,
+.app-share-hero,
+.app-share-snippets,
+.app-share-routes {
+  position: relative;
+}
+
+.app-public-story-header,
+.app-faq-heading,
+.app-share-hero,
+.app-share-section-header {
+  margin-bottom: 0.9rem;
+}
+
+.app-public-story-grid,
+.app-share-snippet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.app-public-story-card,
+.app-share-snippet,
+.app-faq-item,
+.app-module-index-link,
+.app-share-route {
+  border: 1px solid var(--border-soft);
+  background: var(--surface-strong);
+  box-shadow: 0 16px 40px rgba(47, 93, 80, 0.09);
+}
+
+.app-public-story-card,
+.app-share-snippet {
+  min-height: 9.5rem;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.app-public-story-card:nth-child(2),
+.app-share-snippet:nth-child(2) {
+  border-color: rgba(157, 97, 83, 0.24);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 248, 242, 0.92) 100%);
+}
+
+.app-public-story-card:nth-child(3),
+.app-share-snippet:nth-child(3) {
+  border-color: rgba(58, 140, 160, 0.22);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 249, 251, 0.92) 100%);
+}
+
+.app-public-story-card h3,
+.app-share-snippet h3 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.app-public-story-card p,
+.app-share-snippet p,
+.app-faq-item p,
+.app-module-index-link small,
+.app-share-route small {
+  margin: 0.5rem 0 0;
+  color: var(--text-soft);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.app-module-index {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.app-module-index-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.app-module-index-grid,
+.app-share-route-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.app-module-index-link,
+.app-share-route {
+  display: grid;
+  gap: 0.15rem;
+  min-height: 7rem;
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.app-module-index-link:hover,
+.app-module-index-link:focus-visible,
+.app-share-route:hover,
+.app-share-route:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow: 0 20px 44px rgba(47, 93, 80, 0.13);
+  outline: none;
+}
+
+.app-module-index-link span,
+.app-share-route span {
+  color: var(--primary);
+  font-size: 0.98rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.app-faq-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.app-faq-item {
+  border-radius: 1rem;
+  padding: 0.9rem 1rem;
+}
+
+.app-faq-item summary {
+  cursor: pointer;
+  color: var(--primary);
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.app-faq-item summary::marker {
+  color: var(--rose);
+}
+
+.app-share-hero {
+  padding: 1.2rem 0 0.25rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.app-share-snippet p {
+  font-size: 0.95rem;
+}
+
 .app-sequence-nav {
   margin-top: 2.5rem;
   padding-top: 1.5rem;
@@ -333,6 +483,17 @@
     grid-template-columns: 1fr;
   }
 
+  .app-public-story-grid,
+  .app-module-index-grid,
+  .app-share-snippet-grid,
+  .app-share-route-list {
+    grid-template-columns: 1fr;
+  }
+
+  .app-module-index-header {
+    flex-direction: column;
+  }
+
   .app-sequence-nav-header {
     align-items: flex-start;
   }
@@ -371,6 +532,22 @@
 
   .app-input:focus-visible {
     box-shadow: 0 0 0 3px rgba(159, 211, 188, 0.25);
+  }
+
+  .app-public-story-card,
+  .app-share-snippet,
+  .app-faq-item,
+  .app-module-index-link,
+  .app-share-route {
+    background: rgba(23, 41, 35, 0.94);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+  }
+
+  .app-public-story-card:nth-child(2),
+  .app-public-story-card:nth-child(3),
+  .app-share-snippet:nth-child(2),
+  .app-share-snippet:nth-child(3) {
+    background: rgba(25, 45, 38, 0.94);
   }
 }
 
@@ -1169,4 +1346,3 @@ select::placeholder {
     flex: 1;
   }
 }
-

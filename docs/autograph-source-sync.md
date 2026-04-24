@@ -56,9 +56,12 @@ Because these are `file:` dependencies, the app uses the fetched local source re
 
 Vercel is configured to use the sync-aware install command:
 
-- `vercel.json` sets `installCommand` to `npm run install:with-autograph-source`
+- `vercel.json` sets `installCommand` to `node scripts/vercel-install.mjs`
 
-This ensures Vercel pulls the selected autograph-exchange ref during install.
+That script prepares the autograph-exchange source, strips stale npm auth
+configuration, forces the public npm registry, and then runs the workspace
+install. This ensures Vercel pulls the selected autograph-exchange ref during
+install without depending on private package state.
 
 ## What "Latest" Means
 

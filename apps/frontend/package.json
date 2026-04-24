@@ -1,7 +1,15 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "description": "Next.js frontend for Buddhi Align, a contemplative-practice app for journaling, meditation, planning, and growth analytics.",
   "private": false,
+  "keywords": [
+    "Buddhi Align",
+    "spiritual journaling",
+    "meditation tracker",
+    "dharma planner",
+    "mindfulness app"
+  ],
   "scripts": {
     "install:with-autograph-source": "cd ../.. && npm run install:with-autograph-source",
     "verify:no-private-repo": "cd ../.. && npm run verify:no-private-repo",

@@ -1,6 +1,11 @@
 User-agent: *
 Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /opengraph-image
+Allow: /twitter-image
 Disallow: /api/
+Disallow: /admin/
 Disallow: /admin
 Disallow: /admin-access
 Disallow: /sign-in

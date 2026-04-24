@@ -220,8 +220,8 @@ Recommended Vercel project settings:
 
 - Framework preset: `Next.js`
 - Root directory: repository root
-- Install command: from `vercel.json` (`npm install --no-audit --no-fund`)
-- Build command: from `vercel.json` (`npm run build`)
+- Install command: from `vercel.json` (`node scripts/vercel-install.mjs`)
+- Build command: from `vercel.json` (`npm run verify:no-private-repo && npm run build`)
 
 Why this works:
 

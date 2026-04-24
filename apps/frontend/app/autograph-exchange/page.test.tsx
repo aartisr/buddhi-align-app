@@ -33,6 +33,11 @@ vi.mock("next-auth/react", () => ({
   useSession: () => mockSession,
 }));
 
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/autograph-exchange",
+  useSearchParams: () => new URLSearchParams("source=invite&module=autograph"),
+}));
+
 vi.mock("@/app/i18n/provider", () => ({
   useI18n: () => ({
     t: (key: string) => key,
@@ -79,7 +84,7 @@ describe("AutographExchangePage", () => {
         loadingMessage: "user.loadingSession",
         signedOutMessage: "auth.persistHint",
         signInLabel: "auth.signInToSave",
-        signInHref: "/sign-in",
+        signInHref: "/sign-in?callbackUrl=%2Fautograph-exchange%3Fsource%3Dinvite%26module%3Dautograph",
       }),
     );
   });

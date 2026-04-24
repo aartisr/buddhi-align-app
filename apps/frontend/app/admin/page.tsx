@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import { createDataProvider } from "@buddhi-align/data-access";
 import { ADMIN_COOKIE_NAME, isAdminCookieValid } from "@/app/auth/admin";
 import { hasOidcConfidence } from "@/app/auth/auth-confidence";
+import { buildSignInHref } from "@/app/auth/navigation";
 import ModuleLayout from "../components/ModuleLayout";
 import AdminDashboardView from "./AdminDashboardView";
 import { ADMIN_AUDIT_MODULE, type AdminAuditEntry, writeAdminAudit } from "./_audit";
@@ -56,10 +57,10 @@ export const dynamic = "force-dynamic";
 async function requireAdminSession() {
   const session = await auth();
   if (!session?.user?.id) {
-    redirect("/sign-in?callbackUrl=%2Fadmin");
+    redirect(buildSignInHref("/admin"));
   }
   if (!hasOidcConfidence(session as { user?: unknown })) {
-    redirect("/sign-in?callbackUrl=%2Fadmin&error=OIDCRequired");
+    redirect(buildSignInHref("/admin", { error: "OIDCRequired" }));
   }
 
   const adminCookie = cookies().get(ADMIN_COOKIE_NAME)?.value;

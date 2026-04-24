@@ -9,10 +9,10 @@ describe("autograph-exchange dark-mode contrast guardrails", () => {
 
   it("keeps explicit dark-mode fallback backgrounds for inbox and archive cards", () => {
     expect(css).toContain(".autograph-tone-inbox .autograph-request-card {");
-    expect(css).toContain("background: linear-gradient(180deg, rgba(30, 66, 54, 0.9) 0%, rgba(23, 54, 43, 0.84) 100%);");
+    expect(css).toContain("linear-gradient(180deg, rgba(30, 66, 54, 0.9) 0%, rgba(23, 54, 43, 0.84) 100%)");
 
     expect(css).toContain(".autograph-tone-archive .autograph-archive-card {");
-    expect(css).toContain("background: linear-gradient(180deg, rgba(30, 53, 75, 0.9) 0%, rgba(23, 44, 63, 0.84) 100%);");
+    expect(css).toContain("linear-gradient(180deg, rgba(30, 53, 75, 0.9) 0%, rgba(23, 44, 63, 0.84) 100%)");
   });
 
   it("keeps high-contrast text overrides on inner cards in dark mode", () => {

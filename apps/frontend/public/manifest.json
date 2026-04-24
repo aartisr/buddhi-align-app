@@ -53,6 +53,20 @@
       "description": "Track your meditation sessions",
       "url": "/dhyana-meditation",
       "icons": [{ "src": "/buddhi-align-icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Motivation and Analytics",
+      "short_name": "Analytics",
+      "description": "Review your practice streaks and balance",
+      "url": "/motivation-analytics",
+      "icons": [{ "src": "/buddhi-align-icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Share Buddhi Align",
+      "short_name": "Share",
+      "description": "Invite others into the daily practice loop",
+      "url": "/share",
+      "icons": [{ "src": "/buddhi-align-icon.svg", "sizes": "any" }]
     }
   ]
 }

@@ -3,12 +3,14 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import { AutographExchangeFeature } from "@aartisr/autograph-feature";
+import { useCurrentSignInHref } from "@/app/auth/use-current-sign-in-href";
 import ModuleLayout from "@/app/components/ModuleLayout";
 import { useI18n } from "@/app/i18n/provider";
 
 export default function AutographExchangePage() {
   const { t } = useI18n();
   const { data: session, status } = useSession();
+  const signInHref = useCurrentSignInHref("/autograph-exchange");
 
   return (
     <AutographExchangeFeature
@@ -29,7 +31,7 @@ export default function AutographExchangePage() {
       loadingMessage={t("user.loadingSession")}
       signedOutMessage={t("auth.persistHint")}
       signInLabel={t("auth.signInToSave")}
-      signInHref="/sign-in"
+      signInHref={signInHref}
       renderShell={(content) => <ModuleLayout titleKey="module.autograph.title">{content}</ModuleLayout>}
     />
   );

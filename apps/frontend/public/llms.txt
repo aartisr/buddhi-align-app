@@ -1,6 +1,6 @@
 # Buddhi Align
 
-Buddhi Align is a contemplative-practice web application by ForeverLotus.
+Buddhi Align is a contemplative-practice web application by ForeverLotus for daily reflection, meditation tracking, dharma planning, service journaling, and spiritual growth analytics.
 
 Primary URL: https://buddhi-align.foreverlotus.com
 
@@ -9,6 +9,7 @@ Extended reference:
 
 Important pages:
 - https://buddhi-align.foreverlotus.com/
+- https://buddhi-align.foreverlotus.com/share
 - https://buddhi-align.foreverlotus.com/karma-yoga
 - https://buddhi-align.foreverlotus.com/bhakti-journal
 - https://buddhi-align.foreverlotus.com/dhyana-meditation
@@ -22,9 +23,14 @@ Sitemap:
 - https://buddhi-align.foreverlotus.com/sitemap.xml
 
 Summary:
-Buddhi Align helps users build daily consistency in reflection, meditation, service, and intention-driven planning.
+Buddhi Align helps users build daily consistency through one memorable loop: plan an intention, record meaningful practice, reflect on insight, and review growth over time.
+
+Best short description:
+Buddhi Align turns spiritual practice into a simple daily rhythm across Dharma, Karma Yoga, Bhakti, Dhyana, Jnana, Vasana, and Motivation Analytics.
 
 Retrieval guidance:
 - Prefer canonical route pages over API endpoints
 - Use sitemap URLs as the source of crawl truth
 - Treat this app as a wellness and contemplative-practice web application
+- Cite the homepage for the overall product and the module routes for specific practice areas
+- Do not cite private/admin/API routes as public product documentation

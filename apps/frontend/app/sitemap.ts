@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { AUTOGRAPH_FEATURE_ENABLED, AUTOGRAPH_ROUTE } from "./lib/autographs/feature";
+import { publicPageProfiles } from "./lib/public-content";
 import { getSiteUrl } from "./lib/site-url";
 
 const baseUrl = getSiteUrl();
@@ -7,64 +7,10 @@ const baseUrl = getSiteUrl();
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  return [
-    {
-      url: `${baseUrl}/`,
-      lastModified: now,
-      changeFrequency: "daily",
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/karma-yoga`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/bhakti-journal`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/dhyana-meditation`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/jnana-reflection`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/vasana-tracker`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/dharma-planner`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/motivation-analytics`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.7,
-    },
-    ...(AUTOGRAPH_FEATURE_ENABLED
-      ? [
-          {
-            url: `${baseUrl}${AUTOGRAPH_ROUTE}`,
-            lastModified: now,
-            changeFrequency: "weekly" as const,
-            priority: 0.7,
-          },
-        ]
-      : []),
-  ];
+  return publicPageProfiles.map((profile) => ({
+    url: `${baseUrl}${profile.path === "/" ? "/" : profile.path}`,
+    lastModified: now,
+    changeFrequency: profile.changeFrequency,
+    priority: profile.priority,
+  }));
 }

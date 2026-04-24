@@ -41,7 +41,7 @@ export const LOCALE_OPTIONS = LOCALE_DEFINITIONS.map((item) => ({
 
 const EN_MESSAGES = {
   "app.title": "Buddhi Align App",
-  "app.description": "A subtle, spiritual, and professional journaling and analytics app.",
+  "app.description": "A daily contemplative practice app for dharma planning, meditation, service, reflection, and personal analytics.",
   "app.brand": "Buddhi Align App",
   "app.dashboard": "Buddhi Dashboard",
   "app.language": "Language",
@@ -477,6 +477,8 @@ const EN_MESSAGES = {
   "invite.welcomeBody": "Start with one quick entry today. The app is designed to be usable in under a minute.",
   "invite.welcomeBodyWithModule": "You were invited to start with {{module}}. Add one quick entry and you are done for today.",
   "invite.startNow": "Start now",
+  "share.title": "Share Buddhi Align",
+  "share.subtitle": "Clear captions, invite links, and route summaries for friends, families, schools, and spiritual communities.",
 } as const;
 
 export type TranslationKey = keyof typeof EN_MESSAGES;

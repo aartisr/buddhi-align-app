@@ -14,6 +14,7 @@ import "./styles/contrast-overrides.css";
 import "./components/buddhi-bg.css";
 
 import BackgroundMusic from "./components/BackgroundMusic";
+import JsonLd from "./components/JsonLd";
 import SiteFooter from "./components/SiteFooter";
 import { I18nProvider } from "./i18n/provider";
 import { DEFAULT_LOCALE, translate } from "./i18n/config";
@@ -22,13 +23,10 @@ import {
   authorName,
   authorUrl,
   buildPageMetadata,
-  organizationId,
+  buildSiteJsonLd,
   organizationName,
-  siteJsonLd,
-  siteKeywords,
   siteName,
   siteUrl,
-  websiteId,
 } from "./lib/seo";
 
 const title = translate(DEFAULT_LOCALE, "app.title");
@@ -46,12 +44,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   applicationName: title,
   manifest: "/manifest.json",
-  keywords: siteKeywords,
   authors: [{ name: authorName, url: authorUrl }],
   creator: authorName,
   publisher: organizationName,
   category: "health",
-  classification: "Spiritual journaling and personal growth analytics",
+  classification: "Contemplative practice, spiritual journaling, and personal growth analytics",
   formatDetection: {
     address: false,
     email: false,
@@ -72,7 +69,13 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true, "max-snippet": -1 },
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
   },
   alternates: {
     canonical: siteUrl,
@@ -116,26 +119,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              ...siteJsonLd,
-              "@graph": siteJsonLd["@graph"].map((entry) => {
-                if (entry["@id"] === websiteId || entry["@id"] === organizationId) {
-                  return {
-                    ...entry,
-                    name: entry["@id"] === websiteId ? title : organizationName,
-                    description:
-                      entry["@id"] === websiteId ? description : undefined,
-                  };
-                }
-
-                return entry;
-              }),
-            }),
-          }}
-        />
+        <JsonLd data={buildSiteJsonLd({ name: title, description })} />
         <Providers>
           <I18nProvider>
             <div className="buddhi-bg-gradient" aria-hidden="true"></div>
