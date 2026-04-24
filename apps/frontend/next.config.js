@@ -4,6 +4,24 @@
 
 const isDev = process.env.NODE_ENV === 'development';
 
+function normalizeExternalCommunityTarget(value) {
+  const trimmed = value?.trim();
+  if (!trimmed) return undefined;
+
+  try {
+    const parsed = new URL(trimmed);
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return undefined;
+    }
+    return parsed.toString().replace(/\/$/, '');
+  } catch {
+    return undefined;
+  }
+}
+
+const communityProxyTarget = normalizeExternalCommunityTarget(process.env.COMMUNITY_PROXY_TARGET);
+const appSecurityHeaderSource = communityProxyTarget ? '/((?!community(?:/|$)).*)' : '/(.*)';
+
 /** OWASP-recommended HTTP security headers */
 const securityHeaders = [
   // Prevent browsers from MIME-sniffing a response from the declared content-type
@@ -55,10 +73,29 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: appSecurityHeaderSource,
         headers: securityHeaders,
       },
     ];
+  },
+
+  async rewrites() {
+    if (!communityProxyTarget) {
+      return [];
+    }
+
+    return {
+      beforeFiles: [
+        {
+          source: '/community',
+          destination: communityProxyTarget,
+        },
+        {
+          source: '/community/:path*',
+          destination: `${communityProxyTarget}/:path*`,
+        },
+      ],
+    };
   },
 
   // Ensure local workspace packages written in TypeScript are transpiled by Next.js.

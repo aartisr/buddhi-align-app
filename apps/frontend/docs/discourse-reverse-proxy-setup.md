@@ -12,6 +12,7 @@ Set these environment variables in your deployment target (for example Vercel):
 - COMMUNITY_INTEGRATION_PROVIDER=discourse
 - DISCOURSE_BASE_URL=https://buddhi-align.foreverlotus.com/community
 - NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL=https://buddhi-align.foreverlotus.com/community
+- COMMUNITY_PROXY_TARGET=https://community.foreverlotus.com/community
 - DISCOURSE_PARENT_CATEGORY_SLUG=buddhi-align
 
 Optional:
@@ -22,6 +23,15 @@ The app now preserves subpaths, so generated category links become:
 
 - /community/c/<subcategory>
 - /community/c/<parent>/<subcategory>
+
+When `COMMUNITY_PROXY_TARGET` is set, the Next.js app proxies:
+
+- `/community` -> `COMMUNITY_PROXY_TARGET`
+- `/community/:path*` -> `COMMUNITY_PROXY_TARGET/:path*`
+
+This keeps the browser on `https://buddhi-align.foreverlotus.com/community` instead of sending users to a separate tab or visible subdomain.
+
+If the proxy target is not ready yet, leave `COMMUNITY_PROXY_TARGET` unset. Community links will still be generated from `NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL`, but the in-site proxy will not be active.
 
 ## 2) Discourse Container Configuration
 
@@ -97,16 +107,51 @@ In app environment:
 ## 6) Validation Checklist
 
 1. Open /api/community/link?module=bhakti and verify url includes /community/c/...
-2. Click Join Community and confirm same domain path navigation.
+2. Click Join Community and confirm same domain path navigation in the current tab.
 3. Confirm login and DiscourseConnect handoff works.
 4. Confirm topic pages, composer, and notifications load.
 5. Confirm websocket/live updates are working (no stuck loading indicators).
 
-## 7) Rollback Plan
+## 7) Share Community Widgets on Other Websites
+
+Other websites can promote the same community without embedding the full Discourse app.
+
+Use this lightweight widget:
+
+```html
+<div
+  data-buddhi-community-widget
+  data-module="dhyana"
+  data-title="Join the ForeverLotus Community"
+  data-body="Discuss meditation practice, reflections, and steady daily growth with the Buddhi Align community."
+></div>
+<script async src="https://buddhi-align.foreverlotus.com/community-widget.js"></script>
+```
+
+Supported `data-module` values:
+
+- `karma`
+- `bhakti`
+- `jnana`
+- `dhyana`
+- `vasana`
+- `dharma`
+- `motivation`
+- `autograph`
+
+Optional attributes:
+
+- `data-base-url`: override the community base URL.
+- `data-label`: override the button label.
+
+The widget intentionally opens the community in a new tab when embedded on other websites, while Buddhi Align opens same-origin `/community` links in the current tab.
+
+## 8) Rollback Plan
 
 If needed, revert only these env values:
 
 - DISCOURSE_BASE_URL=https://community.foreverlotus.com
 - NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL=https://community.foreverlotus.com
+- unset COMMUNITY_PROXY_TARGET
 
 No app code rollback is needed for subdomain mode.

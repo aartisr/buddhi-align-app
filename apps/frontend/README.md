@@ -93,6 +93,7 @@ NEXT_PUBLIC_BGM_URLS=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.m
 - Legacy compatibility: `DISCOURSE_INTEGRATION_ENABLED=true` also enables the Discourse provider when explicit provider is unset
 - `DISCOURSE_BASE_URL`: Discourse instance base URL (required when enabled)
 - `NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL`: public community URL for client-side links
+- `COMMUNITY_PROXY_TARGET`: optional external proxy destination used by Next.js rewrites for `/community`
 - `DISCOURSE_PARENT_CATEGORY_SLUG`: optional parent category slug; when set, links resolve as `/c/<parent>/<subcategory>`
 - `DISCOURSE_API_USERNAME`: API user for server-side Discourse calls
 - `DISCOURSE_API_KEY`: API key for server-side Discourse calls
@@ -110,9 +111,11 @@ NEXT_PUBLIC_BGM_URLS=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.m
 
 Reverse proxy note:
 - If Discourse is served under a subpath (for example `https://buddhi-align.foreverlotus.com/community`), set `NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL` to that full subpath base.
+- To keep users inside Buddhi Align on Vercel, set `COMMUNITY_PROXY_TARGET=https://community.foreverlotus.com/community` after Discourse is configured to serve from `/community`.
 - Community links will preserve that base path and resolve as:
   - `/community/c/<subcategory>`
   - `/community/c/<parent>/<subcategory>` when `DISCOURSE_PARENT_CATEGORY_SLUG` is set.
+- Other websites can promote the same community with the embeddable script at `/community-widget.js`; see `docs/discourse-reverse-proxy-setup.md` for the snippet.
 
 ## Invite And Growth UX
 

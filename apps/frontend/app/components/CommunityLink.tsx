@@ -10,6 +10,24 @@ interface CommunityLinkPayload {
   url?: string;
 }
 
+function getCurrentOrigin(): string | undefined {
+  if (typeof window === "undefined") return undefined;
+  return window.location.origin;
+}
+
+export function shouldOpenCommunityLinkInNewTab(href: string, currentOrigin = getCurrentOrigin()): boolean {
+  if (!href) return true;
+  if (!currentOrigin) return true;
+
+  try {
+    const linkUrl = new URL(href, currentOrigin);
+    const currentUrl = new URL(currentOrigin);
+    return linkUrl.origin !== currentUrl.origin;
+  } catch {
+    return true;
+  }
+}
+
 export default function CommunityLink({
   moduleKey,
   label = "Join Community",
@@ -45,11 +63,13 @@ export default function CommunityLink({
     return null;
   }
 
+  const opensNewTab = shouldOpenCommunityLinkInNewTab(payload.url);
+
   return (
     <a
       href={payload.url}
-      target="_blank"
-      rel="noopener noreferrer"
+      target={opensNewTab ? "_blank" : undefined}
+      rel={opensNewTab ? "noopener noreferrer" : undefined}
       className="app-user-action inline-flex px-3 py-2 rounded-lg text-sm"
       onClick={() => {
         logEvent("community_link_clicked", {
