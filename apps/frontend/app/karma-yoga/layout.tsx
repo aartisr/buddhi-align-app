@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 import { buildPageMetadata } from "../lib/seo";
 
 export const metadata = buildPageMetadata({
-  title: "Karma Yoga Tracker",
+  title: "Karma Yoga Service Journal and Seva Tracker",
   description:
-    "Log acts of service, reflect on their impact, and keep a clear record of your Karma Yoga practice.",
+    "Use the Karma Yoga tracker to log selfless action, seva, service impact, and reflection so meaningful work becomes a steady spiritual practice.",
   path: "/karma-yoga",
   keywords: ["service journal", "karma yoga tracker", "daily seva"],
 });

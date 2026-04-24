@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 import { buildPageMetadata } from "../lib/seo";
 
 export const metadata = buildPageMetadata({
-  title: "Dhyana Meditation",
+  title: "Dhyana Meditation Tracker for Daily Mindfulness Practice",
   description:
-    "Track meditation sessions, combine guided and self-led practice, and build steadier attention over time.",
+    "Track guided and self-led meditation sessions, duration, notes, and attention-building practice with a calm Dhyana Meditation workspace.",
   path: "/dhyana-meditation",
   keywords: ["meditation log", "dhyana tracker", "mindfulness practice"],
 });

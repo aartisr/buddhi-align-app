@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 import { buildPageMetadata } from "../lib/seo";
 
 export const metadata = buildPageMetadata({
-  title: "Bhakti Journal",
+  title: "Bhakti Journal for Devotion and Gratitude Practice",
   description:
-    "Capture devotional reflections, gratitude, and heartfelt moments in a focused Bhakti practice journal.",
+    "Capture devotion, gratitude, prayerful reflection, and heartfelt practice in a Bhakti journal designed for consistent devotional growth and review.",
   path: "/bhakti-journal",
   keywords: ["devotional journal", "gratitude reflection", "bhakti practice"],
 });

@@ -19,7 +19,7 @@ type PageMetadataOptions = {
 export const siteUrl = getSiteUrl();
 export const siteName = "Buddhi Align App";
 export const siteDescription =
-  "A daily contemplative practice app for dharma planning, meditation, service, reflection, and personal analytics.";
+  "Buddhi Align is a contemplative practice app for dharma planning, meditation tracking, service journaling, self-reflection, and gentle spiritual growth analytics.";
 export const organizationName = "ForeverLotus";
 export const organizationUrl = "https://foreverlotus.com";
 export const authorName = "Aarti Sri Ravikumar";

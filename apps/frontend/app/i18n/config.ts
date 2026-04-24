@@ -40,8 +40,8 @@ export const LOCALE_OPTIONS = LOCALE_DEFINITIONS.map((item) => ({
 }));
 
 const EN_MESSAGES = {
-  "app.title": "Buddhi Align App",
-  "app.description": "A daily contemplative practice app for dharma planning, meditation, service, reflection, and personal analytics.",
+  "app.title": "Buddhi Align Spiritual Practice and Reflection App",
+  "app.description": "Buddhi Align is a contemplative practice app for dharma planning, meditation tracking, service journaling, self-reflection, and gentle spiritual growth analytics.",
   "app.brand": "Buddhi Align App",
   "app.dashboard": "Buddhi Dashboard",
   "app.language": "Language",

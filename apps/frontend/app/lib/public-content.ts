@@ -30,9 +30,9 @@ const moduleAudience = [
 const corePublicPageProfiles = ([
   {
     path: "/",
-    title: "Buddhi Align App",
+    title: "Buddhi Align Spiritual Practice and Reflection App",
     description:
-      "A daily contemplative practice app that joins dharma planning, meditation, service, reflection, and personal analytics in one calm workspace.",
+      "Buddhi Align is a contemplative practice app for dharma planning, meditation tracking, service journaling, reflection, and spiritual growth analytics in one calm workspace.",
     summary:
       "Buddhi Align helps people turn ancient wisdom into one practical daily loop: plan an intention, record meaningful practice, reflect on insight, and review growth over time.",
     keywords: [
@@ -53,10 +53,10 @@ const corePublicPageProfiles = ([
   },
   {
     path: "/karma-yoga",
-    title: "Karma Yoga Tracker",
+    title: "Karma Yoga Service Journal and Seva Tracker",
     inviteModuleKey: "karma",
     description:
-      "Log selfless action, seva, service impact, and reflection with a focused Karma Yoga tracker.",
+      "Use the Karma Yoga tracker to log selfless action, seva, service impact, and reflection so meaningful work becomes a steady spiritual practice.",
     summary:
       "The Karma Yoga Tracker gives service-oriented users a simple way to record meaningful actions, impact, and the inner learning that follows.",
     keywords: ["karma yoga tracker", "seva journal", "service reflection app"],
@@ -67,10 +67,10 @@ const corePublicPageProfiles = ([
   },
   {
     path: "/bhakti-journal",
-    title: "Bhakti Journal",
+    title: "Bhakti Journal for Devotion and Gratitude Practice",
     inviteModuleKey: "bhakti",
     description:
-      "Capture devotion, gratitude, prayerful reflection, and heartfelt practice in a dedicated Bhakti journal.",
+      "Capture devotion, gratitude, prayerful reflection, and heartfelt practice in a Bhakti journal designed for consistent devotional growth and review.",
     summary:
       "The Bhakti Journal supports devotional consistency by giving gratitude, reverence, and heartfelt reflection a dedicated home.",
     keywords: ["bhakti journal", "devotional journal", "gratitude reflection app"],
@@ -81,10 +81,10 @@ const corePublicPageProfiles = ([
   },
   {
     path: "/dhyana-meditation",
-    title: "Dhyana Meditation",
+    title: "Dhyana Meditation Tracker for Daily Mindfulness Practice",
     inviteModuleKey: "dhyana",
     description:
-      "Track guided and self-led meditation sessions, duration, notes, and attention-building practice.",
+      "Track guided and self-led meditation sessions, duration, notes, and attention-building practice with a calm Dhyana Meditation workspace.",
     summary:
       "Dhyana Meditation helps users log meditation sessions and see the quiet pattern of attention-building over time.",
     keywords: ["dhyana meditation tracker", "meditation log", "mindfulness practice tracker"],
@@ -95,10 +95,10 @@ const corePublicPageProfiles = ([
   },
   {
     path: "/jnana-reflection",
-    title: "Jnana Reflection",
+    title: "Jnana Reflection Journal for Self-Inquiry and Insight",
     inviteModuleKey: "jnana",
     description:
-      "Record insight, contemplation, self-inquiry, and wisdom notes in a structured Jnana reflection journal.",
+      "Record insight, contemplation, self-inquiry, study notes, and wisdom questions in a structured Jnana Reflection journal for thoughtful review.",
     summary:
       "Jnana Reflection helps users preserve insights from study, self-inquiry, and contemplative review.",
     keywords: ["jnana reflection", "wisdom journal", "self inquiry journal"],
@@ -109,10 +109,10 @@ const corePublicPageProfiles = ([
   },
   {
     path: "/vasana-tracker",
-    title: "Vasana Tracker",
+    title: "Vasana Tracker for Habit Patterns and Inner Growth",
     inviteModuleKey: "vasana",
     description:
-      "Notice recurring habits, tendencies, triggers, and patterns with a reflective Vasana tracker.",
+      "Use the Vasana Tracker to notice recurring habits, tendencies, triggers, and patterns so inner growth can be observed with clarity and care.",
     summary:
       "The Vasana Tracker supports pattern awareness by helping users observe tendencies without judgment and document what changes over time.",
     keywords: ["vasana tracker", "habit reflection app", "pattern awareness journal"],
@@ -123,10 +123,10 @@ const corePublicPageProfiles = ([
   },
   {
     path: "/dharma-planner",
-    title: "Dharma Planner",
+    title: "Dharma Planner for Purpose-Aligned Goals and Intentions",
     inviteModuleKey: "dharma",
     description:
-      "Plan purpose-aligned goals, intentions, action plans, and daily direction with a Dharma planning workspace.",
+      "Plan purpose-aligned goals, intentions, action steps, and daily direction with a Dharma Planner built for steady spiritual discipline.",
     summary:
       "The Dharma Planner turns intention into action by helping users define a purpose-aligned goal and the next step attached to it.",
     keywords: ["dharma planner", "purpose planner", "intentional living app"],
@@ -137,10 +137,10 @@ const corePublicPageProfiles = ([
   },
   {
     path: "/motivation-analytics",
-    title: "Motivation and Analytics",
+    title: "Motivation Analytics Dashboard for Spiritual Practice Growth",
     inviteModuleKey: "motivation",
     description:
-      "Review streaks, module activity, practice balance, and adaptive next steps inside Buddhi Align.",
+      "Review streaks, module activity, practice balance, and adaptive next steps with a Motivation Analytics dashboard for spiritual practice growth.",
     summary:
       "Motivation and Analytics turns practice data into calm feedback: streaks, trends, module balance, and next-step recommendations.",
     keywords: ["practice analytics", "spiritual growth dashboard", "mindfulness analytics"],
@@ -151,9 +151,9 @@ const corePublicPageProfiles = ([
   },
   {
     path: "/share",
-    title: "Share Buddhi Align",
+    title: "Share Buddhi Align with Friends, Families, and Communities",
     description:
-      "A share kit with concise Buddhi Align descriptions, social captions, and invite links for friends, families, schools, and spiritual communities.",
+      "Use the Buddhi Align share kit to send concise descriptions, social captions, and invite links to friends, families, schools, and spiritual communities.",
     summary:
       "The Buddhi Align share kit packages the app into easy one-sentence descriptions, community-friendly captions, and direct invite links.",
     keywords: ["Buddhi Align share kit", "spiritual app invite", "mindfulness app for friends"],
@@ -169,11 +169,11 @@ const corePublicPageProfiles = ([
 
 const autographPageProfile: PublicPageProfile = {
   path: AUTOGRAPH_ROUTE,
-  title: "Autograph Exchange",
+  title: "Autograph Exchange for Digital Keepsakes and School Messages",
   lastModified: PUBLIC_CONTENT_LAST_MODIFIED,
   inviteModuleKey: "autograph",
   description:
-    "Collect thoughtful autograph messages and keepsakes inside the calm Buddhi Align experience.",
+    "Collect thoughtful autograph messages, school keepsakes, and community memories inside the calm Buddhi Align experience without a noisy social feed.",
   summary:
     "Autograph Exchange lets schools and communities collect meaningful messages without turning the experience into a noisy social feed.",
   keywords: ["digital autograph book", "school keepsakes", "student autograph exchange"],

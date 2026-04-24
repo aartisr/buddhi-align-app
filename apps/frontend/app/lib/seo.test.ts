@@ -25,8 +25,9 @@ describe("SEO public route metadata", () => {
     );
 
     for (const profile of publicPageProfiles) {
-      expect(profile.title).toBeTruthy();
-      expect(profile.description.length).toBeGreaterThan(60);
+      expect(profile.title.length).toBeGreaterThanOrEqual(35);
+      expect(profile.description.length).toBeGreaterThanOrEqual(120);
+      expect(profile.description.length).toBeLessThanOrEqual(180);
       expect(profile.summary.length).toBeGreaterThan(80);
       expect(profile.lastModified).toBe(PUBLIC_CONTENT_LAST_MODIFIED);
       expect(profile.keywords.length).toBeGreaterThanOrEqual(3);
