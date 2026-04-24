@@ -4,6 +4,7 @@ Allow: /llms.txt
 Allow: /llms-full.txt
 Allow: /opengraph-image
 Allow: /twitter-image
+Allow: /6A06157D-A0A1-46BA-BA2B-439CD61864A3.txt
 Disallow: /api/
 Disallow: /admin/
 Disallow: /admin
@@ -17,6 +18,7 @@ Allow: /llms.txt
 Allow: /llms-full.txt
 Allow: /opengraph-image
 Allow: /twitter-image
+Allow: /6A06157D-A0A1-46BA-BA2B-439CD61864A3.txt
 Disallow: /api/
 Disallow: /admin/
 Disallow: /admin
@@ -30,6 +32,7 @@ Allow: /llms.txt
 Allow: /llms-full.txt
 Allow: /opengraph-image
 Allow: /twitter-image
+Allow: /6A06157D-A0A1-46BA-BA2B-439CD61864A3.txt
 Disallow: /api/
 Disallow: /admin/
 Disallow: /admin

@@ -101,6 +101,7 @@ describe("SEO public route metadata", () => {
       expect.arrayContaining(["/api/", "/admin/", "/admin", "/admin-access", "/settings", "/sign-in"]),
     );
     expect(allow).toEqual(expect.arrayContaining(["/", "/llms.txt", "/llms-full.txt"]));
+    expect(allow).toContain("/6A06157D-A0A1-46BA-BA2B-439CD61864A3.txt");
     expect(robots().sitemap).toContain("/sitemap.xml");
   });
 });

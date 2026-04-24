@@ -21,6 +21,17 @@ function normalizeExternalCommunityTarget(value) {
 
 const communityProxyTarget = normalizeExternalCommunityTarget(process.env.COMMUNITY_PROXY_TARGET);
 const appSecurityHeaderSource = communityProxyTarget ? '/((?!community(?:/|$)).*)' : '/(.*)';
+const bingVerificationPath = '/6A06157D-A0A1-46BA-BA2B-439CD61864A3.txt';
+
+const crawlerUtilityHeaders = [
+  {
+    source: bingVerificationPath,
+    headers: [
+      { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+      { key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=3600' },
+    ],
+  },
+];
 
 /** OWASP-recommended HTTP security headers */
 const securityHeaders = [
@@ -72,6 +83,7 @@ const nextConfig = {
   // Attach security headers to all routes
   async headers() {
     return [
+      ...crawlerUtilityHeaders,
       {
         source: appSecurityHeaderSource,
         headers: securityHeaders,
