@@ -2,6 +2,7 @@
   "installCommand": "node scripts/vercel-install.mjs",
   "buildCommand": "npm run verify:no-private-repo && npm run build",
   "env": {
+    "AUTOGRAPH_EXCHANGE_REPO_REF": "211dca601c01422d212651be31d6a7ec9cf85081",
     "COMMUNITY_INTEGRATION_PROVIDER": "discourse",
     "DISCOURSE_INTEGRATION_ENABLED": "true",
     "DISCOURSE_BASE_URL": "https://community.foreverlotus.com",

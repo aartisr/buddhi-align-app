@@ -6,7 +6,7 @@ import os from "node:os";
 const ROOT = process.cwd();
 const TARGET_DIR = path.join(ROOT, "external/autograph-exchange");
 const DEFAULT_REPO_URL = "https://github.com/aartisr/autograph-exchange.git";
-const DEFAULT_REF = "main";
+const DEFAULT_REF = "211dca601c01422d212651be31d6a7ec9cf85081";
 
 function isDefaultPublicRepo(repoUrl) {
   const normalized = repoUrl.replace(/\.git$/i, "");
@@ -61,13 +61,26 @@ function validateSourceTree(rootPath) {
   }
 }
 
+function isCommitSha(ref) {
+  return /^[0-9a-f]{40}$/i.test(ref);
+}
+
 function prepareFromGitClone(repoUrl, ref) {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "autograph-clone-"));
   const cloneDir = path.join(tempRoot, "repo");
 
-  execFileSync("git", ["clone", "--depth=1", "--branch", ref, repoUrl, cloneDir], {
-    stdio: "inherit",
-  });
+  if (isCommitSha(ref)) {
+    execFileSync("git", ["clone", "--filter=blob:none", "--no-checkout", repoUrl, cloneDir], {
+      stdio: "inherit",
+    });
+    execFileSync("git", ["-C", cloneDir, "checkout", "--detach", ref], {
+      stdio: "inherit",
+    });
+  } else {
+    execFileSync("git", ["clone", "--depth=1", "--branch", ref, repoUrl, cloneDir], {
+      stdio: "inherit",
+    });
+  }
 
   ensureDirectory(path.dirname(TARGET_DIR));
   ensureDirectoryRemoved(TARGET_DIR);
@@ -76,7 +89,7 @@ function prepareFromGitClone(repoUrl, ref) {
 }
 
 function prepareFromGithubTarball(ref) {
-  const tarballUrl = `https://codeload.github.com/aartisr/autograph-exchange/tar.gz/refs/heads/${encodeURIComponent(ref)}`;
+  const tarballUrl = `https://codeload.github.com/aartisr/autograph-exchange/tar.gz/${encodeURIComponent(ref)}`;
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "autograph-source-"));
   const tarballPath = path.join(tempRoot, "source.tar.gz");
   const extractDir = path.join(tempRoot, "extract");
