@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import { buildNoIndexMetadata } from "../lib/seo";
+import "../autograph-exchange/autograph-exchange.css";
+import "./admin-dashboard.css";
 
 export const metadata = buildNoIndexMetadata({
   title: "Buddhi Align Restricted Operations and Diagnostics Console",

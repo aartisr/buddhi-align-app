@@ -8,6 +8,7 @@ const {
   createDataProviderMock,
   setCurrentUser,
   resetStore,
+  revalidatePathMock,
 } = vi.hoisted(() => {
   const store: Record<string, GenericEntry[]> = {
     autograph_profiles: [],
@@ -61,6 +62,7 @@ const {
   };
 
   const createDataProviderMock = vi.fn(() => provider);
+  const revalidatePathMock = vi.fn();
 
   return {
     authMock,
@@ -68,6 +70,7 @@ const {
     setCurrentUser(userId: string | null) {
       currentUserId = userId;
     },
+    revalidatePathMock,
     resetStore() {
       store.autograph_profiles = [];
       store.autograph_requests = [];
@@ -77,6 +80,7 @@ const {
       provider.list.mockClear();
       provider.create.mockClear();
       provider.update.mockClear();
+      revalidatePathMock.mockClear();
     },
   };
 });
@@ -87,6 +91,10 @@ vi.mock("@/auth", () => ({
 
 vi.mock("@buddhi-align/data-access", () => ({
   createDataProvider: createDataProviderMock,
+}));
+
+vi.mock("next/cache", () => ({
+  revalidatePath: revalidatePathMock,
 }));
 
 import { GET as getProfiles, PUT as putProfiles } from "./profiles/route";

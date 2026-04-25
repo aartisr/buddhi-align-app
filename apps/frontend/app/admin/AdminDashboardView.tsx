@@ -1,3 +1,6 @@
+import type { AutographProfile } from "@aartisr/autograph-contract";
+import { AutographProfileAdminPanel } from "@aartisr/autograph-feature/profile-components";
+import React, { type ReactNode } from "react";
 import type { AdminAuditEntry } from "./_audit";
 import type { AppErrorEntry } from "@/app/lib/server-error-log";
 import type { ObservabilitySummary } from "@/app/lib/observability-summary";
@@ -31,6 +34,21 @@ type IncidentStats = {
 };
 
 type ObservabilityFilter = "all" | "discourse-sso" | "invite-funnel";
+type MetricTone = "healthy" | "warning" | "danger" | "neutral" | "accent";
+
+type AdminMetric = {
+  label: string;
+  value: string | number;
+  detail: string;
+  tone?: MetricTone;
+};
+
+type AdminNavItem = {
+  id: string;
+  label: string;
+  detail: string;
+  badge: string | number;
+};
 
 type AdminDashboardProps = {
   actorUserId: string;
@@ -45,6 +63,7 @@ type AdminDashboardProps = {
   practiceCounts: Array<{ module: string; count: number }>;
   audits: AdminAuditEntry[];
   incidentsWithAuto: BasicEntry[];
+  autographProfiles: AutographProfile[];
   incidentFilter: IncidentFilter;
   observabilityFilter: ObservabilityFilter;
   incidentStats: IncidentStats;
@@ -80,59 +99,71 @@ function buildSparklinePoints(values: number[], width = 200, height = 56, paddin
     .join(" ");
 }
 
-function StatCards({
-  reliabilityScore,
-  errorBudgetRemaining,
-  activeExperiments,
-  totalCount,
-}: {
-  reliabilityScore: number;
-  errorBudgetRemaining: number;
-  activeExperiments: number;
-  totalCount: number;
-}) {
+function reliabilityTone(score: number): MetricTone {
+  if (score < 72) return "danger";
+  if (score < 90) return "warning";
+  return "healthy";
+}
+
+function MetricGrid({ metrics }: { metrics: AdminMetric[] }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-      <article className="app-record-card">
-        <p className="text-xs app-copy-soft uppercase tracking-wide">{t("admin.stats.reliabilityScore")}</p>
-        <p className="text-2xl font-bold mt-1">{reliabilityScore}</p>
+    <div className="app-admin-metric-grid">
+      {metrics.map((metric) => (
+        <article key={metric.label} className={`app-admin-metric app-admin-metric--${metric.tone ?? "neutral"}`}>
+          <p className="app-admin-metric-label">{metric.label}</p>
+          <p className="app-admin-metric-value">{metric.value}</p>
+          <p className="app-admin-metric-detail">{metric.detail}</p>
       </article>
-      <article className="app-record-card">
-        <p className="text-xs app-copy-soft uppercase tracking-wide">{t("admin.stats.errorBudgetLeft")}</p>
-        <p className="text-2xl font-bold mt-1">{errorBudgetRemaining}%</p>
-      </article>
-      <article className="app-record-card">
-        <p className="text-xs app-copy-soft uppercase tracking-wide">{t("admin.stats.activeExperiments")}</p>
-        <p className="text-2xl font-bold mt-1">{activeExperiments}</p>
-      </article>
-      <article className="app-record-card">
-        <p className="text-xs app-copy-soft uppercase tracking-wide">{t("admin.stats.practiceEntries")}</p>
-        <p className="text-2xl font-bold mt-1">{totalCount}</p>
-      </article>
+      ))}
     </div>
   );
 }
 
-function ObservabilityCards({ observabilitySummary }: { observabilitySummary: ObservabilitySummary }) {
+function AdminSection({
+  id,
+  eyebrow,
+  title,
+  description,
+  children,
+}: {
+  id: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  children: ReactNode;
+}) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-      <article className="app-record-card">
-        <p className="text-xs app-copy-soft uppercase tracking-wide">{t("admin.obs.events24h")}</p>
-        <p className="text-2xl font-bold mt-1">{observabilitySummary.last24hEvents}</p>
-      </article>
-      <article className="app-record-card">
-        <p className="text-xs app-copy-soft uppercase tracking-wide">{t("admin.obs.authDenials24h")}</p>
-        <p className="text-2xl font-bold mt-1">{observabilitySummary.authDenials24h}</p>
-      </article>
-      <article className="app-record-card">
-        <p className="text-xs app-copy-soft uppercase tracking-wide">{t("admin.obs.importIssues24h")}</p>
-        <p className="text-2xl font-bold mt-1">{observabilitySummary.importIssues24h}</p>
-      </article>
-      <article className="app-record-card">
-        <p className="text-xs app-copy-soft uppercase tracking-wide">{t("admin.obs.personalizationIssues24h")}</p>
-        <p className="text-2xl font-bold mt-1">{observabilitySummary.personalizationIssues24h}</p>
-      </article>
-    </div>
+    <section id={id} className="app-admin-section">
+      <header className="app-admin-section-header">
+        <p className="app-admin-eyebrow">{eyebrow}</p>
+        <div>
+          <h3 className="app-admin-section-title">{title}</h3>
+          <p className="app-admin-section-description">{description}</p>
+        </div>
+      </header>
+      <div className="app-admin-section-body">{children}</div>
+    </section>
+  );
+}
+
+function AdminSectionNav({ items }: { items: AdminNavItem[] }) {
+  return (
+    <nav className="app-admin-nav" aria-label="Admin workspace">
+      <p className="app-admin-nav-kicker">Workspace</p>
+      <ol className="app-admin-nav-list">
+        {items.map((item) => (
+          <li key={item.id}>
+            <a className="app-admin-nav-link" href={`#${item.id}`}>
+              <span>
+                <strong>{item.label}</strong>
+                <small>{item.detail}</small>
+              </span>
+              <em>{item.badge}</em>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
   );
 }
 
@@ -538,56 +569,150 @@ function IncidentAndExperimentPanels({
 }
 
 export default function AdminDashboardView(props: AdminDashboardProps) {
+  const criticalAlertCount = props.observabilitySummary.alerts.filter((alert) => alert.level === "critical").length;
+  const reliabilityStatus = props.reliabilityScore < 72
+    ? "Critical"
+    : props.reliabilityScore < 90
+      ? "Watch"
+      : "Healthy";
+  const overviewMetrics: AdminMetric[] = [
+    {
+      label: t("admin.stats.reliabilityScore"),
+      value: props.reliabilityScore,
+      detail: `${reliabilityStatus} production posture`,
+      tone: reliabilityTone(props.reliabilityScore),
+    },
+    {
+      label: t("admin.stats.errorBudgetLeft"),
+      value: `${props.errorBudgetRemaining}%`,
+      detail: `${criticalAlertCount} critical alert${criticalAlertCount === 1 ? "" : "s"}`,
+      tone: criticalAlertCount > 0 ? "danger" : "healthy",
+    },
+    {
+      label: "Profiles",
+      value: props.autographProfiles.length,
+      detail: "Teacher and student records",
+      tone: "accent",
+    },
+    {
+      label: t("admin.stats.practiceEntries"),
+      value: props.totalCount,
+      detail: `${props.activeExperiments} active experiment${props.activeExperiments === 1 ? "" : "s"}`,
+      tone: "neutral",
+    },
+    {
+      label: t("admin.obs.events24h"),
+      value: props.observabilitySummary.last24hEvents,
+      detail: `${props.observabilitySummary.authDenials24h} auth denial${props.observabilitySummary.authDenials24h === 1 ? "" : "s"}`,
+      tone: props.observabilitySummary.authDenials24h > 0 ? "warning" : "neutral",
+    },
+    {
+      label: "Import and personalization",
+      value: props.observabilitySummary.importIssues24h + props.observabilitySummary.personalizationIssues24h,
+      detail: `${props.observabilitySummary.importIssues24h} import / ${props.observabilitySummary.personalizationIssues24h} personalization`,
+      tone: props.observabilitySummary.importIssues24h + props.observabilitySummary.personalizationIssues24h > 0 ? "warning" : "healthy",
+    },
+  ];
+  const navItems: AdminNavItem[] = [
+    { id: "admin-snapshot", label: "Snapshot", detail: "KPIs and posture", badge: reliabilityStatus },
+    { id: "admin-profiles", label: "Profiles", detail: "Teachers and students", badge: props.autographProfiles.length },
+    { id: "admin-reliability", label: "Reliability", detail: "Alerts and runtime", badge: criticalAlertCount },
+    { id: "admin-signals", label: "Signals", detail: "Events and footprint", badge: props.observabilityEvents.length },
+    { id: "admin-actions", label: "Actions", detail: "Incidents and experiments", badge: props.incidentStats.openCount },
+  ];
+
   return (
-    <section className="app-surface-card max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <section className="app-admin-shell" aria-labelledby="admin-dashboard-title">
+      <header className="app-admin-hero">
         <div>
-          <h3 className="app-panel-title text-xl sm:text-2xl font-bold">{t("admin.dashboard.title")}</h3>
-          <p className="app-copy-soft text-sm">
-            {t("admin.dashboard.subtitle")}
-          </p>
-          <p className="app-copy-soft text-xs mt-1">{t("admin.dashboard.actor", { actor: props.actorUserId })}</p>
+          <p className="app-admin-eyebrow">Restricted operations</p>
+          <h2 id="admin-dashboard-title" className="app-admin-title">{t("admin.dashboard.title")}</h2>
+          <p className="app-admin-hero-copy">{t("admin.dashboard.subtitle")}</p>
+          <p className="app-admin-actor">{t("admin.dashboard.actor", { actor: props.actorUserId })}</p>
         </div>
-        <form action={props.lockAdmin}>
-          <button type="submit" className="app-user-action px-3 py-2 rounded-lg text-sm">
-            {t("admin.dashboard.lock")}
-          </button>
-        </form>
+        <div className="app-admin-hero-actions">
+          <span className={`app-admin-status app-admin-status--${reliabilityTone(props.reliabilityScore)}`}>
+            {reliabilityStatus}
+          </span>
+          <form action={props.lockAdmin}>
+            <button type="submit" className="app-user-action app-admin-lock-button">
+              {t("admin.dashboard.lock")}
+            </button>
+          </form>
+        </div>
+      </header>
+
+      <div className="app-admin-layout">
+        <AdminSectionNav items={navItems} />
+
+        <div className="app-admin-workspace">
+          <AdminSection
+            id="admin-snapshot"
+            eyebrow="Command center"
+            title="Operational snapshot"
+            description="The signals that decide where an administrator should look first."
+          >
+            <MetricGrid metrics={overviewMetrics} />
+          </AdminSection>
+
+          <AdminSection
+            id="admin-profiles"
+            eyebrow="People"
+            title="Profile handling"
+            description="Create, edit, review, and open public teacher or student profiles from the Buddhi admin."
+          >
+            <AutographProfileAdminPanel initialProfiles={props.autographProfiles} />
+          </AdminSection>
+
+          <AdminSection
+            id="admin-reliability"
+            eyebrow="Reliability"
+            title="Runtime and alerts"
+            description="Deployment readiness, alerts, trends, and recent server errors."
+          >
+            <div className="app-admin-card-grid app-admin-card-grid--two">
+              <AutographDiagnosticsPanel />
+              <ObservabilityAlertsCard
+                observabilitySummary={props.observabilitySummary}
+                autoCreatedIncidents={props.autoCreatedIncidents}
+              />
+            </div>
+            <TrendsPanel observabilitySummary={props.observabilitySummary} />
+            <ServerErrorLogCard errorLog={props.errorLog} />
+          </AdminSection>
+
+          <AdminSection
+            id="admin-signals"
+            eyebrow="Signals"
+            title="Events and module footprint"
+            description="Recent observability events, practice storage, audit trail, community SSO, and invite conversion."
+          >
+            <OpsDetailGrid
+              observabilityEvents={props.observabilityEvents}
+              observabilityFilter={props.observabilityFilter}
+              incidentFilter={props.incidentFilter}
+              practiceCounts={props.practiceCounts}
+              audits={props.audits}
+            />
+          </AdminSection>
+
+          <AdminSection
+            id="admin-actions"
+            eyebrow="Actions"
+            title="Operator queue"
+            description="Log incidents, plan experiments, and resolve operational work."
+          >
+            <ActionForms logIncident={props.logIncident} createExperiment={props.createExperiment} />
+            <IncidentAndExperimentPanels
+              incidentFilter={props.incidentFilter}
+              incidentStats={props.incidentStats}
+              incidentsWithAuto={props.incidentsWithAuto}
+              resolveIncident={props.resolveIncident}
+              experiments={props.experiments}
+            />
+          </AdminSection>
+        </div>
       </div>
-
-      <StatCards
-        reliabilityScore={props.reliabilityScore}
-        errorBudgetRemaining={props.errorBudgetRemaining}
-        activeExperiments={props.activeExperiments}
-        totalCount={props.totalCount}
-      />
-
-      <ObservabilityCards observabilitySummary={props.observabilitySummary} />
-      <AutographDiagnosticsPanel />
-      <ObservabilityAlertsCard
-        observabilitySummary={props.observabilitySummary}
-        autoCreatedIncidents={props.autoCreatedIncidents}
-      />
-      <TrendsPanel observabilitySummary={props.observabilitySummary} />
-      <ServerErrorLogCard errorLog={props.errorLog} />
-
-      <OpsDetailGrid
-        observabilityEvents={props.observabilityEvents}
-        observabilityFilter={props.observabilityFilter}
-        incidentFilter={props.incidentFilter}
-        practiceCounts={props.practiceCounts}
-        audits={props.audits}
-      />
-
-      <ActionForms logIncident={props.logIncident} createExperiment={props.createExperiment} />
-
-      <IncidentAndExperimentPanels
-        incidentFilter={props.incidentFilter}
-        incidentStats={props.incidentStats}
-        incidentsWithAuto={props.incidentsWithAuto}
-        resolveIncident={props.resolveIncident}
-        experiments={props.experiments}
-      />
     </section>
   );
 }

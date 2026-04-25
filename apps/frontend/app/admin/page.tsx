@@ -23,6 +23,8 @@ import {
   syncCriticalAlertIncidents,
   type IncidentFilter,
 } from "./incident-operations";
+import { autographService } from "@/app/lib/autographs/service";
+import { withDisplayAvatarUrls } from "../api/autographs/_profile-payload";
 
 type ObservabilityFilter = "all" | "discourse-sso" | "invite-funnel";
 
@@ -74,7 +76,7 @@ async function requireAdminSession() {
 async function loadAdminDashboardData(incidentFilter: IncidentFilter) {
   const provider = createDataProvider();
 
-  const [practiceCounts, audits, incidents, experiments, errorLog, observabilityEvents] = await Promise.all([
+  const [practiceCounts, audits, incidents, experiments, errorLog, observabilityEvents, autographProfiles] = await Promise.all([
     Promise.all(
       PRACTICE_MODULES.map(async (module) => {
         const rows = await provider.list<BasicEntry>(module);
@@ -86,6 +88,7 @@ async function loadAdminDashboardData(incidentFilter: IncidentFilter) {
     provider.list<BasicEntry>(ADMIN_EXPERIMENT_MODULE),
     provider.list<AppErrorEntry>(APP_ERROR_LOG_MODULE),
     provider.list<ObservabilityEventEntry>(OBSERVABILITY_EVENT_MODULE),
+    autographService.listAutographProfiles(),
   ]);
 
   const observabilitySummary = buildObservabilitySummary(observabilityEvents);
@@ -127,6 +130,7 @@ async function loadAdminDashboardData(incidentFilter: IncidentFilter) {
     observabilitySummary,
     autoCreatedIncidents,
     incidentsWithAuto,
+    autographProfiles: withDisplayAvatarUrls(autographProfiles),
     incidentStats,
     reliabilityScore: Math.max(0, 100 - severityPenalty),
     errorBudgetRemaining: Math.max(0, 100 - severityPenalty),
@@ -155,6 +159,7 @@ export default async function AdminPage({
     observabilitySummary,
     autoCreatedIncidents,
     incidentsWithAuto,
+    autographProfiles,
     incidentStats,
     reliabilityScore,
     errorBudgetRemaining,
@@ -304,6 +309,7 @@ export default async function AdminPage({
         practiceCounts={practiceCounts}
         audits={audits}
         incidentsWithAuto={incidentsWithAuto}
+        autographProfiles={autographProfiles}
         incidentFilter={incidentFilter}
         observabilityFilter={observabilityFilter}
         incidentStats={incidentStats}
