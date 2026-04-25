@@ -2,10 +2,15 @@
 
 import React from "react";
 import { useSession } from "next-auth/react";
+import type { AutographProfile } from "@aartisr/autograph-contract";
 import { AutographExchangeFeature } from "@aartisr/autograph-feature";
 import { useCurrentSignInHref } from "@/app/auth/use-current-sign-in-href";
 import ModuleLayout from "@/app/components/ModuleLayout";
 import { useI18n } from "@/app/i18n/provider";
+
+function profileHrefForSigner(profile: AutographProfile): string {
+  return `/profiles/${encodeURIComponent(profile.id)}`;
+}
 
 export default function AutographExchangePage() {
   const { t } = useI18n();
@@ -32,6 +37,7 @@ export default function AutographExchangePage() {
       signedOutMessage={t("auth.persistHint")}
       signInLabel={t("auth.signInToSave")}
       signInHref={signInHref}
+      profileHrefForSigner={profileHrefForSigner}
       renderShell={(content) => <ModuleLayout titleKey="module.autograph.title">{content}</ModuleLayout>}
     />
   );

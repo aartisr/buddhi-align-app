@@ -89,6 +89,16 @@ describe("AutographExchangePage", () => {
     );
   });
 
+  it("keeps signer profile links inside the Buddhi Align app", () => {
+    render(<AutographExchangePage />);
+
+    const props = autographFeatureSpy.mock.calls[0][0] as {
+      profileHrefForSigner: (profile: { id: string }) => string;
+    };
+
+    expect(props.profileHrefForSigner({ id: "teacher profile/one" })).toBe("/profiles/teacher%20profile%2Fone");
+  });
+
   it("passes unauthenticated state so the packaged feature can show its public landing screen", () => {
     mockSession.data = null;
     mockSession.status = "unauthenticated";
