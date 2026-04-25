@@ -6,7 +6,8 @@ import RequestFeedbackProvider from "./RequestFeedbackProvider";
 import WebVitalsReporter from "./WebVitalsReporter";
 
 const isClientObservabilityEnabled = process.env.NEXT_PUBLIC_OBSERVABILITY_CLIENT === "1";
-const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID?.trim();
+const CLARITY_PROJECT_ID = "w90fdbtt4x";
+const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID?.trim() || CLARITY_PROJECT_ID;
 
 /**
  * Client-side session provider wrapper.

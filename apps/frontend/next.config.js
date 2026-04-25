@@ -62,15 +62,15 @@ const securityHeaders = [
       "default-src 'self'",
       // unsafe-inline required for Next.js hydration scripts; unsafe-eval needed in dev only
       isDev
-        ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-        : "script-src 'self' 'unsafe-inline'",
+        ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.clarity.ms https://scripts.clarity.ms"
+        : "script-src 'self' 'unsafe-inline' https://www.clarity.ms https://scripts.clarity.ms",
       "style-src 'self' 'unsafe-inline'",
       // Fonts are self-hosted via next/font at build time — no external CDN needed
       "font-src 'self' data:",
       // Allow images from auth providers, Shishu Bharati, and Awaricon badge host
-      "img-src 'self' data: blob: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://graph.facebook.com https://www.shishubharati.net https://www.foreverlotus.com",
+      "img-src 'self' data: blob: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://graph.facebook.com https://www.shishubharati.net https://www.foreverlotus.com https://*.clarity.ms",
       // Supabase real-time + REST connections
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.clarity.ms",
       "frame-ancestors 'self'",
       "form-action 'self'",
       "base-uri 'self'",
