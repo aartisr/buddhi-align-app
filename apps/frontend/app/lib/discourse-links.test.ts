@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildCommunityUrl, buildDiscourseCommunityUrl } from "./community-links";
 
 describe("community-links", () => {
-  it("builds module-aware discourse category URLs", () => {
+  it("builds module-aware native community category URLs", () => {
     const url = buildDiscourseCommunityUrl("karma", {
       enabled: true,
       provider: "discourse",
@@ -15,7 +15,7 @@ describe("community-links", () => {
       },
     });
 
-    expect(url).toBe("https://community.example.org/c/karma-yoga");
+    expect(url).toBe("/community/c/karma-yoga");
   });
 
   it("returns undefined when integration is disabled", () => {
@@ -38,7 +38,7 @@ describe("community-links", () => {
       },
     });
 
-    expect(url).toBe("https://community.example.org/c/dhyana-meditation");
+    expect(url).toBe("/community/c/dhyana-meditation");
   });
 
   it("builds parent/subcategory URLs when parent category slug is configured", () => {
@@ -53,10 +53,10 @@ describe("community-links", () => {
       },
     });
 
-    expect(url).toBe("https://community.example.org/c/buddhi-align/dhyana-meditation");
+    expect(url).toBe("/community/c/buddhi-align/dhyana-meditation");
   });
 
-  it("preserves community subpath for reverse proxy deployments", () => {
+  it("keeps module links relative even when an absolute app community URL is configured", () => {
     const url = buildCommunityUrl("bhakti", {
       enabled: true,
       provider: "discourse",
@@ -69,6 +69,22 @@ describe("community-links", () => {
       },
     });
 
-    expect(url).toBe("https://buddhi-align.example.org/community/c/buddhi-align/bhakti-journal");
+    expect(url).toBe("/community/c/buddhi-align/bhakti-journal");
+  });
+
+  it("does not send module community links to the external Discourse origin", () => {
+    const url = buildCommunityUrl("bhakti", {
+      enabled: true,
+      provider: "discourse",
+      discourse: {
+        enabled: true,
+        baseUrl: "https://community.example.org",
+        communityUrl: "https://community.example.org",
+        parentCategorySlug: "buddhi-align",
+        requestTimeoutMs: 4000,
+      },
+    });
+
+    expect(url).toBe("/community/c/buddhi-align/bhakti-journal");
   });
 });

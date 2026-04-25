@@ -10,22 +10,8 @@ interface CommunityLinkPayload {
   url?: string;
 }
 
-function getCurrentOrigin(): string | undefined {
-  if (typeof window === "undefined") return undefined;
-  return window.location.origin;
-}
-
-export function shouldOpenCommunityLinkInNewTab(href: string, currentOrigin = getCurrentOrigin()): boolean {
-  if (!href) return true;
-  if (!currentOrigin) return true;
-
-  try {
-    const linkUrl = new URL(href, currentOrigin);
-    const currentUrl = new URL(currentOrigin);
-    return linkUrl.origin !== currentUrl.origin;
-  } catch {
-    return true;
-  }
+export function shouldOpenCommunityLinkInNewTab(_href?: string, _currentOrigin?: string): boolean {
+  return false;
 }
 
 export default function CommunityLink({

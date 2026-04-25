@@ -53,7 +53,7 @@ describe("/api/community/link route", () => {
   it("returns resolved community link when available", async () => {
     getCommunityConfigMock.mockReturnValue({ enabled: true, provider: "discourse" });
     validateCommunityConfigMock.mockReturnValue({ ok: true, errors: [], warnings: [] });
-    buildCommunityUrlMock.mockReturnValue("https://community.example.org/c/karma-yoga");
+    buildCommunityUrlMock.mockReturnValue("/community/c/karma-yoga");
 
     const res = await GET(makeRequest("https://example.org/api/community/link?module=karma"));
     const payload = await res.json();
@@ -61,6 +61,6 @@ describe("/api/community/link route", () => {
     expect(res.status).toBe(200);
     expect(payload.enabled).toBe(true);
     expect(payload.provider).toBe("discourse");
-    expect(payload.url).toBe("https://community.example.org/c/karma-yoga");
+    expect(payload.url).toBe("/community/c/karma-yoga");
   });
 });
