@@ -524,11 +524,9 @@ function ModuleLayoutView({
 
         <header className="app-header-panel w-full px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-3 relative z-40">
           <div className="app-brand-lockup">
-            <h1>
-              <Link href="/" className="inline-flex items-center" aria-label={t("app.brand")}>
-                <BuddhiAlignLogo className="h-10 sm:h-11 w-auto" />
-              </Link>
-            </h1>
+            <Link href="/" className="inline-flex items-center" aria-label={t("app.brand")}>
+              <BuddhiAlignLogo className="h-10 sm:h-11 w-auto" />
+            </Link>
             <PlatinumBadge />
           </div>
           <DesktopNavigation
@@ -575,9 +573,9 @@ function ModuleLayoutView({
         />
 
         <main id="main-content" className="app-main-content" tabIndex={-1}>
-          <h2 className="app-panel-title text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-center px-2">
+          <h1 className="app-panel-title text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-center px-2">
             {t(titleKey)}
-          </h2>
+          </h1>
           {currentModule ? (
             <div className="flex justify-center mb-4">
               <CommunityLink moduleKey={currentModule.key} />
