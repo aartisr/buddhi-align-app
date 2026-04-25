@@ -13,9 +13,17 @@ function buildSignInRedirect(origin: string, callbackUrl: string, error?: "OIDCR
   return NextResponse.redirect(signInUrl);
 }
 
+function isPublicAutographProfileApiPath(pathname: string, method: string): boolean {
+  if (method !== "GET" && method !== "HEAD") {
+    return false;
+  }
+
+  return /^\/api\/autographs\/profiles\/[^/]+(?:\/avatar)?$/.test(pathname);
+}
+
 /**
  * Auth middleware: redirects unauthenticated users to /sign-in for protected routes.
- * Public routes: /sign-in and auth/community callback APIs.
+ * Public routes: public feature pages plus auth/community callback APIs.
  * First-time visitors to / are automatically placed in anonymous mode.
  */
 export default auth((req) => {
@@ -29,11 +37,13 @@ export default auth((req) => {
     isRootPublicAsset ||
     pathname.startsWith("/sign-in") ||
     pathname.startsWith("/autograph-exchange") ||
+    (pathname === "/profiles" || pathname.startsWith("/profiles/")) ||
     pathname.startsWith("/community") ||
     pathname.startsWith("/api/auth") ||
     pathname.startsWith("/api/obs") ||
     pathname.startsWith("/api/community/link") ||
-    pathname.startsWith("/api/community/discourse/sso");
+    pathname.startsWith("/api/community/discourse/sso") ||
+    isPublicAutographProfileApiPath(pathname, req.method);
 
   if (!req.auth && !isAnonymous && isHomePage) {
     const response = NextResponse.next();

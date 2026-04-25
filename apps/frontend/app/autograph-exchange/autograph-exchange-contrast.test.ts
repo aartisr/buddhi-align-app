@@ -6,6 +6,7 @@ describe("autograph-exchange dark-mode contrast guardrails", () => {
   const require = createRequire(import.meta.url);
   const css = readFileSync(require.resolve("@aartisr/autograph-feature/styles.css"), "utf8");
   const appContrastOverrides = readFileSync(require.resolve("../styles/contrast-overrides.css"), "utf8");
+  const appAutographOverrides = readFileSync(require.resolve("./autograph-exchange.css"), "utf8");
 
   it("keeps explicit dark-mode fallback backgrounds for inbox and archive cards", () => {
     expect(css).toContain(".autograph-tone-inbox .autograph-request-card {");
@@ -59,5 +60,13 @@ describe("autograph-exchange dark-mode contrast guardrails", () => {
       ".autograph-shell :is(.autograph-tone-inbox, .autograph-tone-archive) .autograph-empty {",
     );
     expect(appContrastOverrides).toContain("color: var(--foreground) !important;");
+  });
+
+  it("keeps Buddhi profile tiles from overflowing long names and dates", () => {
+    expect(appAutographOverrides).toContain(".autograph-profile-highlight-grid {");
+    expect(appAutographOverrides).toContain("grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));");
+    expect(appAutographOverrides).toContain(".autograph-profile-name,");
+    expect(appAutographOverrides).toContain(".autograph-profile-highlight dd,");
+    expect(appAutographOverrides).toContain("overflow-wrap: anywhere;");
   });
 });

@@ -4,6 +4,33 @@
 	color: var(--foreground);
 }
 
+.autograph-profile-card,
+.autograph-profile-identity-card,
+.autograph-profile-highlight,
+.autograph-profile-snapshot-row,
+.autograph-profile-card-top > div,
+.autograph-profile-identity {
+	min-width: 0;
+}
+
+.autograph-profile-highlight-grid {
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+}
+
+.autograph-profile-card-name,
+.autograph-profile-name,
+.autograph-profile-card-headline,
+.autograph-profile-headline,
+.autograph-profile-meta,
+.autograph-profile-highlight dd,
+.autograph-profile-snapshot-row dd,
+.autograph-profile-breadcrumbs li[aria-current="page"] {
+	max-width: 100%;
+	overflow-wrap: anywhere;
+	word-break: normal;
+	hyphens: auto;
+}
+
 .autograph-shell .autograph-feature-card,
 .autograph-shell .autograph-request-card,
 .autograph-shell .autograph-archive-card,

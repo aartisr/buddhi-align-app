@@ -3,10 +3,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AutographProfileShowcase } from "@aartisr/autograph-feature/profile-components";
 import { auth } from "@/auth";
+import JsonLd from "@/app/components/JsonLd";
 import ModuleLayout from "@/app/components/ModuleLayout";
 import { isAutographFeatureEnabled } from "@/app/lib/autographs/feature";
 import { autographService } from "@/app/lib/autographs/service";
-import { buildPageMetadata } from "@/app/lib/seo";
+import {
+  buildAutographProfileDescription,
+  buildAutographProfilePageJsonLd,
+  buildPageMetadata,
+} from "@/app/lib/seo";
 import { withDisplayAvatarUrl } from "../../api/autographs/_profile-payload";
 
 type ProfilePageProps = {
@@ -20,22 +25,6 @@ const EXCHANGE_RETURN_HREF = "/autograph-exchange#autograph-request-composer";
 const PROFILE_SETUP_HREF = "/autograph-exchange#autograph-profile-setup";
 const PROFILES_HREF = "/profiles";
 const OUTBOX_HREF = "/autograph-exchange#autograph-requests-sent";
-
-function buildProfileDescription(profile: {
-  displayName: string;
-  role: string;
-  headline?: string;
-  bio?: string;
-  subjects?: string[];
-  interests?: string[];
-}): string {
-  const focus = [...(profile.subjects ?? []), ...(profile.interests ?? [])].slice(0, 3).join(", ");
-  const summary = profile.headline || profile.bio || `${profile.displayName} has a public ${profile.role} profile.`;
-
-  return focus
-    ? `${summary} Open this Buddhi Align autograph profile to request a meaningful note connected to ${focus}.`
-    : `${summary} Open this Buddhi Align autograph profile to request a meaningful digital autograph.`;
-}
 
 export async function generateMetadata({ params }: ProfilePageProps): Promise<Metadata> {
   const profile = isAutographFeatureEnabled()
@@ -53,7 +42,7 @@ export async function generateMetadata({ params }: ProfilePageProps): Promise<Me
 
   return buildPageMetadata({
     title: `${profile.displayName} Autograph Profile`,
-    description: buildProfileDescription(profile),
+    description: buildAutographProfileDescription(profile),
     path: `${PROFILES_HREF}/${params.id}`,
     keywords: [profile.role, ...(profile.subjects ?? []), ...(profile.interests ?? [])],
   });
@@ -86,10 +75,13 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     ? (await autographService.listAutographProfiles()).find((item) => item.userId === viewerId)
     : null;
 
+  const displayProfile = withDisplayAvatarUrl(profile);
+
   return (
     <ModuleLayout titleKey="module.autograph.title">
+      <JsonLd data={buildAutographProfilePageJsonLd(displayProfile)} />
       <AutographProfileShowcase
-        profile={withDisplayAvatarUrl(profile)}
+        profile={displayProfile}
         viewer={viewer}
         canEdit={myProfile?.id === profile.id}
         viewerHasProfile={Boolean(myProfile)}

@@ -201,8 +201,29 @@ const autographPageProfile: PublicPageProfile = {
   priority: 0.75,
 };
 
+const autographProfilesPageProfile: PublicPageProfile = {
+  path: "/profiles",
+  title: "Autograph Exchange Public Profiles for Teachers and Students",
+  lastModified: PUBLIC_CONTENT_LAST_MODIFIED,
+  inviteModuleKey: "autograph-profiles",
+  description:
+    "Browse public teacher and student autograph profiles in Buddhi Align, review focus areas, and open a profile before requesting a meaningful keepsake message.",
+  summary:
+    "The Autograph Exchange profile directory helps students, teachers, and communities preview public profiles before requesting a thoughtful digital autograph.",
+  keywords: [
+    "autograph profiles",
+    "teacher autograph profiles",
+    "student autograph directory",
+    "public keepsake profiles",
+  ],
+  audience: ["students", "teachers", "school communities", "event communities"],
+  outcomes: ["Browse public profiles", "Preview focus areas", "Request a meaningful autograph"],
+  changeFrequency: "weekly",
+  priority: 0.7,
+};
+
 export const publicPageProfiles: PublicPageProfile[] = AUTOGRAPH_FEATURE_ENABLED
-  ? [...corePublicPageProfiles, autographPageProfile]
+  ? [...corePublicPageProfiles, autographPageProfile, autographProfilesPageProfile]
   : corePublicPageProfiles;
 
 export const publicPageProfileByPath = new Map(

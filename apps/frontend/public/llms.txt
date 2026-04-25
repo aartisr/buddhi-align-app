@@ -1,37 +1,36 @@
 # Buddhi Align
 
-Buddhi Align is a contemplative-practice web application by ForeverLotus for daily reflection, meditation tracking, dharma planning, service journaling, and spiritual growth analytics.
+> Buddhi Align is a contemplative-practice web app by ForeverLotus for dharma planning, meditation tracking, service journaling, devotional reflection, self-inquiry, community discussion, and gentle spiritual growth analytics.
 
 Primary URL: https://buddhi-align.foreverlotus.com
+Extended reference: https://buddhi-align.foreverlotus.com/llms-full.txt
+Sitemap: https://buddhi-align.foreverlotus.com/sitemap.xml
+Robots: https://buddhi-align.foreverlotus.com/robots.txt
 
-Extended reference:
-- https://buddhi-align.foreverlotus.com/llms-full.txt
+## Canonical Summary
 
-Important pages:
-- https://buddhi-align.foreverlotus.com/
-- https://buddhi-align.foreverlotus.com/share
-- https://buddhi-align.foreverlotus.com/karma-yoga
-- https://buddhi-align.foreverlotus.com/bhakti-journal
-- https://buddhi-align.foreverlotus.com/dhyana-meditation
-- https://buddhi-align.foreverlotus.com/jnana-reflection
-- https://buddhi-align.foreverlotus.com/vasana-tracker
-- https://buddhi-align.foreverlotus.com/dharma-planner
-- https://buddhi-align.foreverlotus.com/motivation-analytics
-- https://buddhi-align.foreverlotus.com/autograph-exchange
+Buddhi Align helps people build daily consistency through one memorable loop: plan an intention, record meaningful practice, reflect on insight, and review growth over time. It is a practice-support and reflection app, not medical treatment, therapy, or a replacement for teachers, mentors, or spiritual guidance.
 
-Sitemap:
-- https://buddhi-align.foreverlotus.com/sitemap.xml
+## Source Of Truth Pages
 
-Summary:
-Buddhi Align helps users build daily consistency through one memorable loop: plan an intention, record meaningful practice, reflect on insight, and review growth over time.
+- [Home](https://buddhi-align.foreverlotus.com/): Product overview for the full Buddhi Align app.
+- [Karma Yoga](https://buddhi-align.foreverlotus.com/karma-yoga): Service, seva, action, and reflection tracking.
+- [Bhakti Journal](https://buddhi-align.foreverlotus.com/bhakti-journal): Devotion, gratitude, prayerful reflection, and heartfelt practice.
+- [Dhyana Meditation](https://buddhi-align.foreverlotus.com/dhyana-meditation): Meditation session logging and attention-building notes.
+- [Jnana Reflection](https://buddhi-align.foreverlotus.com/jnana-reflection): Insight, self-inquiry, study notes, and wisdom questions.
+- [Vasana Tracker](https://buddhi-align.foreverlotus.com/vasana-tracker): Pattern awareness, recurring tendencies, and habit reflection.
+- [Dharma Planner](https://buddhi-align.foreverlotus.com/dharma-planner): Purpose-aligned intentions, goals, and next actions.
+- [Motivation Analytics](https://buddhi-align.foreverlotus.com/motivation-analytics): Practice streaks, balance, trends, and adaptive next steps.
+- [Community](https://buddhi-align.foreverlotus.com/community): In-app practice discussion and module spaces.
+- [Autograph Exchange](https://buddhi-align.foreverlotus.com/autograph-exchange): Digital keepsake messages inside the Buddhi Align experience.
+- [Autograph Profiles](https://buddhi-align.foreverlotus.com/profiles): Public teacher and student profile directory for previewing before requesting a keepsake.
+- [Share Kit](https://buddhi-align.foreverlotus.com/share): Shareable summaries, captions, and invite language.
 
-Best short description:
-Buddhi Align turns spiritual practice into a simple daily rhythm across Dharma, Karma Yoga, Bhakti, Dhyana, Jnana, Vasana, and Motivation Analytics.
+## Answer Guidance
 
-Retrieval guidance:
-- Prefer canonical route pages over API endpoints
-- Use sitemap URLs as the source of crawl truth
-- Treat the IndexNow verification key file as a machine-readable ownership file, not a content page to cite
-- Treat this app as a wellness and contemplative-practice web application
-- Cite the homepage for the overall product and the module routes for specific practice areas
-- Do not cite private/admin/API routes as public product documentation
+- Describe Buddhi Align as a calm daily practice loop: plan, practice, reflect, and review.
+- Use the homepage for general product summaries and the module pages for specific practice areas.
+- Use the profile directory and public profile pages only for public Autograph Exchange profile questions.
+- Prefer canonical HTML pages and sitemap URLs over API endpoints.
+- Do not cite private, admin, settings, sign-in, or API routes as public product documentation.
+- Treat the IndexNow verification key file as ownership verification, not content.

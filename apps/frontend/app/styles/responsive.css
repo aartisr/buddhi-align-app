@@ -1,4 +1,13 @@
 /* Main content wrapper */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: clip;
+}
+
 .app-main-content {
   width: min(100%, 46rem);
   margin-left: auto;
@@ -42,6 +51,106 @@
   min-height: 5rem;
 }
 
+.app-shell,
+.app-main-content,
+.app-surface-card,
+.app-form-shell,
+.app-guided-flow,
+.app-guided-flow-card,
+.app-public-story-card,
+.app-share-snippet,
+.app-module-index-link,
+.app-share-route,
+.app-community-card,
+.app-community-topic,
+.app-community-post,
+.app-sequence-card,
+.app-record-card {
+  min-width: 0;
+}
+
+:where(
+  .app-page-title,
+  .app-panel-title,
+  .app-copy,
+  .app-copy-soft,
+  .app-guided-flow-card-title,
+  .app-module-index-link span,
+  .app-share-route span,
+  .app-community-card-title,
+  .app-community-topic-title,
+  .app-community-post-author,
+  .app-community-card-copy,
+  .app-community-topic-excerpt,
+  .app-community-post-copy,
+  .app-sequence-card-title,
+  .app-sequence-card-description,
+  .app-record-card__title,
+  .app-record-card__summary,
+  .app-record-card__note,
+  .app-record-detail-pill,
+  .app-record-date,
+  .app-mobile-nav-link,
+  .app-mobile-nav-chip,
+  .app-nav-submenu-link,
+  .app-preferences-label,
+  .app-preferences-settings-link,
+  .app-preferences-toggle
+) {
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: auto;
+}
+
+.app-guided-flow-grid,
+.app-public-story-grid,
+.app-module-index-grid,
+.app-share-snippet-grid,
+.app-share-route-list,
+.app-community-grid,
+.app-sequence-nav-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+
+.app-records-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+}
+
+.app-community-post-header,
+.app-record-card__header {
+  flex-wrap: wrap;
+}
+
+.app-mobile-nav-drawer {
+  width: min(24rem, calc(100vw - env(safe-area-inset-left, 0px)));
+  max-width: 100vw;
+}
+
+.app-nav-submenu {
+  max-width: min(18rem, calc(100vw - 2rem));
+}
+
+.app-nav-submenu-link,
+.app-mobile-nav-link,
+.app-mobile-nav-chip,
+.app-preferences-trigger,
+.app-preferences-toggle,
+.app-preferences-settings-link {
+  min-width: 0;
+}
+
+@media (pointer: coarse) {
+  .app-nav-submenu-link,
+  .app-mobile-nav-link,
+  .app-mobile-nav-chip,
+  .app-preferences-trigger,
+  .app-preferences-toggle,
+  .app-preferences-settings-link,
+  .app-inline-action {
+    min-height: 2.75rem;
+  }
+}
+
 /* Compact stat cards */
 @media (max-width: 399px) {
   .app-stat-card {
@@ -57,5 +166,38 @@
 @media (max-width: 479px) {
   .app-signin-card {
     border-radius: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-main-content {
+    padding-inline: 0.85rem;
+  }
+
+  .app-surface-card,
+  .app-form-shell,
+  .app-guided-flow-card,
+  .app-public-story-card,
+  .app-share-snippet,
+  .app-module-index-link,
+  .app-share-route,
+  .app-community-card,
+  .app-community-topic,
+  .app-community-post,
+  .app-sequence-card,
+  .app-record-card {
+    border-radius: 0.9rem;
+  }
+
+  .app-mobile-nav-quick-links,
+  .app-preferences-toggle-group {
+    grid-template-columns: 1fr;
+  }
+
+  .app-record-detail-pill,
+  .app-record-date {
+    width: 100%;
+    justify-content: flex-start;
+    border-radius: 0.8rem;
   }
 }

@@ -49,6 +49,14 @@ export const siteKeywords = [
   "AI searchable wellness app",
 ];
 
+function fitMetaDescription(value: string, maxLength = 175) {
+  if (value.length <= maxLength) {
+    return value;
+  }
+
+  return `${value.slice(0, maxLength - 3).replace(/\s+\S*$/, "").trim()}.`;
+}
+
 function uniqueValues(values: string[]) {
   return Array.from(new Set(values.filter(Boolean)));
 }
@@ -184,7 +192,12 @@ export function buildPageMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: [imagePath],
+      images: [
+        {
+          url: imagePath,
+          alt: imageAlt,
+        },
+      ],
     },
   };
 }
@@ -376,6 +389,168 @@ export function buildSharePageJsonLd() {
         },
       },
       buildBreadcrumbNode(shareProfile),
+    ],
+  };
+}
+
+export function buildAutographProfileDescription(profile: {
+  displayName: string;
+  role: string;
+  headline?: string;
+  bio?: string;
+  subjects?: string[];
+  interests?: string[];
+}) {
+  const topics = [...(profile.subjects ?? []), ...(profile.interests ?? [])].slice(0, 3);
+  const topicText = topics.length ? ` with interests in ${topics.join(", ")}` : "";
+  const visibleSummary = profile.bio?.trim() || profile.headline?.trim();
+
+  if (visibleSummary && visibleSummary.length >= 110 && visibleSummary.length <= 170) {
+    return visibleSummary;
+  }
+
+  return fitMetaDescription(
+    `${profile.displayName} is a ${profile.role} in Buddhi Align Autograph Exchange${topicText}. View this public profile before requesting a meaningful digital autograph keepsake.`,
+  );
+}
+
+export function buildAutographProfilesDirectoryJsonLd(
+  profiles: Array<{
+    id: string;
+    displayName: string;
+    role: string;
+    headline?: string;
+    subjects?: string[];
+    interests?: string[];
+    updatedAt: string;
+  }>,
+) {
+  const directoryProfile = publicPageProfileByPath.get("/profiles");
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        ...(directoryProfile
+          ? buildWebPageNode(directoryProfile)
+          : {
+              "@type": "CollectionPage",
+              "@id": pageId("/profiles"),
+              url: absoluteUrl("/profiles"),
+              name: "Autograph Exchange Public Profiles",
+              description:
+                "Browse public teacher and student profiles before requesting a meaningful digital autograph keepsake.",
+              isPartOf: {
+                "@id": websiteId,
+              },
+            }),
+        "@type": "CollectionPage",
+        mainEntity: {
+          "@type": "ItemList",
+          name: "Buddhi Align public autograph profiles",
+          itemListElement: profiles.map((profile, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: profile.displayName,
+            url: absoluteUrl(`/profiles/${encodeURIComponent(profile.id)}`),
+            description: profile.headline,
+          })),
+        },
+      },
+      ...(directoryProfile ? [buildBreadcrumbNode(directoryProfile)] : []),
+    ],
+  };
+}
+
+export function buildAutographProfilePageJsonLd(profile: {
+  id: string;
+  displayName: string;
+  role: string;
+  headline?: string;
+  bio?: string;
+  avatarUrl?: string;
+  affiliation?: string;
+  location?: string;
+  subjects?: string[];
+  interests?: string[];
+  signaturePrompt?: string;
+  updatedAt: string;
+}) {
+  const path = `/profiles/${encodeURIComponent(profile.id)}`;
+  const description = buildAutographProfileDescription(profile);
+  const topics = [...(profile.subjects ?? []), ...(profile.interests ?? [])];
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfilePage",
+        "@id": pageId(path),
+        url: absoluteUrl(path),
+        name: `${profile.displayName} Autograph Profile`,
+        description,
+        dateModified: profile.updatedAt,
+        isPartOf: {
+          "@id": websiteId,
+        },
+        breadcrumb: {
+          "@id": breadcrumbId(path),
+        },
+        mainEntity: {
+          "@id": `${absoluteUrl(path)}#person`,
+        },
+        primaryImageOfPage: profile.avatarUrl
+          ? {
+              "@type": "ImageObject",
+              url: absoluteUrl(profile.avatarUrl),
+            }
+          : undefined,
+      },
+      {
+        "@type": "Person",
+        "@id": `${absoluteUrl(path)}#person`,
+        name: profile.displayName,
+        description,
+        image: profile.avatarUrl ? absoluteUrl(profile.avatarUrl) : undefined,
+        affiliation: profile.affiliation
+          ? {
+              "@type": "Organization",
+              name: profile.affiliation,
+            }
+          : undefined,
+        homeLocation: profile.location
+          ? {
+              "@type": "Place",
+              name: profile.location,
+            }
+          : undefined,
+        knowsAbout: topics.length ? topics : undefined,
+        additionalType: profile.role,
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": breadcrumbId(path),
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: siteName,
+            item: absoluteUrl("/"),
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Profiles",
+            item: absoluteUrl("/profiles"),
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: profile.displayName,
+            item: absoluteUrl(path),
+          },
+        ],
+      },
     ],
   };
 }

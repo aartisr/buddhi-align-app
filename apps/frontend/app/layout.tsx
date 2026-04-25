@@ -100,7 +100,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
-    images: ["/twitter-image"],
+    images: [
+      {
+        url: "/twitter-image",
+        alt: `${title} social preview`,
+      },
+    ],
   },
 };
 
