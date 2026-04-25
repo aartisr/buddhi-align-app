@@ -92,8 +92,8 @@ NEXT_PUBLIC_BGM_URLS=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.m
 - `COMMUNITY_INTEGRATION_PROVIDER`: `none` (default) or `discourse`
 - Legacy compatibility: `DISCOURSE_INTEGRATION_ENABLED=true` also enables the Discourse provider when explicit provider is unset
 - `DISCOURSE_BASE_URL`: Discourse instance base URL (required when enabled)
-- `NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL`: public community URL for client-side links
-- `COMMUNITY_PROXY_TARGET`: optional external proxy destination used by Next.js rewrites for `/community`
+- `NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL`: public community URL for client-side links. Use the Buddhi Align origin, for example `https://buddhi-align.foreverlotus.com/community`, so module CTAs stay in the same tab.
+- `COMMUNITY_PROXY_TARGET`: optional external proxy destination used by Next.js rewrites for `/community`. Leave this unset for the native in-app community pages.
 - `DISCOURSE_PARENT_CATEGORY_SLUG`: optional parent category slug; when set, links resolve as `/c/<parent>/<subcategory>`
 - `DISCOURSE_API_USERNAME`: API user for server-side Discourse calls
 - `DISCOURSE_API_KEY`: API key for server-side Discourse calls
@@ -109,12 +109,14 @@ NEXT_PUBLIC_BGM_URLS=https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.m
 - `DISCOURSE_DEFAULT_CATEGORY_SLUG`: optional default category slug
 - `DISCOURSE_REQUEST_TIMEOUT_MS`: optional timeout override for server requests
 
-Reverse proxy note:
-- If Discourse is served under a subpath (for example `https://buddhi-align.foreverlotus.com/community`), set `NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL` to that full subpath base.
-- To keep users inside Buddhi Align on Vercel, set `COMMUNITY_PROXY_TARGET=https://community.foreverlotus.com/community` after Discourse is configured to serve from `/community`.
+Native community note:
+- `/community`, `/community/c/...`, and `/community/t/...` are Buddhi Align pages that read Discourse JSON server-side and keep users inside the app for browsing.
+- Set `NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL` to the Buddhi Align `/community` URL and leave `COMMUNITY_PROXY_TARGET` unset.
+- Only set `COMMUNITY_PROXY_TARGET` if you intentionally want a full Discourse reverse proxy and Discourse is configured to serve under `/community`; that bypasses the native pages.
 - Community links will preserve that base path and resolve as:
   - `/community/c/<subcategory>`
   - `/community/c/<parent>/<subcategory>` when `DISCOURSE_PARENT_CATEGORY_SLUG` is set.
+- On Vercel, configure the same community variables in Project Settings. Keep `DISCOURSE_API_KEY` and `DISCOURSE_SSO_SECRET` as protected environment variables, not in `vercel.json`.
 - Other websites can promote the same community with the embeddable script at `/community-widget.js`; see `docs/discourse-reverse-proxy-setup.md` for the snippet.
 
 ## Invite And Growth UX

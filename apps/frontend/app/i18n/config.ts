@@ -54,6 +54,8 @@ const EN_MESSAGES = {
   "app.settings.title": "User Settings",
   "app.settings.subtitle": "Manage your language and music control preferences.",
   "app.settings.link": "Settings",
+  "community.title": "Buddhi Align Community",
+  "community.nav": "Community",
   "admin.title": "Admin Module",
   "admin.settings.title": "Admin Access",
   "admin.settings.subtitle": "Unlock and open the restricted admin module.",

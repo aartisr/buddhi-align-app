@@ -361,6 +361,202 @@
   font-size: 0.95rem;
 }
 
+.app-community-shell {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.app-community-hero {
+  padding: 1.2rem 0 0.25rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.app-community-hero--compact {
+  padding-top: 0.85rem;
+}
+
+.app-community-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.app-community-status,
+.app-community-empty {
+  margin: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: 1rem;
+  background: var(--surface-strong);
+  color: var(--text-soft);
+  padding: 0.9rem 1rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.app-community-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.app-community-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0.5rem;
+  min-height: 12.5rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 1rem;
+  background: var(--surface-strong);
+  box-shadow: 0 16px 40px rgba(47, 93, 80, 0.09);
+  color: inherit;
+  padding: 1rem;
+  text-decoration: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+.app-community-card--compact {
+  min-height: 10rem;
+}
+
+.app-community-card:hover,
+.app-community-card:focus-visible {
+  border-color: var(--border-strong);
+  box-shadow: 0 20px 44px rgba(47, 93, 80, 0.13);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.app-community-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: rgba(47, 93, 80, 0.12);
+  font-size: 1.1rem;
+}
+
+.app-community-card-title,
+.app-community-topic-title,
+.app-community-post-author {
+  color: var(--primary);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.app-community-card-copy,
+.app-community-topic-excerpt,
+.app-community-post-copy {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.92rem;
+  line-height: 1.58;
+}
+
+.app-community-card-meta,
+.app-community-topic-meta,
+.app-community-post-meta {
+  color: var(--text-subtle);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.app-community-breadcrumb {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--text-subtle);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.app-community-breadcrumb a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.app-community-breadcrumb a:hover,
+.app-community-breadcrumb a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  outline: none;
+}
+
+.app-community-section {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 0.4rem;
+}
+
+.app-community-section-header {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.app-community-topic-list,
+.app-community-post-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.app-community-topic,
+.app-community-post {
+  display: grid;
+  gap: 0.55rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 1rem;
+  background: var(--surface-strong);
+  box-shadow: 0 14px 34px rgba(47, 93, 80, 0.08);
+  padding: 1rem;
+}
+
+.app-community-topic-title {
+  display: inline-flex;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.app-community-topic-title:hover,
+.app-community-topic-title:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  outline: none;
+}
+
+.app-community-topic-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.7rem;
+}
+
+.app-community-topic-meta--inline {
+  margin-top: 0.8rem;
+}
+
+.app-community-post-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.app-community-post-author {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.app-community-post-meta {
+  margin: 0.2rem 0 0;
+}
+
+.app-community-post-copy {
+  white-space: pre-wrap;
+}
+
 .app-sequence-nav {
   margin-top: 2.5rem;
   padding-top: 1.5rem;
@@ -486,7 +682,8 @@
   .app-public-story-grid,
   .app-module-index-grid,
   .app-share-snippet-grid,
-  .app-share-route-list {
+  .app-share-route-list,
+  .app-community-grid {
     grid-template-columns: 1fr;
   }
 
@@ -538,7 +735,12 @@
   .app-share-snippet,
   .app-faq-item,
   .app-module-index-link,
-  .app-share-route {
+  .app-share-route,
+  .app-community-card,
+  .app-community-topic,
+  .app-community-post,
+  .app-community-status,
+  .app-community-empty {
     background: rgba(23, 41, 35, 0.94);
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
   }

@@ -194,6 +194,15 @@ function MobileNavigation({
               <span aria-hidden>⚙️</span>
               <span>{t("app.settings.link")}</span>
             </Link>
+            <Link
+              href="/community"
+              className={`app-mobile-nav-chip${isPathActive("/community") ? " is-active" : ""}`}
+              onClick={closeNav}
+              aria-current={isPathActive("/community") ? "page" : undefined}
+            >
+              <span aria-hidden>💬</span>
+              <span>{t("community.nav")}</span>
+            </Link>
           </li>
           {groups.map((group) => (
             <li key={group.key} className="app-mobile-nav-group">
@@ -342,6 +351,7 @@ function useModuleMenuGroups(t: Translate): MenuGroup[] {
         label: t("nav.group.home"),
         items: [
           { key: "dashboard", icon: "🏠", href: "/", label: t("app.dashboard") },
+          { key: "community", icon: "💬", href: "/community", label: t("community.nav") },
         ],
       },
       {

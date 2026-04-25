@@ -19,7 +19,7 @@ export type PublicPageProfile = {
 
 type PublicPageProfileDefinition = Omit<PublicPageProfile, "lastModified">;
 
-export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-04-23";
+export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-04-24";
 
 const moduleAudience = [
   "mindfulness practitioners",
@@ -161,6 +161,24 @@ const corePublicPageProfiles = ([
     outcomes: ["Share the app clearly", "Invite others quickly", "Explain the daily practice loop"],
     changeFrequency: "monthly",
     priority: 0.7,
+  },
+  {
+    path: "/community",
+    title: "Buddhi Align Community for Practice Discussion",
+    description:
+      "Open Buddhi Align community discussions inside the app, with module spaces for reflection questions, seva, meditation, dharma planning, and shared practice.",
+    summary:
+      "The Buddhi Align Community keeps practice discussion in the same app experience while using Discourse SSO for full participation.",
+    keywords: [
+      "Buddhi Align community",
+      "spiritual practice forum",
+      "mindfulness discussion community",
+      "dharma planning discussion",
+    ],
+    audience: ["Buddhi Align users", "spiritual practice groups", "mindfulness communities"],
+    outcomes: ["Browse module discussions", "Read community topics", "Use SSO for full participation"],
+    changeFrequency: "daily",
+    priority: 0.72,
   },
 ] satisfies PublicPageProfileDefinition[]).map((profile): PublicPageProfile => ({
   ...profile,
