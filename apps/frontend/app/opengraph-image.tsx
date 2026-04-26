@@ -61,7 +61,7 @@ export default function OpenGraphImage() {
           }}
         >
           <div style={{ display: "flex", gap: 12 }}>
-            {["Plan", "Practice", "Reflect", "Grow"].map((item) => (
+            {["Plan", "Practice", "Reflect", "Autograph"].map((item) => (
               <div
                 key={item}
                 style={{
@@ -94,7 +94,7 @@ export default function OpenGraphImage() {
               <span>daily practice analytics.</span>
             </div>
             <div style={{ fontSize: 28, lineHeight: 1.35, color: "#31463f", maxWidth: 640 }}>
-              Dharma planning, meditation, service, gratitude, self-inquiry, and gentle growth insights in one calm app.
+              Dharma planning, meditation, service, gratitude, self-inquiry, Autograph Exchange, community, and gentle growth insights in one calm app.
             </div>
           </div>
           <div style={{ display: "flex", gap: 14, color: "#6f4c16", fontSize: 23, fontWeight: 800 }}>

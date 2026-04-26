@@ -1,39 +1,35 @@
 1
-00:00:00,000 --> 00:00:06,000
-Buddhi Align in 60 Seconds
-Track, reflect, and grow across all modules.
+00:00:00,000 --> 00:00:04,000
+Welcome. This quick tour shows a simple way to move through the app with clarity.
 
 2
-00:00:06,000 --> 00:00:13,000
-Home Dashboard
-See Daily Rings and jump into any module.
+00:00:04,000 --> 00:00:09,000
+Step one: start at the dashboard, review your progress, and choose what needs attention.
 
 3
-00:00:13,000 --> 00:00:20,000
-Karma, Bhakti, Jnana, Dhyana
-Add one entry per day to build momentum.
+00:00:09,000 --> 00:00:14,000
+Step two: set an intention, goal, or plan so the next action has direction.
 
 4
-00:00:20,000 --> 00:00:27,000
-Vasana + Dharma
-Track habits and plan values-aligned actions.
+00:00:14,000 --> 00:00:21,000
+Step three: add a practice entry in whichever area fits your day.
 
 5
-00:00:27,000 --> 00:00:35,000
-Motivation Analytics
-Watch trends, streak, growth, and consistency.
+00:00:21,000 --> 00:00:27,000
+Capture what happened, what you learned, and what you want to carry forward.
 
 6
-00:00:35,000 --> 00:00:43,000
-Settings + Data Portability
-Set preferences and export/import your data.
+00:00:27,000 --> 00:00:33,000
+Step four: review insights, trends, and recommendations so progress becomes visible.
 
 7
-00:00:43,000 --> 00:00:52,000
-Admin Center
-Review incidents, audits, experiments, and errors.
+00:00:33,000 --> 00:00:41,000
+Step five: use Autograph Exchange. Create a profile, request or give an autograph, and preserve meaningful moments.
 
 8
-00:00:52,000 --> 00:01:00,000
-Daily flow
-Open app, log 2 entries, review analytics, improve.
+00:00:41,000 --> 00:00:46,000
+Share, join community spaces, tune settings, manage data, and keep the experience running smoothly.
+
+9
+00:00:46,000 --> 00:00:51,000
+Begin with one small entry. Let steady use turn intention into momentum.

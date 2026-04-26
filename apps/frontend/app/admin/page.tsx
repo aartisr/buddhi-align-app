@@ -25,6 +25,11 @@ import {
 } from "./incident-operations";
 import { autographService } from "@/app/lib/autographs/service";
 import { withDisplayAvatarUrls } from "../api/autographs/_profile-payload";
+import {
+  SUPPORT_REPORT_MODULE,
+  normalizeSupportReportStatus,
+  type SupportReportEntry,
+} from "@/app/lib/support-reports";
 
 type ObservabilityFilter = "all" | "discourse-sso" | "invite-funnel";
 
@@ -76,7 +81,7 @@ async function requireAdminSession() {
 async function loadAdminDashboardData(incidentFilter: IncidentFilter) {
   const provider = createDataProvider();
 
-  const [practiceCounts, audits, incidents, experiments, errorLog, observabilityEvents, autographProfiles] = await Promise.all([
+  const [practiceCounts, audits, incidents, experiments, errorLog, observabilityEvents, supportReports, autographProfiles] = await Promise.all([
     Promise.all(
       PRACTICE_MODULES.map(async (module) => {
         const rows = await provider.list<BasicEntry>(module);
@@ -88,6 +93,7 @@ async function loadAdminDashboardData(incidentFilter: IncidentFilter) {
     provider.list<BasicEntry>(ADMIN_EXPERIMENT_MODULE),
     provider.list<AppErrorEntry>(APP_ERROR_LOG_MODULE),
     provider.list<ObservabilityEventEntry>(OBSERVABILITY_EVENT_MODULE),
+    provider.list<SupportReportEntry>(SUPPORT_REPORT_MODULE),
     autographService.listAutographProfiles(),
   ]);
 
@@ -127,6 +133,7 @@ async function loadAdminDashboardData(incidentFilter: IncidentFilter) {
     experiments,
     errorLog,
     observabilityEvents,
+    supportReports,
     observabilitySummary,
     autoCreatedIncidents,
     incidentsWithAuto,
@@ -137,6 +144,42 @@ async function loadAdminDashboardData(incidentFilter: IncidentFilter) {
     activeExperiments: experiments.filter((exp) => exp.status === "active").length,
     totalCount: practiceCounts.reduce((sum, item) => sum + item.count, 0),
   };
+}
+
+async function updateSupportReportStatus(formData: FormData) {
+  "use server";
+  const actor = await requireAdminSession();
+
+  const reportId = String(formData.get("reportId") ?? "").trim();
+  const status = normalizeSupportReportStatus(formData.get("status"));
+  if (!reportId || status === "new") {
+    return;
+  }
+
+  const actionProvider = createDataProvider();
+  const reports = await actionProvider.list<SupportReportEntry>(SUPPORT_REPORT_MODULE);
+  const report = reports.find((item) => item.reportId === reportId || item.id === reportId);
+  if (!report) {
+    return;
+  }
+
+  const updatedAt = new Date().toISOString();
+  await actionProvider.update<SupportReportEntry>(SUPPORT_REPORT_MODULE, report.id, {
+    status,
+    updatedAt,
+    reviewedAt: updatedAt,
+    reviewedBy: actor,
+  });
+
+  await writeAdminAudit({
+    actor,
+    action: "support_report.status",
+    detail: `Marked support report ${report.reportId} as ${status}`,
+    severity: status === "resolved" ? "info" : "warning",
+    at: updatedAt,
+  });
+
+  revalidatePath("/admin");
 }
 
 export default async function AdminPage({
@@ -156,6 +199,7 @@ export default async function AdminPage({
     experiments,
     errorLog,
     observabilityEvents,
+    supportReports,
     observabilitySummary,
     autoCreatedIncidents,
     incidentsWithAuto,
@@ -306,6 +350,7 @@ export default async function AdminPage({
         autoCreatedIncidents={autoCreatedIncidents}
         errorLog={errorLog}
         observabilityEvents={observabilityEvents}
+        supportReports={supportReports}
         practiceCounts={practiceCounts}
         audits={audits}
         incidentsWithAuto={incidentsWithAuto}
@@ -318,6 +363,7 @@ export default async function AdminPage({
         logIncident={logIncident}
         createExperiment={createExperiment}
         resolveIncident={resolveIncident}
+        updateSupportReportStatus={updateSupportReportStatus}
       />
     </ModuleLayout>
   );

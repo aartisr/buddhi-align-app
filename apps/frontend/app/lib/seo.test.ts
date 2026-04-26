@@ -15,9 +15,11 @@ import {
   buildAutographProfileDescription,
   buildAutographProfilePageJsonLd,
   buildAutographProfilesDirectoryJsonLd,
+  buildMotivationAnalyticsJsonLd,
   buildNoIndexMetadata,
   buildPageMetadata,
   buildSharePageJsonLd,
+  guidedTourVideo,
 } from "./seo";
 
 type JsonRecord = Record<string, unknown>;
@@ -34,6 +36,7 @@ describe("SEO public route metadata", () => {
     expect(paths).toContain("/karma-yoga");
     expect(paths).toContain("/community");
     expect(paths).toContain("/profiles");
+    expect(paths).toContain("/support");
     expect(new Set(paths).size).toBe(paths.length);
     expect(publicShareDestinations.map((item) => item.href)).toEqual(
       expect.arrayContaining(["/karma-yoga", "/bhakti-journal", "/dhyana-meditation"]),
@@ -67,6 +70,45 @@ describe("SEO public route metadata", () => {
     expect(metadata.keywords).toEqual(
       expect.arrayContaining(["karma yoga tracker", "service reflection app", "daily seva"]),
     );
+  });
+
+  it("publishes guided tour video metadata for video search and social previews", () => {
+    const metadata = buildPageMetadata({
+      title: "Motivation Analytics Dashboard for Spiritual Practice Growth",
+      description:
+        "Review streaks, module activity, guided tour video, practice balance, and adaptive next steps with a spiritual growth analytics dashboard.",
+      path: "/motivation-analytics",
+      imagePath: guidedTourVideo.thumbnailPath,
+      imageAlt: "Buddhi Align guided tour social preview",
+      video: {
+        contentPath: guidedTourVideo.contentPath,
+        type: guidedTourVideo.type,
+        width: guidedTourVideo.width,
+        height: guidedTourVideo.height,
+      },
+    });
+    const jsonLd = buildMotivationAnalyticsJsonLd();
+    const graph = (jsonLd?.["@graph"] ?? []) as JsonRecord[];
+    const videoNode = graph.find((entry) => entry["@type"] === "VideoObject") as JsonRecord | undefined;
+    const pageNode = graph.find((entry) => entry["@type"] === "WebPage") as JsonRecord | undefined;
+
+    expect(metadata.openGraph?.videos).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          url: expect.stringContaining("/videos/buddhi-app-quickstart.mp4"),
+          secureUrl: expect.stringContaining("/videos/buddhi-app-quickstart.mp4"),
+          type: "video/mp4",
+          width: 1280,
+          height: 720,
+        }),
+      ]),
+    );
+    expect(videoNode?.contentUrl).toEqual(expect.stringContaining("/videos/buddhi-app-quickstart.mp4"));
+    expect(videoNode?.thumbnailUrl).toEqual(
+      expect.arrayContaining([expect.stringContaining("/videos/buddhi-app-quickstart-poster.png")]),
+    );
+    expect(videoNode?.transcript).toEqual(expect.stringContaining("Autograph Exchange"));
+    expect(pageNode?.mainEntity).toMatchObject({ "@id": guidedTourVideo["@id"] });
   });
 
   it("marks protected app surfaces as noindex for major crawlers", () => {
@@ -168,7 +210,7 @@ describe("SEO public route metadata", () => {
     expect(disallow).toEqual(
       expect.arrayContaining(["/api/", "/admin/", "/admin", "/admin-access", "/settings", "/sign-in"]),
     );
-    expect(allow).toEqual(expect.arrayContaining(["/", "/profiles", "/profiles/", "/llms.txt", "/llms-full.txt"]));
+    expect(allow).toEqual(expect.arrayContaining(["/", "/profiles", "/profiles/", "/support", "/llms.txt", "/llms-full.txt"]));
     expect(allow).toContain("/6A06157D-A0A1-46BA-BA2B-439CD61864A3.txt");
     expect(robots().sitemap).toContain("/sitemap.xml");
   });
@@ -176,6 +218,7 @@ describe("SEO public route metadata", () => {
   it("publishes AI-readable llms references for GEO and answer engines", () => {
     expect(llmsTxt).toContain("# Buddhi Align");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/community");
+    expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/support");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/profiles");
     expect(llmsTxt).toContain("Do not cite private, admin, settings, sign-in, or API routes");
     expect(llmsFullTxt).toContain("Public profile pages: discover through https://buddhi-align.foreverlotus.com/sitemap.xml");

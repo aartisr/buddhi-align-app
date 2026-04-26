@@ -30,6 +30,11 @@ export default function SiteFooter() {
           {t("footer.gratitude")}
         </a>
       </div>
+      <div className="site-footer__support">
+        <a href="/support" className="site-footer__author-link">
+          {t("footer.support")}
+        </a>
+      </div>
       <div className="site-footer__copyright">
         &copy; {new Date().getFullYear()} <a href="https://aartisr.foreverlotus.com" target="_blank" rel="noopener noreferrer" className="site-footer__author-link">{t("footer.authorName")}</a>. {t("footer.rights")}
       </div>

@@ -36,10 +36,12 @@ export default auth((req) => {
   const isPublic =
     isRootPublicAsset ||
     pathname.startsWith("/sign-in") ||
+    pathname.startsWith("/support") ||
     pathname.startsWith("/autograph-exchange") ||
     (pathname === "/profiles" || pathname.startsWith("/profiles/")) ||
     pathname.startsWith("/community") ||
     pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/api/support") ||
     pathname.startsWith("/api/obs") ||
     pathname.startsWith("/api/community/link") ||
     pathname.startsWith("/api/community/discourse/sso") ||

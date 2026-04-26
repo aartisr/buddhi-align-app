@@ -26,6 +26,7 @@ type StatsModel = {
 };
 
 type Recommendation = ReturnType<typeof buildPersonalizationSignals>[number];
+const INITIAL_QUOTE_INDEX = 0;
 
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -38,6 +39,10 @@ const LongitudinalChart = dynamic(() => import("../components/LongitudinalChart"
 
 function getRandomQuote(quotes: { quote: string; author: string }[]) {
   return quotes[Math.floor(Math.random() * quotes.length)];
+}
+
+function getInitialQuote(quotes: Quote[]) {
+  return quotes[INITIAL_QUOTE_INDEX] ?? MOTIVATIONAL_QUOTES.en[INITIAL_QUOTE_INDEX];
 }
 
 function QuoteHero({
@@ -104,11 +109,13 @@ function QuickTour({ t }: { t: Translate }) {
           controls
           preload="metadata"
           playsInline
-          className="w-full rounded-xl border border-(--border-soft)"
+          poster="/videos/buddhi-app-quickstart-poster.png"
+          className="aspect-video w-full rounded-xl border border-(--border-soft) bg-black object-cover"
           aria-label={t("motivation.quickTourAriaLabel")}
         >
+          <source src="/videos/buddhi-app-quickstart.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />
+          <source src="/videos/buddhi-app-quickstart.webm" type='video/webm; codecs="vp9, opus"' />
           <source src="/videos/buddhi-app-quickstart.mp4" type="video/mp4" />
-          <source src="/videos/buddhi-app-quickstart.webm" type="video/webm" />
           <track
             src="/videos/buddhi-spiritual-captions.vtt"
             kind="captions"
@@ -116,6 +123,7 @@ function QuickTour({ t }: { t: Translate }) {
             label={t("motivation.quickTourCaptionLabel")}
             default
           />
+          {t("motivation.quickTourFallback")}
         </video>
         <p className="app-secondary-copy text-sm text-center mt-3">
           {t("motivation.quickTourClosing")}
@@ -235,7 +243,7 @@ function HowToSection({ t }: { t: Translate }) {
 export default function MotivationAnalyticsPage() {
   const { locale, t } = useI18n();
   const quotes = MOTIVATIONAL_QUOTES[locale] ?? MOTIVATIONAL_QUOTES.en;
-  const [quote, setQuote] = useState(getRandomQuote(quotes));
+  const [quote, setQuote] = useState(() => getInitialQuote(quotes));
   const [loadingStats, setLoadingStats] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [analyticsPayload, setAnalyticsPayload] = useState<AnalyticsPayload | null>(null);
@@ -387,7 +395,7 @@ export default function MotivationAnalyticsPage() {
   }, []);
 
   useEffect(() => {
-    setQuote(getRandomQuote(quotes));
+    setQuote(getInitialQuote(quotes));
   }, [locale, quotes]);
 
   return (

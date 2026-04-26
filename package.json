@@ -23,6 +23,7 @@
     "security:audit": "node scripts/security-audit.mjs",
     "verify:no-private-repo": "node scripts/verify-no-private-repo-refs.mjs",
     "autograph:package-check": "node scripts/verify-autograph-package-integration.mjs",
+    "tour:video": "node scripts/render-guided-tour-video.mjs",
     "checklist:verify": "node scripts/verify-world-class-checklist.mjs",
     "worldclass:gate": "npm-run-all -s quality:gate:full security:audit checklist:verify",
     "start:frontend": "npm --workspace=apps/frontend run start",

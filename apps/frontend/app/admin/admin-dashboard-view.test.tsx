@@ -55,6 +55,23 @@ function makeProps() {
     },
     autoCreatedIncidents: [],
     errorLog: [],
+    supportReports: [
+      {
+        id: "support-row-1",
+        reportId: "BA-SUP-20260426-ABC12345",
+        createdAt: "2026-04-26T12:00:00.000Z",
+        updatedAt: "2026-04-26T12:00:00.000Z",
+        status: "new" as const,
+        category: "bug" as const,
+        severity: "normal" as const,
+        title: "Profile photo upload fails",
+        pageUrl: "/profiles",
+        tryingToDo: "Upload a profile photo.",
+        actualBehavior: "The upload failed.",
+        reproducibility: "always" as const,
+        consentToDiagnostics: true,
+      },
+    ],
     observabilityEvents: [
       {
         id: "event-1",
@@ -88,6 +105,7 @@ function makeProps() {
     logIncident: "" as unknown as (formData: FormData) => Promise<void>,
     createExperiment: "" as unknown as (formData: FormData) => Promise<void>,
     resolveIncident: "" as unknown as (formData: FormData) => Promise<void>,
+    updateSupportReportStatus: "" as unknown as (formData: FormData) => Promise<void>,
   };
 }
 
@@ -104,6 +122,7 @@ describe("AdminDashboardView", () => {
     expect(screen.getByRole("link", { name: /Profiles/i })).toHaveAttribute("href", "#admin-profiles");
     expect(screen.getByText("Operational snapshot")).toBeInTheDocument();
     expect(screen.getByText("Profile handling")).toBeInTheDocument();
+    expect(screen.getAllByText(/Support reports/i).length).toBeGreaterThan(0);
     expect(screen.getByTestId("profile-admin-panel")).toBeInTheDocument();
     expect(screen.getByTestId("diagnostics-panel")).toBeInTheDocument();
     expect(profileAdminSpy).toHaveBeenCalledWith(

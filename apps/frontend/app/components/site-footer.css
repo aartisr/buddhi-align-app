@@ -41,6 +41,11 @@
   font-size: 13px;
   margin-bottom: 8px;
 }
+.site-footer__support {
+  color: var(--text-soft);
+  font-size: 13px;
+  margin-bottom: 8px;
+}
 .site-footer__copyright {
   color: var(--text-subtle);
   font-size: 13px;

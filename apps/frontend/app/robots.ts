@@ -6,6 +6,7 @@ const allowPublic = [
   "/",
   "/profiles",
   "/profiles/",
+  "/support",
   "/llms.txt",
   "/llms-full.txt",
   "/opengraph-image",

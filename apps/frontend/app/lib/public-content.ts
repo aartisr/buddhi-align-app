@@ -19,7 +19,7 @@ export type PublicPageProfile = {
 
 type PublicPageProfileDefinition = Omit<PublicPageProfile, "lastModified">;
 
-export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-04-24";
+export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-04-26";
 
 const moduleAudience = [
   "mindfulness practitioners",
@@ -140,10 +140,10 @@ const corePublicPageProfiles = ([
     title: "Motivation Analytics Dashboard for Spiritual Practice Growth",
     inviteModuleKey: "motivation",
     description:
-      "Review streaks, module activity, practice balance, and adaptive next steps with a Motivation Analytics dashboard for spiritual practice growth.",
+      "Review streaks, module activity, guided tour video, practice balance, and adaptive next steps with a spiritual growth analytics dashboard.",
     summary:
-      "Motivation and Analytics turns practice data into calm feedback: streaks, trends, module balance, and next-step recommendations.",
-    keywords: ["practice analytics", "spiritual growth dashboard", "mindfulness analytics"],
+      "Motivation and Analytics turns practice data into calm feedback: streaks, trends, module balance, next-step recommendations, and a guided tour of the full app.",
+    keywords: ["practice analytics", "spiritual growth dashboard", "mindfulness analytics", "guided app tour"],
     audience: ["self-development users", "habit builders", "reflection communities"],
     outcomes: ["See practice streaks", "Review module balance", "Find the next best practice step"],
     changeFrequency: "weekly",
@@ -161,6 +161,24 @@ const corePublicPageProfiles = ([
     outcomes: ["Share the app clearly", "Invite others quickly", "Explain the daily practice loop"],
     changeFrequency: "monthly",
     priority: 0.7,
+  },
+  {
+    path: "/support",
+    title: "Buddhi Align Support and Website Issue Reporting",
+    description:
+      "Report Buddhi Align website issues, accessibility barriers, sign-in trouble, Autograph Exchange bugs, performance concerns, and content problems.",
+    summary:
+      "The Buddhi Align support page gives users a focused way to report bugs, accessibility barriers, sign-in issues, performance concerns, content problems, and Autograph Exchange feedback with safe diagnostic context.",
+    keywords: [
+      "Buddhi Align support",
+      "report website issue",
+      "accessibility feedback",
+      "Autograph Exchange support",
+    ],
+    audience: ["Buddhi Align users", "website visitors", "accessibility testers", "school communities"],
+    outcomes: ["Report issues clearly", "Share diagnostic context safely", "Help admins triage support reports"],
+    changeFrequency: "weekly",
+    priority: 0.74,
   },
   {
     path: "/community",
@@ -249,7 +267,7 @@ export const homepageHighlights = [
   },
   {
     title: "Built for sharing, not noise",
-    body: "Invite links, a guided tour, and calm module pages make it easy to bring a friend, class, or community into the same practice rhythm.",
+    body: "Invite links, a guided tour, Autograph Exchange, and calm module pages make it easy to bring a friend, class, or community into the same practice rhythm.",
   },
   {
     title: "AI-readable by design",
@@ -300,6 +318,10 @@ export const shareSnippets = [
   },
   {
     label: "AI/search summary",
-    text: "Buddhi Align is a contemplative-practice web app by ForeverLotus for journaling, meditation tracking, dharma planning, and spiritual growth analytics.",
+    text: "Buddhi Align is a contemplative-practice web app by ForeverLotus for journaling, meditation tracking, dharma planning, Autograph Exchange, and spiritual growth analytics.",
+  },
+  {
+    label: "Autograph Exchange",
+    text: "Buddhi Align includes Autograph Exchange: a calm way for students, teachers, events, and communities to request and preserve meaningful digital keepsakes.",
   },
 ] as const;

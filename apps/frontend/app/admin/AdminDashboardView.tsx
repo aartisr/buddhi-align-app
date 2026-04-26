@@ -5,6 +5,7 @@ import type { AdminAuditEntry } from "./_audit";
 import type { AppErrorEntry } from "@/app/lib/server-error-log";
 import type { ObservabilitySummary } from "@/app/lib/observability-summary";
 import type { ObservabilityEventEntry } from "@/app/lib/server-observability";
+import type { SupportReportEntry } from "@/app/lib/support-reports";
 import type { IncidentFilter } from "./incident-operations";
 import AutographDiagnosticsPanel from "./AutographDiagnosticsPanel";
 import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
@@ -60,6 +61,7 @@ type AdminDashboardProps = {
   autoCreatedIncidents: BasicEntry[];
   errorLog: AppErrorEntry[];
   observabilityEvents: ObservabilityEventEntry[];
+  supportReports: SupportReportEntry[];
   practiceCounts: Array<{ module: string; count: number }>;
   audits: AdminAuditEntry[];
   incidentsWithAuto: BasicEntry[];
@@ -72,6 +74,7 @@ type AdminDashboardProps = {
   logIncident: (formData: FormData) => Promise<void>;
   createExperiment: (formData: FormData) => Promise<void>;
   resolveIncident: (formData: FormData) => Promise<void>;
+  updateSupportReportStatus: (formData: FormData) => Promise<void>;
 };
 
 function formatTimestamp(iso?: string): string {
@@ -249,6 +252,60 @@ function ServerErrorLogCard({ errorLog }: { errorLog: AppErrorEntry[] }) {
               <p className="font-medium text-red-700 dark:text-red-300">{entry.errorName}: {entry.errorMessage}</p>
               <p className="app-copy-soft text-xs">{entry.method} {entry.route}</p>
               <p className="app-copy-soft text-xs">{formatTimestamp(entry.at)}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </article>
+  );
+}
+
+function SupportReportQueueCard({
+  supportReports,
+  updateSupportReportStatus,
+}: {
+  supportReports: SupportReportEntry[];
+  updateSupportReportStatus: (formData: FormData) => Promise<void>;
+}) {
+  const visibleReports = supportReports.slice(-10).reverse();
+
+  return (
+    <article className="app-record-card">
+      <h4 className="font-semibold mb-2">
+        Support reports <span className="text-xs app-copy-soft font-normal ml-1">({supportReports.length} total)</span>
+      </h4>
+      {visibleReports.length === 0 ? (
+        <p className="text-sm app-copy-soft">No user-submitted support reports yet.</p>
+      ) : (
+        <ul className="space-y-3 text-sm max-h-96 overflow-y-auto">
+          {visibleReports.map((report) => (
+            <li key={report.id} className="border-b border-(--border-soft) pb-3 last:border-b-0">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-medium">{report.title}</p>
+                  <p className="app-copy-soft text-xs">
+                    {report.reportId} · {report.category} · {report.severity} · {report.status}
+                  </p>
+                  <p className="app-copy-soft text-xs">{formatTimestamp(report.createdAt)}</p>
+                </div>
+                {report.status !== "resolved" ? (
+                  <form action={updateSupportReportStatus} className="flex flex-wrap gap-1 justify-end">
+                    <input type="hidden" name="reportId" value={report.reportId} />
+                    {report.status !== "reviewing" ? (
+                      <button type="submit" name="status" value="reviewing" className="app-user-action px-2 py-1 rounded text-xs">
+                        Reviewing
+                      </button>
+                    ) : null}
+                    <button type="submit" name="status" value="resolved" className="app-user-action px-2 py-1 rounded text-xs">
+                      Resolve
+                    </button>
+                  </form>
+                ) : null}
+              </div>
+              <p className="app-copy-soft text-xs mt-2">{report.pageUrl || "No page URL"} · reproducibility {report.reproducibility}</p>
+              <p className="text-xs mt-2"><strong>Trying:</strong> {report.tryingToDo}</p>
+              <p className="text-xs mt-1"><strong>Observed:</strong> {report.actualBehavior}</p>
+              {report.contactEmail ? <p className="app-copy-soft text-xs mt-1">Reply: {report.contactEmail}</p> : null}
             </li>
           ))}
         </ul>
@@ -570,6 +627,7 @@ function IncidentAndExperimentPanels({
 
 export default function AdminDashboardView(props: AdminDashboardProps) {
   const criticalAlertCount = props.observabilitySummary.alerts.filter((alert) => alert.level === "critical").length;
+  const openSupportReportCount = props.supportReports.filter((report) => report.status !== "resolved").length;
   const reliabilityStatus = props.reliabilityScore < 72
     ? "Critical"
     : props.reliabilityScore < 90
@@ -601,6 +659,12 @@ export default function AdminDashboardView(props: AdminDashboardProps) {
       tone: "neutral",
     },
     {
+      label: "Support Reports",
+      value: openSupportReportCount,
+      detail: `${props.supportReports.length} total submitted`,
+      tone: openSupportReportCount > 0 ? "warning" : "healthy",
+    },
+    {
       label: t("admin.obs.events24h"),
       value: props.observabilitySummary.last24hEvents,
       detail: `${props.observabilitySummary.authDenials24h} auth denial${props.observabilitySummary.authDenials24h === 1 ? "" : "s"}`,
@@ -616,7 +680,7 @@ export default function AdminDashboardView(props: AdminDashboardProps) {
   const navItems: AdminNavItem[] = [
     { id: "admin-snapshot", label: "Snapshot", detail: "KPIs and posture", badge: reliabilityStatus },
     { id: "admin-profiles", label: "Profiles", detail: "Teachers and students", badge: props.autographProfiles.length },
-    { id: "admin-reliability", label: "Reliability", detail: "Alerts and runtime", badge: criticalAlertCount },
+    { id: "admin-reliability", label: "Reliability", detail: "Alerts, support, runtime", badge: criticalAlertCount + openSupportReportCount },
     { id: "admin-signals", label: "Signals", detail: "Events and footprint", badge: props.observabilityEvents.length },
     { id: "admin-actions", label: "Actions", detail: "Incidents and experiments", badge: props.incidentStats.openCount },
   ];
@@ -679,6 +743,10 @@ export default function AdminDashboardView(props: AdminDashboardProps) {
             </div>
             <TrendsPanel observabilitySummary={props.observabilitySummary} />
             <ServerErrorLogCard errorLog={props.errorLog} />
+            <SupportReportQueueCard
+              supportReports={props.supportReports}
+              updateSupportReportStatus={props.updateSupportReportStatus}
+            />
           </AdminSection>
 
           <AdminSection

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import {
   homepageFaq,
+  PUBLIC_CONTENT_LAST_MODIFIED,
   publicPageProfileByPath,
   publicPageProfiles,
   type PublicPageProfile,
@@ -14,12 +15,20 @@ type PageMetadataOptions = {
   keywords?: string[];
   imagePath?: string;
   imageAlt?: string;
+  video?: PageVideoMetadataOptions;
+};
+
+type PageVideoMetadataOptions = {
+  contentPath: string;
+  type: string;
+  width: number;
+  height: number;
 };
 
 export const siteUrl = getSiteUrl();
 export const siteName = "Buddhi Align App";
 export const siteDescription =
-  "Buddhi Align is a contemplative practice app for dharma planning, meditation tracking, service journaling, self-reflection, and gentle spiritual growth analytics.";
+  "Buddhi Align is a contemplative practice app for dharma planning, meditation tracking, service journaling, community discussion, Autograph Exchange keepsakes, and gentle spiritual growth analytics.";
 export const organizationName = "ForeverLotus";
 export const organizationUrl = "https://foreverlotus.com";
 export const authorName = "Aarti Sri Ravikumar";
@@ -47,7 +56,29 @@ export const siteKeywords = [
   "Indian philosophy",
   "contemplative practice",
   "AI searchable wellness app",
+  "spiritual practice app",
+  "digital autograph book",
+  "Autograph Exchange",
+  "mindfulness community",
 ];
+
+export const guidedTourVideo = {
+  "@id": `${absoluteUrl("/motivation-analytics")}#guided-tour-video`,
+  name: "Buddhi Align guided app tour",
+  description:
+    "Watch Buddhi Align move through the dashboard, guided practice steps, analytics, Autograph Exchange, community, settings, and data controls.",
+  watchPath: "/motivation-analytics",
+  contentPath: "/videos/buddhi-app-quickstart.mp4",
+  thumbnailPath: "/videos/buddhi-app-quickstart-poster.png",
+  captionPath: "/videos/buddhi-spiritual-captions.vtt",
+  uploadDate: PUBLIC_CONTENT_LAST_MODIFIED,
+  duration: "PT51S",
+  width: 1280,
+  height: 720,
+  type: "video/mp4",
+  transcript:
+    "Welcome. This quick tour shows a simple way to move through the app with clarity. Step one: start at the dashboard, review your progress, and choose what needs attention. Step two: set an intention, goal, or plan so the next action has direction. Step three: add a practice entry in whichever area fits your day. Capture what happened, what you learned, and what you want to carry forward. Step four: review insights, trends, and recommendations so progress becomes visible. Step five: use Autograph Exchange. Create a profile, request or give an autograph, and preserve meaningful moments. Share, join community spaces, tune settings, manage data, and keep the experience running smoothly. Begin with one small entry. Let steady use turn intention into momentum.",
+} as const;
 
 function fitMetaDescription(value: string, maxLength = 175) {
   if (value.length <= maxLength) {
@@ -136,6 +167,7 @@ export function buildPageMetadata({
   keywords = [],
   imagePath = "/opengraph-image",
   imageAlt = `${title} social preview`,
+  video,
 }: PageMetadataOptions): Metadata {
   const canonicalUrl = absoluteUrl(path);
   const pageProfile = publicPageProfileByPath.get(path);
@@ -187,6 +219,17 @@ export function buildPageMetadata({
           alt: imageAlt,
         },
       ],
+      videos: video
+        ? [
+            {
+              url: absoluteUrl(video.contentPath),
+              secureUrl: absoluteUrl(video.contentPath),
+              type: video.type,
+              width: video.width,
+              height: video.height,
+            },
+          ]
+        : undefined,
     },
     twitter: {
       card: "summary_large_image",
@@ -271,6 +314,18 @@ export function buildSiteJsonLd({
           "@id": organizationId,
         },
         hasPart: publicPageReferences,
+        potentialAction: [
+          {
+            "@type": "ViewAction",
+            name: "Watch the guided Buddhi Align tour",
+            target: absoluteUrl("/motivation-analytics#quick-tour"),
+          },
+          {
+            "@type": "ShareAction",
+            name: "Share Buddhi Align",
+            target: absoluteUrl("/share"),
+          },
+        ],
       },
       {
         "@type": "WebApplication",
@@ -297,6 +352,9 @@ export function buildSiteJsonLd({
         },
         image: absoluteUrl("/opengraph-image"),
         screenshot: absoluteUrl("/opengraph-image"),
+        subjectOf: {
+          "@id": guidedTourVideo["@id"],
+        },
         offers: {
           "@type": "Offer",
           price: "0",
@@ -316,7 +374,26 @@ export function buildSiteJsonLd({
           "Jnana reflection notes",
           "Vasana pattern awareness",
           "Motivation and analytics dashboards",
-          "Invite and sharing tools",
+          "Community discussion",
+          "Autograph Exchange public profiles and keepsake messages",
+          "Guided tour and share kit",
+        ],
+        potentialAction: [
+          {
+            "@type": "UseAction",
+            name: "Open Buddhi Align",
+            target: siteUrl,
+          },
+          {
+            "@type": "WatchAction",
+            name: "Watch the guided app tour",
+            target: absoluteUrl("/motivation-analytics#quick-tour"),
+          },
+          {
+            "@type": "ShareAction",
+            name: "Invite someone to Buddhi Align",
+            target: absoluteUrl("/share"),
+          },
         ],
         hasPart: publicPageReferences,
       },
@@ -389,6 +466,110 @@ export function buildSharePageJsonLd() {
         },
       },
       buildBreadcrumbNode(shareProfile),
+    ],
+  };
+}
+
+export function buildSupportPageJsonLd() {
+  const supportProfile = publicPageProfileByPath.get("/support");
+
+  if (!supportProfile) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        ...buildWebPageNode(supportProfile),
+        "@type": "ContactPage",
+        mainEntity: {
+          "@type": "ContactPoint",
+          contactType: "technical support",
+          name: "Buddhi Align support",
+          url: absoluteUrl("/support"),
+          availableLanguage: ["en-US"],
+          areaServed: "Worldwide",
+        },
+        potentialAction: {
+          "@type": "CommunicateAction",
+          name: "Report a Buddhi Align issue",
+          target: absoluteUrl("/support"),
+        },
+      },
+      buildBreadcrumbNode(supportProfile),
+    ],
+  };
+}
+
+export function buildGuidedTourVideoJsonLd() {
+  return {
+    "@type": "VideoObject",
+    "@id": guidedTourVideo["@id"],
+    name: guidedTourVideo.name,
+    description: guidedTourVideo.description,
+    thumbnailUrl: [absoluteUrl(guidedTourVideo.thumbnailPath)],
+    uploadDate: guidedTourVideo.uploadDate,
+    duration: guidedTourVideo.duration,
+    contentUrl: absoluteUrl(guidedTourVideo.contentPath),
+    embedUrl: absoluteUrl(guidedTourVideo.watchPath),
+    encodingFormat: guidedTourVideo.type,
+    width: guidedTourVideo.width,
+    height: guidedTourVideo.height,
+    inLanguage: "en-US",
+    isFamilyFriendly: true,
+    transcript: guidedTourVideo.transcript,
+    caption: {
+      "@type": "MediaObject",
+      contentUrl: absoluteUrl(guidedTourVideo.captionPath),
+      encodingFormat: "text/vtt",
+      inLanguage: "en-US",
+    },
+    publisher: {
+      "@id": organizationId,
+    },
+    creator: {
+      "@id": personId,
+    },
+    mainEntityOfPage: {
+      "@id": pageId(guidedTourVideo.watchPath),
+    },
+    about: [
+      { "@type": "Thing", name: "Buddhi Align" },
+      { "@type": "Thing", name: "Autograph Exchange" },
+      { "@type": "Thing", name: "spiritual practice analytics" },
+      { "@type": "Thing", name: "daily reflection app" },
+      { "@type": "Thing", name: "mindfulness community" },
+    ],
+    potentialAction: {
+      "@type": "WatchAction",
+      target: absoluteUrl("/motivation-analytics#quick-tour"),
+    },
+  };
+}
+
+export function buildMotivationAnalyticsJsonLd() {
+  const profile = publicPageProfileByPath.get("/motivation-analytics");
+  if (!profile) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        ...buildWebPageNode(profile),
+        primaryImageOfPage: {
+          "@type": "ImageObject",
+          url: absoluteUrl(guidedTourVideo.thumbnailPath),
+          width: guidedTourVideo.width,
+          height: guidedTourVideo.height,
+        },
+        mainEntity: {
+          "@id": guidedTourVideo["@id"],
+        },
+        video: {
+          "@id": guidedTourVideo["@id"],
+        },
+      },
+      buildBreadcrumbNode(profile),
+      buildGuidedTourVideoJsonLd(),
     ],
   };
 }
