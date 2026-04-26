@@ -65,6 +65,10 @@ export function adminProfileErrorResponse(error: unknown, fallbackMessage: strin
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
+  if (error instanceof Error && error.message === "Profile not found.") {
+    return NextResponse.json({ error: error.message }, { status: 404 });
+  }
+
   if (error instanceof Error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }

@@ -59,3 +59,21 @@ export async function PUT(request: Request, context: { params: { id: string } })
     return adminProfileErrorResponse(error, "Unable to update admin profile.");
   }
 }
+
+export async function DELETE(_request: Request, context: { params: { id: string } }) {
+  if (!isAutographFeatureEnabled()) {
+    return NextResponse.json({ error: "Autograph exchange is not enabled." }, { status: 404 });
+  }
+
+  try {
+    const adminUserId = await requireAutographAdminUserId();
+    const profile = await autographService.deleteAutographProfile(adminUserId, context.params.id, {
+      canManageAllProfiles: true,
+    });
+    revalidateAutographProfileSurfaces(profile.id);
+
+    return NextResponse.json(withDisplayAvatarUrl(profile));
+  } catch (error) {
+    return adminProfileErrorResponse(error, "Unable to delete admin profile.");
+  }
+}

@@ -34,6 +34,14 @@ const {
       rows[module] = current.map((item) => (item.id === id ? updated : item));
       return updated;
     }),
+    delete: vi.fn(async (module: string, id: string, context?: { userId?: string }) => {
+      const current = rows[module] ?? [];
+      const target = current.find((item) => item.id === id);
+      if (!target || (context?.userId && target.userId !== context.userId)) {
+        throw new Error("Not found");
+      }
+      rows[module] = current.filter((item) => item.id !== id);
+    }),
   };
 
   return {
@@ -45,6 +53,7 @@ const {
       provider.list.mockClear();
       provider.create.mockClear();
       provider.update.mockClear();
+      provider.delete.mockClear();
     },
     rows,
   };

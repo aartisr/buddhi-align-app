@@ -6,7 +6,7 @@ import os from "node:os";
 const ROOT = process.cwd();
 const TARGET_DIR = path.join(ROOT, "external/autograph-exchange");
 const DEFAULT_REPO_URL = "https://github.com/aartisr/autograph-exchange.git";
-const DEFAULT_REF = "7578ccee175cfe8c6355adaed8127c05c827af7b";
+const DEFAULT_REF = "f6459121e1bf8f035075746509f35ba28aaa7a9e";
 
 function isDefaultPublicRepo(repoUrl) {
   const normalized = repoUrl.replace(/\.git$/i, "");

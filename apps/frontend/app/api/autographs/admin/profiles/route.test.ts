@@ -6,12 +6,14 @@ const {
   isAutographFeatureEnabledMock,
   listAutographProfilesMock,
   adminUpsertAutographProfileMock,
+  deleteAutographProfileMock,
   revalidatePathMock,
 } = vi.hoisted(() => ({
   requireAdminApiAccessMock: vi.fn(),
   isAutographFeatureEnabledMock: vi.fn(),
   listAutographProfilesMock: vi.fn(),
   adminUpsertAutographProfileMock: vi.fn(),
+  deleteAutographProfileMock: vi.fn(),
   revalidatePathMock: vi.fn(),
 }));
 
@@ -27,6 +29,7 @@ vi.mock("@/app/lib/autographs/service", () => ({
   autographService: {
     listAutographProfiles: listAutographProfilesMock,
     adminUpsertAutographProfile: adminUpsertAutographProfileMock,
+    deleteAutographProfile: deleteAutographProfileMock,
   },
 }));
 
@@ -35,7 +38,7 @@ vi.mock("next/cache", () => ({
 }));
 
 import { GET, POST } from "./route";
-import { GET as GET_PROFILE, PUT as PUT_PROFILE } from "./[id]/route";
+import { DELETE as DELETE_PROFILE, GET as GET_PROFILE, PUT as PUT_PROFILE } from "./[id]/route";
 
 const dataAvatar = `data:image/png;base64,${Buffer.from("tiny-avatar").toString("base64")}`;
 
@@ -63,6 +66,7 @@ describe("/api/autographs/admin/profiles", () => {
     isAutographFeatureEnabledMock.mockReset();
     listAutographProfilesMock.mockReset();
     adminUpsertAutographProfileMock.mockReset();
+    deleteAutographProfileMock.mockReset();
     revalidatePathMock.mockReset();
     isAutographFeatureEnabledMock.mockReturnValue(true);
   });
@@ -191,5 +195,33 @@ describe("/api/autographs/admin/profiles", () => {
     );
     expect(revalidatePathMock).toHaveBeenCalledWith("/profiles/profile-1");
     expect(revalidatePathMock).toHaveBeenCalledWith("/api/autographs/profiles");
+  });
+
+  it("deletes an existing profile by id", async () => {
+    requireAdminApiAccessMock.mockResolvedValueOnce({ ok: true, userId: "admin-1" });
+    deleteAutographProfileMock.mockResolvedValueOnce(sampleProfile);
+
+    const response = await DELETE_PROFILE(makeJsonRequest({}), { params: { id: "profile-1" } });
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.avatarUrl).toBe("/api/autographs/profiles/profile-1/avatar");
+    expect(deleteAutographProfileMock).toHaveBeenCalledWith("admin-1", "profile-1", {
+      canManageAllProfiles: true,
+    });
+    expect(revalidatePathMock).toHaveBeenCalledWith("/profiles/profile-1");
+    expect(revalidatePathMock).toHaveBeenCalledWith("/api/autographs/profiles/profile-1/avatar");
+  });
+
+  it("returns not found when an admin deletes a missing profile", async () => {
+    requireAdminApiAccessMock.mockResolvedValueOnce({ ok: true, userId: "admin-1" });
+    deleteAutographProfileMock.mockRejectedValueOnce(new Error("Profile not found."));
+
+    const response = await DELETE_PROFILE(makeJsonRequest({}), { params: { id: "missing-profile" } });
+    const payload = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(payload.error).toBe("Profile not found.");
+    expect(revalidatePathMock).not.toHaveBeenCalled();
   });
 });

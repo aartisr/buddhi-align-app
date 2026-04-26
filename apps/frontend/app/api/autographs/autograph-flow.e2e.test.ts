@@ -5,6 +5,7 @@ type GenericEntry = Record<string, unknown> & { id: string };
 
 const {
   authMock,
+  requireAdminApiAccessMock,
   createDataProviderMock,
   setCurrentUser,
   resetStore,
@@ -26,6 +27,20 @@ const {
       user: {
         id: currentUserId,
       },
+    };
+  });
+
+  const requireAdminApiAccessMock = vi.fn(async () => {
+    if (!currentUserId) {
+      return {
+        ok: false,
+        response: new Response(JSON.stringify({ error: "Authentication required." }), { status: 401 }),
+      };
+    }
+
+    return {
+      ok: true,
+      userId: currentUserId,
     };
   });
 
@@ -59,6 +74,16 @@ const {
       store[module] = current.map((item) => (item.id === id ? updated : item));
       return updated;
     }),
+    delete: vi.fn(async (module: string, id: string, context?: { userId?: string }) => {
+      const current = store[module] ?? [];
+      const found = current.find((item) => item.id === id);
+
+      if (!found || (context?.userId && found.userId !== context.userId)) {
+        throw new Error("Not found");
+      }
+
+      store[module] = current.filter((item) => item.id !== id);
+    }),
   };
 
   const createDataProviderMock = vi.fn(() => provider);
@@ -66,6 +91,7 @@ const {
 
   return {
     authMock,
+    requireAdminApiAccessMock,
     createDataProviderMock,
     setCurrentUser(userId: string | null) {
       currentUserId = userId;
@@ -76,10 +102,12 @@ const {
       store.autograph_requests = [];
       currentUserId = null;
       authMock.mockClear();
+      requireAdminApiAccessMock.mockClear();
       createDataProviderMock.mockClear();
       provider.list.mockClear();
       provider.create.mockClear();
       provider.update.mockClear();
+      provider.delete.mockClear();
       revalidatePathMock.mockClear();
     },
   };
@@ -93,11 +121,17 @@ vi.mock("@buddhi-align/data-access", () => ({
   createDataProvider: createDataProviderMock,
 }));
 
+vi.mock("@/app/api/admin/_auth", () => ({
+  requireAdminApiAccess: requireAdminApiAccessMock,
+}));
+
 vi.mock("next/cache", () => ({
   revalidatePath: revalidatePathMock,
 }));
 
 import { GET as getProfiles, PUT as putProfiles } from "./profiles/route";
+import { POST as createAdminProfile } from "./admin/profiles/route";
+import { DELETE as deleteAdminProfile } from "./admin/profiles/[id]/route";
 import { GET as getRequests, POST as createRequest } from "./requests/route";
 import { POST as signRequest } from "./requests/[id]/sign/route";
 
@@ -295,5 +329,79 @@ describe("autograph exchange API end-to-end flow", () => {
     expect(profilesRes.status).toBe(200);
     expect(profilesPayload.filter((profile: { userId: string }) => profile.userId === "student-1")).toHaveLength(1);
     expect(profilesPayload.filter((profile: { userId: string }) => profile.userId === "teacher-1")).toHaveLength(1);
+  });
+});
+
+describe("Buddhi admin autograph profile deletion", () => {
+  beforeEach(() => {
+    resetStore();
+  });
+
+  it("deletes a profile through Buddhi admin while preserving autograph history", async () => {
+    setCurrentUser("admin-1");
+    const studentProfileRes = await createAdminProfile(
+      makeJsonRequest({
+        userId: "student-1",
+        displayName: "Student One",
+        role: "student",
+      }),
+    );
+    const teacherProfileRes = await createAdminProfile(
+      makeJsonRequest({
+        userId: "teacher-1",
+        displayName: "Teacher One",
+        role: "teacher",
+      }),
+    );
+    const teacherProfile = await teacherProfileRes.json();
+
+    expect(studentProfileRes.status).toBe(201);
+    expect(teacherProfileRes.status).toBe(201);
+
+    setCurrentUser("student-1");
+    const createRes = await createRequest(
+      makeJsonRequest({
+        signerUserId: "teacher-1",
+        message: "Please autograph my journal.",
+      }),
+    );
+    const createdPayload = await createRes.json();
+    expect(createRes.status).toBe(201);
+
+    setCurrentUser("teacher-1");
+    const signRes = await signRequest(
+      makeJsonRequest({ signatureText: "Blessings and strength.", visibility: "public" }),
+      { params: { id: createdPayload.id } },
+    );
+    expect(signRes.status).toBe(200);
+
+    setCurrentUser("admin-1");
+    const deleteRes = await deleteAdminProfile(makeJsonRequest({}), {
+      params: { id: teacherProfile.id },
+    });
+    const deletePayload = await deleteRes.json();
+
+    expect(deleteRes.status).toBe(200);
+    expect(deletePayload.id).toBe(teacherProfile.id);
+    expect(createDataProviderMock().delete).toHaveBeenCalledWith(
+      "autograph_profiles",
+      teacherProfile.id,
+      expect.objectContaining({ userId: "teacher-1" }),
+    );
+    expect(revalidatePathMock).toHaveBeenCalledWith(`/profiles/${teacherProfile.id}`);
+
+    setCurrentUser("student-1");
+    const profilesRes = await getProfiles();
+    const profilesPayload = await profilesRes.json();
+    expect(profilesPayload.map((profile: { displayName: string }) => profile.displayName)).toEqual(["Student One"]);
+
+    const requestsRes = await getRequests();
+    const requestsPayload = await requestsRes.json();
+    expect(requestsPayload).toHaveLength(1);
+    expect(requestsPayload[0]).toMatchObject({
+      signerDisplayName: "Teacher One",
+      status: "signed",
+      signatureText: "Blessings and strength.",
+    });
   });
 });
