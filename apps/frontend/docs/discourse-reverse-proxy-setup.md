@@ -7,7 +7,7 @@ This guide makes Discourse feel native under the Buddhi Align domain:
 
 ## 1) Application Environment (Buddhi Align frontend)
 
-Set these environment variables in your deployment target (for example Vercel):
+Set these environment variables in your deployment target (for example Vercel or Netlify) after Discourse has been rebuilt for `/community`:
 
 - COMMUNITY_INTEGRATION_PROVIDER=discourse
 - DISCOURSE_BASE_URL=https://buddhi-align.foreverlotus.com/community
@@ -31,16 +31,17 @@ When `COMMUNITY_PROXY_TARGET` is set, the Next.js app proxies:
 
 This keeps the browser on `https://buddhi-align.foreverlotus.com/community` instead of sending users to a separate tab or visible subdomain.
 
-If the proxy target is not ready yet, leave `COMMUNITY_PROXY_TARGET` unset. Community links will still be generated from `NEXT_PUBLIC_DISCOURSE_COMMUNITY_URL`, but the in-site proxy will not be active.
+If the proxy target is not ready yet, leave `COMMUNITY_PROXY_TARGET` unset. Community links will keep using the native Buddhi Align community pages until the full Discourse proxy is ready.
 
 ## 2) Discourse Container Configuration
 
-In Discourse app.yml (or equivalent runtime env), set:
+In Discourse `app.yml` (or equivalent runtime env), set:
 
 - DISCOURSE_HOSTNAME=buddhi-align.foreverlotus.com
 - DISCOURSE_RELATIVE_URL_ROOT=/community
+- DISCOURSE_FORCE_HTTPS=true
 
-Then rebuild/restart Discourse.
+Then apply the official Discourse subfolder `run` section for `/community` and rebuild/restart Discourse. The `DISCOURSE_RELATIVE_URL_ROOT` value must not end with a trailing slash.
 
 ## 3) Nginx Reverse Proxy (reference)
 
@@ -60,8 +61,8 @@ server {
   }
 
   # Discourse under /community
-  location /community/ {
-    proxy_pass http://YOUR_DISCOURSE_ORIGIN/;
+  location /community {
+    proxy_pass http://YOUR_DISCOURSE_ORIGIN;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -77,14 +78,14 @@ server {
 
 Notes:
 
-- Keep trailing slash behavior exactly as shown for proxy_pass in /community/.
-- If your Discourse runs TLS internally, use https:// for YOUR_DISCOURSE_ORIGIN.
+- Keep trailing slash behavior exactly as shown: the proxy must preserve `/community` because Discourse is configured with `DISCOURSE_RELATIVE_URL_ROOT=/community`.
+- If your Discourse runs TLS internally, use `https://` for `YOUR_DISCOURSE_ORIGIN`.
 
 ## 4) Caddy Reverse Proxy (reference)
 
 ```caddy
 buddhi-align.foreverlotus.com {
-  handle_path /community/* {
+  handle /community* {
     reverse_proxy YOUR_DISCOURSE_ORIGIN
   }
 
@@ -103,14 +104,16 @@ In Discourse settings:
 In app environment:
 
 - DISCOURSE_SSO_SECRET must match Discourse discourse connect secret.
+- AUTH_URL / NEXTAUTH_URL should use https://buddhi-align.foreverlotus.com in production.
 
 ## 6) Validation Checklist
 
-1. Open /api/community/link?module=bhakti and verify url includes /community/c/...
-2. Click Join Community and confirm same domain path navigation in the current tab.
-3. Confirm login and DiscourseConnect handoff works.
-4. Confirm topic pages, composer, and notifications load.
-5. Confirm websocket/live updates are working (no stuck loading indicators).
+1. Open `https://buddhi-align.foreverlotus.com/community` and confirm the page is the full Discourse app, not the native Buddhi cards.
+2. Open `/api/community/link?module=bhakti` and verify the JSON URL is `/community/c/buddhi-align/bhakti-journal`.
+3. Click `Join Community` from a module and confirm same-domain navigation in the current tab.
+4. Sign in and confirm DiscourseConnect returns to `/community/session/sso_login`.
+5. Create or open a topic and confirm composer, notifications, uploads, and live updates work.
+6. Browser devtools should show Discourse assets loading from `/community/...`, not root `/assets/...`.
 
 ## 7) Share Community Widgets on Other Websites
 
