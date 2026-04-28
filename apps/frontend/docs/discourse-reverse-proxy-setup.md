@@ -18,11 +18,15 @@ Set these environment variables in your deployment target (for example Vercel or
 Optional:
 
 - DISCOURSE_DEFAULT_CATEGORY_SLUG=community
+- DISCOURSE_API_USERNAME=system
+- DISCOURSE_API_KEY=<admin-api-key>
+
+Set the Discourse API credentials in Vercel/production when module categories are private or group-gated. Buddhi Align uses them server-side to resolve real Discourse category IDs from `/categories.json`; without them, module buttons fall back to `/community` instead of sending users to a category URL that may show Discourse's private/not-found page.
 
 The app now preserves subpaths, so generated category links become:
 
-- /community/c/<subcategory>
-- /community/c/<parent>/<subcategory>
+- /community/c/<subcategory>/<category-id>
+- /community/c/<parent>/<subcategory>/<category-id>
 
 When `COMMUNITY_PROXY_TARGET` is set, the Next.js app proxies:
 
@@ -107,7 +111,7 @@ For seamless app-to-forum navigation, Buddhi Align sends Community links through
 
 - https://buddhi-align.foreverlotus.com/api/community/discourse/login?returnPath=/community
 
-That route checks the Buddhi Align OAuth session. If a user is already signed in to Buddhi Align, it starts DiscourseConnect at `/community/session/sso?return_path=...` so Discourse creates or reuses the matching user before returning to the forum page. The `return_path` value must be Discourse-relative, for example `/c/buddhi-align/bhakti-journal`, not `/community/c/buddhi-align/bhakti-journal`. If no Buddhi Align session exists, it falls back to public community browsing.
+That route checks the Buddhi Align OAuth session. If a user is already signed in to Buddhi Align, it starts DiscourseConnect at `/community/session/sso?return_path=...` so Discourse creates or reuses the matching user before returning to the forum page. The `return_path` value must be Discourse-relative, for example `/c/buddhi-align/bhakti-journal/11`, not `/community/c/buddhi-align/bhakti-journal/11`. If no Buddhi Align session exists, it falls back to public community browsing.
 
 Optional: if you want direct visits to `/community` to always require Buddhi Align SSO, enable Discourse `login required`. Leave it disabled if anonymous read access should remain available.
 
@@ -119,9 +123,9 @@ In app environment:
 ## 6) Validation Checklist
 
 1. Open `https://buddhi-align.foreverlotus.com/community` and confirm the page is the full Discourse app, not the native Buddhi cards.
-2. Open `/api/community/link?module=bhakti` and verify the JSON URL is `/community/c/buddhi-align/bhakti-journal`.
-3. While signed in to Buddhi Align, open `/api/community/discourse/login?returnPath=/community/c/buddhi-align/bhakti-journal` and confirm it redirects to `/community/session/sso?return_path=%2Fc%2Fbuddhi-align%2Fbhakti-journal`.
-4. Click `Join Community` from a module and confirm same-domain navigation in the current tab.
+2. Open `/api/community/link?module=bhakti` and verify the JSON URL is ID-qualified when Discourse is reachable, for example `/community/c/buddhi-align/bhakti-journal/11`.
+3. While signed in to Buddhi Align, open `/api/community/discourse/login?returnPath=/community/c/buddhi-align/bhakti-journal/11` and confirm it redirects to `/community/session/sso?return_path=%2Fc%2Fbuddhi-align%2Fbhakti-journal%2F11`.
+4. Click `Discuss in Community` from a module and confirm same-domain navigation in the current tab.
 5. Sign in and confirm DiscourseConnect returns to `/community/session/sso_login`, then lands back on the intended `/community/...` path with the Discourse user logged in.
 6. Create or open a topic and confirm composer, notifications, uploads, and live updates work.
 7. Browser devtools should show Discourse assets loading from `/community/...`, not root `/assets/...`.
@@ -143,7 +147,7 @@ Keep the Discourse origin warm and crawlable:
   - `*/5 * * * * curl -fsS https://buddhi-align.foreverlotus.com/community/categories.json >/dev/null`
 - After deploys or Discourse rebuilds, test first byte time:
   - `curl -sS -o /dev/null -w 'ttfb=%{time_starttransfer} total=%{time_total} code=%{http_code}\n' https://buddhi-align.foreverlotus.com/community`
-  - `curl -sS -o /dev/null -w 'ttfb=%{time_starttransfer} total=%{time_total} code=%{http_code}\n' https://buddhi-align.foreverlotus.com/community/c/buddhi-align/bhakti-journal`
+  - `curl -sS -o /dev/null -w 'ttfb=%{time_starttransfer} total=%{time_total} code=%{http_code}\n' https://buddhi-align.foreverlotus.com/community/c/buddhi-align/bhakti-journal/11`
 
 ## 8) Share Community Widgets on Other Websites
 
@@ -155,7 +159,7 @@ Use this lightweight widget:
 <div
   data-buddhi-community-widget
   data-module="dhyana"
-  data-title="Join the ForeverLotus Community"
+  data-title="Discuss with the ForeverLotus Community"
   data-body="Discuss meditation practice, reflections, and steady daily growth with the Buddhi Align community."
 ></div>
 <script async src="https://buddhi-align.foreverlotus.com/community-widget.js"></script>
@@ -179,7 +183,7 @@ Optional attributes:
 
 The widget intentionally opens the community in a new tab when embedded on other websites, while Buddhi Align opens same-origin `/community` links in the current tab.
 
-## 8) Rollback Plan
+## 9) Rollback Plan
 
 If needed, revert only these env values:
 

@@ -12,6 +12,7 @@ interface CommunityLinkPayload {
   provider?: string;
   module?: string;
   url?: string;
+  categoryId?: number;
 }
 
 export function shouldOpenCommunityLinkInNewTab(_href?: string, _currentOrigin?: string): boolean {
@@ -20,7 +21,7 @@ export function shouldOpenCommunityLinkInNewTab(_href?: string, _currentOrigin?:
 
 export default function CommunityLink({
   moduleKey,
-  label = "Join Community",
+  label = "Discuss in Community",
 }: {
   moduleKey: string;
   label?: string;

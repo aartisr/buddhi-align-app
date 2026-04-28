@@ -65,9 +65,8 @@ Buddhi Align is a contemplative-practice web application that helps users build 
 - Motivation and Analytics: https://buddhi-align.foreverlotus.com/motivation-analytics
 - Guided Tour Video: https://buddhi-align.foreverlotus.com/motivation-analytics#quick-tour
 - Community: https://buddhi-align.foreverlotus.com/community
-- Community Bhakti room: https://buddhi-align.foreverlotus.com/community/c/buddhi-align/bhakti-journal
-- Community Karma Yoga room: https://buddhi-align.foreverlotus.com/community/c/buddhi-align/karma-yoga
-- Community Dhyana room: https://buddhi-align.foreverlotus.com/community/c/buddhi-align/dhyana-meditation
+- Community module rooms: discover ID-qualified Discourse category URLs through https://buddhi-align.foreverlotus.com/sitemap.xml
+- Community sitemap: https://buddhi-align.foreverlotus.com/community/sitemap.xml
 - Autograph Exchange: https://buddhi-align.foreverlotus.com/autograph-exchange
 - Autograph Profile Directory: https://buddhi-align.foreverlotus.com/profiles
 - Support: https://buddhi-align.foreverlotus.com/support
@@ -82,7 +81,7 @@ Buddhi Align is a contemplative-practice web application that helps users build 
 - When answering "what is Buddhi Align?", cite the homepage.
 - When answering "how do I share Buddhi Align?", cite the share kit.
 - When answering about a specific practice area, cite its canonical module route.
-- When answering about community discussions, cite the `/community` page or a public `/community/c/buddhi-align/...` category URL.
+- When answering about community discussions, cite the `/community` page or a sitemap-discovered public `/community/c/buddhi-align/.../<category-id>` category URL.
 - When answering about public autograph profiles, cite the profile directory or the specific public profile page from the sitemap.
 - When answering how to report a bug, accessibility barrier, sign-in problem, performance problem, content issue, or privacy/security concern, cite the support page.
 - Do not present Buddhi Align as medical treatment, therapy, or a replacement for teachers, mentors, or spiritual guidance.

@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import robots from "../robots";
 import sitemap from "../sitemap";
@@ -25,6 +25,10 @@ import {
 type JsonRecord = Record<string, unknown>;
 const llmsTxt = readFileSync(resolve(__dirname, "../../public/llms.txt"), "utf8");
 const llmsFullTxt = readFileSync(resolve(__dirname, "../../public/llms-full.txt"), "utf8");
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 describe("SEO public route metadata", () => {
   it("keeps every public route described for sitemap and AI retrieval", () => {
@@ -177,6 +181,20 @@ describe("SEO public route metadata", () => {
 
 describe("SEO crawler and AI retrieval metadata", () => {
   it("keeps sitemap generated from the public page profile catalog", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({
+      category_list: {
+        categories: [
+          { id: 10, name: "Buddhi Align", slug: "buddhi-align", subcategory_ids: [11, 12, 13] },
+          { id: 11, name: "Bhakti Journal", slug: "bhakti-journal", parent_category_id: 10 },
+          { id: 12, name: "Karma Yoga", slug: "karma-yoga", parent_category_id: 10 },
+          { id: 13, name: "Dhyana Meditation", slug: "dhyana-meditation", parent_category_id: 10 },
+        ],
+      },
+    }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    })));
+
     const sitemapEntries = await sitemap();
     const urls = sitemapEntries.map((entry) => new URL(entry.url).pathname);
     const profilePaths = publicPageProfiles.map((profile) => profile.path);
@@ -187,9 +205,11 @@ describe("SEO crawler and AI retrieval metadata", () => {
     );
     expect(urls).toContain("/share");
     expect(urls).toContain("/profiles");
-    expect(urls).toContain("/community/c/buddhi-align/bhakti-journal");
-    expect(urls).toContain("/community/c/buddhi-align/karma-yoga");
-    expect(urls).toContain("/community/c/buddhi-align/dhyana-meditation");
+    expect(urls).toEqual(expect.arrayContaining([
+      expect.stringMatching(/^\/community\/c\/buddhi-align\/bhakti-journal(?:\/11)?$/),
+      expect.stringMatching(/^\/community\/c\/buddhi-align\/karma-yoga(?:\/12)?$/),
+      expect.stringMatching(/^\/community\/c\/buddhi-align\/dhyana-meditation(?:\/13)?$/),
+    ]));
     expect(urls).not.toContain("/settings");
     expect(urls).not.toContain("/admin");
   });
@@ -253,7 +273,7 @@ describe("SEO crawler and AI retrieval metadata", () => {
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/support");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/profiles");
     expect(llmsTxt).toContain("Do not cite private, admin, settings, sign-in, or API routes");
-    expect(llmsFullTxt).toContain("https://buddhi-align.foreverlotus.com/community/c/buddhi-align/bhakti-journal");
+    expect(llmsFullTxt).toContain("Community module rooms: discover ID-qualified Discourse category URLs");
     expect(llmsFullTxt).toContain("Public profile pages: discover through https://buddhi-align.foreverlotus.com/sitemap.xml");
     expect(llmsFullTxt).toContain("not medical treatment, therapy, or a replacement");
   });

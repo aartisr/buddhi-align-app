@@ -51,12 +51,12 @@ describe("/api/community/discourse/login route", () => {
     });
 
     const res = await GET(
-      makeRequest("https://buddhi-align.foreverlotus.com/api/community/discourse/login?returnPath=/community/c/buddhi-align/bhakti-journal"),
+      makeRequest("https://buddhi-align.foreverlotus.com/api/community/discourse/login?returnPath=/community/c/buddhi-align/bhakti-journal/11"),
     );
 
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toBe(
-      "https://buddhi-align.foreverlotus.com/community/session/sso?return_path=%2Fc%2Fbuddhi-align%2Fbhakti-journal",
+      "https://buddhi-align.foreverlotus.com/community/session/sso?return_path=%2Fc%2Fbuddhi-align%2Fbhakti-journal%2F11",
     );
   });
 
@@ -65,12 +65,12 @@ describe("/api/community/discourse/login route", () => {
     authMock.mockResolvedValue(null);
 
     const res = await GET(
-      makeRequest("https://buddhi-align.foreverlotus.com/api/community/discourse/login?returnPath=/community/c/buddhi-align/karma-yoga"),
+      makeRequest("https://buddhi-align.foreverlotus.com/api/community/discourse/login?returnPath=/community/c/buddhi-align/karma-yoga/12"),
     );
 
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toBe(
-      "https://buddhi-align.foreverlotus.com/community/c/buddhi-align/karma-yoga",
+      "https://buddhi-align.foreverlotus.com/community/c/buddhi-align/karma-yoga/12",
     );
   });
 

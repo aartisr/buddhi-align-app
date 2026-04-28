@@ -4,6 +4,7 @@ import {
   buildCommunityUrl,
   isCommunityModuleKey,
 } from "@/app/lib/community-links";
+import { resolveDiscourseModuleCategoryLink } from "@/app/lib/community/discourse-category-links";
 
 const COMMUNITY_LINK_CACHE_CONTROL = "public, max-age=60, s-maxage=300, stale-while-revalidate=86400";
 
@@ -32,7 +33,10 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return communityLinkJson({ enabled: false, reason: "invalid_config" });
   }
 
-  const url = buildCommunityUrl(moduleCandidate, config);
+  const resolvedDiscourseCategory = config.provider === "discourse"
+    ? await resolveDiscourseModuleCategoryLink(moduleCandidate, config)
+    : undefined;
+  const url = resolvedDiscourseCategory?.href ?? buildCommunityUrl(moduleCandidate, config);
 
   if (!url) {
     return communityLinkJson({ enabled: false, reason: "not_available" });
@@ -43,5 +47,6 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     provider: config.provider,
     module: moduleCandidate,
     url,
+    categoryId: resolvedDiscourseCategory?.categoryId,
   });
 }
