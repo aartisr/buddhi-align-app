@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getCommunityConfig } from "@/app/lib/community-config";
-import { normalizeCommunityReturnPath } from "@/app/lib/community-navigation";
+import {
+  buildDiscourseSsoReturnPath,
+  normalizeCommunityReturnPath,
+} from "@/app/lib/community-navigation";
 
 function buildSameOriginRedirect(req: NextRequest, path: string): NextResponse {
   return NextResponse.redirect(new URL(path, req.nextUrl.origin));
@@ -45,5 +48,5 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  return buildSameOriginRedirect(req, buildDiscourseSsoStartPath(returnPath));
+  return buildSameOriginRedirect(req, buildDiscourseSsoStartPath(buildDiscourseSsoReturnPath(returnPath)));
 }

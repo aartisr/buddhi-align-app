@@ -107,7 +107,7 @@ For seamless app-to-forum navigation, Buddhi Align sends Community links through
 
 - https://buddhi-align.foreverlotus.com/api/community/discourse/login?returnPath=/community
 
-That route checks the Buddhi Align OAuth session. If a user is already signed in to Buddhi Align, it starts DiscourseConnect at `/community/session/sso?return_path=...` so Discourse creates or reuses the matching user before returning to the forum page. If no Buddhi Align session exists, it falls back to public community browsing.
+That route checks the Buddhi Align OAuth session. If a user is already signed in to Buddhi Align, it starts DiscourseConnect at `/community/session/sso?return_path=...` so Discourse creates or reuses the matching user before returning to the forum page. The `return_path` value must be Discourse-relative, for example `/c/buddhi-align/bhakti-journal`, not `/community/c/buddhi-align/bhakti-journal`. If no Buddhi Align session exists, it falls back to public community browsing.
 
 Optional: if you want direct visits to `/community` to always require Buddhi Align SSO, enable Discourse `login required`. Leave it disabled if anonymous read access should remain available.
 
@@ -120,7 +120,7 @@ In app environment:
 
 1. Open `https://buddhi-align.foreverlotus.com/community` and confirm the page is the full Discourse app, not the native Buddhi cards.
 2. Open `/api/community/link?module=bhakti` and verify the JSON URL is `/community/c/buddhi-align/bhakti-journal`.
-3. While signed in to Buddhi Align, open `/api/community/discourse/login?returnPath=/community/c/buddhi-align/bhakti-journal` and confirm it redirects to `/community/session/sso?return_path=...`.
+3. While signed in to Buddhi Align, open `/api/community/discourse/login?returnPath=/community/c/buddhi-align/bhakti-journal` and confirm it redirects to `/community/session/sso?return_path=%2Fc%2Fbuddhi-align%2Fbhakti-journal`.
 4. Click `Join Community` from a module and confirm same-domain navigation in the current tab.
 5. Sign in and confirm DiscourseConnect returns to `/community/session/sso_login`, then lands back on the intended `/community/...` path with the Discourse user logged in.
 6. Create or open a topic and confirm composer, notifications, uploads, and live updates work.

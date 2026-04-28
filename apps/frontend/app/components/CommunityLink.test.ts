@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { shouldOpenCommunityLinkInNewTab } from "./CommunityLink";
 import {
+  buildDiscourseSsoReturnPath,
   buildCommunitySsoLoginHref,
   normalizeCommunityReturnPath,
   shouldUseDocumentNavigationForCommunity,
@@ -79,5 +80,15 @@ describe("Community route warmup behavior", () => {
       ),
     ).toBe("/community");
     expect(normalizeCommunityReturnPath("/community/session/sso?return_path=/community")).toBe("/community");
+  });
+
+  it("converts app community paths to Discourse-relative SSO return paths", () => {
+    expect(buildDiscourseSsoReturnPath("/community")).toBe("/");
+    expect(buildDiscourseSsoReturnPath("/community/c/buddhi-align/bhakti-journal")).toBe(
+      "/c/buddhi-align/bhakti-journal",
+    );
+    expect(buildDiscourseSsoReturnPath("/community/t/settling-into-practice/44")).toBe(
+      "/t/settling-into-practice/44",
+    );
   });
 });

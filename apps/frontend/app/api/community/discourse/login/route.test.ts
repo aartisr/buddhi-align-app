@@ -56,7 +56,7 @@ describe("/api/community/discourse/login route", () => {
 
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toBe(
-      "https://buddhi-align.foreverlotus.com/community/session/sso?return_path=%2Fcommunity%2Fc%2Fbuddhi-align%2Fbhakti-journal",
+      "https://buddhi-align.foreverlotus.com/community/session/sso?return_path=%2Fc%2Fbuddhi-align%2Fbhakti-journal",
     );
   });
 
@@ -89,7 +89,7 @@ describe("/api/community/discourse/login route", () => {
 
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toBe(
-      "https://buddhi-align.foreverlotus.com/community/session/sso?return_path=%2Fcommunity",
+      "https://buddhi-align.foreverlotus.com/community/session/sso?return_path=%2F",
     );
   });
 

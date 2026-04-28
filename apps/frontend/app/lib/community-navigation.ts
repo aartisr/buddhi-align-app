@@ -68,6 +68,24 @@ export function normalizeCommunityReturnPath(href?: string, currentOrigin = ""):
   }
 }
 
+export function buildDiscourseSsoReturnPath(communityReturnPath: string): string {
+  const normalized = normalizeCommunityReturnPath(communityReturnPath);
+
+  try {
+    const parsed = new URL(normalized, "https://buddhi-align.local");
+    if (parsed.pathname === COMMUNITY_ROUTE || parsed.pathname === `${COMMUNITY_ROUTE}/`) {
+      return `/${parsed.search}${parsed.hash}`;
+    }
+    if (parsed.pathname.startsWith(`${COMMUNITY_ROUTE}/`)) {
+      return `${parsed.pathname.slice(COMMUNITY_ROUTE.length)}${parsed.search}${parsed.hash}`;
+    }
+  } catch {
+    return "/";
+  }
+
+  return "/";
+}
+
 export function buildCommunitySsoLoginHref(returnPath?: string, currentOrigin = ""): string {
   const params = new URLSearchParams();
   params.set("returnPath", normalizeCommunityReturnPath(returnPath, currentOrigin));
