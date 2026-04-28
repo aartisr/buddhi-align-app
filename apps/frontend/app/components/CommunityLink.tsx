@@ -1,6 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  buildCommunitySsoLoginHref,
+  shouldWarmCommunityHref,
+} from "@/app/lib/community-navigation";
 import { logEvent } from "@/app/lib/logEvent";
 
 interface CommunityLinkPayload {
@@ -22,6 +26,8 @@ export default function CommunityLink({
   label?: string;
 }) {
   const [payload, setPayload] = useState<CommunityLinkPayload | null>(null);
+  const warmedHrefRef = useRef<string | null>(null);
+  const warmedSsoHrefRef = useRef<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -45,18 +51,66 @@ export default function CommunityLink({
     };
   }, [moduleKey]);
 
+  const warmCommunityRoute = useCallback(() => {
+    const href = payload?.url;
+    if (!href || warmedHrefRef.current === href || typeof window === "undefined") return;
+    if (!shouldWarmCommunityHref(href, window.location.origin)) return;
+
+    warmedHrefRef.current = href;
+    void fetch(href, {
+      credentials: "include",
+      cache: "force-cache",
+    }).catch(() => undefined);
+  }, [payload?.url]);
+
+  const warmCommunitySsoRoute = useCallback(() => {
+    const href = payload?.url;
+    if (!href || warmedSsoHrefRef.current === href || typeof window === "undefined") return;
+
+    warmCommunityRoute();
+    warmedSsoHrefRef.current = href;
+    void fetch(buildCommunitySsoLoginHref(href, window.location.origin), {
+      credentials: "include",
+      cache: "no-store",
+    }).catch(() => undefined);
+  }, [payload?.url, warmCommunityRoute]);
+
+  useEffect(() => {
+    if (!payload?.url || typeof window === "undefined") return undefined;
+
+    const win = window as Window & {
+      requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+
+    if (win.requestIdleCallback) {
+      const handle = win.requestIdleCallback(() => warmCommunityRoute(), { timeout: 3000 });
+      return () => win.cancelIdleCallback?.(handle);
+    }
+
+    const timeout = window.setTimeout(() => warmCommunityRoute(), 1800);
+    return () => window.clearTimeout(timeout);
+  }, [payload?.url, warmCommunityRoute]);
+
   if (!payload?.enabled || !payload.url) {
     return null;
   }
 
   const opensNewTab = shouldOpenCommunityLinkInNewTab(payload.url);
+  const href = buildCommunitySsoLoginHref(
+    payload.url,
+    typeof window === "undefined" ? "" : window.location.origin,
+  );
 
   return (
     <a
-      href={payload.url}
+      href={href}
       target={opensNewTab ? "_blank" : undefined}
       rel={opensNewTab ? "noopener noreferrer" : undefined}
       className="app-user-action inline-flex px-3 py-2 rounded-lg text-sm"
+      onPointerEnter={warmCommunitySsoRoute}
+      onFocus={warmCommunitySsoRoute}
+      onTouchStart={warmCommunitySsoRoute}
       onClick={() => {
         logEvent("community_link_clicked", {
           module: moduleKey,

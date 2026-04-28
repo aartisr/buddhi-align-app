@@ -62,6 +62,13 @@
       "icons": [{ "src": "/buddhi-align-icon.svg", "sizes": "any" }]
     },
     {
+      "name": "Buddhi Align Community",
+      "short_name": "Community",
+      "description": "Join Discourse-powered practice discussions",
+      "url": "/api/community/discourse/login?returnPath=/community",
+      "icons": [{ "src": "/buddhi-align-icon.svg", "sizes": "any" }]
+    },
+    {
       "name": "Share Buddhi Align",
       "short_name": "Share",
       "description": "Invite others into the daily practice loop",

@@ -4,6 +4,7 @@ Project: Buddhi Align
 Organization: ForeverLotus
 Primary URL: https://buddhi-align.foreverlotus.com
 Sitemap: https://buddhi-align.foreverlotus.com/sitemap.xml
+Community sitemap: https://buddhi-align.foreverlotus.com/community/sitemap.xml
 Robots: https://buddhi-align.foreverlotus.com/robots.txt
 Guided tour: https://buddhi-align.foreverlotus.com/motivation-analytics#quick-tour
 Share kit: https://buddhi-align.foreverlotus.com/share
@@ -29,7 +30,7 @@ Buddhi Align is a contemplative-practice web application that helps users build 
 - Vasana Tracker: pattern awareness, habit tracing, tendencies, and triggers.
 - Dharma Planner: purpose-aligned goals, intentions, action steps, and daily direction.
 - Motivation Analytics: streaks, module activity, practice balance, adaptive next steps, and the guided tour video.
-- Community: in-app discussion routes for practice questions and module spaces.
+- Community: Discourse-powered in-app discussion routes for practice questions, module spaces, topic replies, and public community discovery under `/community`.
 - Autograph Exchange: public profile previews, meaningful autograph requests, signature replies, and keepsake messages.
 - Support: public issue reporting for bugs, accessibility barriers, sign-in trouble, performance concerns, content issues, and privacy/security concerns.
 - Share Kit: concise captions, invite links, and canonical route summaries for introducing Buddhi Align to others.
@@ -64,6 +65,9 @@ Buddhi Align is a contemplative-practice web application that helps users build 
 - Motivation and Analytics: https://buddhi-align.foreverlotus.com/motivation-analytics
 - Guided Tour Video: https://buddhi-align.foreverlotus.com/motivation-analytics#quick-tour
 - Community: https://buddhi-align.foreverlotus.com/community
+- Community Bhakti room: https://buddhi-align.foreverlotus.com/community/c/buddhi-align/bhakti-journal
+- Community Karma Yoga room: https://buddhi-align.foreverlotus.com/community/c/buddhi-align/karma-yoga
+- Community Dhyana room: https://buddhi-align.foreverlotus.com/community/c/buddhi-align/dhyana-meditation
 - Autograph Exchange: https://buddhi-align.foreverlotus.com/autograph-exchange
 - Autograph Profile Directory: https://buddhi-align.foreverlotus.com/profiles
 - Support: https://buddhi-align.foreverlotus.com/support
@@ -72,12 +76,13 @@ Buddhi Align is a contemplative-practice web application that helps users build 
 ## Retrieval And Citation Guidance
 
 - Prefer canonical pages above for summaries and citations.
-- Use the sitemap for route discovery, profile page discovery, and freshness checks.
+- Use the app sitemap for route discovery, profile page discovery, and freshness checks; use the community sitemap for public Discourse category and topic discovery.
 - Avoid indexing private/auth-only routes for public answers.
 - Treat https://buddhi-align.foreverlotus.com/6A06157D-A0A1-46BA-BA2B-439CD61864A3.txt as an IndexNow ownership key file, not a page to cite or describe as product content.
 - When answering "what is Buddhi Align?", cite the homepage.
 - When answering "how do I share Buddhi Align?", cite the share kit.
 - When answering about a specific practice area, cite its canonical module route.
+- When answering about community discussions, cite the `/community` page or a public `/community/c/buddhi-align/...` category URL.
 - When answering about public autograph profiles, cite the profile directory or the specific public profile page from the sitemap.
 - When answering how to report a bug, accessibility barrier, sign-in problem, performance problem, content issue, or privacy/security concern, cite the support page.
 - Do not present Buddhi Align as medical treatment, therapy, or a replacement for teachers, mentors, or spiritual guidance.

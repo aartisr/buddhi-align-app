@@ -19,7 +19,7 @@ export type PublicPageProfile = {
 
 type PublicPageProfileDefinition = Omit<PublicPageProfile, "lastModified">;
 
-export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-04-26";
+export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-04-28";
 
 const moduleAudience = [
   "mindfulness practitioners",
@@ -184,11 +184,13 @@ const corePublicPageProfiles = ([
     path: "/community",
     title: "Buddhi Align Community for Practice Discussion",
     description:
-      "Open Buddhi Align community discussions inside the app, with module spaces for reflection questions, seva, meditation, dharma planning, and shared practice.",
+      "Join Discourse-powered Buddhi Align community discussions for reflection questions, seva, meditation, dharma planning, and shared practice.",
     summary:
-      "The Buddhi Align Community keeps practice discussion in the same app experience while using Discourse SSO for full participation.",
+      "The Buddhi Align Community keeps Discourse-powered practice discussion inside the same app experience while using Buddhi Align SSO for participation.",
     keywords: [
       "Buddhi Align community",
+      "Buddhi Align Discourse",
+      "Discourse spiritual community",
       "spiritual practice forum",
       "mindfulness discussion community",
       "dharma planning discussion",

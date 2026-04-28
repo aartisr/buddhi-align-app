@@ -149,6 +149,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       email: session.user.email,
       username: session.user.name ?? session.user.email.split("@")[0],
       name: session.user.name ?? undefined,
+      avatarUrl: session.user.image ?? undefined,
       admin: roleMapping.admin,
       moderator: roleMapping.moderator,
       groups: roleMapping.shouldSyncGroups ? roleMapping.mappedGroups : undefined,

@@ -62,5 +62,6 @@ describe("/api/community/link route", () => {
     expect(payload.enabled).toBe(true);
     expect(payload.provider).toBe("discourse");
     expect(payload.url).toBe("/community/c/karma-yoga");
+    expect(res.headers.get("Cache-Control")).toContain("s-maxage=300");
   });
 });

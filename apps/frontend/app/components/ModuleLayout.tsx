@@ -6,6 +6,11 @@ import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
 import { logEvent } from "@/app/lib/logEvent";
 import { buildSignInHref, sanitizeRelativeCallbackUrl } from "@/app/auth/navigation";
+import {
+  buildCommunitySsoLoginHref,
+  shouldUseDocumentNavigationForCommunity,
+  shouldWarmCommunityHref,
+} from "@/app/lib/community-navigation";
 
 import UserMenu from "./UserMenu";
 import BuddhiAlignLogo from "./BuddhiAlignLogo";
@@ -41,6 +46,107 @@ type MenuGroup = {
 
 type PathActive = (href: string) => boolean;
 
+const warmedCommunityNavigationHrefs = new Set<string>();
+const warmedCommunitySsoNavigationHrefs = new Set<string>();
+
+function warmCommunityNavigationHref(href: string) {
+  if (typeof window === "undefined") return;
+  if (warmedCommunityNavigationHrefs.has(href)) return;
+  if (!shouldWarmCommunityHref(href, window.location.origin)) return;
+
+  warmedCommunityNavigationHrefs.add(href);
+  void fetch(href, {
+    credentials: "include",
+    cache: "force-cache",
+  }).catch(() => undefined);
+}
+
+function warmCommunitySsoNavigationHref(href: string) {
+  if (typeof window === "undefined") return;
+  if (warmedCommunitySsoNavigationHrefs.has(href)) return;
+  if (!shouldWarmCommunityHref(href, window.location.origin)) return;
+
+  warmCommunityNavigationHref(href);
+  warmedCommunitySsoNavigationHrefs.add(href);
+  void fetch(buildCommunitySsoLoginHref(href), {
+    credentials: "include",
+    cache: "no-store",
+  }).catch(() => undefined);
+}
+
+function CommunityAwareLink({
+  href,
+  onPointerEnter,
+  onFocus,
+  onTouchStart,
+  children,
+  ...props
+}: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) {
+  const isCommunityRoute = shouldUseDocumentNavigationForCommunity(href);
+  const navigationHref = isCommunityRoute ? buildCommunitySsoLoginHref(href) : href;
+
+  const handlePointerEnter = (event: React.PointerEvent<HTMLAnchorElement>) => {
+    if (isCommunityRoute) warmCommunitySsoNavigationHref(href);
+    onPointerEnter?.(event);
+  };
+
+  const handleFocus = (event: React.FocusEvent<HTMLAnchorElement>) => {
+    if (isCommunityRoute) warmCommunitySsoNavigationHref(href);
+    onFocus?.(event);
+  };
+
+  const handleTouchStart = (event: React.TouchEvent<HTMLAnchorElement>) => {
+    if (isCommunityRoute) warmCommunitySsoNavigationHref(href);
+    onTouchStart?.(event);
+  };
+
+  if (isCommunityRoute) {
+    return (
+      <a
+        href={navigationHref}
+        onPointerEnter={handlePointerEnter}
+        onFocus={handleFocus}
+        onTouchStart={handleTouchStart}
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      href={navigationHref}
+      onPointerEnter={onPointerEnter}
+      onFocus={onFocus}
+      onTouchStart={onTouchStart}
+      {...props}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function useCommunityRouteWarmup() {
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+
+    const win = window as Window & {
+      requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    const warm = () => warmCommunityNavigationHref("/community");
+
+    if (win.requestIdleCallback) {
+      const handle = win.requestIdleCallback(warm, { timeout: 3500 });
+      return () => win.cancelIdleCallback?.(handle);
+    }
+
+    const timeout = window.setTimeout(warm, 2200);
+    return () => window.clearTimeout(timeout);
+  }, []);
+}
+
 function DesktopNavigation({
   groups,
   desktopOpenGroup,
@@ -73,7 +179,7 @@ function DesktopNavigation({
           </button>
           <div className="app-nav-submenu" aria-label={group.label}>
             {group.items.map((item) => (
-              <Link
+              <CommunityAwareLink
                 key={item.key}
                 href={item.href}
                 className={`app-nav-submenu-link${isPathActive(item.href) ? " is-active" : ""}`}
@@ -81,7 +187,7 @@ function DesktopNavigation({
               >
                 <span className="app-nav-item-icon" aria-hidden>{item.icon}</span>
                 <span>{item.label}</span>
-              </Link>
+              </CommunityAwareLink>
             ))}
           </div>
         </div>
@@ -194,7 +300,7 @@ function MobileNavigation({
               <span aria-hidden>⚙️</span>
               <span>{t("app.settings.link")}</span>
             </Link>
-            <Link
+            <CommunityAwareLink
               href="/community"
               className={`app-mobile-nav-chip${isPathActive("/community") ? " is-active" : ""}`}
               onClick={closeNav}
@@ -202,7 +308,7 @@ function MobileNavigation({
             >
               <span aria-hidden>💬</span>
               <span>{t("community.nav")}</span>
-            </Link>
+            </CommunityAwareLink>
             <Link
               href="/support"
               className={`app-mobile-nav-chip${isPathActive("/support") ? " is-active" : ""}`}
@@ -218,7 +324,7 @@ function MobileNavigation({
               <p className="app-mobile-nav-group-title">{group.label}</p>
               <div>
                 {group.items.map((item) => (
-                  <Link
+                  <CommunityAwareLink
                     key={item.key}
                     href={item.href}
                     className={`app-mobile-nav-link${isPathActive(item.href) ? " is-active" : ""}`}
@@ -227,7 +333,7 @@ function MobileNavigation({
                   >
                     <span className="app-nav-item-icon" aria-hidden>{item.icon}</span>
                     <span>{item.label}</span>
-                  </Link>
+                  </CommunityAwareLink>
                 ))}
               </div>
             </li>
@@ -524,6 +630,8 @@ function ModuleLayoutView({
   previousModule: ModuleItem | null;
   nextModule: ModuleItem | null;
 }) {
+  useCommunityRouteWarmup();
+
   return (
     <div className="app-shell relative font-sans">
       <a

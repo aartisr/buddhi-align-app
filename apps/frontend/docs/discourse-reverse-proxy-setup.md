@@ -99,7 +99,17 @@ buddhi-align.foreverlotus.com {
 
 In Discourse settings:
 
+- enable discourse connect = enabled
 - discourse connect url = https://buddhi-align.foreverlotus.com/api/community/discourse/sso
+- discourse connect secret = the same secret stored in `DISCOURSE_SSO_SECRET`
+
+For seamless app-to-forum navigation, Buddhi Align sends Community links through:
+
+- https://buddhi-align.foreverlotus.com/api/community/discourse/login?returnPath=/community
+
+That route checks the Buddhi Align OAuth session. If a user is already signed in to Buddhi Align, it starts DiscourseConnect at `/community/session/sso?return_path=...` so Discourse creates or reuses the matching user before returning to the forum page. If no Buddhi Align session exists, it falls back to public community browsing.
+
+Optional: if you want direct visits to `/community` to always require Buddhi Align SSO, enable Discourse `login required`. Leave it disabled if anonymous read access should remain available.
 
 In app environment:
 
@@ -110,12 +120,32 @@ In app environment:
 
 1. Open `https://buddhi-align.foreverlotus.com/community` and confirm the page is the full Discourse app, not the native Buddhi cards.
 2. Open `/api/community/link?module=bhakti` and verify the JSON URL is `/community/c/buddhi-align/bhakti-journal`.
-3. Click `Join Community` from a module and confirm same-domain navigation in the current tab.
-4. Sign in and confirm DiscourseConnect returns to `/community/session/sso_login`.
-5. Create or open a topic and confirm composer, notifications, uploads, and live updates work.
-6. Browser devtools should show Discourse assets loading from `/community/...`, not root `/assets/...`.
+3. While signed in to Buddhi Align, open `/api/community/discourse/login?returnPath=/community/c/buddhi-align/bhakti-journal` and confirm it redirects to `/community/session/sso?return_path=...`.
+4. Click `Join Community` from a module and confirm same-domain navigation in the current tab.
+5. Sign in and confirm DiscourseConnect returns to `/community/session/sso_login`, then lands back on the intended `/community/...` path with the Discourse user logged in.
+6. Create or open a topic and confirm composer, notifications, uploads, and live updates work.
+7. Browser devtools should show Discourse assets loading from `/community/...`, not root `/assets/...`.
 
-## 7) Share Community Widgets on Other Websites
+## 7) Performance, Search, and Sharing
+
+Keep the Discourse origin warm and crawlable:
+
+- Add both sitemap URLs to Google Search Console and Bing Webmaster Tools:
+  - https://buddhi-align.foreverlotus.com/sitemap.xml
+  - https://buddhi-align.foreverlotus.com/community/sitemap.xml
+- Confirm `https://buddhi-align.foreverlotus.com/robots.txt` allows `/community`, `/community/c/`, and `/community/t/`, while blocking login/session/admin/search routes.
+- In Discourse Admin -> Settings, set the site title, description, short site description, logo, large icon, favicon, default locale, and social share images.
+- In Discourse Admin -> Settings, keep `login required` off if public topic pages should rank. Turn it on only if the community must be private.
+- Keep topic titles specific and human-searchable: module name + question/outcome works better than generic titles.
+- Pin one welcome topic in each module category with a concise description and links back to the matching Buddhi Align module.
+- Keep Caddy and Discourse warm with a lightweight cron from the server:
+  - `*/5 * * * * curl -fsS https://buddhi-align.foreverlotus.com/community >/dev/null`
+  - `*/5 * * * * curl -fsS https://buddhi-align.foreverlotus.com/community/categories.json >/dev/null`
+- After deploys or Discourse rebuilds, test first byte time:
+  - `curl -sS -o /dev/null -w 'ttfb=%{time_starttransfer} total=%{time_total} code=%{http_code}\n' https://buddhi-align.foreverlotus.com/community`
+  - `curl -sS -o /dev/null -w 'ttfb=%{time_starttransfer} total=%{time_total} code=%{http_code}\n' https://buddhi-align.foreverlotus.com/community/c/buddhi-align/bhakti-journal`
+
+## 8) Share Community Widgets on Other Websites
 
 Other websites can promote the same community without embedding the full Discourse app.
 

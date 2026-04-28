@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import JsonLd from "@/app/components/JsonLd";
 import ModuleLayout from "@/app/components/ModuleLayout";
 import {
   getCommunityCategoryData,
@@ -8,6 +10,7 @@ import {
   type CommunityDataStatus,
   type CommunityTopicSummary,
 } from "@/app/lib/community/discourse-api";
+import { absoluteUrl, buildPageMetadata, siteName } from "@/app/lib/seo";
 
 export const revalidate = 300;
 
@@ -16,6 +19,16 @@ type CommunityCategoryPageProps = {
     categoryPath?: string[];
   };
 };
+
+function buildCategoryPath(categoryPath: readonly string[] = []): string {
+  return `/community/c/${categoryPath.map((segment) => encodeURIComponent(segment)).join("/")}`;
+}
+
+function fitDescription(value: string, maxLength = 170): string {
+  const trimmed = value.replace(/\s+/g, " ").trim();
+  if (trimmed.length <= maxLength) return trimmed;
+  return `${trimmed.slice(0, maxLength - 3).replace(/\s+\S*$/, "").trim()}.`;
+}
 
 function formatDate(value: string | undefined): string | undefined {
   if (!value) return undefined;
@@ -77,12 +90,113 @@ function TopicRow({ topic }: { topic: CommunityTopicSummary }) {
   );
 }
 
+export async function generateMetadata({ params }: CommunityCategoryPageProps): Promise<Metadata> {
+  const categoryPath = params.categoryPath ?? [];
+  const data = await getCommunityCategoryData(categoryPath);
+  const path = categoryPath.length > 0 ? buildCategoryPath(categoryPath) : "/community";
+
+  if (!data) {
+    return buildPageMetadata({
+      title: "Buddhi Align Community Discussion",
+      description:
+        "Browse Buddhi Align community discussions for spiritual practice, meditation, service, devotion, self-inquiry, dharma planning, and shared reflection.",
+      path,
+      keywords: ["Buddhi Align community", "spiritual practice forum", "mindfulness discussion"],
+    });
+  }
+
+  const title = `${data.category.name} Community Discussion`;
+  const description = fitDescription(
+    `${data.category.description} Join Buddhi Align discussion for practice questions, shared reflection, module support, and steady daily growth.`,
+  );
+
+  return buildPageMetadata({
+    title,
+    description,
+    path,
+    keywords: [
+      data.category.name,
+      `${data.category.slug} discussion`,
+      "Buddhi Align community",
+      "spiritual practice forum",
+    ],
+  });
+}
+
+function buildCategoryJsonLd(data: NonNullable<Awaited<ReturnType<typeof getCommunityCategoryData>>>, path: string) {
+  const breadcrumbItems = [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: siteName,
+      item: absoluteUrl("/"),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Community",
+      item: absoluteUrl("/community"),
+    },
+  ];
+
+  if (data.parentCategory && data.parentCategory.slug !== data.category.slug) {
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: breadcrumbItems.length + 1,
+      name: data.parentCategory.name,
+      item: absoluteUrl(data.parentCategory.href),
+    });
+  }
+
+  breadcrumbItems.push({
+    "@type": "ListItem",
+    position: breadcrumbItems.length + 1,
+    name: data.category.name,
+    item: absoluteUrl(path),
+  });
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${absoluteUrl(path)}#webpage`,
+        url: absoluteUrl(path),
+        name: data.category.name,
+        description: data.category.description,
+        isPartOf: {
+          "@id": `${absoluteUrl("/")}#website`,
+        },
+        mainEntity: {
+          "@type": "ItemList",
+          name: `${data.category.name} recent discussions`,
+          itemListElement: data.topics.map((topic, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: topic.title,
+            url: absoluteUrl(topic.href),
+            description: topic.excerpt,
+          })),
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${absoluteUrl(path)}#breadcrumb`,
+        itemListElement: breadcrumbItems,
+      },
+    ],
+  };
+}
+
 export default async function CommunityCategoryPage({ params }: CommunityCategoryPageProps) {
   const data = await getCommunityCategoryData(params.categoryPath ?? []);
   if (!data) notFound();
+  const path = buildCategoryPath(params.categoryPath ?? []);
 
   return (
     <ModuleLayout titleKey="community.title">
+      <JsonLd data={buildCategoryJsonLd(data, path)} />
+
       <section className="app-community-shell max-w-6xl mx-auto" aria-labelledby="community-category-heading">
         <nav className="app-community-breadcrumb" aria-label="Community breadcrumb">
           <Link href="/community">Community</Link>

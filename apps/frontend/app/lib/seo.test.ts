@@ -23,11 +23,10 @@ import {
 } from "./seo";
 
 type JsonRecord = Record<string, unknown>;
+const llmsTxt = readFileSync(resolve(__dirname, "../../public/llms.txt"), "utf8");
+const llmsFullTxt = readFileSync(resolve(__dirname, "../../public/llms-full.txt"), "utf8");
 
 describe("SEO public route metadata", () => {
-  const llmsTxt = readFileSync(resolve(__dirname, "../../public/llms.txt"), "utf8");
-  const llmsFullTxt = readFileSync(resolve(__dirname, "../../public/llms-full.txt"), "utf8");
-
   it("keeps every public route described for sitemap and AI retrieval", () => {
     const paths = publicPageProfiles.map((profile) => profile.path);
 
@@ -174,7 +173,9 @@ describe("SEO public route metadata", () => {
     expect(profileGraph.some((entry) => entry["@type"] === "ProfilePage")).toBe(true);
     expect(profileGraph.some((entry) => entry["@type"] === "Person")).toBe(true);
   });
+});
 
+describe("SEO crawler and AI retrieval metadata", () => {
   it("keeps sitemap generated from the public page profile catalog", async () => {
     const sitemapEntries = await sitemap();
     const urls = sitemapEntries.map((entry) => new URL(entry.url).pathname);
@@ -186,6 +187,9 @@ describe("SEO public route metadata", () => {
     );
     expect(urls).toContain("/share");
     expect(urls).toContain("/profiles");
+    expect(urls).toContain("/community/c/buddhi-align/bhakti-journal");
+    expect(urls).toContain("/community/c/buddhi-align/karma-yoga");
+    expect(urls).toContain("/community/c/buddhi-align/dhyana-meditation");
     expect(urls).not.toContain("/settings");
     expect(urls).not.toContain("/admin");
   });
@@ -208,19 +212,48 @@ describe("SEO public route metadata", () => {
     const allow = Array.isArray(rules.allow) ? rules.allow : [rules.allow];
 
     expect(disallow).toEqual(
-      expect.arrayContaining(["/api/", "/admin/", "/admin", "/admin-access", "/settings", "/sign-in"]),
+      expect.arrayContaining([
+        "/api/",
+        "/admin/",
+        "/admin",
+        "/admin-access",
+        "/settings",
+        "/sign-in",
+        "/community/session/",
+        "/community/search",
+      ]),
     );
-    expect(allow).toEqual(expect.arrayContaining(["/", "/profiles", "/profiles/", "/support", "/llms.txt", "/llms-full.txt"]));
+    expect(allow).toEqual(
+      expect.arrayContaining([
+        "/",
+        "/community",
+        "/community/c/",
+        "/community/t/",
+        "/profiles",
+        "/profiles/",
+        "/support",
+        "/llms.txt",
+        "/llms-full.txt",
+      ]),
+    );
     expect(allow).toContain("/6A06157D-A0A1-46BA-BA2B-439CD61864A3.txt");
-    expect(robots().sitemap).toContain("/sitemap.xml");
+    const sitemaps = Array.isArray(robots().sitemap) ? robots().sitemap : [robots().sitemap];
+    expect(sitemaps).toEqual(
+      expect.arrayContaining([
+        "https://buddhi-align.foreverlotus.com/sitemap.xml",
+        "https://buddhi-align.foreverlotus.com/community/sitemap.xml",
+      ]),
+    );
   });
 
   it("publishes AI-readable llms references for GEO and answer engines", () => {
     expect(llmsTxt).toContain("# Buddhi Align");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/community");
+    expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/community/sitemap.xml");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/support");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/profiles");
     expect(llmsTxt).toContain("Do not cite private, admin, settings, sign-in, or API routes");
+    expect(llmsFullTxt).toContain("https://buddhi-align.foreverlotus.com/community/c/buddhi-align/bhakti-journal");
     expect(llmsFullTxt).toContain("Public profile pages: discover through https://buddhi-align.foreverlotus.com/sitemap.xml");
     expect(llmsFullTxt).toContain("not medical treatment, therapy, or a replacement");
   });
