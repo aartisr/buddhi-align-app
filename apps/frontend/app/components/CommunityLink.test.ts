@@ -61,6 +61,7 @@ describe("Community route warmup behavior", () => {
   });
 
   it("builds DiscourseConnect login-gate links for community return paths", () => {
+    expect(buildCommunitySsoLoginHref("/community")).toBe("/community");
     expect(buildCommunitySsoLoginHref("/community/c/buddhi-align/bhakti-journal/11")).toBe(
       "/api/community/discourse/login?returnPath=%2Fcommunity%2Fc%2Fbuddhi-align%2Fbhakti-journal%2F11",
     );

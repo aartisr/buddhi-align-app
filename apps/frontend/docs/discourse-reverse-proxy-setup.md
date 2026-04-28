@@ -124,7 +124,7 @@ In app environment:
 
 1. Open `https://buddhi-align.foreverlotus.com/community` and confirm the page is the full Discourse app, not the native Buddhi cards.
 2. Open `/api/community/link?module=bhakti` and verify the JSON URL is ID-qualified when Discourse is reachable, for example `/community/c/buddhi-align/bhakti-journal/11`.
-3. While signed in to Buddhi Align, open `/api/community/discourse/login?returnPath=/community/c/buddhi-align/bhakti-journal/11` and confirm it redirects to `/community/session/sso?return_path=%2Fc%2Fbuddhi-align%2Fbhakti-journal%2F11`.
+3. While signed in to Buddhi Align, open `/api/community/discourse/login?returnPath=/community/c/buddhi-align/bhakti-journal/11` and confirm it redirects to `/community/session/sso?return_path=/c/buddhi-align/bhakti-journal/11`.
 4. Click `Discuss in Community` from a module and confirm same-domain navigation in the current tab.
 5. Sign in and confirm DiscourseConnect returns to `/community/session/sso_login`, then lands back on the intended `/community/...` path with the Discourse user logged in.
 6. Create or open a topic and confirm composer, notifications, uploads, and live updates work.

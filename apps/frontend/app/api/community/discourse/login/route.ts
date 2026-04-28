@@ -21,9 +21,8 @@ function isDiscourseSsoConfigured() {
 }
 
 function buildDiscourseSsoStartPath(returnPath: string): string {
-  const params = new URLSearchParams();
-  params.set("return_path", returnPath);
-  return `/community/session/sso?${params.toString()}`;
+  const encodedReturnPath = encodeURIComponent(returnPath).replace(/%2F/gi, "/");
+  return `/community/session/sso?return_path=${encodedReturnPath}`;
 }
 
 export async function GET(req: NextRequest): Promise<NextResponse> {

@@ -28,7 +28,6 @@ export default function CommunityLink({
 }) {
   const [payload, setPayload] = useState<CommunityLinkPayload | null>(null);
   const warmedHrefRef = useRef<string | null>(null);
-  const warmedSsoHrefRef = useRef<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -64,18 +63,6 @@ export default function CommunityLink({
     }).catch(() => undefined);
   }, [payload?.url]);
 
-  const warmCommunitySsoRoute = useCallback(() => {
-    const href = payload?.url;
-    if (!href || warmedSsoHrefRef.current === href || typeof window === "undefined") return;
-
-    warmCommunityRoute();
-    warmedSsoHrefRef.current = href;
-    void fetch(buildCommunitySsoLoginHref(href, window.location.origin), {
-      credentials: "include",
-      cache: "no-store",
-    }).catch(() => undefined);
-  }, [payload?.url, warmCommunityRoute]);
-
   useEffect(() => {
     if (!payload?.url || typeof window === "undefined") return undefined;
 
@@ -109,9 +96,9 @@ export default function CommunityLink({
       target={opensNewTab ? "_blank" : undefined}
       rel={opensNewTab ? "noopener noreferrer" : undefined}
       className="app-user-action inline-flex px-3 py-2 rounded-lg text-sm"
-      onPointerEnter={warmCommunitySsoRoute}
-      onFocus={warmCommunitySsoRoute}
-      onTouchStart={warmCommunitySsoRoute}
+      onPointerEnter={warmCommunityRoute}
+      onFocus={warmCommunityRoute}
+      onTouchStart={warmCommunityRoute}
       onClick={() => {
         logEvent("community_link_clicked", {
           module: moduleKey,

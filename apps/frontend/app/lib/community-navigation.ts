@@ -87,7 +87,10 @@ export function buildDiscourseSsoReturnPath(communityReturnPath: string): string
 }
 
 export function buildCommunitySsoLoginHref(returnPath?: string, currentOrigin = ""): string {
+  const normalizedReturnPath = normalizeCommunityReturnPath(returnPath, currentOrigin);
+  if (normalizedReturnPath === COMMUNITY_ROUTE) return COMMUNITY_ROUTE;
+
   const params = new URLSearchParams();
-  params.set("returnPath", normalizeCommunityReturnPath(returnPath, currentOrigin));
+  params.set("returnPath", normalizedReturnPath);
   return `${COMMUNITY_SSO_LOGIN_ROUTE}?${params.toString()}`;
 }
