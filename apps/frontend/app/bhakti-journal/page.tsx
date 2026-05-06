@@ -9,6 +9,7 @@ import {
   getBhaktiFields,
   type BhaktiFormState,
 } from "../config/module-fields";
+import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useBhaktiJournalEntries } from "../hooks/useBhaktiJournalEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
@@ -17,6 +18,7 @@ export default function BhaktiJournalPage() {
   const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useBhaktiJournalEntries();
   const [form, setForm] = useState<BhaktiFormState>(BHAKTI_INITIAL_FORM_STATE);
+  useCopilotPracticeDraft("bhakti", BHAKTI_INITIAL_FORM_STATE, setForm);
   const fields = getBhaktiFields(form, t);
 
   return (

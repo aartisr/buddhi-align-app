@@ -43,6 +43,7 @@ export default auth((req) => {
     pathname.startsWith("/api/auth") ||
     pathname.startsWith("/api/support") ||
     pathname.startsWith("/api/obs") ||
+    pathname.startsWith("/api/copilot/chat") ||
     pathname.startsWith("/api/community/link") ||
     pathname.startsWith("/api/community/discourse/sso") ||
     isPublicAutographProfileApiPath(pathname, req.method);

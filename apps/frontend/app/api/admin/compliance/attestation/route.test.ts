@@ -73,7 +73,7 @@ describe("/api/admin/compliance/attestation route", () => {
             subject: "service:frontend",
             issuer: "did:example:auditor",
             issuedAt: "2026-04-01T00:00:00.000Z",
-            validUntil: "2026-05-01T00:00:00.000Z",
+            validUntil: "2026-12-01T00:00:00.000Z",
             claimType: "control.auth.oidc",
             claims: {
               providerPolicy: "oidc-only",

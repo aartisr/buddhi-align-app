@@ -33,6 +33,7 @@ type SupportFormState = {
 const supportEmail = process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@foreverlotus.com";
 const titleMinLength = 8;
 const reportTextMinLength = 10;
+const queryTextMaxLength = 700;
 
 const categoryOptions: Array<{ value: SupportReportCategory; label: string; detail: string }> = [
   { value: "bug", label: "Something is broken", detail: "Errors, missing pages, forms, buttons, or unexpected behavior." },
@@ -73,6 +74,37 @@ const startingForm: SupportFormState = {
   consentToDiagnostics: true,
   company: "",
 };
+
+function readQueryText(searchParams: ReturnType<typeof useSearchParams>, key: string, maxLength = queryTextMaxLength): string {
+  return searchParams?.get(key)?.trim().slice(0, maxLength) ?? "";
+}
+
+function readPrefilledSupportForm(
+  searchParams: ReturnType<typeof useSearchParams>,
+  captured: SupportReportDiagnostics,
+): Partial<SupportFormState> {
+  const pageParam = readQueryText(searchParams, "page", 600);
+  const categoryParam = searchParams?.get("category");
+  const severityParam = searchParams?.get("severity");
+
+  return {
+    pageUrl: pageParam || captured.referrer || "",
+    title: readQueryText(searchParams, "title", 140),
+    tryingToDo: readQueryText(searchParams, "tryingToDo"),
+    actualBehavior: readQueryText(searchParams, "actualBehavior"),
+    expectedBehavior: readQueryText(searchParams, "expectedBehavior"),
+    category: normalizePrefillCategory(categoryParam),
+    severity: normalizePrefillSeverity(severityParam),
+  };
+}
+
+function normalizePrefillCategory(value: string | null | undefined): SupportReportCategory {
+  return categoryOptions.some((option) => option.value === value) ? value as SupportReportCategory : startingForm.category;
+}
+
+function normalizePrefillSeverity(value: string | null | undefined): SupportReportSeverity {
+  return severityOptions.some((option) => option.value === value) ? value as SupportReportSeverity : startingForm.severity;
+}
 
 function captureDiagnostics(): SupportReportDiagnostics {
   const connection = (navigator as Navigator & {
@@ -482,9 +514,8 @@ export default function SupportPageClient() {
 
   useEffect(() => {
     const captured = captureDiagnostics();
-    const pageParam = searchParams?.get("page")?.trim();
     setDiagnostics(captured);
-    setForm((current) => ({ ...current, pageUrl: pageParam || captured.referrer || "" }));
+    setForm((current) => ({ ...current, ...readPrefilledSupportForm(searchParams, captured) }));
   }, [searchParams]);
 
   const reportText = useMemo(

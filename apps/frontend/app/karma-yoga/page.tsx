@@ -8,6 +8,7 @@ import {
   KARMA_INITIAL_FORM_STATE,
   type KarmaFormState,
 } from "../config/module-fields";
+import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useKarmaYogaEntries } from "../hooks/useKarmaYogaEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
@@ -16,6 +17,7 @@ export default function KarmaYogaPage() {
   const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useKarmaYogaEntries();
   const [form, setForm] = useState<KarmaFormState>(KARMA_INITIAL_FORM_STATE);
+  useCopilotPracticeDraft("karma", KARMA_INITIAL_FORM_STATE, setForm);
   const fields = getKarmaFields(form, t);
 
   return (

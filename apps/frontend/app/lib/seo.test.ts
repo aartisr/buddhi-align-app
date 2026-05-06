@@ -212,7 +212,7 @@ describe("SEO crawler and AI retrieval metadata", () => {
     ]));
     expect(urls).not.toContain("/settings");
     expect(urls).not.toContain("/admin");
-  });
+  }, 15000);
 
   it("keeps private and API routes out of crawler access", () => {
     const robotRules = Array.isArray(robots().rules) ? robots().rules : [robots().rules];

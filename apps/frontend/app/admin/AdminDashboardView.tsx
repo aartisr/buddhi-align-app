@@ -8,6 +8,7 @@ import type { ObservabilityEventEntry } from "@/app/lib/server-observability";
 import type { SupportReportEntry } from "@/app/lib/support-reports";
 import type { IncidentFilter } from "./incident-operations";
 import AutographDiagnosticsPanel from "./AutographDiagnosticsPanel";
+import CopilotDiagnosticsPanel from "./CopilotDiagnosticsPanel";
 import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
 
 const t = (key: Parameters<typeof translate>[1], vars?: Record<string, string | number>) =>
@@ -676,6 +677,12 @@ export default function AdminDashboardView(props: AdminDashboardProps) {
       detail: `${props.observabilitySummary.importIssues24h} import / ${props.observabilitySummary.personalizationIssues24h} personalization`,
       tone: props.observabilitySummary.importIssues24h + props.observabilitySummary.personalizationIssues24h > 0 ? "warning" : "healthy",
     },
+    {
+      label: "Copilot",
+      value: props.observabilitySummary.copilotAnswers24h,
+      detail: `${props.observabilitySummary.copilotFailures24h} failures / ${props.observabilitySummary.copilotGuardrails24h} guardrails`,
+      tone: props.observabilitySummary.copilotFailures24h > 0 ? "warning" : "accent",
+    },
   ];
   const navItems: AdminNavItem[] = [
     { id: "admin-snapshot", label: "Snapshot", detail: "KPIs and posture", badge: reliabilityStatus },
@@ -736,6 +743,7 @@ export default function AdminDashboardView(props: AdminDashboardProps) {
           >
             <div className="app-admin-card-grid app-admin-card-grid--two">
               <AutographDiagnosticsPanel />
+              <CopilotDiagnosticsPanel />
               <ObservabilityAlertsCard
                 observabilitySummary={props.observabilitySummary}
                 autoCreatedIncidents={props.autoCreatedIncidents}

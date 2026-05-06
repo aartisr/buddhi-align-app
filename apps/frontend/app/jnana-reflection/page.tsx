@@ -9,6 +9,7 @@ import {
   JNANA_INITIAL_FORM_STATE,
   type JnanaFormState,
 } from "../config/module-fields";
+import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useJnanaReflectionEntries } from "../hooks/useJnanaReflectionEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
@@ -17,6 +18,7 @@ export default function JnanaReflectionPage() {
   const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useJnanaReflectionEntries();
   const [form, setForm] = useState<JnanaFormState>(JNANA_INITIAL_FORM_STATE);
+  useCopilotPracticeDraft("jnana", JNANA_INITIAL_FORM_STATE, setForm);
   const fields = getJnanaFields(form, t);
 
   return (

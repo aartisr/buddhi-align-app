@@ -8,6 +8,7 @@ import {
   getDharmaFields,
   type DharmaFormState,
 } from "../config/module-fields";
+import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useDharmaPlannerEntries } from "../hooks/useDharmaPlannerEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
@@ -16,6 +17,7 @@ export default function DharmaPlannerPage() {
   const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useDharmaPlannerEntries();
   const [form, setForm] = useState<DharmaFormState>(DHARMA_INITIAL_FORM_STATE);
+  useCopilotPracticeDraft("dharma", DHARMA_INITIAL_FORM_STATE, setForm);
   const fields = getDharmaFields(form, t);
 
   return (

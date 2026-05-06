@@ -9,6 +9,7 @@ import {
   getDhyanaFields,
   type DhyanaFormState,
 } from "../config/module-fields";
+import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useDhyanaMeditationEntries } from "../hooks/useDhyanaMeditationEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
@@ -17,6 +18,7 @@ export default function DhyanaMeditationPage() {
   const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useDhyanaMeditationEntries();
   const [form, setForm] = useState<DhyanaFormState>(DHYANA_INITIAL_FORM_STATE);
+  useCopilotPracticeDraft("dhyana", DHYANA_INITIAL_FORM_STATE, setForm);
   const fields = getDhyanaFields(form, t);
 
   return (

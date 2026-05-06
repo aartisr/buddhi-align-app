@@ -17,6 +17,7 @@ import BuddhiAlignLogo from "./BuddhiAlignLogo";
 import PlatinumBadge from "./PlatinumBadge";
 import PreferencesMenu from "./PreferencesMenu";
 import CommunityLink from "./CommunityLink";
+import BuddhiAlignCopilot from "./copilot/BuddhiAlignCopilot";
 import { MODULE_CATALOG, type TranslationKey } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 import {
@@ -723,6 +724,7 @@ function ModuleLayoutView({
             />
           ) : null}
         </main>
+        <BuddhiAlignCopilot />
       </div>
       <div className="app-backdrop-panel" />
     </div>

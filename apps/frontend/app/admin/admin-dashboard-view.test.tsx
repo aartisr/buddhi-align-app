@@ -17,6 +17,10 @@ vi.mock("./AutographDiagnosticsPanel", () => ({
   default: () => <article data-testid="diagnostics-panel" />,
 }));
 
+vi.mock("./CopilotDiagnosticsPanel", () => ({
+  default: () => <article data-testid="copilot-diagnostics-panel" />,
+}));
+
 import AdminDashboardView from "./AdminDashboardView";
 
 const incident = {
@@ -39,6 +43,9 @@ function makeProps() {
       authDenials24h: 2,
       importIssues24h: 0,
       personalizationIssues24h: 1,
+      copilotAnswers24h: 3,
+      copilotFailures24h: 0,
+      copilotGuardrails24h: 1,
       weeklyAuthDenials: [{ day: "04/25", count: 2 }],
       weeklyImportIssues: [{ day: "04/25", count: 0 }],
       alerts: [
@@ -125,6 +132,7 @@ describe("AdminDashboardView", () => {
     expect(screen.getAllByText(/Support reports/i).length).toBeGreaterThan(0);
     expect(screen.getByTestId("profile-admin-panel")).toBeInTheDocument();
     expect(screen.getByTestId("diagnostics-panel")).toBeInTheDocument();
+    expect(screen.getByTestId("copilot-diagnostics-panel")).toBeInTheDocument();
     expect(profileAdminSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         initialProfiles: [

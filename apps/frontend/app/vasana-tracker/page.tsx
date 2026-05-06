@@ -9,6 +9,7 @@ import {
   type VasanaFormState,
   VASANA_INITIAL_FORM_STATE,
 } from "../config/module-fields";
+import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useVasanaTrackerEntries } from "../hooks/useVasanaTrackerEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
@@ -17,6 +18,7 @@ export default function VasanaTrackerPage() {
   const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useVasanaTrackerEntries();
   const [form, setForm] = useState<VasanaFormState>(VASANA_INITIAL_FORM_STATE);
+  useCopilotPracticeDraft("vasana", VASANA_INITIAL_FORM_STATE, setForm);
   const fields = getVasanaFields(form, t);
 
   return (

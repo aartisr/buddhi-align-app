@@ -1,6 +1,6 @@
 import type { ObservabilityEventEntry } from "./server-observability";
 
-export type ObservabilityAlertCategory = "auth" | "data" | "personalization";
+export type ObservabilityAlertCategory = "auth" | "copilot" | "data" | "personalization";
 
 export interface ObservabilityAlert {
   key: string;
@@ -22,6 +22,9 @@ export interface ObservabilitySummary {
   authDenials24h: number;
   importIssues24h: number;
   personalizationIssues24h: number;
+  copilotAnswers24h: number;
+  copilotFailures24h: number;
+  copilotGuardrails24h: number;
   weeklyAuthDenials: WeeklyTrendPoint[];
   weeklyImportIssues: WeeklyTrendPoint[];
   alerts: ObservabilityAlert[];
@@ -70,6 +73,18 @@ function isPersonalizationIssueEvent(name: string): boolean {
     name.startsWith("personalization_")
     && (name.includes("empty") || name.includes("failed") || name.includes("error"))
   );
+}
+
+function isCopilotAnswerEvent(name: string): boolean {
+  return name === "copilot_answer_completed";
+}
+
+function isCopilotFailureEvent(name: string): boolean {
+  return name === "copilot_answer_failed";
+}
+
+function isCopilotGuardrailEvent(name: string): boolean {
+  return name === "copilot_guardrail_triggered";
 }
 
 function formatUtcDayLabel(ts: number): string {
@@ -122,15 +137,28 @@ function classifyIssueCounts(events: ObservabilityEventEntry[]) {
   let authDenials24h = 0;
   let importIssues24h = 0;
   let personalizationIssues24h = 0;
+  let copilotAnswers24h = 0;
+  let copilotFailures24h = 0;
+  let copilotGuardrails24h = 0;
 
   for (const event of events) {
     const name = getNormalizedName(event);
     if (isAuthDenialEvent(name)) authDenials24h++;
     if (isImportIssueEvent(name)) importIssues24h++;
     if (isPersonalizationIssueEvent(name)) personalizationIssues24h++;
+    if (isCopilotAnswerEvent(name)) copilotAnswers24h++;
+    if (isCopilotFailureEvent(name)) copilotFailures24h++;
+    if (isCopilotGuardrailEvent(name)) copilotGuardrails24h++;
   }
 
-  return { authDenials24h, importIssues24h, personalizationIssues24h };
+  return {
+    authDenials24h,
+    importIssues24h,
+    personalizationIssues24h,
+    copilotAnswers24h,
+    copilotFailures24h,
+    copilotGuardrails24h,
+  };
 }
 
 export function buildObservabilitySummary(
@@ -139,7 +167,14 @@ export function buildObservabilitySummary(
 ): ObservabilitySummary {
   const recentEvents = allEvents.filter((event) => isRecent(event.at, nowMs));
   const { weeklyAuthDenials, weeklyImportIssues } = buildWeeklyTrends(allEvents, nowMs);
-  const { authDenials24h, importIssues24h, personalizationIssues24h } = classifyIssueCounts(recentEvents);
+  const {
+    authDenials24h,
+    importIssues24h,
+    personalizationIssues24h,
+    copilotAnswers24h,
+    copilotFailures24h,
+    copilotGuardrails24h,
+  } = classifyIssueCounts(recentEvents);
 
   const authWarn = parseThreshold("OBS_ALERT_AUTH_DENIALS_WARN", 5);
   const authCritical = parseThreshold("OBS_ALERT_AUTH_DENIALS_CRITICAL", 10);
@@ -147,6 +182,8 @@ export function buildObservabilitySummary(
   const importCritical = parseThreshold("OBS_ALERT_IMPORT_ISSUES_CRITICAL", 6);
   const personalizationWarn = parseThreshold("OBS_ALERT_PERSONALIZATION_ISSUES_WARN", 4);
   const personalizationCritical = parseThreshold("OBS_ALERT_PERSONALIZATION_ISSUES_CRITICAL", 8);
+  const copilotFailureWarn = parseThreshold("OBS_ALERT_COPILOT_FAILURES_WARN", 3);
+  const copilotFailureCritical = parseThreshold("OBS_ALERT_COPILOT_FAILURES_CRITICAL", 8);
 
   const alerts: ObservabilityAlert[] = [];
 
@@ -216,11 +253,36 @@ export function buildObservabilitySummary(
     });
   }
 
+  if (copilotFailures24h >= copilotFailureCritical) {
+    alerts.push({
+      key: "copilot-unavailable",
+      level: "critical",
+      category: "copilot",
+      title: "Copilot unavailable",
+      detail: `${copilotFailures24h} copilot failures in last 24h (critical threshold ${copilotFailureCritical}).`,
+      owner: "AI Experience",
+      runbook: "RB-OBS-COPILOT-04",
+    });
+  } else if (copilotFailures24h >= copilotFailureWarn) {
+    alerts.push({
+      key: "copilot-failures-rising",
+      level: "warning",
+      category: "copilot",
+      title: "Copilot failures rising",
+      detail: `${copilotFailures24h} copilot failures in last 24h (warning threshold ${copilotFailureWarn}).`,
+      owner: "AI Experience",
+      runbook: "RB-OBS-COPILOT-04",
+    });
+  }
+
   return {
     last24hEvents: recentEvents.length,
     authDenials24h,
     importIssues24h,
     personalizationIssues24h,
+    copilotAnswers24h,
+    copilotFailures24h,
+    copilotGuardrails24h,
     weeklyAuthDenials,
     weeklyImportIssues,
     alerts,
