@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { unstable_cache } from "next/cache";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -14,6 +15,15 @@ import { absoluteUrl, buildPageMetadata, siteName } from "@/app/lib/seo";
 
 export const revalidate = 300;
 
+const getCachedCommunityCategoryData = unstable_cache(
+  (categoryPathKey: string) => {
+    const categoryPath = categoryPathKey.split("/").filter(Boolean);
+    return getCommunityCategoryData(categoryPath);
+  },
+  ["community-category"],
+  { revalidate },
+);
+
 type CommunityCategoryPageProps = {
   params: {
     categoryPath?: string[];
@@ -22,6 +32,10 @@ type CommunityCategoryPageProps = {
 
 function buildCategoryPath(categoryPath: readonly string[] = []): string {
   return `/community/c/${categoryPath.map((segment) => encodeURIComponent(segment)).join("/")}`;
+}
+
+function buildCategoryPathKey(categoryPath: readonly string[] = []): string {
+  return categoryPath.join("/");
 }
 
 function fitDescription(value: string, maxLength = 170): string {
@@ -92,7 +106,7 @@ function TopicRow({ topic }: { topic: CommunityTopicSummary }) {
 
 export async function generateMetadata({ params }: CommunityCategoryPageProps): Promise<Metadata> {
   const categoryPath = params.categoryPath ?? [];
-  const data = await getCommunityCategoryData(categoryPath);
+  const data = await getCachedCommunityCategoryData(buildCategoryPathKey(categoryPath));
   const path = categoryPath.length > 0 ? buildCategoryPath(categoryPath) : "/community";
 
   if (!data) {
@@ -189,7 +203,7 @@ function buildCategoryJsonLd(data: NonNullable<Awaited<ReturnType<typeof getComm
 }
 
 export default async function CommunityCategoryPage({ params }: CommunityCategoryPageProps) {
-  const data = await getCommunityCategoryData(params.categoryPath ?? []);
+  const data = await getCachedCommunityCategoryData(buildCategoryPathKey(params.categoryPath ?? []));
   if (!data) notFound();
   const path = buildCategoryPath(params.categoryPath ?? []);
 

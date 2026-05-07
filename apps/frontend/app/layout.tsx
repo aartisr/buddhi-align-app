@@ -29,9 +29,11 @@ import {
   siteName,
   siteUrl,
 } from "./lib/seo";
+import { resolveDefaultTheme } from "./lib/theme";
 
 const title = translate(DEFAULT_LOCALE, "app.title");
 const description = translate(DEFAULT_LOCALE, "app.description");
+const defaultTheme = resolveDefaultTheme();
 
 export const metadata: Metadata = {
   ...buildPageMetadata({
@@ -111,7 +113,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#2f5d50",
+  themeColor: "#244d42",
   colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
@@ -123,7 +125,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme={defaultTheme}>
       <body className="antialiased">
         <JsonLd data={buildSiteJsonLd({ name: title, description })} />
         <h1 className="sr-only">{title}</h1>

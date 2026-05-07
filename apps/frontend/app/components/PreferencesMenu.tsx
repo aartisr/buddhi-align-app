@@ -6,11 +6,14 @@ import { useSession } from "next-auth/react";
 
 import { useI18n } from "../i18n/provider";
 import type { Locale } from "../i18n/config";
+import { THEME_OPTIONS, type ThemeName, normalizeThemeName, resolveDefaultTheme } from "../lib/theme";
 import {
   fetchPreferencesFromDatabase,
   readMusicControlVisibilityPreference,
+  readStoredThemePreference,
   savePreferencesToDatabase,
   writeMusicControlVisibilityPreference,
+  writeStoredThemePreference,
 } from "../preferences";
 
 type PreferencesMenuProps = {
@@ -20,11 +23,13 @@ type PreferencesMenuProps = {
 type PreferencesPanelProps = {
   locale: Locale;
   locales: Array<{ code: string; label: string }>;
+  theme: ThemeName;
   musicControlVisible: boolean;
   isSaving: boolean;
   showTrigger: boolean;
   t: ReturnType<typeof useI18n>["t"];
   handleLocaleChange: (nextLocale: Locale) => void;
+  handleThemeChange: (nextTheme: ThemeName) => void;
   handleMusicVisibility: (nextValue: boolean) => void;
   closeOnSettingsClick: () => void;
 };
@@ -32,11 +37,13 @@ type PreferencesPanelProps = {
 function PreferencesPanel({
   locale,
   locales,
+  theme,
   musicControlVisible,
   isSaving,
   showTrigger,
   t,
   handleLocaleChange,
+  handleThemeChange,
   handleMusicVisibility,
   closeOnSettingsClick,
 }: PreferencesPanelProps) {
@@ -65,6 +72,25 @@ function PreferencesPanel({
             ))}
           </select>
           {isSaving ? <span className="app-inline-spinner app-preferences-spinner" aria-hidden="true" /> : null}
+        </div>
+      </div>
+
+      <div className="app-preferences-row">
+        <label htmlFor="prefs-theme" className="app-preferences-label">Theme</label>
+        <div className="app-preferences-field-wrap">
+          <select
+            id="prefs-theme"
+            className="app-preferences-select"
+            value={theme}
+            disabled={isSaving}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => handleThemeChange(event.target.value as ThemeName)}
+          >
+            {THEME_OPTIONS.map((option) => (
+              <option key={option.code} value={option.code}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -118,6 +144,7 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
   const { locale, locales, setLocale, t } = useI18n();
   const { status } = useSession();
   const [open, setOpen] = useState(!showTrigger);
+  const [theme, setTheme] = useState<ThemeName>(resolveDefaultTheme());
   const [musicControlVisible, setMusicControlVisible] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -130,6 +157,7 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
 
   useEffect(() => {
     setMusicControlVisible(readMusicControlVisibilityPreference());
+    setTheme(normalizeThemeName(readStoredThemePreference()) ?? resolveDefaultTheme());
   }, []);
 
   useEffect(() => {
@@ -149,6 +177,14 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
         if (typeof preferences.musicControlVisible === "boolean") {
           setMusicControlVisible(preferences.musicControlVisible);
           writeMusicControlVisibilityPreference(preferences.musicControlVisible);
+        }
+
+        if (preferences.theme) {
+          const normalizedTheme = normalizeThemeName(preferences.theme);
+          if (normalizedTheme) {
+            setTheme(normalizedTheme);
+            writeStoredThemePreference(normalizedTheme);
+          }
         }
       } catch (error) {
         console.error("Failed to load preferences", error);
@@ -193,6 +229,7 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
       void savePreferencesToDatabase({
         locale,
         musicControlVisible: nextValue,
+        theme,
       })
         .catch((error) => {
           console.error("Failed to persist music preference", error);
@@ -211,9 +248,30 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
       void savePreferencesToDatabase({
         locale: nextLocale,
         musicControlVisible,
+        theme,
       })
         .catch((error) => {
           console.error("Failed to persist locale preference", error);
+        })
+        .finally(() => {
+          setIsSaving(false);
+        });
+    }
+  };
+
+  const handleThemeChange = (nextTheme: ThemeName) => {
+    setTheme(nextTheme);
+    writeStoredThemePreference(nextTheme);
+
+    if (status === "authenticated") {
+      setIsSaving(true);
+      void savePreferencesToDatabase({
+        locale,
+        musicControlVisible,
+        theme: nextTheme,
+      })
+        .catch((error) => {
+          console.error("Failed to persist theme preference", error);
         })
         .finally(() => {
           setIsSaving(false);
@@ -239,11 +297,13 @@ export default function PreferencesMenu({ showTrigger = true }: PreferencesMenuP
         <PreferencesPanel
           locale={locale}
           locales={locales}
+          theme={theme}
           musicControlVisible={musicControlVisible}
           isSaving={isSaving}
           showTrigger={showTrigger}
           t={t}
           handleLocaleChange={handleLocaleChange}
+          handleThemeChange={handleThemeChange}
           handleMusicVisibility={handleMusicVisibility}
           closeOnSettingsClick={() => {
             if (showTrigger) setOpen(false);

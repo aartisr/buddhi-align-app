@@ -8,22 +8,20 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      heading: ['Playfair Display', 'serif'],
-      body: ['Inter', 'Nunito', 'Open Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-      sans: ['Inter', 'Nunito', 'Open Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      heading: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      body: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
     },
     extend: {
       colors: {
-        primary: '#4B0082', // deep indigo
-        accent: '#8200da',
-        gold: '#FFD700',
-        emerald: '#2E8B57',
-        rose: '#C72C6A',
-        lavender: '#B39DDB',
-        sky: '#87CEEB',
-        sand: '#F6F8FC',
-        background: '#F6F8FC',
-        surface: '#fff',
+        primary: 'var(--primary)',
+        accent: 'var(--accent)',
+        gold: 'var(--gold)',
+        emerald: 'var(--emerald)',
+        rose: 'var(--rose)',
+        background: 'var(--background)',
+        surface: 'var(--surface)',
+        foreground: 'var(--foreground)',
         zinc: {
           900: '#18181b',
           800: '#27272a',

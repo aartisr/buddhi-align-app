@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../autograph-exchange"
+		}
+	],
+	"settings": {
+		"chat.tools.terminal.autoApprove": {
+			"git commit": true,
+			"git push": true,
+			"npm --workspace=apps/frontend run test": true,
+			"npx eslint": true,
+			"npm run -s checklist:verify": true,
+			"npm run -s perf:ci": true
+		}
+	}
+}

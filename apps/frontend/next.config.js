@@ -31,6 +31,20 @@ const crawlerUtilityHeaders = [
       { key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=3600' },
     ],
   },
+  {
+    source: '/llms.txt',
+    headers: [
+      { key: 'Cache-Control', value: 'public, max-age=1800, s-maxage=1800, stale-while-revalidate=86400' },
+      { key: 'X-Content-Type-Options', value: 'nosniff' },
+    ],
+  },
+  {
+    source: '/llms-full.txt',
+    headers: [
+      { key: 'Cache-Control', value: 'public, max-age=1800, s-maxage=1800, stale-while-revalidate=86400' },
+      { key: 'X-Content-Type-Options', value: 'nosniff' },
+    ],
+  },
 ];
 
 /** OWASP-recommended HTTP security headers */
@@ -41,6 +55,8 @@ const securityHeaders = [
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   // Control referrer information included with requests
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  // Expose machine-readable discovery endpoints for search and AI agents
+  { key: 'Link', value: '</llms.txt>; rel="alternate"; type="text/plain", </sitemap.xml>; rel="sitemap"; type="application/xml"' },
   // DNS prefetching for performance
   { key: 'X-DNS-Prefetch-Control', value: 'on' },
   // Restrict browser feature access
@@ -80,6 +96,13 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  reactStrictMode: true,
+  poweredByHeader: false,
+  compress: true,
+  productionBrowserSourceMaps: false,
+  experimental: {
+    optimizePackageImports: ['@buddhi-align/shared-ui', 'react-apexcharts', 'apexcharts'],
+  },
   // Attach security headers to all routes
   async headers() {
     return [

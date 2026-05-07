@@ -37,17 +37,17 @@
     card.style.cssText = [
       "box-sizing:border-box",
       "max-width:420px",
-      "border:1px solid rgba(47,93,80,.22)",
+      "border:1px solid rgba(36,77,66,.22)",
       "border-radius:12px",
       "padding:16px",
       "background:#fffdf7",
       "color:#1f352d",
       "font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif",
-      "box-shadow:0 12px 30px rgba(47,93,80,.12)"
+      "box-shadow:0 12px 30px rgba(36,77,66,.12)"
     ].join(";");
 
     var heading = document.createElement("h3");
-    heading.style.cssText = "margin:0 0 8px;font-size:18px;line-height:1.3;color:#2f5d50;";
+    heading.style.cssText = "margin:0 0 8px;font-size:18px;line-height:1.3;color:#244d42;";
     appendText(heading, title);
 
     var copy = document.createElement("p");
@@ -65,7 +65,7 @@
       "min-height:40px",
       "padding:0 14px",
       "border-radius:10px",
-      "background:#2f5d50",
+      "background:#244d42",
       "color:#fff",
       "font-size:14px",
       "font-weight:700",

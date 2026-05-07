@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { auth } from "@/auth";
 import { createDataProvider } from "@buddhi-align/data-access";
+import { isThemeName, type ThemeName } from "@/app/lib/theme";
 
 type PreferenceEntry = {
   id: string;
   userId?: string;
   locale?: string;
   musicControlVisible?: boolean;
+  theme?: ThemeName;
   updatedAt?: string;
 };
 
@@ -41,6 +43,25 @@ function toPublicPreferences(entry: PreferenceEntry | null) {
       typeof entry.musicControlVisible === "boolean"
         ? entry.musicControlVisible
         : false,
+    theme: entry.theme,
+  };
+}
+
+function parsePreferenceInput(body: Record<string, unknown>) {
+  const locale = typeof body.locale === "string" ? body.locale : undefined;
+  const musicControlVisible =
+    typeof body.musicControlVisible === "boolean"
+      ? body.musicControlVisible
+      : undefined;
+  const theme = typeof body.theme === "string" && isThemeName(body.theme)
+    ? body.theme
+    : undefined;
+
+  return {
+    locale,
+    musicControlVisible,
+    theme,
+    hasAny: locale !== undefined || musicControlVisible !== undefined || theme !== undefined,
   };
 }
 
@@ -84,13 +105,9 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const locale = typeof body.locale === "string" ? body.locale : undefined;
-  const musicControlVisible =
-    typeof body.musicControlVisible === "boolean"
-      ? body.musicControlVisible
-      : undefined;
+  const { locale, musicControlVisible, theme, hasAny } = parsePreferenceInput(body);
 
-  if (locale === undefined && musicControlVisible === undefined) {
+  if (!hasAny) {
     return NextResponse.json(
       { error: "At least one preference field is required" },
       { status: 400 },
@@ -112,6 +129,7 @@ export async function PUT(req: NextRequest) {
     if (musicControlVisible !== undefined) {
       patch.musicControlVisible = musicControlVisible;
     }
+    if (theme !== undefined) patch.theme = theme;
 
     const saved = latest
       ? await provider.update<PreferenceEntry>(PREFERENCES_MODULE, latest.id, patch, { userId })

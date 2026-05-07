@@ -7,6 +7,11 @@ import {
   type PublicPageProfile,
 } from "./public-content";
 import { getSiteUrl } from "./site-url";
+import { THEME_OPTIONS } from "./theme";
+import {
+  themedOpenGraphImagePath,
+  themedTwitterImagePath,
+} from "./social-image-theme";
 
 type PageMetadataOptions = {
   title: string;
@@ -171,6 +176,16 @@ export function buildPageMetadata({
 }: PageMetadataOptions): Metadata {
   const canonicalUrl = absoluteUrl(path);
   const pageProfile = publicPageProfileByPath.get(path);
+  const themeVariantImages = THEME_OPTIONS.map((theme) => ({
+    url: themedOpenGraphImagePath(theme.code),
+    width: 1200,
+    height: 630,
+    alt: `${imageAlt} (${theme.label} theme)`,
+  }));
+  const themeVariantTwitterImages = THEME_OPTIONS.map((theme) => ({
+    url: themedTwitterImagePath(theme.code),
+    alt: `${imageAlt} (${theme.label} theme)`,
+  }));
   const mergedKeywords = uniqueValues([
     ...siteKeywords,
     ...(pageProfile?.keywords ?? []),
@@ -218,6 +233,7 @@ export function buildPageMetadata({
           height: 630,
           alt: imageAlt,
         },
+        ...themeVariantImages,
       ],
       videos: video
         ? [
@@ -240,6 +256,7 @@ export function buildPageMetadata({
           url: imagePath,
           alt: imageAlt,
         },
+        ...themeVariantTwitterImages,
       ],
     },
   };

@@ -13,6 +13,61 @@ import {
   homepageHighlights,
   publicPageProfiles,
 } from "./lib/public-content";
+import { THEME_OPTIONS } from "./lib/theme";
+import { themedOpenGraphImagePath, themedTwitterImagePath } from "./lib/social-image-theme";
+
+type ThemePreviewCopy = Record<(typeof THEME_OPTIONS)[number]["code"], string>;
+
+const THEME_PREVIEW_COPY: ThemePreviewCopy = {
+  sattva: "Forest calm and classic Buddhi Align look.",
+  sunrise: "Warm saffron palette for daytime momentum.",
+  midnight: "Low-glare dark canvas for evening reflection.",
+};
+
+function ThemeGallery({ themePreviewCopy }: { themePreviewCopy: ThemePreviewCopy }) {
+  return (
+    <section className="app-theme-gallery max-w-5xl mx-auto mb-6" aria-labelledby="theme-gallery-heading">
+      <div className="app-theme-gallery-header">
+        <p className="app-guided-flow-kicker">Personalize instantly</p>
+        <h2 id="theme-gallery-heading" className="app-panel-title text-lg sm:text-xl font-bold leading-tight">
+          Switch themes in one tap and preview social cards
+        </h2>
+        <p className="app-copy-soft text-sm mt-1">
+          Pick a look for your sessions, then open matching OG and X image previews for campaigns and AI/search snippets.
+        </p>
+      </div>
+      <div className="app-theme-gallery-grid">
+        {THEME_OPTIONS.map((theme) => (
+          <article key={theme.code} className={`app-theme-card app-theme-card--${theme.code}`}>
+            <h3>{theme.label}</h3>
+            <p>{themePreviewCopy[theme.code]}</p>
+            <div className="app-theme-card-actions">
+              <Link href={`/?theme=${theme.code}`} className="app-guided-flow-link">
+                Use this theme
+              </Link>
+              <a
+                href={themedOpenGraphImagePath(theme.code)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="app-guided-flow-link"
+              >
+                Open OG preview
+              </a>
+              <a
+                href={themedTwitterImagePath(theme.code)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="app-guided-flow-link"
+              >
+                Open X preview
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export default function HomePageClient() {
   const { t } = useI18n();
@@ -127,6 +182,8 @@ export default function HomePageClient() {
         shareCta={t("invite.share")}
         copiedLabel={t("invite.copied")}
       />
+
+      <ThemeGallery themePreviewCopy={THEME_PREVIEW_COPY} />
 
       <section className="app-public-story max-w-5xl mx-auto mb-6" aria-labelledby="why-buddhi-align-spreads">
         <div className="app-public-story-header">

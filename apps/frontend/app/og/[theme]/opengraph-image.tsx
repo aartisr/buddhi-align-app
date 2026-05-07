@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { getSocialThemePalette, resolveSocialImageTheme } from "@/app/lib/social-image-theme";
 
 export const size = {
   width: 1200,
@@ -7,7 +8,10 @@ export const size = {
 
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+export default function OpenGraphImage({ params }: { params: { theme: string } }) {
+  const theme = resolveSocialImageTheme(params.theme);
+  const palette = getSocialThemePalette(theme);
+
   return new ImageResponse(
     (
       <div
@@ -15,8 +19,8 @@ export default function OpenGraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          background: "#fbfdf8",
-          color: "#17362d",
+          background: palette.panelBackground,
+          color: palette.panelText,
           fontFamily: "Avenir Next, Inter, Arial, sans-serif",
         }}
       >
@@ -28,7 +32,7 @@ export default function OpenGraphImage() {
             flexDirection: "column",
             justifyContent: "space-between",
             padding: "54px 42px",
-            background: "linear-gradient(160deg, #174437 0%, #244d42 62%, #a85b6a 100%)",
+            background: palette.heroGradient,
             color: "#fffaf0",
           }}
         >
@@ -47,7 +51,7 @@ export default function OpenGraphImage() {
               <span>Buddhi</span>
               <span>Align</span>
             </div>
-            <div style={{ width: 112, height: 8, borderRadius: 99, background: "#dec48f" }} />
+            <div style={{ width: 112, height: 8, borderRadius: 99, background: palette.accent }} />
           </div>
           <div style={{ fontSize: 24, opacity: 0.95 }}>buddhi-align.foreverlotus.com</div>
         </div>
@@ -58,6 +62,7 @@ export default function OpenGraphImage() {
             flexDirection: "column",
             justifyContent: "space-between",
             padding: "54px 56px",
+            background: palette.canvasGradient,
           }}
         >
           <div style={{ display: "flex", gap: 12 }}>
@@ -67,9 +72,9 @@ export default function OpenGraphImage() {
                 style={{
                   padding: "10px 18px",
                   borderRadius: 999,
-                  border: "2px solid rgba(36, 77, 66, 0.22)",
+                  border: `2px solid ${palette.chipBorder}`,
                   background: "#ffffff",
-                  color: "#244d42",
+                  color: palette.chipText,
                   fontSize: 22,
                   fontWeight: 800,
                 }}
@@ -93,11 +98,11 @@ export default function OpenGraphImage() {
               <span>Ancient wisdom,</span>
               <span>daily practice analytics.</span>
             </div>
-            <div style={{ fontSize: 28, lineHeight: 1.35, color: "#31463f", maxWidth: 640 }}>
+            <div style={{ fontSize: 28, lineHeight: 1.35, color: palette.bodyText, maxWidth: 640 }}>
               Dharma planning, meditation, service, gratitude, self-inquiry, Autograph Exchange, community, and gentle growth insights in one calm app.
             </div>
           </div>
-          <div style={{ display: "flex", gap: 14, color: "#6f4c16", fontSize: 23, fontWeight: 800 }}>
+          <div style={{ display: "flex", gap: 14, color: palette.brandAccent, fontSize: 23, fontWeight: 800 }}>
             <span>#spiritualpractice</span>
             <span>#mindfulness</span>
             <span>#dailyreflection</span>

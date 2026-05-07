@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { unstable_cache } from "next/cache";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -12,6 +13,12 @@ import {
 import { absoluteUrl, buildPageMetadata, siteName } from "@/app/lib/seo";
 
 export const revalidate = 300;
+
+const getCachedCommunityTopicData = unstable_cache(
+  (slug: string, id: string) => getCommunityTopicData(slug, id),
+  ["community-topic"],
+  { revalidate },
+);
 
 type CommunityTopicPageProps = {
   params: {
@@ -74,7 +81,7 @@ function PostExcerpt({ post }: { post: CommunityPostSummary }) {
 }
 
 export async function generateMetadata({ params }: CommunityTopicPageProps): Promise<Metadata> {
-  const data = await getCommunityTopicData(params.slug, params.id);
+  const data = await getCachedCommunityTopicData(params.slug, params.id);
   const path = buildTopicPath(params.slug, params.id);
 
   if (!data) {
@@ -183,7 +190,7 @@ function buildTopicJsonLd(data: NonNullable<Awaited<ReturnType<typeof getCommuni
 }
 
 export default async function CommunityTopicPage({ params }: CommunityTopicPageProps) {
-  const data = await getCommunityTopicData(params.slug, params.id);
+  const data = await getCachedCommunityTopicData(params.slug, params.id);
   if (!data) notFound();
 
   const createdAt = formatDate(data.topic.createdAt);

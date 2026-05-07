@@ -7,7 +7,7 @@
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#fcfefb",
-  "theme_color": "#2f5d50",
+  "theme_color": "#244d42",
   "categories": ["health", "lifestyle", "productivity"],
   "lang": "en",
   "dir": "ltr",

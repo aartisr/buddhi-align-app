@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { unstable_cache } from "next/cache";
 
 import ModuleLayout from "../components/ModuleLayout";
 import JsonLd from "../components/JsonLd";
@@ -11,6 +12,12 @@ import { publicPageProfileByPath } from "../lib/public-content";
 import { absoluteUrl } from "../lib/seo";
 
 export const revalidate = 300;
+
+const getCachedCommunityOverviewData = unstable_cache(
+  () => getCommunityOverviewData(),
+  ["community-overview"],
+  { revalidate },
+);
 
 function buildCommunityJsonLd(categories: CommunityCategoryCard[]) {
   const profile = publicPageProfileByPath.get("/community");
@@ -71,7 +78,7 @@ function CategoryCard({ category }: { category: CommunityCategoryCard }) {
 }
 
 export default async function CommunityPage() {
-  const data = await getCommunityOverviewData();
+  const data = await getCachedCommunityOverviewData();
 
   return (
     <ModuleLayout titleKey="community.title">

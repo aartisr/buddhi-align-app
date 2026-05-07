@@ -4,6 +4,8 @@ import { buildCommunityUrl } from "@/app/lib/community-links";
 import { MODULE_CATEGORY_SLUGS, type CommunityModuleKey } from "./module-map";
 
 const COMMUNITY_REVALIDATE_SECONDS = 300;
+const MAX_CATEGORY_TOPICS = 24;
+const MAX_TOPIC_PREVIEW_POSTS = 12;
 const DEFAULT_COMMUNITY_DESCRIPTION =
   "A shared Buddhi Align discussion space for practice notes, questions, and steady reflection.";
 
@@ -456,7 +458,14 @@ async function fetchDiscourseCategories(
 function getSafeCategoryPath(categoryPath: readonly string[]): string[] | null {
   const normalized = categoryPath.map((segment) => normalizeSlug(segment));
   if (normalized.some((segment) => !segment)) return null;
-  return normalized as string[];
+  const safePath = normalized as string[];
+  const lastSegment = safePath.at(-1);
+
+  if (safePath.length > 1 && lastSegment && /^\d+$/.test(lastSegment)) {
+    return safePath.slice(0, -1);
+  }
+
+  return safePath;
 }
 
 function buildCategoryJsonPath(category: CommunityCategoryCard, parentSlug?: string): string | undefined {
@@ -503,6 +512,7 @@ async function fetchCategoryTopics(
   const payload = await fetchDiscourseJson<RawDiscourseCategoryTopicsResponse>(config, categoryPath);
   return (payload?.topic_list?.topics ?? [])
     .filter((topic) => topic.archetype !== "private_message")
+    .slice(0, MAX_CATEGORY_TOPICS)
     .map((topic) => mapTopicToSummary(topic, config))
     .filter((topic): topic is CommunityTopicSummary => Boolean(topic));
 }
@@ -642,14 +652,16 @@ export async function getCommunityTopicData(
   }
 
   const resolvedSlug = normalizeSlug(payload.slug) ?? slug;
-  const posts = (payload.post_stream?.posts ?? []).map((post) => ({
-    id: post.id,
-    username: post.username ?? "community-member",
-    name: post.name ?? undefined,
-    postNumber: post.post_number,
-    createdAt: post.created_at,
-    excerpt: clampText(post.cooked, 900),
-  }));
+  const posts = (payload.post_stream?.posts ?? [])
+    .slice(0, MAX_TOPIC_PREVIEW_POSTS)
+    .map((post) => ({
+      id: post.id,
+      username: post.username ?? "community-member",
+      name: post.name ?? undefined,
+      postNumber: post.post_number,
+      createdAt: post.created_at,
+      excerpt: clampText(post.cooked, 900),
+    }));
 
   return {
     status: "ready",

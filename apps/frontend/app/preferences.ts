@@ -1,10 +1,12 @@
 export const MUSIC_CONTROL_VISIBLE_KEY = "buddhi-align-music-control-visible";
 export const LOCALE_STORAGE_KEY = "buddhi-align-locale";
+export const THEME_STORAGE_KEY = "buddhi-align-theme";
 export const PREFERENCES_UPDATED_EVENT = "buddhi-align-preferences-updated";
 
 export interface UserPreferences {
   locale?: string;
   musicControlVisible?: boolean;
+  theme?: string;
 }
 
 export function readMusicControlVisibilityPreference(): boolean {
@@ -28,6 +30,17 @@ export function readStoredLocalePreference(): string | null {
 export function writeStoredLocalePreference(locale: string): void {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+  window.dispatchEvent(new CustomEvent(PREFERENCES_UPDATED_EVENT));
+}
+
+export function readStoredThemePreference(): string | null {
+  if (typeof window === "undefined") return null;
+  return window.localStorage.getItem(THEME_STORAGE_KEY);
+}
+
+export function writeStoredThemePreference(theme: string): void {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(THEME_STORAGE_KEY, theme);
   window.dispatchEvent(new CustomEvent(PREFERENCES_UPDATED_EVENT));
 }
 

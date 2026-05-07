@@ -127,6 +127,99 @@ describe("discourse-api community data", () => {
     ]);
   });
 
+});
+
+describe("discourse-api community resilience", () => {
+  it("accepts native category paths that include a trailing Discourse id", async () => {
+    const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith("/categories.json")) {
+        return jsonResponse({
+          category_list: {
+            categories: [
+              { id: 10, name: "Buddhi Align", slug: "buddhi-align", subcategory_ids: [11] },
+              { id: 11, name: "Dhyana", slug: "dhyana-meditation", parent_category_id: 10 },
+            ],
+          },
+        });
+      }
+
+      return jsonResponse({
+        topic_list: {
+          topics: [
+            {
+              id: 44,
+              title: "Settling into practice",
+              slug: "settling-into-practice",
+              excerpt: "<p>How do you begin?</p>",
+            },
+          ],
+        },
+      });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const data = await getCommunityCategoryData(["buddhi-align", "dhyana-meditation", "11"], discourseConfig);
+
+    expect(data?.status).toBe("ready");
+    expect(data?.category.slug).toBe("dhyana-meditation");
+    expect(fetchMock).toHaveBeenLastCalledWith(
+      "https://community.example.org/c/buddhi-align/dhyana-meditation/11.json",
+      expect.any(Object),
+    );
+    expect(data?.topics[0]?.href).toBe("/community/t/settling-into-practice/44");
+  });
+
+  it("limits heavy community previews for resilient page rendering", async () => {
+    const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith("/categories.json")) {
+        return jsonResponse({
+          category_list: {
+            categories: [
+              { id: 10, name: "Buddhi Align", slug: "buddhi-align", subcategory_ids: [11] },
+              { id: 11, name: "Dhyana", slug: "dhyana-meditation", parent_category_id: 10 },
+            ],
+          },
+        });
+      }
+
+      if (url.endsWith("/t/44.json")) {
+        return jsonResponse({
+          id: 44,
+          title: "Long sangha thread",
+          slug: "long-sangha-thread",
+          post_stream: {
+            posts: Array.from({ length: 30 }, (_, index) => ({
+              id: index + 1,
+              username: "aarti",
+              post_number: index + 1,
+              cooked: `<p>Practice note ${index + 1}</p>`,
+            })),
+          },
+        });
+      }
+
+      return jsonResponse({
+        topic_list: {
+          topics: Array.from({ length: 40 }, (_, index) => ({
+            id: index + 1,
+            title: `Topic ${index + 1}`,
+            slug: `topic-${index + 1}`,
+            excerpt: `<p>Topic ${index + 1}</p>`,
+          })),
+        },
+      });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const categoryData = await getCommunityCategoryData(["buddhi-align", "dhyana-meditation"], discourseConfig);
+    const topicData = await getCommunityTopicData("long-sangha-thread", "44", discourseConfig);
+
+    expect(categoryData?.topics).toHaveLength(24);
+    expect(topicData?.topic.posts).toHaveLength(12);
+  });
+
   it("loads topic excerpts without rendering Discourse HTML", async () => {
     const fetchMock = vi.fn(async () => jsonResponse({
       id: 44,

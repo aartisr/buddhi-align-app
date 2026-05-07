@@ -769,6 +769,8 @@
 .app-community-post {
   display: grid;
   gap: 0.55rem;
+  content-visibility: auto;
+  contain-intrinsic-size: 9rem;
   border: 1px solid var(--border-soft);
   border-radius: 1rem;
   background: var(--surface-strong);
@@ -1315,7 +1317,7 @@ select::placeholder {
   position: absolute;
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
-  color: #2f5d50;
+  color: var(--primary);
   font-size: 1.6rem;
   font-weight: 700;
 }
@@ -1839,5 +1841,79 @@ select::placeholder {
   .app-compliance-modal__primary,
   .app-compliance-modal__secondary {
     flex: 1;
+  }
+}
+
+.app-theme-gallery {
+  position: relative;
+}
+
+.app-theme-gallery-header {
+  margin-bottom: 0.9rem;
+}
+
+.app-theme-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.app-theme-card {
+  border: 1px solid var(--border-soft);
+  border-radius: 1rem;
+  padding: 1rem;
+  background: var(--surface-strong);
+  box-shadow: 0 16px 40px rgba(47, 93, 80, 0.09);
+  display: grid;
+  gap: 0.6rem;
+}
+
+.app-theme-card h3 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 1rem;
+}
+
+.app-theme-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+.app-theme-card-actions {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.app-theme-card--sattva {
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 249, 245, 0.92) 100%);
+  border-color: rgba(63, 122, 96, 0.22);
+}
+
+.app-theme-card--sunrise {
+  background: linear-gradient(150deg, rgba(255, 253, 248, 0.98) 0%, rgba(255, 241, 223, 0.9) 100%);
+  border-color: rgba(188, 108, 37, 0.26);
+}
+
+.app-theme-card--midnight {
+  background: linear-gradient(150deg, rgba(24, 40, 34, 0.96) 0%, rgba(13, 26, 22, 0.92) 100%);
+  border-color: rgba(159, 211, 188, 0.34);
+}
+
+.app-theme-card--midnight h3,
+.app-theme-card--midnight p {
+  color: #deebe5;
+}
+
+@media (max-width: 980px) {
+  .app-theme-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .app-theme-gallery-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

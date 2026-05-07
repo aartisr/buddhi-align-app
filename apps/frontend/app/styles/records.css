@@ -149,7 +149,7 @@
 
 .app-record-accent--bhakti,
 .app-record-accent--vasana {
-  color: #9d6153;
+  color: var(--rose);
 }
 
 .app-record-accent--jnana,

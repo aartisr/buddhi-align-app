@@ -60,6 +60,17 @@ npm run build
 - `NEXT_PUBLIC_OBSERVABILITY_SAMPLE_RATE` (optional; `0..1`, defaults to `1` when telemetry is enabled)
 - `NEXT_PUBLIC_CLARITY_PROJECT_ID` (optional; when set, initializes Microsoft Clarity on the client)
 
+### Theme System (Plug-and-Play)
+
+- `NEXT_PUBLIC_DEFAULT_THEME`: optional default theme (`sattva`, `sunrise`, `midnight`)
+- Runtime switch: open any route with `?theme=sattva|sunrise|midnight` to apply immediately
+- User setting: the Settings menu now persists theme preference locally and in the preferences API
+- Theme-specific social previews:
+  - OG: `/og/sattva/opengraph-image`, `/og/sunrise/opengraph-image`, `/og/midnight/opengraph-image`
+  - X/Twitter: `/social/twitter/sattva/twitter-image`, `/social/twitter/sunrise/twitter-image`, `/social/twitter/midnight/twitter-image`
+
+Theme tokens are centralized in `app/styles/theme-base.css` and consumed by both handcrafted CSS and Tailwind tokens, so adding a new theme is a variable-only change.
+
 ### Authentication Variables
 
 - `AUTH_SECRET`

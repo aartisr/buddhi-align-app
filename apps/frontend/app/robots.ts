@@ -34,12 +34,19 @@ const disallowPrivate = [
 ];
 const indexableCrawlerUserAgents = [
   "Googlebot",
+  "Google-Extended",
   "Bingbot",
   "AdIdxBot",
+  "DuckAssistBot",
+  "Applebot",
+  "Applebot-Extended",
+  "GPTBot",
+  "CCBot",
   "OAI-SearchBot",
   "ChatGPT-User",
   "PerplexityBot",
   "Perplexity-User",
+  "ClaudeBot",
   "Claude-SearchBot",
   "Claude-User",
 ];
@@ -58,6 +65,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: disallowPrivate,
       },
     ],
+    host: baseUrl,
     sitemap: [`${baseUrl}/sitemap.xml`, `${baseUrl}/community/sitemap.xml`],
   };
 }

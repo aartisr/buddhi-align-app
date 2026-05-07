@@ -4,10 +4,26 @@ import { useEffect, useRef } from "react";
 import { SessionProvider } from "next-auth/react";
 import RequestFeedbackProvider from "./RequestFeedbackProvider";
 import WebVitalsReporter from "./WebVitalsReporter";
+import {
+  PREFERENCES_UPDATED_EVENT,
+  readStoredThemePreference,
+  writeStoredThemePreference,
+} from "../preferences";
+import {
+  normalizeThemeName,
+  resolveDefaultTheme,
+  themeColorScheme,
+  type ThemeName,
+} from "../lib/theme";
 
 const isClientObservabilityEnabled = process.env.NEXT_PUBLIC_OBSERVABILITY_CLIENT === "1";
 const CLARITY_PROJECT_ID = "w90fdbtt4x";
 const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID?.trim() || CLARITY_PROJECT_ID;
+
+function applyTheme(theme: ThemeName) {
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.style.colorScheme = themeColorScheme(theme);
+}
 
 /**
  * Client-side session provider wrapper.
@@ -15,6 +31,27 @@ const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID?.trim() || C
  */
 export default function Providers({ children }: { children: React.ReactNode }) {
   const hasInitializedClarity = useRef(false);
+
+  useEffect(() => {
+    const searchTheme = normalizeThemeName(new URLSearchParams(window.location.search).get("theme"));
+    const storedTheme = normalizeThemeName(readStoredThemePreference());
+    const nextTheme = searchTheme ?? storedTheme ?? resolveDefaultTheme();
+
+    applyTheme(nextTheme);
+    if (searchTheme || !storedTheme) {
+      writeStoredThemePreference(nextTheme);
+    }
+
+    const onPreferenceUpdate = () => {
+      const updatedTheme = normalizeThemeName(readStoredThemePreference()) ?? resolveDefaultTheme();
+      applyTheme(updatedTheme);
+    };
+
+    window.addEventListener(PREFERENCES_UPDATED_EVENT, onPreferenceUpdate);
+    return () => {
+      window.removeEventListener(PREFERENCES_UPDATED_EVENT, onPreferenceUpdate);
+    };
+  }, []);
 
   useEffect(() => {
     if (!clarityProjectId || hasInitializedClarity.current) {

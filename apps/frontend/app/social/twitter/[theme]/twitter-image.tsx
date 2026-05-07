@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { getSocialThemePalette, resolveSocialImageTheme } from "@/app/lib/social-image-theme";
 
 export const size = {
   width: 1200,
@@ -7,7 +8,10 @@ export const size = {
 
 export const contentType = "image/png";
 
-export default function TwitterImage() {
+export default function TwitterImage({ params }: { params: { theme: string } }) {
+  const theme = resolveSocialImageTheme(params.theme);
+  const palette = getSocialThemePalette(theme);
+
   return new ImageResponse(
     (
       <div
@@ -18,8 +22,8 @@ export default function TwitterImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: "56px 66px",
-          background: "linear-gradient(135deg, #fbfdf8 0%, #fff6e3 52%, #e9f4ef 100%)",
-          color: "#17362d",
+          background: palette.canvasGradient,
+          color: palette.panelText,
           fontFamily: "Avenir Next, Inter, Arial, sans-serif",
         }}
       >
@@ -31,10 +35,10 @@ export default function TwitterImage() {
             marginBottom: 42,
           }}
         >
-          <div style={{ fontSize: 32, fontWeight: 900, color: "#244d42", letterSpacing: 0 }}>
+          <div style={{ fontSize: 32, fontWeight: 900, color: palette.chipText, letterSpacing: 0 }}>
             Buddhi Align
           </div>
-          <div style={{ fontSize: 26, fontWeight: 800, color: "#a85b6a" }}>ForeverLotus</div>
+          <div style={{ fontSize: 26, fontWeight: 800, color: palette.brandAccent }}>ForeverLotus</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <div
@@ -50,7 +54,7 @@ export default function TwitterImage() {
             <span>The calm daily loop</span>
             <span>for spiritual growth.</span>
           </div>
-          <div style={{ fontSize: 31, lineHeight: 1.35, color: "#31463f", maxWidth: 940 }}>
+          <div style={{ fontSize: 31, lineHeight: 1.35, color: palette.bodyText, maxWidth: 940 }}>
             Plan one intention. Record one practice. Reflect once. Share meaningful autograph keepsakes.
           </div>
         </div>
@@ -62,7 +66,7 @@ export default function TwitterImage() {
                 padding: "11px 17px",
                 borderRadius: 12,
                 background: item === "Bhakti" || item === "Autograph" ? "#f6e7df" : "#e6f0eb",
-                color: item === "Bhakti" || item === "Autograph" ? "#8b5147" : "#244d42",
+                color: item === "Bhakti" || item === "Autograph" ? "#8b5147" : palette.chipText,
                 fontSize: 23,
                 fontWeight: 800,
               }}

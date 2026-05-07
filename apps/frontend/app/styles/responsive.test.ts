@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const stylesheet = readFileSync(resolve(__dirname, "responsive.css"), "utf8");
+const copilotStylesheet = readFileSync(resolve(__dirname, "../components/copilot/copilot.css"), "utf8");
 
 describe("responsive app shell styles", () => {
   it("prevents page-level horizontal overflow on narrow screens", () => {
@@ -28,5 +29,15 @@ describe("responsive app shell styles", () => {
     expect(stylesheet).toContain("min-height: 2.75rem;");
     expect(stylesheet).toContain(".app-mobile-nav-quick-links,");
     expect(stylesheet).toContain("grid-template-columns: 1fr;");
+  });
+
+  it("keeps the copilot panel usable on phone and short viewports", () => {
+    expect(copilotStylesheet).toContain("calc(100dvh - 9rem)");
+    expect(copilotStylesheet).toContain("env(safe-area-inset-bottom, 0px)");
+    expect(copilotStylesheet).toContain("grid-template-rows: auto minmax(0, 1fr) auto auto;");
+    expect(copilotStylesheet).toContain("overflow-wrap: anywhere;");
+    expect(copilotStylesheet).toContain("font-size: 16px;");
+    expect(copilotStylesheet).toContain(".app-copilot--open .app-copilot-launcher");
+    expect(copilotStylesheet).toContain("@media (max-height: 620px) and (max-width: 640px)");
   });
 });
