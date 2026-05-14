@@ -9,7 +9,11 @@ import {
   readMusicControlVisibilityPreference,
 } from "../preferences";
 
-const DEFAULT_BGM_URL = "https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.mp3";
+const DEFAULT_BGM_URLS = [
+  "/audio/meditation-ambient-1.mp3",
+  "/audio/meditation-ambient-2.mp3",
+  "/audio/meditation-ambient-3.mp3",
+];
 
 export function normalizeBgmUrl(input: string | null | undefined): string | null {
   const value = input?.trim();
@@ -42,7 +46,7 @@ export function getBgmUrlsFromEnv(env: NodeJS.ProcessEnv = process.env): string[
     return [configuredSingleUrl];
   }
 
-  return [DEFAULT_BGM_URL];
+  return DEFAULT_BGM_URLS;
 }
 
 function getRouteTrackPool(pathname: string, totalTracks: number): number[] {

@@ -49,7 +49,9 @@ describe("BackgroundMusic URL parsing", () => {
     ).toEqual(["/audio/single.mp3"]);
 
     expect(getBgmUrlsFromEnv({} as NodeJS.ProcessEnv)).toEqual([
-      "https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.mp3",
+      "/audio/meditation-ambient-1.mp3",
+      "/audio/meditation-ambient-2.mp3",
+      "/audio/meditation-ambient-3.mp3",
     ]);
   });
 });
