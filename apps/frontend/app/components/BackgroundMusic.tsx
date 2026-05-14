@@ -113,6 +113,7 @@ export default function BackgroundMusic() {
   const [status, setStatus] = useState<"idle" | "loading" | "playing" | "paused" | "blocked" | "error">("idle");
   const [trackIndex, setTrackIndex] = useState(() => pickRandomTrack(routeTrackPool, 0));
   const [controlVisible, setControlVisible] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const statusMessage = useMemo(() => {
     switch (status) {
@@ -214,25 +215,44 @@ export default function BackgroundMusic() {
   }
 
   return (
-    <div className="app-music-panel">
+    <div className={`app-music-panel ${expanded ? "app-music-panel--expanded" : "app-music-panel--compact"}`}>
       <button
         type="button"
         aria-label={playing ? t("app.pause") : t("app.play")}
         onClick={togglePlay}
-        className="app-music-button"
+        className={`app-music-button ${expanded ? "" : "app-music-button--compact"}`}
       >
         {playing ? t("app.pause") : t("app.play")}
       </button>
-      <input
-        type="range"
-        min={0}
-        max={1}
-        step={0.01}
-        value={volume}
-        onChange={handleVolume}
-        aria-label={t("app.backgroundMusic")}
-        className="app-music-slider"
-      />
+      
+      {expanded && (
+        <>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={volume}
+            onChange={handleVolume}
+            aria-label={t("app.backgroundMusic")}
+            className="app-music-slider"
+          />
+          <span className="app-music-label">{t("app.backgroundMusic")}</span>
+          <span className="app-music-status" aria-live="polite">{statusMessage}</span>
+          {prompt && <span className="app-music-prompt">{t("app.musicPrompt")}</span>}
+        </>
+      )}
+
+      <button
+        type="button"
+        aria-label={expanded ? "Collapse player" : "Expand player"}
+        onClick={() => setExpanded(!expanded)}
+        className="app-music-expand-btn"
+        title={expanded ? "Collapse" : "Expand"}
+      >
+        {expanded ? "−" : "+"}
+      </button>
+
       <audio
         ref={audioRef}
         src={bgmUrls[trackIndex]}
@@ -268,9 +288,6 @@ export default function BackgroundMusic() {
         }}
         onEnded={playNextTrack}
       />
-      <span className="app-music-label">{t("app.backgroundMusic")}</span>
-      <span className="app-music-status" aria-live="polite">{statusMessage}</span>
-      {prompt && <span className="app-music-prompt">{t("app.musicPrompt")}</span>}
     </div>
   );
 }

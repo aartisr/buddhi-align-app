@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import BackgroundMusic, { getBgmUrlsFromEnv, normalizeBgmUrl } from "./BackgroundMusic";
@@ -68,7 +68,9 @@ describe("BackgroundMusic rendering", () => {
   it("renders player controls when music control preference is visible", () => {
     render(<BackgroundMusic />);
     expect(screen.getByRole("button", { name: "app.play" })).toBeInTheDocument();
-    expect(screen.getByLabelText("app.backgroundMusic")).toBeInTheDocument();
+    // Expand to see full controls
+    const expandBtn = screen.getByRole("button", { name: /Expand player/i });
+    expect(expandBtn).toBeInTheDocument();
   });
 
   it("hides player controls when preference is hidden", () => {
@@ -76,5 +78,18 @@ describe("BackgroundMusic rendering", () => {
     render(<BackgroundMusic />);
     expect(screen.queryByRole("button", { name: "app.play" })).not.toBeInTheDocument();
     expect(screen.queryByLabelText("app.backgroundMusic")).not.toBeInTheDocument();
+  });
+
+  it("expands and collapses player", () => {
+    render(<BackgroundMusic />);
+    // Initially compact, slider not visible
+    expect(screen.queryByLabelText("app.backgroundMusic")).not.toBeInTheDocument();
+    
+    // Expand
+    const expandBtn = screen.getByRole("button", { name: /Expand player/i });
+    fireEvent.click(expandBtn);
+    
+    // Now slider should be visible
+    expect(screen.getByLabelText("app.backgroundMusic")).toBeInTheDocument();
   });
 });
