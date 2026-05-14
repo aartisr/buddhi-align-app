@@ -18,7 +18,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:visual": "playwright test e2e/theme-gallery.visual.spec.js"
   },
   "dependencies": {
     "@aartisr/autograph-contract": "file:../../external/autograph-exchange/packages/autograph-contract",
@@ -37,6 +39,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.0",
     "@netlify/plugin-nextjs": "^5.9.3",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.8.0",

@@ -1,5 +1,6 @@
 
 'use client';
+import React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { usePathname } from "next/navigation";
 import { useI18n } from "../i18n/provider";
@@ -10,30 +11,38 @@ import {
 
 const DEFAULT_BGM_URL = "https://cdn.pixabay.com/audio/2022/10/16/audio_12b5fae3b6.mp3";
 
-function getBgmUrl() {
-  const configuredUrl = process.env.NEXT_PUBLIC_BGM_URL?.trim();
-  if (!configuredUrl) {
-    return DEFAULT_BGM_URL;
+export function normalizeBgmUrl(input: string | null | undefined): string | null {
+  const value = input?.trim();
+  if (!value) return null;
+
+  if (/^https?:\/\//i.test(value)) {
+    return value;
   }
 
-  if (/^https?:\/\//i.test(configuredUrl)) {
-    return configuredUrl;
+  // Allow same-origin assets served from /public, e.g. /audio/track.mp3.
+  if (value.startsWith("/")) {
+    return value;
   }
 
-  return DEFAULT_BGM_URL;
+  return null;
 }
 
-function getBgmUrls() {
-  const configuredUrls = process.env.NEXT_PUBLIC_BGM_URLS
+export function getBgmUrlsFromEnv(env: NodeJS.ProcessEnv = process.env): string[] {
+  const configuredUrls = env.NEXT_PUBLIC_BGM_URLS
     ?.split(",")
-    .map((url: string) => url.trim())
-    .filter((url: string) => /^https?:\/\//i.test(url));
+    .map((url: string) => normalizeBgmUrl(url))
+    .filter((url: string | null): url is string => Boolean(url));
 
   if (configuredUrls && configuredUrls.length > 0) {
     return configuredUrls;
   }
 
-  return [getBgmUrl()];
+  const configuredSingleUrl = normalizeBgmUrl(env.NEXT_PUBLIC_BGM_URL);
+  if (configuredSingleUrl) {
+    return [configuredSingleUrl];
+  }
+
+  return [DEFAULT_BGM_URL];
 }
 
 function getRouteTrackPool(pathname: string, totalTracks: number): number[] {
@@ -89,7 +98,7 @@ export default function BackgroundMusic() {
   const { t } = useI18n();
   const pathname = usePathname();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const bgmUrls = useMemo(() => getBgmUrls(), []);
+  const bgmUrls = useMemo(() => getBgmUrlsFromEnv(), []);
   const routeTrackPool = useMemo(
     () => getRouteTrackPool(pathname ?? "/", bgmUrls.length),
     [pathname, bgmUrls.length],
@@ -97,19 +106,40 @@ export default function BackgroundMusic() {
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.4);
   const [prompt, setPrompt] = useState(true);
+  const [status, setStatus] = useState<"idle" | "loading" | "playing" | "paused" | "blocked" | "error">("idle");
   const [trackIndex, setTrackIndex] = useState(() => pickRandomTrack(routeTrackPool, 0));
   const [controlVisible, setControlVisible] = useState(false);
 
+  const statusMessage = useMemo(() => {
+    switch (status) {
+      case "loading":
+        return "Loading audio...";
+      case "playing":
+        return "Playing";
+      case "paused":
+        return "Paused";
+      case "blocked":
+        return "Tap Play to enable audio";
+      case "error":
+        return "Unable to load this track";
+      default:
+        return "Ready";
+    }
+  }, [status]);
+
   const startPlayback = useCallback(async () => {
     if (!audioRef.current) return;
+    setStatus("loading");
 
     try {
       await audioRef.current.play();
       setPlaying(true);
       setPrompt(false);
+      setStatus("playing");
     } catch {
       setPlaying(false);
       setPrompt(true);
+      setStatus("blocked");
     }
   }, []);
 
@@ -163,6 +193,7 @@ export default function BackgroundMusic() {
       audioRef.current.pause();
       setPlaying(false);
       setPrompt(true);
+      setStatus("paused");
     }
   };
 
@@ -213,15 +244,28 @@ export default function BackgroundMusic() {
           void startPlayback();
         }}
         onError={() => {
-          setPlaying(false);
-          setPrompt(true);
+          if (routeTrackPool.length <= 1) {
+            setPlaying(false);
+            setPrompt(true);
+            setStatus("error");
+            return;
+          }
+
+          setStatus("loading");
           playNextTrack();
         }}
-        onPlay={() => setPrompt(false)}
-        onPause={() => setPrompt(true)}
+        onPlay={() => {
+          setPrompt(false);
+          setStatus("playing");
+        }}
+        onPause={() => {
+          setPrompt(true);
+          setStatus((currentStatus) => (currentStatus === "blocked" ? currentStatus : "paused"));
+        }}
         onEnded={playNextTrack}
       />
       <span className="app-music-label">{t("app.backgroundMusic")}</span>
+      <span className="app-music-status" aria-live="polite">{statusMessage}</span>
       {prompt && <span className="app-music-prompt">{t("app.musicPrompt")}</span>}
     </div>
   );

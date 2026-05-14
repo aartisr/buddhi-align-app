@@ -12,7 +12,8 @@ export interface UserPreferences {
 export function readMusicControlVisibilityPreference(): boolean {
   if (typeof window === "undefined") return false;
   const stored = window.localStorage.getItem(MUSIC_CONTROL_VISIBLE_KEY);
-  if (stored === null) return false;
+  // Show controls by default so users can trigger playback when autoplay is blocked.
+  if (stored === null) return true;
   return stored === "true";
 }
 

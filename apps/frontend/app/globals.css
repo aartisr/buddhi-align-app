@@ -1859,6 +1859,13 @@ select::placeholder {
 }
 
 .app-theme-card {
+  --theme-card-title: var(--primary);
+  --theme-card-copy: var(--text-soft);
+  --theme-card-link: var(--primary);
+  --theme-card-link-border: color-mix(in srgb, var(--theme-card-link) 28%, transparent);
+  --theme-card-link-surface: color-mix(in srgb, var(--theme-card-link) 12%, transparent);
+  --theme-card-link-hover-surface: color-mix(in srgb, var(--theme-card-link) 18%, transparent);
+  --theme-card-link-focus-ring: color-mix(in srgb, var(--theme-card-link) 26%, transparent);
   border: 1px solid var(--border-soft);
   border-radius: 1rem;
   padding: 1rem;
@@ -1870,15 +1877,34 @@ select::placeholder {
 
 .app-theme-card h3 {
   margin: 0;
-  color: var(--primary);
+  color: var(--theme-card-title);
   font-size: 1rem;
 }
 
 .app-theme-card p {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--text-soft);
+  color: var(--theme-card-copy);
   line-height: 1.55;
+}
+
+.app-theme-card .app-guided-flow-link {
+  color: var(--theme-card-link);
+  border: 1px solid var(--theme-card-link-border);
+  background: var(--theme-card-link-surface);
+  border-radius: 0.6rem;
+  padding: 0.32rem 0.5rem;
+  width: fit-content;
+}
+
+.app-theme-card .app-guided-flow-link:hover,
+.app-theme-card .app-guided-flow-link:focus-visible {
+  color: var(--theme-card-link);
+  background: var(--theme-card-link-hover-surface);
+  border-color: var(--theme-card-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  box-shadow: 0 0 0 3px var(--theme-card-link-focus-ring);
 }
 
 .app-theme-card-actions {
@@ -1887,23 +1913,35 @@ select::placeholder {
 }
 
 .app-theme-card--sattva {
+  --theme-card-title: #1f3f35;
+  --theme-card-copy: #1f332c;
+  --theme-card-link: #1f4a3d;
+  --theme-card-link-hover-surface: rgba(31, 74, 61, 0.16);
+  --theme-card-link-focus-ring: rgba(31, 74, 61, 0.18);
   background: linear-gradient(150deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 249, 245, 0.92) 100%);
   border-color: rgba(63, 122, 96, 0.22);
 }
 
 .app-theme-card--sunrise {
+  --theme-card-title: #6c2e14;
+  --theme-card-copy: #4c3224;
+  --theme-card-link: #7a3418;
+  --theme-card-link-hover-surface: rgba(122, 52, 24, 0.14);
+  --theme-card-link-focus-ring: rgba(122, 52, 24, 0.18);
   background: linear-gradient(150deg, rgba(255, 253, 248, 0.98) 0%, rgba(255, 241, 223, 0.9) 100%);
   border-color: rgba(188, 108, 37, 0.26);
 }
 
 .app-theme-card--midnight {
+  --theme-card-title: #edf7f2;
+  --theme-card-copy: #dcebe4;
+  --theme-card-link: #f2dfb6;
+  --theme-card-link-border: rgba(242, 223, 182, 0.38);
+  --theme-card-link-surface: rgba(242, 223, 182, 0.12);
+  --theme-card-link-hover-surface: rgba(242, 223, 182, 0.18);
+  --theme-card-link-focus-ring: rgba(242, 223, 182, 0.24);
   background: linear-gradient(150deg, rgba(24, 40, 34, 0.96) 0%, rgba(13, 26, 22, 0.92) 100%);
   border-color: rgba(159, 211, 188, 0.34);
-}
-
-.app-theme-card--midnight h3,
-.app-theme-card--midnight p {
-  color: #deebe5;
 }
 
 @media (max-width: 980px) {
