@@ -30,6 +30,7 @@
     "@buddhi-align/shared-ui": "*",
     "@buddhi-align/site-config": "*",
     "@microsoft/clarity": "^1.0.0",
+    "@vercel/analytics": "^2.0.1",
     "apexcharts": "^5.10.4",
     "autoprefixer": "^10.4.27",
     "next": "14.2.35",
@@ -39,8 +40,8 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
     "@netlify/plugin-nextjs": "^5.9.3",
+    "@playwright/test": "^1.55.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
