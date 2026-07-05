@@ -38,6 +38,11 @@ export const organizationName = "ForeverLotus";
 export const organizationUrl = "https://foreverlotus.com";
 export const authorName = "Aarti Sri Ravikumar";
 export const authorUrl = "https://aartisr.foreverlotus.com";
+export const organizationSocialProfiles = (
+  process.env.NEXT_PUBLIC_ORGANIZATION_SAME_AS
+    ? process.env.NEXT_PUBLIC_ORGANIZATION_SAME_AS.split(",").map((value) => value.trim())
+    : [organizationUrl, authorUrl, `${siteUrl}/community`]
+).filter(Boolean);
 export const organizationId = `${organizationUrl}/#organization`;
 export const websiteId = `${siteUrl}/#website`;
 export const webAppId = `${siteUrl}/#webapp`;
@@ -305,7 +310,7 @@ export function buildSiteJsonLd({
           "@id": personId,
         },
         logo: absoluteUrl("/buddhi-align-icon.svg"),
-        sameAs: [organizationUrl, authorUrl],
+        sameAs: organizationSocialProfiles,
       },
       {
         "@type": "Person",

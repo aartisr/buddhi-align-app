@@ -29,11 +29,12 @@ import {
   siteName,
   siteUrl,
 } from "./lib/seo";
-import { resolveDefaultTheme } from "./lib/theme";
+import { resolveDefaultSeasonalTheme, resolveDefaultTheme } from "./lib/theme";
 
 const title = translate(DEFAULT_LOCALE, "app.title");
 const description = translate(DEFAULT_LOCALE, "app.description");
 const defaultTheme = resolveDefaultTheme();
+const defaultSeasonalTheme = resolveDefaultSeasonalTheme();
 
 export const metadata: Metadata = {
   ...buildPageMetadata({
@@ -82,6 +83,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteUrl,
+    types: {
+      "application/rss+xml": `${siteUrl}/feed.xml`,
+    },
   },
   openGraph: {
     type: "website",
@@ -125,7 +129,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme={defaultTheme}>
+    <html lang="en" data-theme={defaultTheme} data-season={defaultSeasonalTheme ?? undefined}>
       <body className="antialiased">
         <JsonLd data={buildSiteJsonLd({ name: title, description })} />
         <h1 className="sr-only">{title}</h1>

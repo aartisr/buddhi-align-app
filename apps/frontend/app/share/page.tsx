@@ -1,7 +1,9 @@
 import Link from "next/link";
 
 import EasyInviteCard from "../components/EasyInviteCard";
+import FocusIntro from "../components/FocusIntro";
 import JsonLd from "../components/JsonLd";
+import LazyDetails from "../components/LazyDetails";
 import ModuleLayout from "../components/ModuleLayout";
 import {
   publicPageProfiles,
@@ -17,15 +19,10 @@ export default function SharePage() {
     <ModuleLayout titleKey="share.title">
       <JsonLd data={buildSharePageJsonLd()} />
 
-      <section className="app-share-hero max-w-5xl mx-auto mb-6" aria-labelledby="share-buddhi-align-intro">
-        <p className="app-guided-flow-kicker">Share kit</p>
-        <h2 id="share-buddhi-align-intro" className="app-panel-title text-xl sm:text-2xl font-bold leading-tight">
-          Make the invitation effortless
-        </h2>
-        <p className="app-copy-soft text-sm sm:text-base mt-2">
-          These snippets keep the message clear wherever Buddhi Align travels: search results, AI answers, texts, emails, classrooms, and community circles.
-        </p>
-      </section>
+      <FocusIntro
+        title="Share in seconds"
+        summary="Pick a destination, send one link, and let people start immediately."
+      />
 
       <EasyInviteCard
         title="Invite someone into the daily loop"
@@ -44,7 +41,8 @@ export default function SharePage() {
         copiedLabel="Copied"
       />
 
-      <section className="app-share-snippets max-w-5xl mx-auto mb-6" aria-labelledby="share-caption-library">
+      <LazyDetails summary="Optional caption library" className="app-surface-card max-w-5xl mx-auto mb-6 p-4 sm:p-6">
+        <section className="app-share-snippets" aria-labelledby="share-caption-library">
         <div className="app-share-section-header">
           <p className="app-guided-flow-kicker">Caption library</p>
           <h2 id="share-caption-library" className="app-panel-title text-lg sm:text-xl font-bold leading-tight">
@@ -59,7 +57,8 @@ export default function SharePage() {
             </article>
           ))}
         </div>
-      </section>
+        </section>
+      </LazyDetails>
 
       <section className="app-share-routes max-w-5xl mx-auto" aria-labelledby="canonical-share-routes">
         <div className="app-share-section-header">

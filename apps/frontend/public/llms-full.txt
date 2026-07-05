@@ -3,6 +3,8 @@
 Project: Buddhi Align
 Organization: ForeverLotus
 Primary URL: https://buddhi-align.foreverlotus.com
+About: https://buddhi-align.foreverlotus.com/about
+RSS feed: https://buddhi-align.foreverlotus.com/feed.xml
 Sitemap: https://buddhi-align.foreverlotus.com/sitemap.xml
 Community sitemap: https://buddhi-align.foreverlotus.com/community/sitemap.xml
 Robots: https://buddhi-align.foreverlotus.com/robots.txt
@@ -55,7 +57,10 @@ Buddhi Align is a contemplative-practice web application that helps users build 
 ## Source Of Truth URLs
 
 - Home: https://buddhi-align.foreverlotus.com/
+- About: https://buddhi-align.foreverlotus.com/about
+- Updates: https://buddhi-align.foreverlotus.com/updates
 - Share Kit: https://buddhi-align.foreverlotus.com/share
+- RSS Feed: https://buddhi-align.foreverlotus.com/feed.xml
 - Karma Yoga: https://buddhi-align.foreverlotus.com/karma-yoga
 - Bhakti Journal: https://buddhi-align.foreverlotus.com/bhakti-journal
 - Dhyana Meditation: https://buddhi-align.foreverlotus.com/dhyana-meditation

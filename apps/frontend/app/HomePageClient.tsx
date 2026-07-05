@@ -1,81 +1,15 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { BuddhiDashboard } from "@buddhi-align/shared-ui";
 import Link from "next/link";
 import ModuleLayout from "./components/ModuleLayout";
-import DailyRings from "./components/DailyRings";
-import EasyInviteCard from "./components/EasyInviteCard";
+import FocusIntro from "./components/FocusIntro";
 import { MODULE_CATALOG } from "./i18n/config";
 import { useI18n, useLocalizedModules } from "./i18n/provider";
-import {
-  homepageFaq,
-  homepageHighlights,
-  publicPageProfiles,
-} from "./lib/public-content";
-import { THEME_OPTIONS } from "./lib/theme";
-import { themedOpenGraphImagePath, themedTwitterImagePath } from "./lib/social-image-theme";
-
-type ThemePreviewCopy = Record<(typeof THEME_OPTIONS)[number]["code"], string>;
-
-const THEME_PREVIEW_COPY: ThemePreviewCopy = {
-  sattva: "Forest calm and classic Buddhi Align look.",
-  sunrise: "Warm saffron palette for daytime momentum.",
-  midnight: "Low-glare dark canvas for evening reflection.",
-};
-
-function ThemeGallery({ themePreviewCopy }: { themePreviewCopy: ThemePreviewCopy }) {
-  return (
-    <section className="app-theme-gallery max-w-5xl mx-auto mb-6" aria-labelledby="theme-gallery-heading">
-      <div className="app-theme-gallery-header">
-        <p className="app-guided-flow-kicker">Personalize instantly</p>
-        <h2 id="theme-gallery-heading" className="app-panel-title text-lg sm:text-xl font-bold leading-tight">
-          Switch themes in one tap and preview social cards
-        </h2>
-        <p className="app-copy-soft text-sm mt-1">
-          Pick a look for your sessions, then open matching OG and X image previews for campaigns and AI/search snippets.
-        </p>
-      </div>
-      <div className="app-theme-gallery-grid">
-        {THEME_OPTIONS.map((theme) => (
-          <article key={theme.code} className={`app-theme-card app-theme-card--${theme.code}`}>
-            <h3>{theme.label}</h3>
-            <p>{themePreviewCopy[theme.code]}</p>
-            <div className="app-theme-card-actions">
-              <Link href={`/?theme=${theme.code}`} className="app-guided-flow-link">
-                Use this theme
-              </Link>
-              <a
-                href={themedOpenGraphImagePath(theme.code)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="app-guided-flow-link"
-              >
-                Open OG preview
-              </a>
-              <a
-                href={themedTwitterImagePath(theme.code)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="app-guided-flow-link"
-              >
-                Open X preview
-              </a>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
 
 export default function HomePageClient() {
   const { t } = useI18n();
   const modules = useLocalizedModules();
-  const inviteModuleOptions = useMemo(
-    () => modules.map((item) => ({ key: item.key, href: item.href, label: item.navLabel })),
-    [modules],
-  );
   const moduleByKey = useMemo(
     () => new Map(MODULE_CATALOG.map((item) => [item.key, item])),
     [],
@@ -86,6 +20,7 @@ export default function HomePageClient() {
         {
           key: "plan",
           icon: "📜",
+          iconClassName: "app-module-icon--dharma",
           title: t("dashboard.flow.plan.title"),
           description: t("dashboard.flow.plan.description"),
           href: moduleByKey.get("dharma")?.href ?? "/dharma-planner",
@@ -94,6 +29,7 @@ export default function HomePageClient() {
         {
           key: "practice",
           icon: "🙏",
+          iconClassName: "app-module-icon--karma",
           title: t("dashboard.flow.practice.title"),
           description: t("dashboard.flow.practice.description"),
           href: moduleByKey.get("karma")?.href ?? "/karma-yoga",
@@ -102,6 +38,7 @@ export default function HomePageClient() {
         {
           key: "reflect",
           icon: "🧘‍♂️",
+          iconClassName: "app-module-icon--jnana",
           title: t("dashboard.flow.reflect.title"),
           description: t("dashboard.flow.reflect.description"),
           href: moduleByKey.get("jnana")?.href ?? "/jnana-reflection",
@@ -110,31 +47,41 @@ export default function HomePageClient() {
       ] as const,
     [moduleByKey, t],
   );
-  const publicModuleProfiles = useMemo(
-    () => publicPageProfiles.filter((profile) => !["/", "/share"].includes(profile.path)).slice(0, 6),
-    [],
+  const coreModuleKeys = useMemo(() => new Set(["dharma", "karma", "jnana"]), []);
+  const supportModules = useMemo(
+    () => modules.filter((module) => !coreModuleKeys.has(module.key)),
+    [coreModuleKeys, modules],
   );
 
   return (
     <ModuleLayout titleKey="app.dashboard">
-      <DailyRings />
-      <section className="app-guided-flow app-surface-card max-w-5xl mx-auto mb-6 p-4 sm:p-6" aria-label={t("dashboard.flow.aria")}>
+      <FocusIntro
+        title="Daily clarity, zero clutter"
+        summary="Use Copilot to decide your next best step, complete one meaningful action, then move on."
+      />
+
+      <section className="app-guided-flow app-surface-card max-w-4xl mx-auto mb-6 p-5 sm:p-7" aria-label={t("dashboard.flow.aria")}>
         <div className="app-guided-flow-header">
           <div>
-            <p className="app-guided-flow-kicker">{t("dashboard.flow.kicker")}</p>
-            <h2 className="app-panel-title text-lg sm:text-xl font-bold leading-tight">{t("dashboard.flow.title")}</h2>
-            <p className="app-copy-soft text-sm mt-1">{t("dashboard.flow.subtitle")}</p>
+            <p className="app-guided-flow-kicker">Copilot-first daily loop</p>
+            <h2 className="app-panel-title text-xl sm:text-2xl font-bold leading-tight">Decide. Do. Reflect.</h2>
+            <p className="app-copy-soft text-sm mt-2 max-w-2xl">
+              Skip the noise. Ask Copilot one question, complete one meaningful action, and close your day with a short reflection.
+            </p>
           </div>
           <Link href="/dharma-planner" className="app-guided-flow-primary-link">
-            {t("dashboard.flow.primaryCta")}
+            Start now
           </Link>
         </div>
+        <p className="app-copy-soft text-xs sm:text-sm mb-4">
+          Copilot is available in the bottom-right corner across every module.
+        </p>
         <div className="app-guided-flow-grid">
-          {flowSteps.map((step, index) => (
+          {flowSteps.map((step) => (
             <article key={step.key} className="app-guided-flow-card">
-              <p className="app-guided-flow-step">{t("dashboard.flow.stepLabel", { step: index + 1 })}</p>
+              <p className="app-guided-flow-step">Focus now</p>
               <h3 className="app-guided-flow-card-title">
-                <span aria-hidden>{step.icon}</span>
+                <span aria-hidden className={`app-module-icon ${step.iconClassName}`}>{step.icon}</span>
                 <span>{step.title}</span>
               </h3>
               <p className="app-copy-soft text-sm">{step.description}</p>
@@ -145,112 +92,29 @@ export default function HomePageClient() {
           ))}
         </div>
       </section>
-      <section className="app-surface-card max-w-4xl mx-auto mb-6 p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <h2 className="app-panel-title text-lg sm:text-xl font-bold leading-tight">{t("dashboard.quickTourTitle")}</h2>
-            <details>
-              <summary className="app-copy-soft text-sm cursor-pointer select-none underline underline-offset-2">
-                {t("dashboard.quickTourMoreDetails")}
-              </summary>
-              <p className="app-copy-soft text-sm mt-2 max-w-xl">{t("dashboard.quickTourDescription")}</p>
-            </details>
-          </div>
-          <Link
-            href="/motivation-analytics#quick-tour"
-            className="app-button-primary px-4 py-2 rounded-lg whitespace-nowrap"
-            aria-label={t("dashboard.quickTourButton")}
-          >
-            {t("dashboard.quickTourButton")}
-          </Link>
-        </div>
-      </section>
 
-      <EasyInviteCard
-        title={t("invite.title")}
-        subtitle={t("invite.subtitle")}
-        moduleOptions={inviteModuleOptions}
-        moduleSelectorLabel={t("invite.moduleSelector")}
-        homeOptionLabel={t("invite.homeOption")}
-        emailFieldLabel={t("invite.emailOptional")}
-        phoneFieldLabel={t("invite.phoneOptional")}
-        emailPlaceholder={t("invite.emailPlaceholder")}
-        phonePlaceholder={t("invite.phonePlaceholder")}
-        emailCta={t("invite.email")}
-        smsCta={t("invite.sms")}
-        copyCta={t("invite.copy")}
-        shareCta={t("invite.share")}
-        copiedLabel={t("invite.copied")}
-      />
-
-      <ThemeGallery themePreviewCopy={THEME_PREVIEW_COPY} />
-
-      <section className="app-public-story max-w-5xl mx-auto mb-6" aria-labelledby="why-buddhi-align-spreads">
-        <div className="app-public-story-header">
-          <p className="app-guided-flow-kicker">Built to spread calmly</p>
-          <h2 id="why-buddhi-align-spreads" className="app-panel-title text-lg sm:text-xl font-bold leading-tight">
-            A daily practice loop that is easy to explain and easy to return to
+      <section className="app-surface-card max-w-4xl mx-auto mb-6 p-4 sm:p-6" aria-labelledby="other-modules-heading">
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <h2 id="other-modules-heading" className="app-panel-title text-lg sm:text-xl font-bold leading-tight">
+            Everything else, one tap away
           </h2>
-          <p className="app-copy-soft text-sm mt-1">
-            Buddhi Align gives timeless practice a memorable product shape: one dashboard, six inner-work modules, and a gentle analytics view.
-          </p>
-        </div>
-        <div className="app-public-story-grid">
-          {homepageHighlights.map((item) => (
-            <article key={item.title} className="app-public-story-card">
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="app-module-index max-w-5xl mx-auto mb-6" aria-labelledby="practice-module-index">
-        <div className="app-module-index-header">
-          <div>
-            <p className="app-guided-flow-kicker">Practice map</p>
-            <h2 id="practice-module-index" className="app-panel-title text-lg sm:text-xl font-bold leading-tight">
-              Six ways to make inner work visible
-            </h2>
-          </div>
-          <Link href="/share" className="app-guided-flow-link">
-            Share the app
+          <Link href="/motivation-analytics" className="app-guided-flow-link">
+            See momentum
           </Link>
         </div>
-        <div className="app-module-index-grid">
-          {publicModuleProfiles.map((profile) => (
-            <Link key={profile.path} href={profile.path} className="app-module-index-link">
-              <span>{profile.title}</span>
-              <small>{profile.summary}</small>
+        <div className="flex flex-wrap gap-2">
+          {supportModules.map((module) => (
+            <Link
+              key={module.key}
+              href={module.href}
+              className={`app-module-chip app-module-chip--${module.key} inline-flex items-center gap-2 rounded-full border border-(--border-soft) bg-(--surface-strong) px-3 py-2 text-sm font-semibold text-(--primary)`}
+            >
+              <span aria-hidden className={`app-module-icon app-module-icon--${module.key}`}>{module.icon}</span>
+              <span>{module.navLabel}</span>
             </Link>
           ))}
         </div>
       </section>
-
-      <section className="app-faq-section max-w-5xl mx-auto mb-6" aria-labelledby="buddhi-align-faq">
-        <div className="app-faq-heading">
-          <p className="app-guided-flow-kicker">Clear answers</p>
-          <h2 id="buddhi-align-faq" className="app-panel-title text-lg sm:text-xl font-bold leading-tight">
-            Questions people ask before they join
-          </h2>
-        </div>
-        <div className="app-faq-list">
-          {homepageFaq.map((item) => (
-            <details key={item.question} className="app-faq-item">
-              <summary>{item.question}</summary>
-              <p>{item.answer}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      <BuddhiDashboard
-        userName={t("dashboard.defaultUser")}
-        heading={t("app.dashboard")}
-        subtitle={t("dashboard.subtitle")}
-        welcomeTemplate={t("dashboard.welcome")}
-        modules={modules}
-      />
     </ModuleLayout>
   );
 }

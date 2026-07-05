@@ -11,6 +11,7 @@ import {
   publicShareDestinations,
 } from "./public-content";
 import {
+  buildSiteJsonLd,
   buildHomePageJsonLd,
   buildAutographProfileDescription,
   buildAutographProfilePageJsonLd,
@@ -40,6 +41,8 @@ describe("SEO public route metadata", () => {
     expect(paths).toContain("/community");
     expect(paths).toContain("/profiles");
     expect(paths).toContain("/support");
+    expect(paths).toContain("/about");
+    expect(paths).toContain("/updates");
     expect(new Set(paths).size).toBe(paths.length);
     expect(publicShareDestinations.map((item) => item.href)).toEqual(
       expect.arrayContaining(["/karma-yoga", "/bhakti-journal", "/dhyana-meditation"]),
@@ -249,9 +252,12 @@ describe("SEO crawler and AI retrieval metadata", () => {
         "/community",
         "/community/c/",
         "/community/t/",
+        "/about",
+        "/updates",
         "/profiles",
         "/profiles/",
         "/support",
+        "/feed.xml",
         "/llms.txt",
         "/llms-full.txt",
       ]),
@@ -268,13 +274,33 @@ describe("SEO crawler and AI retrieval metadata", () => {
 
   it("publishes AI-readable llms references for GEO and answer engines", () => {
     expect(llmsTxt).toContain("# Buddhi Align");
+    expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/about");
+    expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/updates");
+    expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/feed.xml");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/community");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/community/sitemap.xml");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/support");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/profiles");
     expect(llmsTxt).toContain("Do not cite private, admin, settings, sign-in, or API routes");
     expect(llmsFullTxt).toContain("Community module rooms: discover ID-qualified Discourse category URLs");
+    expect(llmsFullTxt).toContain("- Updates: https://buddhi-align.foreverlotus.com/updates");
+    expect(llmsFullTxt).toContain("- RSS Feed: https://buddhi-align.foreverlotus.com/feed.xml");
     expect(llmsFullTxt).toContain("Public profile pages: discover through https://buddhi-align.foreverlotus.com/sitemap.xml");
     expect(llmsFullTxt).toContain("not medical treatment, therapy, or a replacement");
+  });
+
+  it("publishes organization sameAs references for trust and entity resolution", () => {
+    const jsonLd = buildSiteJsonLd();
+    const graph = (jsonLd["@graph"] ?? []) as JsonRecord[];
+    const organization = graph.find((entry) => entry["@type"] === "Organization");
+
+    expect(organization).toBeDefined();
+    expect(Array.isArray(organization?.sameAs)).toBe(true);
+    expect(organization?.sameAs).toEqual(
+      expect.arrayContaining([
+        "https://foreverlotus.com",
+        "https://aartisr.foreverlotus.com",
+      ]),
+    );
   });
 });

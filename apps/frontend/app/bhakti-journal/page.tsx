@@ -13,6 +13,8 @@ import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useBhaktiJournalEntries } from "../hooks/useBhaktiJournalEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
+import FocusIntro from "../components/FocusIntro";
+import LazyDetails from "../components/LazyDetails";
 
 export default function BhaktiJournalPage() {
   const { t } = useI18n();
@@ -23,7 +25,15 @@ export default function BhaktiJournalPage() {
 
   return (
     <ModuleLayout titleKey="module.bhakti.title">
-      <DailyReflectionPrompt module="bhakti" />
+      <FocusIntro
+        title="Record one gratitude moment"
+        summary="Capture the one devotional reflection that mattered most today."
+      />
+
+      <LazyDetails summary="Need a prompt?" className="app-surface-card max-w-4xl mx-auto mb-5 p-4">
+        <DailyReflectionPrompt module="bhakti" />
+      </LazyDetails>
+
       <ModuleEntryForm
         title={t("module.bhakti.title")}
         icon="🌸"

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { unstable_cache } from "next/cache";
 
+import FocusIntro from "../components/FocusIntro";
 import ModuleLayout from "../components/ModuleLayout";
 import JsonLd from "../components/JsonLd";
 import {
@@ -84,6 +85,13 @@ export default async function CommunityPage() {
     <ModuleLayout titleKey="community.title">
       <JsonLd data={buildCommunityJsonLd(data.categories)} />
 
+      <FocusIntro
+        title="Join the right conversation quickly"
+        summary="Open the module space you need, read what matters, and respond only when helpful."
+        primaryHref="/sign-in?callbackUrl=%2Fcommunity"
+        primaryLabel="Sign in for SSO"
+      />
+
       <section className="app-community-shell max-w-6xl mx-auto" aria-labelledby="community-home-heading">
         <div className="app-community-hero">
           <p className="app-guided-flow-kicker">Community</p>
@@ -94,9 +102,6 @@ export default async function CommunityPage() {
             Browse module discussions, read recent topics, and move into Discourse SSO only when you want to reply or manage the full thread.
           </p>
           <div className="app-community-actions">
-            <Link href="/sign-in?callbackUrl=%2Fcommunity" className="app-guided-flow-primary-link">
-              Sign in for SSO
-            </Link>
             {data.parentCategory?.externalUrl ? (
               <a href={data.parentCategory.externalUrl} className="app-guided-flow-link">
                 Open full forum

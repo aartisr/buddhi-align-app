@@ -13,7 +13,7 @@
 
 .app-alert-error__button {
   background: var(--rose);
-  color: #fff;
+  color: var(--on-danger);
 }
 
 .app-alert-error__button:hover {

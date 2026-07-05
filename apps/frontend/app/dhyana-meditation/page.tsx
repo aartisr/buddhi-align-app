@@ -13,6 +13,8 @@ import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useDhyanaMeditationEntries } from "../hooks/useDhyanaMeditationEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
+import FocusIntro from "../components/FocusIntro";
+import LazyDetails from "../components/LazyDetails";
 
 export default function DhyanaMeditationPage() {
   const { t } = useI18n();
@@ -23,7 +25,15 @@ export default function DhyanaMeditationPage() {
 
   return (
     <ModuleLayout titleKey="module.dhyana.title">
-      <PranayamaTimer />
+      <FocusIntro
+        title="Sit once, log once"
+        summary="Track one meditation session and keep your rhythm steady."
+      />
+
+      <LazyDetails summary="Need a breathing timer?" className="app-surface-card max-w-4xl mx-auto mb-5 p-4">
+        <PranayamaTimer />
+      </LazyDetails>
+
       <ModuleEntryForm
         title={t("module.dhyana.title")}
         icon="🧘‍♀️"

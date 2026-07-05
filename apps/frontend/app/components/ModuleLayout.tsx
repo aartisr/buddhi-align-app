@@ -467,6 +467,8 @@ function useModuleMenuGroups(t: Translate): MenuGroup[] {
         label: t("nav.group.home"),
         items: [
           { key: "dashboard", icon: "🏠", href: "/", label: t("app.dashboard") },
+          { key: "about", icon: "ℹ️", href: "/about", label: "About" },
+          { key: "updates", icon: "📰", href: "/updates", label: "Updates" },
           { key: "community", icon: "💬", href: "/community", label: t("community.nav") },
           { key: "support", icon: "🛟", href: "/support", label: t("support.nav") },
         ],

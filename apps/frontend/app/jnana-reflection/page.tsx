@@ -13,6 +13,8 @@ import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useJnanaReflectionEntries } from "../hooks/useJnanaReflectionEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
+import FocusIntro from "../components/FocusIntro";
+import LazyDetails from "../components/LazyDetails";
 
 export default function JnanaReflectionPage() {
   const { t } = useI18n();
@@ -23,7 +25,15 @@ export default function JnanaReflectionPage() {
 
   return (
     <ModuleLayout titleKey="module.jnana.title">
-      <DailyReflectionPrompt module="jnana" />
+      <FocusIntro
+        title="Capture one insight"
+        summary="Write the clearest insight from today in a few lines."
+      />
+
+      <LazyDetails summary="Need a prompt?" className="app-surface-card max-w-4xl mx-auto mb-5 p-4">
+        <DailyReflectionPrompt module="jnana" />
+      </LazyDetails>
+
       <ModuleEntryForm
         title={t("module.jnana.title")}
         icon="🧘‍♂️"

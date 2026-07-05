@@ -12,6 +12,7 @@ import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useKarmaYogaEntries } from "../hooks/useKarmaYogaEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
+import FocusIntro from "../components/FocusIntro";
 
 export default function KarmaYogaPage() {
   const { t } = useI18n();
@@ -22,6 +23,11 @@ export default function KarmaYogaPage() {
 
   return (
     <ModuleLayout titleKey="module.karma.title">
+      <FocusIntro
+        title="Log one meaningful act"
+        summary="Record one service action and its impact without overthinking it."
+      />
+
       <ModuleEntryForm
         title={t("module.karma.title")}
         icon="🙏"

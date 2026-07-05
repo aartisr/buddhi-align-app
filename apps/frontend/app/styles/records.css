@@ -18,7 +18,7 @@
   border-radius: 999px;
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   border: 1px solid var(--border-strong);
-  color: #fff;
+  color: var(--on-primary);
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;

@@ -13,6 +13,8 @@ import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useVasanaTrackerEntries } from "../hooks/useVasanaTrackerEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
+import FocusIntro from "../components/FocusIntro";
+import LazyDetails from "../components/LazyDetails";
 
 export default function VasanaTrackerPage() {
   const { t } = useI18n();
@@ -23,7 +25,15 @@ export default function VasanaTrackerPage() {
 
   return (
     <ModuleLayout titleKey="module.vasana.title">
-      <DailyReflectionPrompt module="vasana" />
+      <FocusIntro
+        title="Notice one repeating pattern"
+        summary="Log the tendency you observed and one shift you want tomorrow."
+      />
+
+      <LazyDetails summary="Need a prompt?" className="app-surface-card max-w-4xl mx-auto mb-5 p-4">
+        <DailyReflectionPrompt module="vasana" />
+      </LazyDetails>
+
       <ModuleEntryForm
         title={t("module.vasana.title")}
         icon="🌱"

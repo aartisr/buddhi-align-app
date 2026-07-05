@@ -11,6 +11,8 @@ import { getSyntheticAnalyticsPayload, shouldUseSyntheticAnalytics } from "./dem
 import { cachedJsonFetch, invalidateClientFetchCache } from "../lib/clientFetchCache";
 import DeferredRender from "../components/DeferredRender";
 import { buildPersonalizationSignals } from "./personalization";
+import FocusIntro from "../components/FocusIntro";
+import LazyDetails from "../components/LazyDetails";
 
 type Translate = ReturnType<typeof useI18n>["t"];
 type Quote = { quote: string; author: string };
@@ -43,6 +45,32 @@ function getRandomQuote(quotes: { quote: string; author: string }[]) {
 
 function getInitialQuote(quotes: Quote[]) {
   return quotes[INITIAL_QUOTE_INDEX] ?? MOTIVATIONAL_QUOTES.en[INITIAL_QUOTE_INDEX];
+}
+
+function emptyStatsModel(): StatsModel {
+  return {
+    karma: 0,
+    bhakti: 0,
+    jnana: 0,
+    dhyana: 0,
+    vasana: 0,
+    dharma: 0,
+    streak: 0,
+    totalEntries: 0,
+  };
+}
+
+function toStatsModel(data: AnalyticsPayload): StatsModel {
+  return {
+    karma: data.counts.karma,
+    bhakti: data.counts.bhakti,
+    jnana: data.counts.jnana,
+    dhyana: data.counts.dhyana,
+    vasana: data.counts.vasana,
+    dharma: data.counts.dharma,
+    streak: data.streak,
+    totalEntries: data.totalEntries,
+  };
 }
 
 function QuoteHero({
@@ -138,6 +166,7 @@ function StatCard({
   label,
   value,
   loading,
+  iconClassName,
   labelClassName,
   valueClassName,
 }: {
@@ -145,12 +174,13 @@ function StatCard({
   label: string;
   value: string | number;
   loading: boolean;
+  iconClassName: string;
   labelClassName: string;
   valueClassName: string;
 }) {
   return (
     <div className="app-stat-card flex flex-col items-center p-4">
-      <span className="text-3xl mb-2">{icon}</span>
+      <span className={`app-module-stat-icon text-3xl mb-2 ${iconClassName}`}>{icon}</span>
       <span className={labelClassName}>{label}</span>
       {loading ? <span className="app-stat-skeleton" /> : <span className={valueClassName}>{value}</span>}
     </div>
@@ -160,14 +190,14 @@ function StatCard({
 function StatsGrid({ t, loadingStats, stats }: { t: Translate; loadingStats: boolean; stats: StatsModel }) {
   return (
     <div className="w-full max-w-3xl grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8 sm:mb-10">
-      <StatCard icon="🙏" label={t("layout.module.karma")} value={stats.karma} loading={loadingStats} labelClassName="font-bold text-lg app-module-label--karma" valueClassName="text-2xl font-extrabold app-module-value--karma" />
-      <StatCard icon="🌸" label={t("layout.module.bhakti")} value={stats.bhakti} loading={loadingStats} labelClassName="font-bold text-lg app-module-label--bhakti" valueClassName="text-2xl font-extrabold app-module-value--bhakti" />
-      <StatCard icon="🧘‍♂️" label={t("layout.module.jnana")} value={stats.jnana} loading={loadingStats} labelClassName="font-bold text-lg app-module-label--jnana" valueClassName="text-2xl font-extrabold app-module-value--jnana" />
-      <StatCard icon="🧘‍♀️" label={t("layout.module.dhyana")} value={stats.dhyana} loading={loadingStats} labelClassName="font-bold text-lg app-module-label--dhyana" valueClassName="text-2xl font-extrabold app-module-value--dhyana" />
-      <StatCard icon="🌱" label={t("layout.module.vasana")} value={stats.vasana} loading={loadingStats} labelClassName="app-stat-title-amber font-bold text-lg" valueClassName="app-stat-value-warm text-2xl font-extrabold" />
-      <StatCard icon="📜" label={t("layout.module.dharma")} value={stats.dharma} loading={loadingStats} labelClassName="font-bold text-lg app-module-label--dharma" valueClassName="text-2xl font-extrabold app-module-value--dharma" />
-      <StatCard icon="🔥" label={t("motivation.streak")} value={`${stats.streak} ${t("motivation.days")}`} loading={loadingStats} labelClassName="app-stat-title-primary font-bold text-lg" valueClassName="app-stat-value-primary text-2xl font-extrabold" />
-      <StatCard icon="📈" label={t("motivation.totalEntries")} value={stats.totalEntries} loading={loadingStats} labelClassName="app-stat-title-amber font-bold text-lg" valueClassName="app-stat-value-warm text-2xl font-extrabold" />
+      <StatCard icon="🙏" iconClassName="app-module-icon--karma" label={t("layout.module.karma")} value={stats.karma} loading={loadingStats} labelClassName="font-bold text-lg app-module-label--karma" valueClassName="text-2xl font-extrabold app-module-value--karma" />
+      <StatCard icon="🌸" iconClassName="app-module-icon--bhakti" label={t("layout.module.bhakti")} value={stats.bhakti} loading={loadingStats} labelClassName="font-bold text-lg app-module-label--bhakti" valueClassName="text-2xl font-extrabold app-module-value--bhakti" />
+      <StatCard icon="🧘‍♂️" iconClassName="app-module-icon--jnana" label={t("layout.module.jnana")} value={stats.jnana} loading={loadingStats} labelClassName="font-bold text-lg app-module-label--jnana" valueClassName="text-2xl font-extrabold app-module-value--jnana" />
+      <StatCard icon="🧘‍♀️" iconClassName="app-module-icon--dhyana" label={t("layout.module.dhyana")} value={stats.dhyana} loading={loadingStats} labelClassName="font-bold text-lg app-module-label--dhyana" valueClassName="text-2xl font-extrabold app-module-value--dhyana" />
+      <StatCard icon="🌱" iconClassName="app-module-icon--vasana" label={t("layout.module.vasana")} value={stats.vasana} loading={loadingStats} labelClassName="app-stat-title-amber font-bold text-lg app-module-label--vasana" valueClassName="app-stat-value-warm text-2xl font-extrabold app-module-value--vasana" />
+      <StatCard icon="📜" iconClassName="app-module-icon--dharma" label={t("layout.module.dharma")} value={stats.dharma} loading={loadingStats} labelClassName="font-bold text-lg app-module-label--dharma" valueClassName="text-2xl font-extrabold app-module-value--dharma" />
+      <StatCard icon="🔥" iconClassName="app-module-icon--motivation" label={t("motivation.streak")} value={`${stats.streak} ${t("motivation.days")}`} loading={loadingStats} labelClassName="app-stat-title-primary font-bold text-lg" valueClassName="app-stat-value-primary text-2xl font-extrabold" />
+      <StatCard icon="📈" iconClassName="app-module-icon--motivation" label={t("motivation.totalEntries")} value={stats.totalEntries} loading={loadingStats} labelClassName="app-stat-title-amber font-bold text-lg" valueClassName="app-stat-value-warm text-2xl font-extrabold" />
     </div>
   );
 }
@@ -247,17 +277,7 @@ export default function MotivationAnalyticsPage() {
   const [loadingStats, setLoadingStats] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [analyticsPayload, setAnalyticsPayload] = useState<AnalyticsPayload | null>(null);
-
-  const [stats, setStats] = useState<StatsModel>({
-    karma: 0,
-    bhakti: 0,
-    jnana: 0,
-    dhyana: 0,
-    vasana: 0,
-    dharma: 0,
-    streak: 0,
-    totalEntries: 0
-  });
+  const [stats, setStats] = useState<StatsModel>(() => emptyStatsModel());
   const chartSeries = useMemo(
     () => [{
       name: t("motivation.entries"),
@@ -349,17 +369,7 @@ export default function MotivationAnalyticsPage() {
         ? getSyntheticAnalyticsPayload()
         : apiData;
       setAnalyticsPayload(data);
-      const newStats = {
-        karma: data.counts.karma,
-        bhakti: data.counts.bhakti,
-        jnana: data.counts.jnana,
-        dhyana: data.counts.dhyana,
-        vasana: data.counts.vasana,
-        dharma: data.counts.dharma,
-        streak: data.streak,
-        totalEntries: data.totalEntries,
-      };
-      setStats(newStats);
+      setStats(toStatsModel(data));
       logEvent("analytics_fetch_success", {
         totalEntries: data.totalEntries,
         streak: data.streak,
@@ -369,17 +379,7 @@ export default function MotivationAnalyticsPage() {
       // Non-fatal: use synthetic analytics so the UX remains useful in empty/new setups.
       const data = getSyntheticAnalyticsPayload();
       setAnalyticsPayload(data);
-      const newStats = {
-        karma: data.counts.karma,
-        bhakti: data.counts.bhakti,
-        jnana: data.counts.jnana,
-        dhyana: data.counts.dhyana,
-        vasana: data.counts.vasana,
-        dharma: data.counts.dharma,
-        streak: data.streak,
-        totalEntries: data.totalEntries,
-      };
-      setStats(newStats);
+      setStats(toStatsModel(data));
       logEvent("analytics_fetch_failed", { syntheticData: true });
     } finally {
       setLoadingStats(false);
@@ -397,13 +397,22 @@ export default function MotivationAnalyticsPage() {
   useEffect(() => {
     setQuote(getInitialQuote(quotes));
   }, [locale, quotes]);
-
   return (
     <ModuleLayout titleKey="module.motivation.title">
+      <FocusIntro
+        title="Review momentum in under a minute"
+        summary="Use these signals to decide your next best practice step quickly."
+      />
+
       <section className="mb-8 sm:mb-10 flex flex-col items-center justify-center">
-        <QuoteHero t={t} quote={quote} inspireAgain={() => setQuote(getRandomQuote(quotes))} />
+        <LazyDetails summary="Optional inspiration and quick tour" className="app-surface-card w-full max-w-3xl rounded-2xl p-4 sm:p-6 mb-6">
+          <div className="flex flex-col items-center">
+            <QuoteHero t={t} quote={quote} inspireAgain={() => setQuote(getRandomQuote(quotes))} />
+            <QuickTour t={t} />
+          </div>
+        </LazyDetails>
+
         <ModuleActivityChart t={t} isMounted={isMounted} chartOptions={chartOptions} chartSeries={chartSeries} />
-        <QuickTour t={t} />
         <div className="w-full max-w-3xl flex justify-end mb-2">
           <button
             className="app-analytics-refresh"
@@ -420,7 +429,10 @@ export default function MotivationAnalyticsPage() {
       <DeferredRender minHeightClassName="min-h-[260px]">
         <LongitudinalChart />
       </DeferredRender>
-      <HowToSection t={t} />
+
+      <LazyDetails summary="Optional practice guidance" className="app-surface-card max-w-3xl mx-auto mt-6 p-4 sm:p-6">
+        <HowToSection t={t} />
+      </LazyDetails>
     </ModuleLayout>
   );
 }

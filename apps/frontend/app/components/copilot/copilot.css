@@ -25,7 +25,7 @@
   padding: 0.55rem 0.95rem;
   border: 1px solid rgba(29, 65, 53, 0.24);
   border-radius: 999px;
-  color: #fff;
+  color: var(--on-primary);
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   box-shadow: 0 16px 34px rgba(47, 93, 80, 0.24);
   cursor: pointer;
@@ -133,7 +133,7 @@
 
 .app-copilot-message--user {
   align-self: flex-end;
-  color: #fff;
+  color: var(--on-primary);
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
 }
 
@@ -176,7 +176,7 @@
 }
 
 .app-copilot-action {
-  color: #fff;
+  color: var(--on-danger);
   background: linear-gradient(135deg, var(--rose) 0%, #7f4e43 100%);
   border: 1px solid rgba(157, 97, 83, 0.24);
 }
@@ -226,7 +226,7 @@
   min-height: 2.5rem;
   border: 1px solid rgba(29, 65, 53, 0.24);
   border-radius: 0.75rem;
-  color: #fff;
+  color: var(--on-primary);
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   cursor: pointer;
   padding: 0.5rem 0.78rem;

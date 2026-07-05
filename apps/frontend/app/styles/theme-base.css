@@ -24,6 +24,12 @@
   --on-danger: #fff7f5;
   --warning-surface: #fff6dd;
   --warning-text: #6f4c16;
+  --season-aura-primary: rgba(164, 124, 67, 0.18);
+  --season-aura-secondary: rgba(57, 113, 94, 0.12);
+  --season-aura-tertiary: rgba(157, 97, 83, 0.1);
+  --season-border-glow: rgba(198, 150, 85, 0.34);
+  --season-sheen: rgba(255, 255, 255, 0.46);
+  --shell-noise-opacity: 0.04;
   --font-sans: 'Avenir Next', 'Nunito Sans', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -38,7 +44,7 @@
   --background-deep: #f2e3d2;
   --foreground: #3a2a1f;
   --primary: #8a3f1f;
-  --accent: #bc6c25;
+  --accent: #8f4b1f;
   --gold: #d6a85b;
   --emerald: #4f7f69;
   --rose: #b5534e;
@@ -81,10 +87,48 @@
   --on-danger: #1a0f0d;
   --warning-surface: #2b2412;
   --warning-text: #f2d89c;
+  --season-aura-primary: rgba(196, 159, 89, 0.12);
+  --season-aura-secondary: rgba(98, 168, 142, 0.14);
+  --season-aura-tertiary: rgba(208, 163, 154, 0.1);
+  --season-border-glow: rgba(222, 196, 143, 0.24);
+  --season-sheen: rgba(255, 255, 255, 0.08);
+  --shell-noise-opacity: 0.03;
+}
+
+:root[data-season="vernal"] {
+  --season-aura-primary: rgba(95, 171, 122, 0.18);
+  --season-aura-secondary: rgba(107, 164, 224, 0.13);
+  --season-aura-tertiary: rgba(230, 186, 132, 0.1);
+  --season-border-glow: rgba(95, 171, 122, 0.34);
+}
+
+:root[data-season="solstice"] {
+  --season-aura-primary: rgba(231, 166, 82, 0.2);
+  --season-aura-secondary: rgba(133, 179, 215, 0.12);
+  --season-aura-tertiary: rgba(191, 118, 95, 0.12);
+  --season-border-glow: rgba(231, 166, 82, 0.34);
+}
+
+:root[data-season="harvest"] {
+  --season-aura-primary: rgba(182, 109, 71, 0.2);
+  --season-aura-secondary: rgba(188, 146, 79, 0.16);
+  --season-aura-tertiary: rgba(121, 160, 103, 0.11);
+  --season-border-glow: rgba(182, 109, 71, 0.34);
+}
+
+:root[data-season="stillness"] {
+  --season-aura-primary: rgba(132, 132, 213, 0.16);
+  --season-aura-secondary: rgba(118, 170, 199, 0.13);
+  --season-aura-tertiary: rgba(190, 152, 209, 0.11);
+  --season-border-glow: rgba(132, 132, 213, 0.32);
 }
 
 body {
-  background: linear-gradient(140deg, var(--background) 0%, var(--background-elevated) 52%, var(--background-deep) 100%);
+  background:
+    radial-gradient(circle at 88% 6%, var(--season-aura-primary) 0%, transparent 44%),
+    radial-gradient(circle at 8% 82%, var(--season-aura-secondary) 0%, transparent 46%),
+    radial-gradient(circle at 48% 38%, var(--season-aura-tertiary) 0%, transparent 52%),
+    linear-gradient(140deg, var(--background) 0%, var(--background-elevated) 52%, var(--background-deep) 100%);
   color: var(--foreground);
   font-family: var(--font-sans);
   min-height: 100vh;
@@ -93,6 +137,29 @@ body {
   transition: background 0.5s, color 0.5s;
   position: relative;
   color-scheme: var(--color-scheme);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+  background-image:
+    linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, var(--shell-noise-opacity)) 20%, transparent 40%),
+    linear-gradient(295deg, transparent 0%, rgba(255, 255, 255, calc(var(--shell-noise-opacity) * 0.8)) 26%, transparent 48%);
+  mix-blend-mode: soft-light;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 20% -10%, var(--season-sheen) 0%, transparent 42%),
+    radial-gradient(circle at 100% 100%, rgba(255, 255, 255, calc(var(--shell-noise-opacity) * 2)) 0%, transparent 38%);
 }
 
 .spiritual-bg {
@@ -140,8 +207,24 @@ a:hover {
 
 .card,
 .surface {
-  background: var(--surface);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--surface) 82%, transparent) 0%, var(--surface-strong) 100%);
   border-radius: 1.25rem;
-  box-shadow: 0 2px 10px 0 rgba(47, 93, 80, 0.12);
+  border: 1px solid color-mix(in srgb, var(--border-soft) 72%, var(--season-border-glow));
+  box-shadow:
+    0 2px 10px rgba(47, 93, 80, 0.1),
+    0 14px 34px rgba(22, 30, 27, 0.09);
   padding: 1.5rem;
+}
+
+.app-shell {
+  position: relative;
+}
+
+.app-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 24%, transparent 76%, rgba(255, 255, 255, 0.15) 100%);
+  mix-blend-mode: soft-light;
 }

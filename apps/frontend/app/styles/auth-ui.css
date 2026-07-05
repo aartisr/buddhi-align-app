@@ -10,7 +10,7 @@
 
 .app-user-signin-link {
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  color: #fff;
+  color: var(--on-primary);
 }
 
 .app-user-signin-link:hover {
@@ -20,7 +20,7 @@
 .app-user-avatar,
 .app-user-avatar-fallback {
   background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
-  color: #fff;
+  color: var(--on-primary);
 }
 
 .app-user-avatar-ring {

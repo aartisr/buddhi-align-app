@@ -12,6 +12,7 @@ import { useCopilotPracticeDraft } from "../hooks/useCopilotPracticeDraft";
 import { useDharmaPlannerEntries } from "../hooks/useDharmaPlannerEntries";
 import { useState } from "react";
 import { useI18n } from "../i18n/provider";
+import FocusIntro from "../components/FocusIntro";
 
 export default function DharmaPlannerPage() {
   const { t } = useI18n();
@@ -22,6 +23,11 @@ export default function DharmaPlannerPage() {
 
   return (
     <ModuleLayout titleKey="module.dharma.title">
+      <FocusIntro
+        title="Pick one clear intention"
+        summary="Capture one purpose-aligned goal and the next concrete action."
+      />
+
       <ModuleEntryForm
         title={t("module.dharma.title")}
         icon="📜"

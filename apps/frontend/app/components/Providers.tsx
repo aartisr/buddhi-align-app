@@ -10,9 +10,12 @@ import {
   writeStoredThemePreference,
 } from "../preferences";
 import {
+  normalizeSeasonalThemeName,
   normalizeThemeName,
+  resolveDefaultSeasonalTheme,
   resolveDefaultTheme,
   themeColorScheme,
+  type SeasonalThemeName,
   type ThemeName,
 } from "../lib/theme";
 
@@ -20,8 +23,13 @@ const isClientObservabilityEnabled = process.env.NEXT_PUBLIC_OBSERVABILITY_CLIEN
 const CLARITY_PROJECT_ID = "w90fdbtt4x";
 const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID?.trim() || CLARITY_PROJECT_ID;
 
-function applyTheme(theme: ThemeName) {
+function applyTheme(theme: ThemeName, seasonalTheme: SeasonalThemeName | null) {
   document.documentElement.dataset.theme = theme;
+  if (seasonalTheme) {
+    document.documentElement.dataset.season = seasonalTheme;
+  } else {
+    delete document.documentElement.dataset.season;
+  }
   document.documentElement.style.colorScheme = themeColorScheme(theme);
 }
 
@@ -33,18 +41,21 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const hasInitializedClarity = useRef(false);
 
   useEffect(() => {
-    const searchTheme = normalizeThemeName(new URLSearchParams(window.location.search).get("theme"));
+    const searchParams = new URLSearchParams(window.location.search);
+    const searchTheme = normalizeThemeName(searchParams.get("theme"));
+    const searchSeasonalTheme = normalizeSeasonalThemeName(searchParams.get("season"));
     const storedTheme = normalizeThemeName(readStoredThemePreference());
     const nextTheme = searchTheme ?? storedTheme ?? resolveDefaultTheme();
+    const seasonalTheme = searchSeasonalTheme ?? resolveDefaultSeasonalTheme();
 
-    applyTheme(nextTheme);
+    applyTheme(nextTheme, seasonalTheme);
     if (searchTheme || !storedTheme) {
       writeStoredThemePreference(nextTheme);
     }
 
     const onPreferenceUpdate = () => {
       const updatedTheme = normalizeThemeName(readStoredThemePreference()) ?? resolveDefaultTheme();
-      applyTheme(updatedTheme);
+      applyTheme(updatedTheme, seasonalTheme);
     };
 
     window.addEventListener(PREFERENCES_UPDATED_EVENT, onPreferenceUpdate);

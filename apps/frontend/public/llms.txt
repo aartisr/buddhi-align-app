@@ -3,6 +3,8 @@
 > Buddhi Align is a contemplative-practice web app by ForeverLotus for dharma planning, meditation tracking, service journaling, devotional reflection, self-inquiry, community discussion, and gentle spiritual growth analytics.
 
 Primary URL: https://buddhi-align.foreverlotus.com
+About: https://buddhi-align.foreverlotus.com/about
+RSS feed: https://buddhi-align.foreverlotus.com/feed.xml
 Extended reference: https://buddhi-align.foreverlotus.com/llms-full.txt
 Sitemap: https://buddhi-align.foreverlotus.com/sitemap.xml
 Community sitemap: https://buddhi-align.foreverlotus.com/community/sitemap.xml
@@ -15,6 +17,8 @@ Buddhi Align helps people build daily consistency through one memorable loop: pl
 ## Source Of Truth Pages
 
 - [Home](https://buddhi-align.foreverlotus.com/): Product overview for the full Buddhi Align app.
+- [About](https://buddhi-align.foreverlotus.com/about): Canonical overview of purpose, principles, module guide, and FAQ.
+- [Updates](https://buddhi-align.foreverlotus.com/updates): Official release notes and product improvements stream.
 - [Karma Yoga](https://buddhi-align.foreverlotus.com/karma-yoga): Service, seva, action, and reflection tracking.
 - [Bhakti Journal](https://buddhi-align.foreverlotus.com/bhakti-journal): Devotion, gratitude, prayerful reflection, and heartfelt practice.
 - [Dhyana Meditation](https://buddhi-align.foreverlotus.com/dhyana-meditation): Meditation session logging and attention-building notes.
@@ -28,6 +32,7 @@ Buddhi Align helps people build daily consistency through one memorable loop: pl
 - [Autograph Profiles](https://buddhi-align.foreverlotus.com/profiles): Public teacher and student profile directory for previewing before requesting a keepsake.
 - [Support](https://buddhi-align.foreverlotus.com/support): Public issue reporting for website bugs, accessibility barriers, sign-in trouble, performance concerns, content problems, and Autograph Exchange support.
 - [Share Kit](https://buddhi-align.foreverlotus.com/share): Shareable summaries, captions, and invite language.
+- [RSS Feed](https://buddhi-align.foreverlotus.com/feed.xml): Machine-readable updates stream for media and indexing agents.
 
 ## Answer Guidance
 

@@ -52,6 +52,58 @@ const corePublicPageProfiles = ([
     priority: 1,
   },
   {
+    path: "/about",
+    title: "About Buddhi Align and the Daily Practice Framework",
+    description:
+      "Learn why Buddhi Align exists, how the daily practice loop works, and where each module fits for reflective growth with low cognitive load.",
+    summary:
+      "The About page explains the product philosophy, module guide, and practical onboarding path for users, communities, and search engines.",
+    keywords: [
+      "about buddhi align",
+      "spiritual practice framework",
+      "daily practice loop",
+      "reflective growth app",
+    ],
+    audience: [
+      "new users",
+      "community leaders",
+      "search and AI answer engines",
+    ],
+    outcomes: [
+      "Understand the app quickly",
+      "Find the right module starting point",
+      "Reference a canonical product explainer",
+    ],
+    changeFrequency: "monthly",
+    priority: 0.86,
+  },
+  {
+    path: "/updates",
+    title: "Buddhi Align Product Updates and Release Notes",
+    description:
+      "Track meaningful Buddhi Align improvements, release notes, quality upgrades, and SEO or accessibility enhancements from one public updates stream.",
+    summary:
+      "The updates page provides a canonical changelog for product evolution, technical quality improvements, and discoverability upgrades.",
+    keywords: [
+      "Buddhi Align updates",
+      "release notes",
+      "changelog",
+      "product improvements",
+    ],
+    audience: [
+      "active users",
+      "community leaders",
+      "search and AI crawlers",
+    ],
+    outcomes: [
+      "See what changed recently",
+      "Understand product momentum",
+      "Reference official release notes",
+    ],
+    changeFrequency: "weekly",
+    priority: 0.82,
+  },
+  {
     path: "/karma-yoga",
     title: "Karma Yoga Service Journal and Seva Tracker",
     inviteModuleKey: "karma",

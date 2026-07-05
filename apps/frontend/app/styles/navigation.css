@@ -8,7 +8,7 @@
   width: 2.75rem;
   height: 2.75rem;
   padding: 0.5rem;
-  background: rgba(255, 255, 255, 0.76);
+  background: var(--surface-soft);
   border: 1px solid var(--border-strong);
   border-radius: 0.5rem;
   cursor: pointer;
@@ -17,7 +17,7 @@
 }
 
 .app-mobile-menu-btn:hover {
-  background: rgba(255, 255, 255, 0.94);
+  background: var(--surface);
 }
 
 .app-mobile-menu-btn:focus-visible {
@@ -186,8 +186,8 @@
 
 /* Desktop grouped nav */
 .app-top-nav {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(252, 248, 240, 0.9) 100%);
-  border: 1px solid rgba(47, 93, 80, 0.3);
+  background: var(--surface-soft);
+  border: 1px solid var(--border-soft);
   border-radius: 999px;
   padding: 0.32rem;
   box-shadow: 0 12px 28px rgba(24, 24, 27, 0.12);
@@ -227,7 +227,7 @@
 .app-nav-group:hover .app-nav-group-trigger,
 .app-nav-group:focus-within .app-nav-group-trigger {
   border-color: var(--border-strong);
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--surface-soft);
   color: var(--primary);
 }
 
@@ -274,7 +274,7 @@
 
 .app-nav-submenu-link:hover,
 .app-nav-submenu-link:focus-visible {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--surface-soft);
   color: var(--primary);
   outline: none;
 }
@@ -498,7 +498,7 @@
 .app-preferences-toggle.is-active {
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   border-color: transparent;
-  color: #fff;
+  color: var(--on-primary);
 }
 
 .app-preferences-toggle:disabled,
@@ -547,7 +547,7 @@
 .app-inline-action--danger:hover:not(:disabled) {
   background: linear-gradient(135deg, rgba(157, 97, 83, 0.18) 0%, rgba(222, 196, 143, 0.14) 100%);
   border-color: rgba(157, 97, 83, 0.45);
-  color: #8f4d42;
+  color: var(--danger);
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(157, 97, 83, 0.2);
 }

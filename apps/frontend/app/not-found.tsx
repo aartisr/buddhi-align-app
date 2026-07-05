@@ -34,7 +34,7 @@ export default function NotFound() {
         <div className="flex flex-wrap gap-3 mt-6 justify-center">
           <Link
             href="/"
-            className="px-5 py-2 rounded-xl text-sm font-semibold bg-(--primary) text-white hover:bg-(--primary-dark,#24493e) transition"
+            className="px-5 py-2 rounded-xl text-sm font-semibold bg-(--primary) text-(--on-primary) hover:bg-(--accent) transition"
             aria-label={translate(DEFAULT_LOCALE, "route.notFound.homeAria")}
           >
             {translate(DEFAULT_LOCALE, "route.notFound.home")}

@@ -9,8 +9,18 @@ describe("responsive app shell styles", () => {
   it("prevents page-level horizontal overflow on narrow screens", () => {
     expect(stylesheet).toContain("overflow-x: clip;");
     expect(stylesheet).toContain("text-size-adjust: 100%;");
+    expect(stylesheet).toContain("max-width: 100%;");
     expect(stylesheet).toContain(".app-main-content");
     expect(stylesheet).toContain("width: min(100%, 46rem);");
+  });
+
+  it("forces media and long-form content to remain inside viewport", () => {
+    expect(stylesheet).toContain("img,");
+    expect(stylesheet).toContain("video,");
+    expect(stylesheet).toContain("iframe {");
+    expect(stylesheet).toContain("max-width: 100%;");
+    expect(stylesheet).toContain("overflow-wrap: anywhere;");
+    expect(stylesheet).toContain("white-space: pre-wrap;");
   });
 
   it("uses fluid grids and wrapping for app cards, records, and community surfaces", () => {
@@ -29,6 +39,24 @@ describe("responsive app shell styles", () => {
     expect(stylesheet).toContain("min-height: 2.75rem;");
     expect(stylesheet).toContain(".app-mobile-nav-quick-links,");
     expect(stylesheet).toContain("grid-template-columns: 1fr;");
+  });
+
+  it("adds tiny-screen and landscape-phone safeguards", () => {
+    expect(stylesheet).toContain("@media (max-width: 360px)");
+    expect(stylesheet).toContain(".app-module-chip {");
+    expect(stylesheet).toContain("width: 100%;");
+    expect(stylesheet).toContain("@media (max-height: 640px) and (max-width: 960px) and (orientation: landscape)");
+    expect(stylesheet).toContain(".app-header-panel {");
+    expect(stylesheet).toContain("position: static;");
+  });
+
+  it("includes embedded-webview guardrails for 320px and ultra-short screens", () => {
+    expect(stylesheet).toContain("@media (max-width: 320px)");
+    expect(stylesheet).toContain("grid-auto-columns: minmax(8.5rem, 1fr);");
+    expect(stylesheet).toContain(".app-support-grid,");
+    expect(stylesheet).toContain(".app-support-severity-grid,");
+    expect(stylesheet).toContain("@media (max-height: 560px) and (max-width: 420px)");
+    expect(stylesheet).toContain("padding-bottom: 2.25rem;");
   });
 
   it("keeps the copilot panel usable on phone and short viewports", () => {
