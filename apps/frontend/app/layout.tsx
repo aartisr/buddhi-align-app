@@ -1,5 +1,6 @@
 
 import type { Metadata, Viewport } from "next";
+import { Analytics } from '@vercel/analytics/next';
 
 import "./globals.css";
 import "./styles/theme-base.css";
@@ -141,6 +142,7 @@ export default function RootLayout({
             <SiteFooter />
           </I18nProvider>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
