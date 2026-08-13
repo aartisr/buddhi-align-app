@@ -22,6 +22,10 @@ function normalizeExternalCommunityTarget(value) {
 const communityProxyTarget = normalizeExternalCommunityTarget(process.env.COMMUNITY_PROXY_TARGET);
 const appSecurityHeaderSource = communityProxyTarget ? '/((?!community(?:/|$)).*)' : '/(.*)';
 const bingVerificationPath = '/6A06157D-A0A1-46BA-BA2B-439CD61864A3.txt';
+const postHogHost = process.env.NEXT_PUBLIC_POSTHOG_KEY
+  ? normalizeExternalCommunityTarget(process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com')
+  : undefined;
+const postHogConnectSource = postHogHost ? ` ${postHogHost}` : '';
 
 const crawlerUtilityHeaders = [
   {
@@ -86,7 +90,7 @@ const securityHeaders = [
       // Allow images from auth providers, Shishu Bharati, and Awaricon badge host
       "img-src 'self' data: blob: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://graph.facebook.com https://www.shishubharati.net https://www.foreverlotus.com https://*.clarity.ms",
       // Supabase real-time + REST connections
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.clarity.ms",
+      `connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.clarity.ms${postHogConnectSource}`,
       "frame-ancestors 'self'",
       "form-action 'self'",
       "base-uri 'self'",

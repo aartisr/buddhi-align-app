@@ -3,7 +3,7 @@
 /** @type {import('playwright').PlaywrightTestConfig} */
 const config = {
   testDir: "./e2e",
-  testMatch: /.*\.spec\.ts$/,
+  testMatch: /.*\.spec\.(ts|js)$/,
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

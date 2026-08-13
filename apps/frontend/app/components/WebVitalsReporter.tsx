@@ -22,6 +22,7 @@ export default function WebVitalsReporter() {
 
   useEffect(() => {
     if (!pathname) return;
+    logEvent("page_view", { pathname });
     const start = performance.now();
     const frame1 = requestAnimationFrame(() => {
       const frame2 = requestAnimationFrame(() => {

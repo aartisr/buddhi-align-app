@@ -5,6 +5,8 @@ export interface ObservationEvent {
 }
 
 const isClientObservabilityEnabled = process.env.NEXT_PUBLIC_OBSERVABILITY_CLIENT === "1";
+import { capturePostHog, getPostHogConfig } from "./posthog";
+
 const rawSampleRate = Number(process.env.NEXT_PUBLIC_OBSERVABILITY_SAMPLE_RATE ?? "1");
 const observabilitySampleRate = Number.isFinite(rawSampleRate)
   ? Math.min(Math.max(rawSampleRate, 0), 1)
@@ -15,7 +17,8 @@ const observabilitySampleRate = Number.isFinite(rawSampleRate)
  * Posts to /api/obs from the browser (best-effort, no throw).
  */
 export function logEvent(event: string, data?: Record<string, unknown>): void {
-  if (!isClientObservabilityEnabled) {
+  const isPostHogEnabled = Boolean(getPostHogConfig());
+  if (!isClientObservabilityEnabled && !isPostHogEnabled) {
     return;
   }
 
@@ -28,6 +31,12 @@ export function logEvent(event: string, data?: Record<string, unknown>): void {
     data,
     timestamp: new Date().toISOString(),
   };
+
+  capturePostHog(payload);
+
+  if (!isClientObservabilityEnabled) {
+    return;
+  }
 
   // Browser-side best effort delivery.
   if (typeof window !== "undefined") {

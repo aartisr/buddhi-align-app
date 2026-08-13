@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import PublicPageJsonLd from "../components/PublicPageJsonLd";
 import { buildPageMetadata } from "../lib/seo";
 
 export const metadata = buildPageMetadata({
@@ -10,5 +11,5 @@ export const metadata = buildPageMetadata({
 });
 
 export default function VasanaTrackerLayout({ children }: { children: ReactNode }) {
-  return children;
+  return <><PublicPageJsonLd path="/vasana-tracker" />{children}</>;
 }

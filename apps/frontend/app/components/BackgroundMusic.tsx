@@ -169,10 +169,6 @@ export default function BackgroundMusic() {
   }, []);
 
   useEffect(() => {
-    void startPlayback();
-  }, [startPlayback]);
-
-  useEffect(() => {
     if (!playing) return;
     void startPlayback();
   }, [trackIndex, playing, startPlayback]);
@@ -257,8 +253,7 @@ export default function BackgroundMusic() {
         ref={audioRef}
         src={bgmUrls[trackIndex]}
         loop={bgmUrls.length === 1}
-        autoPlay
-        preload="auto"
+        preload="metadata"
         className="hidden"
         onLoadedMetadata={() => {
           if (audioRef.current) audioRef.current.volume = volume;

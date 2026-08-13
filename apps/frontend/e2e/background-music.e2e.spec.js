@@ -35,11 +35,9 @@ test("uses configured track and supports play/pause flow", async ({ page }) => {
   const button = panel.locator(".app-music-button");
   const status = panel.locator(".app-music-status");
 
-  await expect(status).toContainText(/Playing|Loading audio\.\.\./);
+  await button.click();
+  await expect(status).toContainText("Playing");
 
   await button.click();
   await expect(status).toContainText("Paused");
-
-  await button.click();
-  await expect(status).toContainText("Playing");
 });

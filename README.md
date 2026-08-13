@@ -12,6 +12,18 @@ This project is dedicated to **Shishubharati**.
 
 Website: [https://www.shishubharati.net/](https://www.shishubharati.net/)
 
+## Official Buddhi Align Links
+
+- [Buddhi Align app](https://buddhi-align.foreverlotus.com/)
+- [Product overview and FAQ](https://buddhi-align.foreverlotus.com/about)
+- [Product updates](https://buddhi-align.foreverlotus.com/updates)
+- [Public support](https://buddhi-align.foreverlotus.com/support)
+- [Sitemap](https://buddhi-align.foreverlotus.com/sitemap.xml) and [AI-readable reference](https://buddhi-align.foreverlotus.com/llms.txt)
+
+The GitHub Pages companion supplies original public documentation and links to the
+authoritative product pages. It is deployed from `docs/github-pages` after GitHub
+Pages is configured to use GitHub Actions.
+
 ## Documentation Status
 
 This documentation was refreshed on **2026-03-30** to match the current codebase.

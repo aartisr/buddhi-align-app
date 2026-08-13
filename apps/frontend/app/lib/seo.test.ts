@@ -19,6 +19,7 @@ import {
   buildMotivationAnalyticsJsonLd,
   buildNoIndexMetadata,
   buildPageMetadata,
+  buildPublicPageJsonLd,
   buildSharePageJsonLd,
   guidedTourVideo,
 } from "./seo";
@@ -145,6 +146,22 @@ describe("SEO public route metadata", () => {
 
     expect(faqEntries).toHaveLength(homepageFaq.length);
     expect(itemListEntries.length).toBeGreaterThanOrEqual(6);
+  });
+
+  it("keeps route-specific structured data on its canonical page", () => {
+    const siteGraph = (buildSiteJsonLd()["@graph"] ?? []) as JsonRecord[];
+    const karmaJsonLd = buildPublicPageJsonLd("/karma-yoga");
+    const karmaGraph = (karmaJsonLd?.["@graph"] ?? []) as JsonRecord[];
+    const karmaPage = karmaGraph.find((entry) => entry["@type"] === "WebPage");
+
+    expect(siteGraph.some((entry) => entry["@type"] === "WebPage")).toBe(false);
+    expect(karmaPage).toMatchObject({
+      url: "https://buddhi-align.foreverlotus.com/karma-yoga",
+      dateModified: PUBLIC_CONTENT_LAST_MODIFIED,
+      inLanguage: "en-US",
+    });
+    expect(karmaGraph.some((entry) => entry["@type"] === "BreadcrumbList")).toBe(true);
+    expect(buildPublicPageJsonLd("/settings")).toBeNull();
   });
 
   it("publishes a share kit CollectionPage structured data node", () => {

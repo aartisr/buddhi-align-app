@@ -68,6 +68,7 @@ describe("BackgroundMusic rendering", () => {
   it("renders player controls when music control preference is visible", () => {
     render(<BackgroundMusic />);
     expect(screen.getByRole("button", { name: "app.play" })).toBeInTheDocument();
+    expect(document.querySelector("audio")).not.toHaveAttribute("autoplay");
     // Expand to see full controls
     const expandBtn = screen.getByRole("button", { name: /Expand player/i });
     expect(expandBtn).toBeInTheDocument();

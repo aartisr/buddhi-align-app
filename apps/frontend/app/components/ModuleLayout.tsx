@@ -167,18 +167,23 @@ function DesktopNavigation({
         <div
           key={group.key}
           className={`app-nav-group${desktopOpenGroup === group.key ? " is-open" : ""}${group.items.some((item) => isPathActive(item.href)) ? " is-active" : ""}`}
-          onMouseEnter={() => setDesktopOpenGroup(group.key)}
-          onMouseLeave={() => setDesktopOpenGroup((current) => (current === group.key ? null : current))}
         >
           <button
             type="button"
             className="app-nav-group-trigger"
             onClick={() => setDesktopOpenGroup((current) => (current === group.key ? null : group.key))}
+            aria-expanded={desktopOpenGroup === group.key}
+            aria-controls={`desktop-nav-${group.key}`}
           >
             <span className="app-nav-item-icon" aria-hidden>{group.icon}</span>
             {group.label}
           </button>
-          <div className="app-nav-submenu" aria-label={group.label}>
+          <div
+            id={`desktop-nav-${group.key}`}
+            className="app-nav-submenu"
+            aria-label={group.label}
+            aria-hidden={desktopOpenGroup !== group.key}
+          >
             {group.items.map((item) => (
               <CommunityAwareLink
                 key={item.key}
@@ -591,6 +596,7 @@ function useInviteContext({
 function ModuleLayoutView({
   t,
   titleKey,
+  heading,
   children,
   icon,
   menuGroups,
@@ -613,6 +619,7 @@ function ModuleLayoutView({
 }: {
   t: Translate;
   titleKey: TranslationKey;
+  heading?: string;
   children: React.ReactNode;
   icon: string;
   menuGroups: MenuGroup[];
@@ -705,7 +712,7 @@ function ModuleLayoutView({
 
         <main id="main-content" className="app-main-content" tabIndex={-1}>
           <h1 className="app-panel-title text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-center px-2">
-            {t(titleKey)}
+            {heading ?? t(titleKey)}
           </h1>
           {currentModule ? (
             <div className="flex justify-center mb-4">
@@ -733,7 +740,15 @@ function ModuleLayoutView({
   );
 }
 
-export default function ModuleLayout({ titleKey, children }: { titleKey: TranslationKey; children: React.ReactNode }) {
+export default function ModuleLayout({
+  titleKey,
+  heading,
+  children,
+}: {
+  titleKey: TranslationKey;
+  heading?: string;
+  children: React.ReactNode;
+}) {
   const { t } = useI18n();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -769,6 +784,7 @@ export default function ModuleLayout({ titleKey, children }: { titleKey: Transla
     <ModuleLayoutView
       t={t}
       titleKey={titleKey}
+      heading={heading}
       icon={icon}
       menuGroups={menuGroups}
       desktopOpenGroup={desktopOpenGroup}

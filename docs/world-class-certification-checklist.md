@@ -44,6 +44,11 @@ Every item below is implemented and mapped to an automated check, command, or wo
   - Evidence: `apps/frontend/app/admin/page.tsx`, `apps/frontend/app/admin/AdminDashboardView.tsx`
   - Check: built and type-checked as part of quality gate
 
+- [x] Public-route accessibility baseline is enforced in CI.
+  - Evidence: `apps/frontend/e2e/accessibility-smoke.spec.ts`
+  - Check: `npm run test:a11y`
+  - Scope: one clear page heading, main landmark, named controls, valid links, and no automatic media playback. Broader manual assistive-technology testing remains part of release review.
+
 ## Level 3: Process and Governance
 
 - [x] Scorecard policy with release-blocking gates documented.

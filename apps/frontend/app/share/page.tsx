@@ -60,22 +60,27 @@ export default function SharePage() {
         </section>
       </LazyDetails>
 
-      <section className="app-share-routes max-w-5xl mx-auto" aria-labelledby="canonical-share-routes">
-        <div className="app-share-section-header">
-          <p className="app-guided-flow-kicker">Canonical links</p>
-          <h2 id="canonical-share-routes" className="app-panel-title text-lg sm:text-xl font-bold leading-tight">
-            Send people to the page that matches their intent
-          </h2>
-        </div>
-        <div className="app-share-route-list">
-          {shareableRoutes.map((profile) => (
-            <Link key={profile.path} href={profile.path} className="app-share-route">
-              <span>{profile.title}</span>
-              <small>{profile.description}</small>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <LazyDetails
+        summary="Browse all public pages by intent"
+        className="app-share-routes max-w-5xl mx-auto p-4 sm:p-6 app-surface-card"
+      >
+        <section aria-labelledby="canonical-share-routes">
+          <div className="app-share-section-header">
+            <p className="app-guided-flow-kicker">Canonical links</p>
+            <h2 id="canonical-share-routes" className="app-panel-title text-lg sm:text-xl font-bold leading-tight">
+              Send people to the page that matches their intent
+            </h2>
+          </div>
+          <div className="app-share-route-list">
+            {shareableRoutes.map((profile) => (
+              <Link key={profile.path} href={profile.path} className="app-share-route">
+                <span>{profile.title}</span>
+                <small>{profile.description}</small>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </LazyDetails>
     </ModuleLayout>
   );
 }

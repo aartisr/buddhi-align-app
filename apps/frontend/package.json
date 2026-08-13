@@ -20,6 +20,7 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "test:a11y": "playwright test e2e/accessibility-smoke.spec.ts",
     "test:visual": "playwright test e2e/theme-gallery.visual.spec.js"
   },
   "dependencies": {

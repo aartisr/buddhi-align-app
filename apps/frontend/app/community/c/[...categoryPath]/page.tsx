@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 
 import JsonLd from "@/app/components/JsonLd";
 import ModuleLayout from "@/app/components/ModuleLayout";
+import { fitDescription, formatPublicDate } from "@/app/lib/content-format";
 import {
   getCommunityCategoryData,
   type CommunityCategoryCard,
@@ -38,19 +39,6 @@ function buildCategoryPathKey(categoryPath: readonly string[] = []): string {
   return categoryPath.join("/");
 }
 
-function fitDescription(value: string, maxLength = 170): string {
-  const trimmed = value.replace(/\s+/g, " ").trim();
-  if (trimmed.length <= maxLength) return trimmed;
-  return `${trimmed.slice(0, maxLength - 3).replace(/\s+\S*$/, "").trim()}.`;
-}
-
-function formatDate(value: string | undefined): string | undefined {
-  if (!value) return undefined;
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return undefined;
-  return new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" }).format(date);
-}
-
 function CommunityStatus({ status }: { status: CommunityDataStatus }) {
   if (status === "ready") return null;
 
@@ -82,7 +70,7 @@ function SubcategoryCard({ category }: { category: CommunityCategoryCard }) {
 }
 
 function TopicRow({ topic }: { topic: CommunityTopicSummary }) {
-  const bumpedAt = formatDate(topic.bumpedAt ?? topic.createdAt);
+  const bumpedAt = formatPublicDate(topic.bumpedAt ?? topic.createdAt);
 
   return (
     <article className="app-community-topic">

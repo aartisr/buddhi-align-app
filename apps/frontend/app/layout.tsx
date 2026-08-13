@@ -132,7 +132,6 @@ export default function RootLayout({
     <html lang="en" data-theme={defaultTheme} data-season={defaultSeasonalTheme ?? undefined}>
       <body className="antialiased">
         <JsonLd data={buildSiteJsonLd({ name: title, description })} />
-        <h1 className="sr-only">{title}</h1>
         <Providers>
           <I18nProvider>
             <div className="buddhi-bg-gradient" aria-hidden="true"></div>

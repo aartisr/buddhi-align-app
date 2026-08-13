@@ -121,6 +121,8 @@ function buildWebPageNode(profile: PublicPageProfile) {
     url: absoluteUrl(profile.path),
     name: profile.title,
     description: profile.description,
+    dateModified: profile.lastModified,
+    inLanguage: "en-US",
     isPartOf: {
       "@id": websiteId,
     },
@@ -419,13 +421,27 @@ export function buildSiteJsonLd({
         ],
         hasPart: publicPageReferences,
       },
-      ...publicPageProfiles.map(buildWebPageNode),
-      ...publicPageProfiles.map(buildBreadcrumbNode),
     ],
   };
 }
 
 export const siteJsonLd = buildSiteJsonLd();
+
+/**
+ * Emits only the schema that belongs to one canonical public route. Keeping
+ * route entities off unrelated pages makes the structured data easier for
+ * search engines and answer engines to validate and trust.
+ */
+export function buildPublicPageJsonLd(path: string) {
+  const profile = publicPageProfileByPath.get(path);
+
+  if (!profile) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [buildWebPageNode(profile), buildBreadcrumbNode(profile)],
+  };
+}
 
 export function buildHomePageJsonLd() {
   const homeProfile = publicPageProfileByPath.get("/") ?? publicPageProfiles[0];

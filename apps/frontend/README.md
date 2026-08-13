@@ -59,6 +59,10 @@ npm run build
 - `NEXT_PUBLIC_OBSERVABILITY_CLIENT` (optional; set to `1` to enable client telemetry posts)
 - `NEXT_PUBLIC_OBSERVABILITY_SAMPLE_RATE` (optional; `0..1`, defaults to `1` when telemetry is enabled)
 - `NEXT_PUBLIC_CLARITY_PROJECT_ID` (optional; when set, initializes Microsoft Clarity on the client)
+- `NEXT_PUBLIC_POSTHOG_KEY` (optional; enables curated PostHog product events)
+- `NEXT_PUBLIC_POSTHOG_HOST` (optional; defaults to `https://us.i.posthog.com`, or use `https://eu.i.posthog.com` / a self-hosted HTTPS ingestion host)
+
+PostHog is intentionally zero-configuration in application code: add the project key, redeploy, and the existing curated event stream is forwarded in small batches. It is inactive without a key and does not turn on session replay, autocapture, cookies, or account identification. See [`docs/posthog-integration.md`](../../docs/posthog-integration.md) for privacy and deployment guidance.
 
 ### Theme System (Plug-and-Play)
 

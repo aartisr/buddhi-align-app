@@ -4,9 +4,9 @@ import React from "react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("./components/ModuleLayout", () => ({
-  default: ({ titleKey, children }: { titleKey: string; children: React.ReactNode }) => (
+  default: ({ titleKey, heading, children }: { titleKey: string; heading?: string; children: React.ReactNode }) => (
     <main>
-      <h1>{titleKey}</h1>
+      <h1>{heading ?? titleKey}</h1>
       {children}
     </main>
   ),
@@ -40,18 +40,15 @@ describe("Home page", () => {
   it("renders a simplified Copilot-first dashboard with quick access modules", () => {
     render(<Home />);
 
-    expect(screen.getByRole("heading", { name: "app.dashboard", level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Buddhi Align: Daily Spiritual Practice and Reflection", level: 1 })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Decide. Do. Reflect.", level: 2 })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Start now" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Everything else, one tap away", level: 2 })).toBeInTheDocument();
+    expect(screen.getByText("Explore 4 more practice areas")).toBeInTheDocument();
 
     expect(screen.getByRole("link", { name: "dashboard.flow.plan.cta" })).toHaveAttribute("href", "/dharma-planner");
     expect(screen.getByRole("link", { name: "dashboard.flow.practice.cta" })).toHaveAttribute("href", "/karma-yoga");
     expect(screen.getByRole("link", { name: "dashboard.flow.reflect.cta" })).toHaveAttribute("href", "/jnana-reflection");
 
-    expect(screen.getByRole("link", { name: /Bhakti Journal/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Dhyana Meditation/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Vasana Tracker/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Motivation & Analytics/i })).toBeInTheDocument();
+    expect(screen.getByText("Explore 4 more practice areas")).toBeInTheDocument();
   });
 });

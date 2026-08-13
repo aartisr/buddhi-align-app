@@ -63,9 +63,11 @@ function checkCiWorkflow() {
     "name: CI/CD Quality Gates",
     "quality:",
     "performance:",
+    "accessibility:",
     "security-audit:",
     "TypeScript type-check",
     "npm run perf:ci",
+    "npm run test:a11y",
   ];
 
   for (const snippet of requiredSnippets) {
