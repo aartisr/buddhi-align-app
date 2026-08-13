@@ -15,6 +15,46 @@
   color: var(--on-primary) !important;
 }
 
+/* A single, high-visibility keyboard treatment keeps interactions predictable
+ * across every route and theme, including components with local focus styles. */
+:where(a, button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 3px solid var(--focus-ring) !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px var(--focus-ring-offset) !important;
+}
+
+/* Keep reading calm: prose has a comfortable measure and headings avoid
+ * awkward orphaned words without affecting compact controls or data tables. */
+:where(.app-copy, .app-copy-soft, .app-copy-subtle, .app-community-card-copy, .app-community-topic-excerpt, .app-community-post-copy) {
+  max-inline-size: 68ch;
+  text-wrap: pretty;
+}
+
+:where(h1, h2, h3, h4, h5, h6, .app-page-title, .app-panel-title) {
+  text-wrap: balance;
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --border-soft: var(--border-strong);
+  }
+
+  :where(.app-surface-card, .app-guided-flow-card, .app-public-story-card, .app-share-snippet, .app-faq-item, .app-module-index-link, .app-share-route, .app-community-card, .app-community-topic, .app-community-post) {
+    box-shadow: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 .app-reflection-prompt-card {
   background: var(--warning-surface);
 }

@@ -1253,33 +1253,18 @@ select::placeholder {
 }
 
 .app-module-label--karma,
-.app-module-value--karma {
-  color: #4d6d57;
-}
-
 .app-module-label--bhakti,
-.app-module-value--bhakti {
-  color: #90505f;
-}
-
 .app-module-label--jnana,
-.app-module-value--jnana {
-  color: #3b6a5a;
-}
-
 .app-module-label--dhyana,
-.app-module-value--dhyana {
-  color: #2f6a5d;
-}
-
 .app-module-label--vasana,
-.app-module-value--vasana {
-  color: #8b4f43;
-}
-
 .app-module-label--dharma,
+.app-module-value--karma,
+.app-module-value--bhakti,
+.app-module-value--jnana,
+.app-module-value--dhyana,
+.app-module-value--vasana,
 .app-module-value--dharma {
-  color: #355a4e;
+  color: var(--text-subtle);
 }
 
 .app-module-icon,

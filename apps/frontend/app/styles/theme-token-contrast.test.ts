@@ -77,8 +77,11 @@ describe("theme token contrast guardrails", () => {
     { foreground: "on-primary", background: "primary", min: 4.5 },
     { foreground: "on-primary", background: "accent", min: 4.5 },
     { foreground: "on-accent", background: "accent", min: 4.5 },
+    { foreground: "on-emerald", background: "emerald", min: 4.5 },
     { foreground: "on-danger", background: "danger", min: 4.5 },
     { foreground: "warning-text", background: "warning-surface", min: 4.5 },
+    { foreground: "focus-ring", background: "surface", min: 3 },
+    { foreground: "focus-ring", background: "background", min: 3 },
   ];
 
   for (const theme of themes) {

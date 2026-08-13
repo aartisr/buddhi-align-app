@@ -20,10 +20,13 @@
   --text-subtle: #244d42;
   --on-primary: #f7fbf8;
   --on-accent: #f7fbf8;
+  --on-emerald: #ffffff;
   --danger: #8f3e34;
   --on-danger: #fff7f5;
   --warning-surface: #fff6dd;
   --warning-text: #6f4c16;
+  --focus-ring: #1e5c4a;
+  --focus-ring-offset: #ffffff;
   --season-aura-primary: rgba(164, 124, 67, 0.18);
   --season-aura-secondary: rgba(57, 113, 94, 0.12);
   --season-aura-tertiary: rgba(157, 97, 83, 0.1);
@@ -59,6 +62,9 @@
   --text-subtle: #8a3f1f;
   --on-primary: #fff8f2;
   --on-accent: #fff8f2;
+  --on-emerald: #ffffff;
+  --focus-ring: #7a351a;
+  --focus-ring-offset: #fffaf5;
 }
 
 :root[data-theme="midnight"] {
@@ -83,10 +89,13 @@
   --text-subtle: #9fd3bc;
   --on-primary: #0f1d19;
   --on-accent: #0f1d19;
+  --on-emerald: #0f1d19;
   --danger: #f0a99d;
   --on-danger: #1a0f0d;
   --warning-surface: #2b2412;
   --warning-text: #f2d89c;
+  --focus-ring: #f2d89c;
+  --focus-ring-offset: #0f1d19;
   --season-aura-primary: rgba(196, 159, 89, 0.12);
   --season-aura-secondary: rgba(98, 168, 142, 0.14);
   --season-aura-tertiary: rgba(208, 163, 154, 0.1);

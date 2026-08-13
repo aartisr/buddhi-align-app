@@ -79,7 +79,7 @@ export default function DailyRings() {
                 </svg>
                 {done && (
                   <span
-                    className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center rounded-full text-white font-bold app-daily-ring-check"
+                    className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center rounded-full font-bold app-daily-ring-check"
                     aria-hidden="true"
                   >
                     ✓

@@ -44,7 +44,7 @@ export default function Error({
           <button
             type="button"
             onClick={reset}
-            className="px-5 py-2 rounded-xl text-sm font-semibold bg-(--primary) text-white hover:bg-(--primary-dark,#24493e) transition"
+            className="px-5 py-2 rounded-xl text-sm font-semibold bg-(--primary) text-(--on-primary) hover:bg-(--primary-dark,#24493e) transition"
             aria-label={translate(DEFAULT_LOCALE, "route.error.retryAria")}
           >
             {translate(DEFAULT_LOCALE, "route.error.retry")}

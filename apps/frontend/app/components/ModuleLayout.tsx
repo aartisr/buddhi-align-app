@@ -646,7 +646,7 @@ function ModuleLayoutView({
     <div className="app-shell relative font-sans">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-9999 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-(--primary) focus:text-white focus:font-semibold focus:text-sm"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-9999 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-(--primary) focus:text-(--on-primary) focus:font-semibold focus:text-sm"
       >
         {t("nav.skipToMain")}
       </a>
