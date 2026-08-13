@@ -34,6 +34,10 @@ if (!existsSync(packageJsonPath) || !existsSync(vercelConfigPath)) {
     fail("vercel.json buildCommand must execute the Vercel preflight check.");
   }
 
+  if (vercelConfig.outputDirectory !== "apps/frontend/.next") {
+    fail('vercel.json must set outputDirectory to "apps/frontend/.next" for the workspace build.');
+  }
+
   if (existsSync(nestedVercelConfigPath)) {
     fail("apps/frontend/vercel.json must not exist: Vercel must build from the repository root.");
   }

@@ -3,6 +3,7 @@
   "framework": "nextjs",
   "installCommand": "node scripts/vercel-install.mjs",
   "buildCommand": "npm run vercel:preflight && npm run verify:no-private-repo && npm run build",
+  "outputDirectory": "apps/frontend/.next",
   "env": {
     "AUTOGRAPH_EXCHANGE_REPO_REF": "f6459121e1bf8f035075746509f35ba28aaa7a9e",
     "COMMUNITY_INTEGRATION_PROVIDER": "discourse",

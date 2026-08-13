@@ -234,6 +234,7 @@ Recommended Vercel project settings:
 - Root directory: repository root
 - Install command: from `vercel.json` (`node scripts/vercel-install.mjs`)
 - Build command: from `vercel.json` (`npm run vercel:preflight && npm run verify:no-private-repo && npm run build`)
+- Output directory: from `vercel.json` (`apps/frontend/.next`)
 
 Why this works:
 
