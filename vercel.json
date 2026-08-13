@@ -1,6 +1,8 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
   "installCommand": "node scripts/vercel-install.mjs",
-  "buildCommand": "npm run verify:no-private-repo && npm run build",
+  "buildCommand": "npm run vercel:preflight && npm run verify:no-private-repo && npm run build",
   "env": {
     "AUTOGRAPH_EXCHANGE_REPO_REF": "f6459121e1bf8f035075746509f35ba28aaa7a9e",
     "COMMUNITY_INTEGRATION_PROVIDER": "discourse",

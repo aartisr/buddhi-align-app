@@ -74,7 +74,7 @@ Note: There is no standalone `apps/backend` service in this repository. API beha
 
 ### Prerequisites
 
-- Node.js 20.x (repo engines target)
+- Node.js 24.x (matches the Vercel deployment runtime)
 - npm 9+
 
 ### Install
@@ -219,7 +219,7 @@ CI workflow (`.github/workflows/ci.yml`) runs:
 - Lint (`npm run lint:frontend`)
 - Tests (`npm run test:frontend`)
 - Build (`npm run build:frontend`)
-- Matrix: Node 18.x and 20.x
+- Node 24.x, matching the deployment runtime
 - Security audit and coverage upload steps
 
 ## Deployment
@@ -233,7 +233,7 @@ Recommended Vercel project settings:
 - Framework preset: `Next.js`
 - Root directory: repository root
 - Install command: from `vercel.json` (`node scripts/vercel-install.mjs`)
-- Build command: from `vercel.json` (`npm run verify:no-private-repo && npm run build`)
+- Build command: from `vercel.json` (`npm run vercel:preflight && npm run verify:no-private-repo && npm run build`)
 
 Why this works:
 
@@ -244,9 +244,10 @@ Why this works:
 - Vercel install runs through `scripts/vercel-install.mjs`, which forces the public npm registry and strips stale npm auth variables before workspace install
 - local development can override source URL and ref through environment variables when needed
 - autograph packages resolve from local file dependencies under `external/autograph-exchange/packages/*`
-- the deploy no longer depends on `external/` sibling paths or local proprietary package references
+- the deploy fetches its pinned public Autograph dependency into `external/` during installation, then resolves it as workspace-local source
+- `npm run vercel:preflight` is part of every Vercel build and rejects an unsupported nested-project configuration before compilation starts
 
-If your Vercel project uses `apps/frontend` as the root directory, that folder now includes its own `vercel.json` and `scripts/vercel-install.mjs` so the same sanitized install flow still works from the app subdirectory.
+Do not set the Vercel project Root Directory to `apps/frontend`. This is a workspace application that requires the repository root so its shared packages and prepared public Autograph source are available during installation and build.
 
 Recommended Vercel environment variables:
 

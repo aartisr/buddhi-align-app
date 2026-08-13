@@ -31,7 +31,6 @@
     "@buddhi-align/shared-ui": "*",
     "@buddhi-align/site-config": "*",
     "@microsoft/clarity": "^1.0.0",
-    "@vercel/analytics": "^2.0.1",
     "apexcharts": "^5.10.4",
     "autoprefixer": "^10.4.27",
     "next": "14.2.35",
