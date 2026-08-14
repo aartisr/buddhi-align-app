@@ -11,6 +11,7 @@ body {
 
 body {
   overflow-x: clip;
+  overflow-wrap: anywhere;
 }
 
 img,
@@ -44,7 +45,7 @@ pre {
   width: min(100%, 46rem);
   margin-left: auto;
   margin-right: auto;
-  padding: 2rem 1rem 6rem;
+  padding: 2rem max(1rem, env(safe-area-inset-right, 0px)) calc(6rem + env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px));
   position: relative;
   z-index: 10;
 }
@@ -53,7 +54,7 @@ pre {
 @media (min-width: 640px) {
   .app-main-content {
     width: min(100%, 54rem);
-    padding: 3rem 2rem 6rem;
+    padding: 3rem max(2rem, env(safe-area-inset-right, 0px)) calc(6rem + env(safe-area-inset-bottom, 0px)) max(2rem, env(safe-area-inset-left, 0px));
   }
 }
 
@@ -99,6 +100,38 @@ pre {
 .app-sequence-card,
 .app-record-card {
   min-width: 0;
+}
+
+/* Nested grid and flex children otherwise retain their content's intrinsic width.
+   This makes every route resilient to long names, URLs, translations, and user text. */
+.app-main-content :where(.grid, .flex, [class*="grid"], [class*="flex"]) > *,
+.site-footer__grid > *,
+.site-footer__meta > *,
+.app-practice-context__body > *,
+.app-copilot-panel > * {
+  min-inline-size: 0;
+}
+
+:where(
+  .app-main-content,
+  .site-footer,
+  .app-copilot-panel
+) :where(
+  h1, h2, h3, h4, p, a, button, label, legend, small, span, dd, dt, li
+) {
+  overflow-wrap: anywhere;
+}
+
+.app-practice-context,
+.app-practice-context summary,
+.app-practice-context__body,
+.site-footer__utility,
+.site-footer__utility-links {
+  max-width: 100%;
+}
+
+.app-practice-context summary {
+  white-space: normal;
 }
 
 :where(
@@ -203,7 +236,7 @@ pre {
 
 @media (max-width: 480px) {
   .app-main-content {
-    padding-inline: 0.85rem;
+    padding-inline: max(0.85rem, env(safe-area-inset-right, 0px)) max(0.85rem, env(safe-area-inset-left, 0px));
   }
 
   .app-surface-card,
@@ -231,6 +264,10 @@ pre {
     width: 100%;
     justify-content: flex-start;
     border-radius: 0.8rem;
+  }
+
+  .app-practice-context {
+    width: 100%;
   }
 }
 

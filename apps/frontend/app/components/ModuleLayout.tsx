@@ -12,7 +12,6 @@ import {
 
 import UserMenu from "./UserMenu";
 import BuddhiAlignLogo from "./BuddhiAlignLogo";
-import PlatinumBadge from "./PlatinumBadge";
 import PreferencesMenu from "./PreferencesMenu";
 import CommunityLink from "./CommunityLink";
 import BuddhiAlignCopilot from "./copilot/BuddhiAlignCopilot";
@@ -374,6 +373,29 @@ function FlowRail({
   );
 }
 
+function PracticeContext({
+  t,
+  currentModule,
+  getModuleLabel,
+}: {
+  t: Translate;
+  currentModule: ModuleItem;
+  getModuleLabel: (moduleItem: ModuleItem) => string;
+}) {
+  return (
+    <details className="app-practice-context">
+      <summary>
+        <span aria-hidden>✦</span>
+        <span>Practice path and community</span>
+      </summary>
+      <div className="app-practice-context__body">
+        <FlowRail t={t} currentModule={currentModule} getModuleLabel={getModuleLabel} />
+        <CommunityLink moduleKey={currentModule.key} label="Discuss this practice" />
+      </div>
+    </details>
+  );
+}
+
 function SequenceNavigation({
   t,
   sequenceIndex,
@@ -626,10 +648,9 @@ function ModuleLayoutView({
             <Link href="/" className="inline-flex items-center" aria-label={t("app.brand")}>
               <BuddhiAlignLogo className="h-10 sm:h-11 w-auto" />
             </Link>
-            <PlatinumBadge />
           </div>
           <DesktopNavigation
-            groups={menuGroups}
+            groups={menuGroups.filter((group) => group.key !== "home")}
             desktopOpenGroup={desktopOpenGroup}
             setDesktopOpenGroup={setDesktopOpenGroup}
             isPathActive={isPathActive}
@@ -674,13 +695,8 @@ function ModuleLayoutView({
           <h1 className="app-panel-title text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-center px-2">
             {heading ?? t(titleKey)}
           </h1>
-          {currentModule ? (
-            <div className="flex justify-center mb-4">
-              <CommunityLink moduleKey={currentModule.key} />
-            </div>
-          ) : null}
-          {sequenceIndex >= 0 ? (
-            <FlowRail t={t} currentModule={currentModule} getModuleLabel={getModuleLabel} />
+          {currentModule && sequenceIndex >= 0 ? (
+            <PracticeContext t={t} currentModule={currentModule} getModuleLabel={getModuleLabel} />
           ) : null}
           {children}
           {sequenceIndex >= 0 && (previousModule || nextModule) ? (

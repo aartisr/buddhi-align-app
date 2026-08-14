@@ -16,16 +16,13 @@ export default function FocusIntro({ title, summary, primaryHref, primaryLabel }
           <h2 className="app-panel-title text-lg sm:text-xl font-bold leading-tight">{title}</h2>
           <p className="app-copy-soft text-sm mt-1 max-w-2xl">{summary}</p>
         </div>
-        <div className="flex items-center gap-2">
-          {primaryHref && primaryLabel ? (
+        {primaryHref && primaryLabel ? (
+          <div className="flex items-center gap-2">
             <Link href={primaryHref} className="app-guided-flow-primary-link">
               {primaryLabel}
             </Link>
-          ) : null}
-          <Link href="/about" className="app-guided-flow-link whitespace-nowrap">
-            About this app
-          </Link>
-        </div>
+          </div>
+        ) : null}
       </div>
     </section>
   );

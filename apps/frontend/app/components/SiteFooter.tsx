@@ -60,23 +60,6 @@ export default function SiteFooter() {
             </ul>
           </nav>
 
-          <section className="site-footer__panel site-footer__panel--trust" aria-label="Trust and indexing links">
-            <h3 className="site-footer__section-heading">Trust and Discovery</h3>
-            <ul className="site-footer__link-list">
-              <li>
-                <a href="/feed.xml" className="site-footer__link">RSS Feed</a>
-              </li>
-              <li>
-                <a href="/sitemap.xml" className="site-footer__link">Sitemap</a>
-              </li>
-              <li>
-                <a href="/llms.txt" className="site-footer__link">LLMs Index</a>
-              </li>
-              <li>
-                <a href="/robots.txt" className="site-footer__link">Crawler Rules</a>
-              </li>
-            </ul>
-          </section>
         </div>
 
         <div className="site-footer__meta">
@@ -92,6 +75,16 @@ export default function SiteFooter() {
             </a>
             . {t("footer.rights")}
           </p>
+
+          <details className="site-footer__utility">
+            <summary>Technical resources</summary>
+            <div className="site-footer__utility-links">
+              <a href="/feed.xml">RSS feed</a>
+              <a href="/sitemap.xml">Sitemap</a>
+              <a href="/llms.txt">LLMs index</a>
+              <a href="/robots.txt">Crawler rules</a>
+            </div>
+          </details>
 
           <div className="site-footer__awaricon">
             <p className="site-footer__awaricon-label">Certified Excellence</p>

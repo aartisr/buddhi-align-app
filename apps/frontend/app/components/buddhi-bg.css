@@ -1,9 +1,7 @@
 .buddhi-bg-gradient {
   /* Ultra-subtle, spiritual background gradient */
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   z-index: 0;
   pointer-events: none;
   background:
@@ -13,7 +11,7 @@
     linear-gradient(120deg, #f2f6f1 0%, #e6efe6 55%, #dce8db 100%);
   opacity: 0.5;
   transition: opacity 0.5s;
-  overflow: visible !important;
+  overflow: hidden;
 }
 
 .buddhi-bg-icon {

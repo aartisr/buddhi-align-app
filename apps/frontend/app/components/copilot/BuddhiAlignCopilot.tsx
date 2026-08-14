@@ -203,11 +203,12 @@ export default function BuddhiAlignCopilot() {
         type="button"
         className="app-copilot-launcher"
         aria-label="Open Buddhi Align Copilot"
+        title="Ask Buddhi Align Copilot"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
       >
-        <span aria-hidden>?</span>
-        <span>Copilot</span>
+        <span aria-hidden>✦</span>
+        <span className="sr-only">Copilot</span>
       </button>
     </div>
   );

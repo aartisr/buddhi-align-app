@@ -37,7 +37,7 @@
 
 .site-footer__grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-columns: 1.35fr .85fr;
   gap: 0.95rem;
   position: relative;
   z-index: 1;
@@ -227,6 +227,36 @@
   color: var(--footer-link);
   text-transform: uppercase;
   margin: 0;
+}
+
+.site-footer__utility {
+  justify-self: start;
+  font-size: 0.78rem;
+  color: var(--footer-ink);
+}
+
+.site-footer__utility summary {
+  cursor: pointer;
+  color: var(--footer-link);
+  font-weight: 700;
+}
+
+.site-footer__utility-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.8rem;
+  margin-top: 0.55rem;
+}
+
+.site-footer__utility-links a {
+  color: var(--footer-ink);
+  text-decoration: none;
+}
+
+.site-footer__utility-links a:hover,
+.site-footer__utility-links a:focus-visible {
+  color: var(--footer-link-hover);
+  text-decoration: underline;
 }
 
 @keyframes app-footer-badge-attention-once {

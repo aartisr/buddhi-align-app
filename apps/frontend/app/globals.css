@@ -141,6 +141,35 @@
   color: var(--primary);
 }
 
+.app-practice-context {
+  width: min(100% - 2rem, 68rem);
+  margin: -0.45rem auto 1.1rem;
+  color: var(--text-soft);
+}
+
+.app-practice-context summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  color: var(--text-subtle);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.app-practice-context__body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  padding-top: 0.75rem;
+}
+
+.app-practice-context .app-flow-rail {
+  flex: 1 1 34rem;
+  margin: 0;
+}
+
 .app-guided-flow {
   position: relative;
   overflow: hidden;

@@ -12,6 +12,7 @@ describe("responsive app shell styles", () => {
     expect(stylesheet).toContain("max-width: 100%;");
     expect(stylesheet).toContain(".app-main-content");
     expect(stylesheet).toContain("width: min(100%, 46rem);");
+    expect(stylesheet).toContain("env(safe-area-inset-bottom, 0px)");
   });
 
   it("forces media and long-form content to remain inside viewport", () => {
@@ -30,6 +31,9 @@ describe("responsive app shell styles", () => {
     expect(stylesheet).toContain(".app-community-post-header,");
     expect(stylesheet).toContain(".app-record-card__header {");
     expect(stylesheet).toContain("flex-wrap: wrap;");
+    expect(stylesheet).toContain("min-inline-size: 0;");
+    expect(stylesheet).toContain("[class*=\"grid\"]");
+    expect(stylesheet).toContain("overflow-wrap: anywhere;");
   });
 
   it("keeps mobile navigation and preference controls within the viewport", () => {

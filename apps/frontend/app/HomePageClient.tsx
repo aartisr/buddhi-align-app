@@ -3,7 +3,6 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import ModuleLayout from "./components/ModuleLayout";
-import FocusIntro from "./components/FocusIntro";
 import LazyDetails from "./components/LazyDetails";
 import { MODULE_CATALOG } from "./i18n/config";
 import { useI18n, useLocalizedModules } from "./i18n/provider";
@@ -58,20 +57,15 @@ export default function HomePageClient() {
   return (
     <ModuleLayout
       titleKey="app.dashboard"
-      heading="Buddhi Align: Daily Spiritual Practice and Reflection"
+      heading="A gentle practice for today"
     >
-      <FocusIntro
-        title="Daily clarity, zero clutter"
-        summary="Use Copilot to decide your next best step, complete one meaningful action, then move on."
-      />
-
       <section className="app-guided-flow app-surface-card max-w-4xl mx-auto mb-6 p-5 sm:p-7" aria-label={t("dashboard.flow.aria")}>
         <div className="app-guided-flow-header">
           <div>
-            <p className="app-guided-flow-kicker">Copilot-first daily loop</p>
+            <p className="app-guided-flow-kicker">One mindful rhythm</p>
             <h2 className="app-panel-title text-xl sm:text-2xl font-bold leading-tight">Decide. Do. Reflect.</h2>
             <p className="app-copy-soft text-sm mt-2 max-w-2xl">
-              Skip the noise. Ask Copilot one question, complete one meaningful action, and close your day with a short reflection.
+              Begin with one purpose-aligned intention, offer one meaningful action, and make space to notice what you learn.
             </p>
           </div>
           <Link
@@ -82,9 +76,6 @@ export default function HomePageClient() {
             Start now
           </Link>
         </div>
-        <p className="app-copy-soft text-xs sm:text-sm mb-4">
-          Copilot is available in the bottom-right corner across every module.
-        </p>
         <div className="app-guided-flow-grid">
           {flowSteps.map((step) => (
             <article key={step.key} className="app-guided-flow-card">
