@@ -1,4 +1,5 @@
 import ComplianceBadge from "./ComplianceBadge";
+import AwariconPlatinumMark from "./AwariconPlatinumMark";
 import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
 
 type PlatinumBadgeProps = {
@@ -14,6 +15,7 @@ export default function PlatinumBadge({ size = "header" }: PlatinumBadgeProps) {
       alt={translate(DEFAULT_LOCALE, "compliance.badgeAlt")}
       ariaLabel={translate(DEFAULT_LOCALE, "compliance.badgeAria")}
       tierTag={size === "header" ? translate(DEFAULT_LOCALE, "compliance.tier.platinum") : undefined}
+      renderMark={(className) => <AwariconPlatinumMark className={className} />}
     />
   );
 }

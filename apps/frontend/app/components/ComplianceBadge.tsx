@@ -15,6 +15,7 @@ type ComplianceBadgeProps = {
   tierTag?: string;
   width?: number;
   height?: number;
+  renderMark?: (className: string) => React.ReactNode;
 };
 
 const BADGE_CLASS_BY_VARIANT: Record<ComplianceBadgeVariant, string> = {
@@ -41,6 +42,7 @@ export default function ComplianceBadge({
   tierTag,
   width = 180,
   height = 180,
+  renderMark,
 }: ComplianceBadgeProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const titleId = useId();
@@ -80,16 +82,18 @@ export default function ComplianceBadge({
         aria-controls={dialogId}
         onClick={() => setIsDialogOpen(true)}
       >
-        <Image
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
-          sizes={variant === "header" ? "(max-width: 640px) 40px, 60px" : "(max-width: 640px) 114px, 132px"}
-          priority={variant === "header"}
-          unoptimized
-          className={IMAGE_CLASS_BY_VARIANT[variant]}
-        />
+        {renderMark ? renderMark(IMAGE_CLASS_BY_VARIANT[variant]) : (
+          <Image
+            src={src}
+            alt={alt}
+            width={width}
+            height={height}
+            sizes={variant === "header" ? "(max-width: 640px) 40px, 60px" : "(max-width: 640px) 114px, 132px"}
+            priority={variant === "header"}
+            unoptimized
+            className={IMAGE_CLASS_BY_VARIANT[variant]}
+          />
+        )}
         {tierTag ? <span className={TAG_CLASS_BY_VARIANT[variant]}>{tierTag}</span> : null}
       </button>
 
@@ -128,14 +132,16 @@ export default function ComplianceBadge({
 
             <div className="app-compliance-modal__content">
               <div className="app-compliance-modal__badge">
-                <Image
-                  src={src}
-                  alt={alt}
-                  width={88}
-                  height={88}
-                  sizes="88px"
-                  unoptimized
-                />
+                {renderMark ? renderMark("app-compliance-modal__badge-image") : (
+                  <Image
+                    src={src}
+                    alt={alt}
+                    width={88}
+                    height={88}
+                    sizes="88px"
+                    unoptimized
+                  />
+                )}
                 <div>
                   <p className="app-compliance-modal__kicker">{translate(DEFAULT_LOCALE, "compliance.kicker")}</p>
                   <p className="app-compliance-modal__value">

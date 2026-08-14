@@ -2122,6 +2122,12 @@ select::placeholder {
   gap: 0.8rem;
 }
 
+.app-compliance-modal__badge-image {
+  width: 5.5rem;
+  height: 5.5rem;
+  flex: 0 0 auto;
+}
+
 .app-compliance-modal__kicker {
   margin: 0;
   color: var(--text-subtle);
