@@ -3,6 +3,8 @@
 import React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { MODULE_CATALOG, translate, DEFAULT_LOCALE } from "@/app/i18n/config";
+import { logEvent } from "@/app/lib/logEvent";
+import { siteUrl } from "@/app/lib/seo";
 
 type EasyInviteCardProps = {
   title: string;
@@ -18,6 +20,7 @@ type EasyInviteCardProps = {
   phonePlaceholder?: string;
   emailCta: string;
   smsCta: string;
+  whatsappCta?: string;
   copyCta: string;
   shareCta: string;
   copiedLabel: string;
@@ -97,6 +100,14 @@ function buildInviteMessage(url: string): string {
   return translate(DEFAULT_LOCALE, "invite.messageTemplate", { url });
 }
 
+function buildCampaignUrl(path: string, source: string): string {
+  const url = new URL(path, `${siteUrl}/`);
+  url.searchParams.set("utm_source", source);
+  url.searchParams.set("utm_medium", "share");
+  url.searchParams.set("utm_campaign", "community-invite");
+  return url.toString();
+}
+
 export default function EasyInviteCard({
   title,
   subtitle,
@@ -111,6 +122,7 @@ export default function EasyInviteCard({
   phonePlaceholder = "+1 555 123 4567",
   emailCta,
   smsCta,
+  whatsappCta = "WhatsApp",
   copyCta,
   shareCta,
   copiedLabel,
@@ -139,8 +151,13 @@ export default function EasyInviteCard({
   const [canNativeShare, setCanNativeShare] = useState(false);
 
   // Keep render-time value deterministic between SSR and CSR to avoid hydration mismatch.
-  const inviteUrl = invitePath;
-  const inviteMessage = useMemo(() => buildInviteMessage(inviteUrl), [inviteUrl]);
+  const emailInviteUrl = useMemo(() => buildCampaignUrl(invitePath, "email"), [invitePath]);
+  const smsInviteUrl = useMemo(() => buildCampaignUrl(invitePath, "sms"), [invitePath]);
+  const whatsappInviteUrl = useMemo(() => buildCampaignUrl(invitePath, "whatsapp"), [invitePath]);
+  const nativeInviteUrl = useMemo(() => buildCampaignUrl(invitePath, "native-share"), [invitePath]);
+  const emailMessage = useMemo(() => buildInviteMessage(emailInviteUrl), [emailInviteUrl]);
+  const smsMessage = useMemo(() => buildInviteMessage(smsInviteUrl), [smsInviteUrl]);
+  const whatsappMessage = useMemo(() => buildInviteMessage(whatsappInviteUrl), [whatsappInviteUrl]);
 
   useEffect(() => {
     setCanNativeShare(typeof navigator !== "undefined" && typeof navigator.share === "function");
@@ -149,22 +166,27 @@ export default function EasyInviteCard({
   const emailHref = useMemo(() => {
     const params = new URLSearchParams();
     params.set("subject", translate(DEFAULT_LOCALE, "invite.mailSubject"));
-    params.set("body", inviteMessage);
+    params.set("body", emailMessage);
     const recipient = emailTo.trim();
     return `mailto:${encodeURIComponent(recipient)}?${params.toString()}`;
-  }, [emailTo, inviteMessage]);
+  }, [emailTo, emailMessage]);
 
   const smsHref = useMemo(() => {
-    const encoded = encodeURIComponent(inviteMessage);
+    const encoded = encodeURIComponent(smsMessage);
     const recipient = phoneTo.trim();
     return `sms:${encodeURIComponent(recipient)}?body=${encoded}`;
-  }, [phoneTo, inviteMessage]);
+  }, [phoneTo, smsMessage]);
+
+  const whatsappHref = useMemo(
+    () => `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`,
+    [whatsappMessage],
+  );
 
   async function copyInviteLink() {
     try {
-      const absoluteUrl = `${window.location.origin}${invitePath}`;
-      await navigator.clipboard.writeText(absoluteUrl);
+      await navigator.clipboard.writeText(buildCampaignUrl(invitePath, "copy-link"));
       setCopied(true);
+      logEvent("invite_shared", { channel: "copy-link", destination: invitePath });
       setTimeout(() => setCopied(false), 1600);
     } catch {
       setCopied(false);
@@ -177,8 +199,9 @@ export default function EasyInviteCard({
       await navigator.share({
         title: title,
         text: translate(DEFAULT_LOCALE, "invite.shareText"),
-        url: `${window.location.origin}${invitePath}`,
+        url: nativeInviteUrl,
       });
+      logEvent("invite_shared", { channel: "native-share", destination: invitePath });
     } catch {
       // User cancel should remain silent.
     }
@@ -233,8 +256,9 @@ export default function EasyInviteCard({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <a href={emailHref} className="app-user-action px-3 py-2 rounded-lg text-sm">{emailCta}</a>
-          <a href={smsHref} className="app-user-action px-3 py-2 rounded-lg text-sm">{smsCta}</a>
+          <a href={emailHref} onClick={() => logEvent("invite_shared", { channel: "email", destination: invitePath })} className="app-user-action px-3 py-2 rounded-lg text-sm">{emailCta}</a>
+          <a href={smsHref} onClick={() => logEvent("invite_shared", { channel: "sms", destination: invitePath })} className="app-user-action px-3 py-2 rounded-lg text-sm">{smsCta}</a>
+          <a href={whatsappHref} onClick={() => logEvent("invite_shared", { channel: "whatsapp", destination: invitePath })} className="app-user-action px-3 py-2 rounded-lg text-sm">{whatsappCta}</a>
           <button type="button" onClick={copyInviteLink} className="app-user-action px-3 py-2 rounded-lg text-sm">
             {copied ? copiedLabel : copyCta}
           </button>

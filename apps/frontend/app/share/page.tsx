@@ -26,16 +26,17 @@ export default function SharePage() {
 
       <EasyInviteCard
         title="Invite someone into the daily loop"
-        subtitle="Choose a module, then send a link that opens directly into a calm starting point."
+        subtitle="Choose a starting point, then send a trusted link that opens directly into a calm first step."
         moduleOptions={publicShareDestinations}
         homeOptionLabel="Home (quick start)"
         moduleSelectorLabel="Share destination"
         emailFieldLabel="Email"
         phoneFieldLabel="Phone"
         emailPlaceholder="friend@example.com"
-        phonePlaceholder="+1 555 123 4567"
+        phonePlaceholder="+91 98765 43210"
         emailCta="Email invite"
         smsCta="Text invite"
+        whatsappCta="Share on WhatsApp"
         copyCta="Copy link"
         shareCta="Share"
         copiedLabel="Copied"
