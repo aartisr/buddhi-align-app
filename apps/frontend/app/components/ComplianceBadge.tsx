@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useId, useMemo, useState } from "react";
+import React, { useEffect, useId, useMemo, useState } from "react";
 import { translate, DEFAULT_LOCALE } from "@/app/i18n/config";
 
 type ComplianceBadgeVariant = "header" | "footer";
@@ -85,6 +85,9 @@ export default function ComplianceBadge({
           alt={alt}
           width={width}
           height={height}
+          sizes={variant === "header" ? "(max-width: 640px) 40px, 60px" : "(max-width: 640px) 114px, 132px"}
+          priority={variant === "header"}
+          unoptimized
           className={IMAGE_CLASS_BY_VARIANT[variant]}
         />
         {tierTag ? <span className={TAG_CLASS_BY_VARIANT[variant]}>{tierTag}</span> : null}
@@ -130,6 +133,8 @@ export default function ComplianceBadge({
                   alt={alt}
                   width={88}
                   height={88}
+                  sizes="88px"
+                  unoptimized
                 />
                 <div>
                   <p className="app-compliance-modal__kicker">{translate(DEFAULT_LOCALE, "compliance.kicker")}</p>
