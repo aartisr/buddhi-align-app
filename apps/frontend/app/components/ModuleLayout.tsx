@@ -425,7 +425,9 @@ function SequenceNavigation({
             className="app-sequence-card"
             aria-label={`${t("nav.previous")}: ${getModuleLabel(previousModule)}`}
           >
-            <span className="app-sequence-card-label">{t("nav.previous")}</span>
+            <span className="app-sequence-card-label">
+              <span aria-hidden="true">←</span> {t("nav.previous")}
+            </span>
             <span className="app-sequence-card-title">
               <span aria-hidden>{previousModule.icon}</span>
               <span>{getModuleLabel(previousModule)}</span>
@@ -441,7 +443,9 @@ function SequenceNavigation({
             className="app-sequence-card app-sequence-card--next"
             aria-label={`${t("nav.next")}: ${getModuleLabel(nextModule)}`}
           >
-            <span className="app-sequence-card-label">{t("nav.next")}</span>
+            <span className="app-sequence-card-label">
+              {t("nav.next")} <span aria-hidden="true">→</span>
+            </span>
             <span className="app-sequence-card-title">
               <span aria-hidden>{nextModule.icon}</span>
               <span>{getModuleLabel(nextModule)}</span>
