@@ -1,40 +1,25 @@
 "use client";
 
-import { hasAnonymousCookieInHeader } from "@/app/auth/anonymous";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { useI18n } from "../i18n/provider";
 
 /**
  * Displays the signed-in user's avatar + name and a sign-out button.
  * Renders nothing while the session is loading.
- * When no session exists, shows a sign-in link instead.
+ * When no session exists, keeps the header quiet so people can explore before
+ * being asked to sign in at the moment they choose to save an entry.
  */
 export default function UserMenu() {
   const { data: session, status } = useSession();
   const { t } = useI18n();
-  const [isAnonymous, setIsAnonymous] = useState(false);
-
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    setIsAnonymous(hasAnonymousCookieInHeader(document.cookie));
-  }, []);
 
   if (status === "loading") {
     return <div className="w-8 h-8 rounded-full app-user-skeleton animate-pulse" aria-label={t("user.loadingSession")} />;
   }
 
   if (!session) {
-    return (
-      <div className="flex items-center gap-2">
-        {isAnonymous && (
-          <span className="text-xs px-2 py-1 rounded-full app-anonymous-badge">
-            {t("auth.anonymousBadge")}
-          </span>
-        )}
-      </div>
-    );
+    return null;
   }
 
   return (

@@ -54,7 +54,7 @@
 	opacity: 1;
 }
 
-@media (prefers-color-scheme: dark) {
+:root[data-theme="midnight"] {
 	.autograph-shell :is(input, textarea, select, .app-form-input, .autograph-input) {
 		background: rgba(20, 34, 29, 0.96) !important;
 		border-color: rgba(178, 213, 198, 0.38) !important;

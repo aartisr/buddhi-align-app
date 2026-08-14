@@ -27,6 +27,24 @@
   --warning-text: #6f4c16;
   --focus-ring: #1e5c4a;
   --focus-ring-offset: #ffffff;
+  /* Semantic chrome tokens: every persistent surface reads from this contract,
+   * while each theme supplies the palette values behind it. */
+  --chrome-surface: color-mix(in srgb, var(--surface-strong) 90%, var(--background));
+  --chrome-surface-raised: color-mix(in srgb, var(--surface) 92%, var(--background-elevated));
+  --chrome-surface-hover: color-mix(in srgb, var(--surface-soft) 78%, var(--gold));
+  --chrome-border: color-mix(in srgb, var(--border-strong) 72%, var(--season-border-glow));
+  --chrome-ink: var(--foreground);
+  --chrome-link: var(--primary);
+  --chrome-link-hover: var(--accent);
+  --chrome-wash: color-mix(in srgb, var(--season-aura-primary) 56%, var(--season-aura-tertiary));
+  --chrome-glow: color-mix(in srgb, var(--gold) 34%, var(--season-aura-primary));
+  --chrome-shadow: rgba(24, 24, 27, 0.14);
+  --chrome-overlay: rgba(18, 40, 33, 0.36);
+  --footer-surface: color-mix(in srgb, var(--surface-strong) 88%, var(--background-elevated));
+  --footer-panel: color-mix(in srgb, var(--surface-strong) 92%, transparent);
+  --footer-ink: var(--text-muted);
+  --footer-link: var(--primary);
+  --footer-link-hover: var(--accent);
   --season-aura-primary: rgba(164, 124, 67, 0.18);
   --season-aura-secondary: rgba(57, 113, 94, 0.12);
   --season-aura-tertiary: rgba(157, 97, 83, 0.1);
@@ -96,6 +114,14 @@
   --warning-text: #f2d89c;
   --focus-ring: #f2d89c;
   --focus-ring-offset: #0f1d19;
+  --chrome-surface: color-mix(in srgb, var(--surface-strong) 94%, var(--background));
+  --chrome-surface-raised: color-mix(in srgb, var(--surface) 88%, var(--background-elevated));
+  --chrome-surface-hover: color-mix(in srgb, var(--surface-soft) 78%, var(--gold));
+  --chrome-border: color-mix(in srgb, var(--border-strong) 74%, var(--season-border-glow));
+  --chrome-shadow: rgba(0, 0, 0, 0.38);
+  --chrome-overlay: rgba(5, 15, 11, 0.58);
+  --footer-surface: color-mix(in srgb, var(--surface-strong) 92%, var(--background));
+  --footer-panel: color-mix(in srgb, var(--surface-strong) 86%, transparent);
   --season-aura-primary: rgba(196, 159, 89, 0.12);
   --season-aura-secondary: rgba(98, 168, 142, 0.14);
   --season-aura-tertiary: rgba(208, 163, 154, 0.1);

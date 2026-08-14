@@ -4,19 +4,19 @@
   padding: 1.2rem 0 1.6rem;
   color: var(--foreground);
   background:
-    radial-gradient(circle at 86% 14%, rgba(198, 150, 85, 0.18) 0%, rgba(198, 150, 85, 0) 48%),
-    radial-gradient(circle at 12% 80%, rgba(157, 97, 83, 0.16) 0%, rgba(157, 97, 83, 0) 52%),
-    linear-gradient(165deg, var(--surface-strong) 0%, var(--surface-soft) 100%);
-  border-top: 1px solid var(--border-soft);
+    radial-gradient(circle at 86% 14%, var(--chrome-glow) 0%, transparent 48%),
+    radial-gradient(circle at 12% 80%, var(--chrome-wash) 0%, transparent 52%),
+    linear-gradient(165deg, var(--footer-surface) 0%, var(--chrome-surface-raised) 100%);
+  border-top: 1px solid var(--chrome-border);
 }
 
 .site-footer__inner {
   width: min(1120px, 94%);
   margin: 0 auto;
-  border: 1px solid var(--border-soft);
+  border: 1px solid var(--chrome-border);
   border-radius: 1.35rem;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: 0 24px 48px rgba(24, 24, 27, 0.12);
+  background: var(--footer-surface);
+  box-shadow: 0 24px 48px var(--chrome-shadow);
   padding: 1.4rem 1.2rem 1.1rem;
   position: relative;
   overflow: hidden;
@@ -31,7 +31,7 @@
   border-radius: 999px;
   right: -4rem;
   top: -5rem;
-  background: radial-gradient(circle, rgba(198, 150, 85, 0.34) 0%, rgba(198, 150, 85, 0) 72%);
+  background: radial-gradient(circle, var(--chrome-glow) 0%, transparent 72%);
   pointer-events: none;
 }
 
@@ -44,9 +44,9 @@
 }
 
 .site-footer__panel {
-  border: 1px solid var(--border-soft);
+  border: 1px solid var(--chrome-border);
   border-radius: 1rem;
-  background: color-mix(in srgb, var(--surface-strong) 88%, transparent);
+  background: var(--footer-panel);
   padding: 1rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   animation: app-footer-panel-rise 0.45s ease-out both;
@@ -66,8 +66,8 @@
 
 .site-footer__panel:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(24, 24, 27, 0.11);
-  border-color: var(--border-strong);
+  box-shadow: 0 12px 24px var(--chrome-shadow);
+  border-color: var(--chrome-border);
 }
 
 @keyframes app-footer-panel-rise {
@@ -96,7 +96,7 @@
   font-size: clamp(1rem, 1.8vw, 1.35rem);
   line-height: 1.2;
   letter-spacing: -0.01em;
-  color: var(--primary);
+  color: var(--footer-link);
 }
 
 .site-footer__dedication-line {
@@ -105,7 +105,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 0.4rem;
-  color: var(--text-muted);
+  color: var(--footer-ink);
 }
 
 .site-footer__dedication-prefix {
@@ -126,21 +126,21 @@
 
 .site-footer__logo-link:hover,
 .site-footer__logo-link:focus-visible {
-  border-color: var(--border-strong);
-  background: var(--surface-soft);
+  border-color: var(--chrome-border);
+  background: var(--chrome-surface-hover);
   outline: none;
 }
 
 .site-footer__logo-text {
   font-weight: 700;
-  color: var(--rose);
+  color: var(--footer-link);
   font-size: 0.92rem;
 }
 
 .site-footer__gratitude {
   margin: 0.7rem 0 0;
   font-size: 0.86rem;
-  color: var(--text-soft);
+  color: var(--footer-ink);
 }
 
 .site-footer__section-heading {
@@ -148,7 +148,7 @@
   font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--text-subtle);
+  color: var(--footer-link);
 }
 
 .site-footer__link-list {
@@ -163,7 +163,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  color: var(--text-muted);
+  color: var(--footer-ink);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
@@ -175,14 +175,14 @@
 
 .site-footer__link:hover,
 .site-footer__link:focus-visible {
-  color: var(--primary);
-  background: var(--surface-soft);
-  border-color: var(--border-soft);
+  color: var(--footer-link-hover);
+  background: var(--chrome-surface-hover);
+  border-color: var(--chrome-border);
   outline: none;
 }
 
 .site-footer__author-link {
-  color: var(--rose);
+  color: var(--footer-link);
   font-weight: 600;
   text-decoration: none;
   border-bottom: 1px solid transparent;
@@ -198,7 +198,7 @@
 .site-footer__meta {
   margin-top: 0.9rem;
   padding-top: 0.85rem;
-  border-top: 1px solid var(--border-soft);
+  border-top: 1px solid var(--chrome-border);
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 0.75rem;
@@ -209,7 +209,7 @@
 
 .site-footer__copyright {
   margin: 0;
-  color: var(--text-soft);
+  color: var(--footer-ink);
   font-size: 0.84rem;
   line-height: 1.5;
 }
@@ -224,7 +224,7 @@
 .site-footer__awaricon-label {
   font-size: 0.67rem;
   letter-spacing: 0.07em;
-  color: var(--text-subtle);
+  color: var(--footer-link);
   text-transform: uppercase;
   margin: 0;
 }
@@ -366,41 +366,8 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .site-footer {
-    background:
-      radial-gradient(circle at 88% 12%, rgba(198, 150, 85, 0.14) 0%, rgba(198, 150, 85, 0) 52%),
-      radial-gradient(circle at 14% 86%, rgba(157, 97, 83, 0.16) 0%, rgba(157, 97, 83, 0) 55%),
-      linear-gradient(165deg, rgba(16, 30, 25, 0.95) 0%, rgba(20, 34, 29, 0.92) 100%);
-    border-top-color: rgba(178, 213, 198, 0.22);
-  }
-
-  .site-footer__inner {
-    background: rgba(18, 34, 29, 0.66);
-    border-color: rgba(178, 213, 198, 0.26);
-    box-shadow: 0 22px 44px rgba(0, 0, 0, 0.36);
-  }
-
-  .site-footer__panel {
-    background: rgba(23, 41, 35, 0.74);
-    border-color: rgba(178, 213, 198, 0.24);
-  }
-
-  .site-footer__link:hover,
-  .site-footer__link:focus-visible,
-  .site-footer__logo-link:hover,
-  .site-footer__logo-link:focus-visible {
-    background: rgba(29, 51, 43, 0.94);
-    border-color: rgba(178, 213, 198, 0.28);
-  }
-
-  .app-awaricon-badge--footer {
-    filter: saturate(0.95);
-  }
-
-  .app-awaricon-badge__tag {
-    color: #b8aa84;
-  }
+:root[data-theme="midnight"] .app-awaricon-badge--footer {
+  filter: saturate(0.95);
 }
 
 @media (prefers-reduced-motion: reduce) {

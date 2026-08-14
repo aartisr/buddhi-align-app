@@ -108,7 +108,7 @@ function getSignInErrorMessage(error: string): string {
 export default function SignInPage({
   searchParams,
 }: {
-  searchParams?: { callbackUrl?: string; error?: string; mode?: string };
+  searchParams?: { callbackUrl?: string; error?: string; mode?: string; intent?: string };
 }) {
   const configuredProviders = getConfiguredOAuthProviders();
   const requestOrigin = getRequestOrigin();
@@ -118,6 +118,7 @@ export default function SignInPage({
   });
   const mode = sanitizeChoiceMode(searchParams?.mode);
   const error = searchParams?.error;
+  const isSavingDraft = searchParams?.intent === "save";
   const inviteModuleOptions = MODULE_CATALOG.map((item) => ({
     key: item.key,
     href: item.href,
@@ -160,30 +161,32 @@ export default function SignInPage({
             {t("auth.signIn")}
           </p>
 
-          <div className="app-anonymous-callout rounded-xl p-4 mb-4" role="note" aria-label={t("auth.anonymousWarningTitle")}>
-            <p className="app-anonymous-title text-sm font-semibold">
-              {t("auth.anonymousWarningTitle")}
-            </p>
-            <p className="app-anonymous-copy text-xs mt-1">
-              {t("auth.anonymousWarningBody")}
-            </p>
-            <form
-              className="mt-3"
-              action={async () => {
-                "use server";
-                cookies().set(getAnonymousCookieOptions());
-                redirect(callbackUrl);
-              }}
-            >
-              <button
-                type="submit"
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-150 app-anonymous-button shadow-sm hover:shadow-md active:scale-[0.98]"
+          {!isSavingDraft ? (
+            <div className="app-anonymous-callout rounded-xl p-4 mb-4" role="note" aria-label={t("auth.anonymousWarningTitle")}>
+              <p className="app-anonymous-title text-sm font-semibold">
+                {t("auth.anonymousWarningTitle")}
+              </p>
+              <p className="app-anonymous-copy text-xs mt-1">
+                {t("auth.anonymousWarningBody")}
+              </p>
+              <form
+                className="mt-3"
+                action={async () => {
+                  "use server";
+                  cookies().set(getAnonymousCookieOptions());
+                  redirect(callbackUrl);
+                }}
               >
-                <span aria-hidden>🕊️</span>
-                <span>{t("auth.continueAnonymously")}</span>
-              </button>
-            </form>
-          </div>
+                <button
+                  type="submit"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-150 app-anonymous-button shadow-sm hover:shadow-md active:scale-[0.98]"
+                >
+                  <span aria-hidden>🕊️</span>
+                  <span>{t("auth.continueAnonymously")}</span>
+                </button>
+              </form>
+            </div>
+          ) : null}
 
           {configuredProviders.map((provider) => {
             const theme = PROVIDER_THEME[provider.id];

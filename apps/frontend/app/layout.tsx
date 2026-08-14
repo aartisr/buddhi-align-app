@@ -11,6 +11,7 @@ import "./styles/records.css";
 import "./styles/navigation.css";
 import "./styles/responsive.css";
 import "./styles/contrast-overrides.css";
+import "./styles/theme-contract.css";
 import "./components/buddhi-bg.css";
 import "./components/copilot/copilot.css";
 

@@ -3,9 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import React, { useMemo, useState, useEffect, useCallback } from "react";
-import { ANONYMOUS_COOKIE_NAME, ANONYMOUS_COOKIE_VALUE } from "@/app/auth/anonymous";
 import { logEvent } from "@/app/lib/logEvent";
-import { buildSignInHref, sanitizeRelativeCallbackUrl } from "@/app/auth/navigation";
 import {
   buildCommunitySsoLoginHref,
   shouldUseDocumentNavigationForCommunity,
@@ -199,22 +197,6 @@ function DesktopNavigation({
         </div>
       ))}
     </nav>
-  );
-}
-
-function AnonymousModeBanner({ t, signInHref }: { t: Translate; signInHref: string }) {
-  return (
-    <div className="app-anonymous-banner px-4 sm:px-6 py-3 relative z-20" role="status" aria-live="polite">
-      <div className="app-anonymous-banner-inner">
-        <p className="app-anonymous-banner-copy">
-          <span className="app-anonymous-banner-strong">{t("auth.anonymousBannerTitle")}</span>{" "}
-          {t("auth.persistHint")}
-        </p>
-        <Link href={signInHref} className="app-anonymous-banner-cta">
-          {t("auth.signInToSave")}
-        </Link>
-      </div>
-    </div>
   );
 }
 
@@ -500,17 +482,6 @@ function useModuleMenuGroups(t: Translate): MenuGroup[] {
   }, [t]);
 }
 
-function useAnonymousModeFlag() {
-  const [isAnonymous, setIsAnonymous] = useState(false);
-
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    setIsAnonymous(document.cookie.includes(`${ANONYMOUS_COOKIE_NAME}=${ANONYMOUS_COOKIE_VALUE}`));
-  }, []);
-
-  return isAnonymous;
-}
-
 function usePathActive(pathname: string | null): PathActive {
   return useCallback((href: string) => {
     if (!pathname) return href === "/";
@@ -572,11 +543,6 @@ function useInviteContext({
   searchParams: ReturnType<typeof useSearchParams>;
   currentModule: ModuleItem | null;
 }) {
-  const currentPathWithSearch = sanitizeRelativeCallbackUrl(
-    `${pathname || "/"}${searchParams?.toString() ? `?${searchParams.toString()}` : ""}`,
-    "/",
-  );
-  const signInHref = buildSignInHref(currentPathWithSearch);
   const isInviteArrival = searchParams?.get("source") === "invite";
   const inviteModule = searchParams?.get("module")?.trim();
   const inviteModuleItem = inviteModule
@@ -586,7 +552,6 @@ function useInviteContext({
   const inviteStartHref = inviteStartModule ? `${inviteStartModule.href}#quick-start-form` : undefined;
 
   return {
-    signInHref,
     isInviteArrival,
     inviteStartModule,
     inviteStartHref,
@@ -604,8 +569,6 @@ function ModuleLayoutView({
   setDesktopOpenGroup,
   isPathActive,
   setMobileNavOpen,
-  isAnonymous,
-  signInHref,
   isInviteArrival,
   inviteStartModule,
   inviteStartHref,
@@ -627,8 +590,6 @@ function ModuleLayoutView({
   setDesktopOpenGroup: React.Dispatch<React.SetStateAction<string | null>>;
   isPathActive: PathActive;
   setMobileNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  isAnonymous: boolean;
-  signInHref: string;
   isInviteArrival: boolean;
   inviteStartModule: ModuleItem | null;
   inviteStartHref?: string;
@@ -692,7 +653,6 @@ function ModuleLayoutView({
           </div>
         </header>
 
-        {isAnonymous ? <AnonymousModeBanner t={t} signInHref={signInHref} /> : null}
         {isInviteArrival ? (
           <InviteArrivalBanner
             t={t}
@@ -760,7 +720,6 @@ export default function ModuleLayout({
   const menuGroups = useModuleMenuGroups(t);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [desktopOpenGroup, setDesktopOpenGroup] = useState<string | null>(null);
-  const isAnonymous = useAnonymousModeFlag();
   useNavEffects({
     pathname,
     mobileNavOpen,
@@ -774,7 +733,7 @@ export default function ModuleLayout({
   const getModuleLabel = (moduleItem: ModuleItem) => t(moduleItem.navKey ?? moduleItem.titleKey);
 
   const closeNav = () => setMobileNavOpen(false);
-  const { signInHref, isInviteArrival, inviteStartModule, inviteStartHref } = useInviteContext({
+  const { isInviteArrival, inviteStartModule, inviteStartHref } = useInviteContext({
     pathname,
     searchParams,
     currentModule,
@@ -791,8 +750,6 @@ export default function ModuleLayout({
       setDesktopOpenGroup={setDesktopOpenGroup}
       isPathActive={isPathActive}
       setMobileNavOpen={setMobileNavOpen}
-      isAnonymous={isAnonymous}
-      signInHref={signInHref}
       isInviteArrival={isInviteArrival}
       inviteStartModule={inviteStartModule}
       inviteStartHref={inviteStartHref}

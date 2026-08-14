@@ -1,6 +1,18 @@
-# Buddhi Align App
+# Buddhi Align
 
-> Buddhi Yoga as a practical system for clarity, self-regulation, and purposeful daily action.
+> A gentle place to return to clarity, care, and purposeful daily action.
+
+I am Aarti S. Ravikumar, and I made Buddhi Align from a simple conviction: none of us should have to carry the work of becoming whole alone. In crowded days and uncertain seasons, we all deserve a small, steady place to pause, listen inwardly, and choose our next step with kindness.
+
+This is not a measure of anyone's worth, nor a demand to be perfect. It is a companion for the ordinary, courageous work of living—meeting our responsibilities, noticing our patterns, tending our inner lives, and remembering that the wellbeing we cultivate in ourselves can ripple outward into our families, workplaces, and communities.
+
+Buddhi Align draws on the enduring paths of Karma Yoga, Bhakti, Jnana, and Dhyana, and holds them as practices for real human days. A reflection can become a clearer conversation. A moment of meditation can become patience with a neighbor. A plan made with care can become service. I hope this app helps each person find their own meaningful bridge between inner steadiness and generous action.
+
+Please use it, adapt it, question it, and share what you learn. Your feedback is not an afterthought; it is how this work becomes more useful, more welcoming, and more truthful. If something helps you, tell us. If something excludes you or could be gentler, tell us that too. I invite builders, seekers, teachers, friends, and communities everywhere to help shape Buddhi Align into a resource that serves with humility and care.
+
+With gratitude,
+
+**Aarti S. Ravikumar**
 
 [![Shishu Bharati Logo](https://www.shishubharati.net/wp-content/uploads/2024/07/ShishuBharati-Logo-Transparent-HiRes-150x150.png)](https://www.shishubharati.net/)
 
@@ -32,9 +44,9 @@ This documentation was refreshed on **2026-03-30** to match the current codebase
 
 - Source sync and package-link flow: [docs/autograph-source-sync.md](docs/autograph-source-sync.md)
 
-## What This App Is
+## What This App Offers
 
-Buddhi Align is a monorepo centered on a Next.js App Router application that helps users build contemplative practice through structured modules:
+Buddhi Align is a monorepo centered on a Next.js App Router application. It offers gentle structure for a contemplative practice that can support clarity, self-regulation, and purposeful action through these modules:
 
 - Karma Yoga
 - Bhakti Journal

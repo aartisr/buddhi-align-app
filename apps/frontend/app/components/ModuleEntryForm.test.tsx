@@ -29,6 +29,20 @@ describe("ModuleEntryForm invite conversion tracking", () => {
     useSearchParamsMock.mockReturnValue(new URLSearchParams());
     logEventMock.mockReset();
     window.sessionStorage.clear();
+    document.cookie = "buddhi-align-anonymous=; path=/; max-age=0";
+
+    Object.defineProperty(HTMLDialogElement.prototype, "showModal", {
+      configurable: true,
+      value() {
+        this.setAttribute("open", "");
+      },
+    });
+    Object.defineProperty(HTMLDialogElement.prototype, "close", {
+      configurable: true,
+      value() {
+        this.removeAttribute("open");
+      },
+    });
   });
 
   it("logs conversion once on invite submit", async () => {
@@ -90,5 +104,37 @@ describe("ModuleEntryForm invite conversion tracking", () => {
 
     expect(onSubmit).toHaveBeenCalledTimes(1);
     expect(logEventMock).not.toHaveBeenCalled();
+  });
+
+  it("asks anonymous visitors to sign in only when they submit an entry and preserves the draft", async () => {
+    document.cookie = "buddhi-align-anonymous=1; path=/";
+    const onSubmit = vi.fn();
+
+    render(
+      <ModuleEntryForm
+        title="Karma"
+        icon="🙏"
+        className="test-form"
+        onSubmit={onSubmit}
+        submitLabel="Save"
+      >
+        <input id="module-field-action" aria-label="field" defaultValue="Helped a neighbor" required />
+      </ModuleEntryForm>,
+    );
+
+    fireEvent.submit(screen.getByLabelText("Karma"));
+
+    await waitFor(() => {
+      expect(screen.getByRole("dialog")).toHaveAttribute("open");
+    });
+    expect(onSubmit).not.toHaveBeenCalled();
+
+    const signInLink = screen.getByRole("link", { name: "Sign in to save" });
+    const click = new MouseEvent("click", { bubbles: true, cancelable: true });
+    click.preventDefault();
+    signInLink.dispatchEvent(click);
+
+    expect(signInLink).toHaveAttribute("href", "/sign-in?callbackUrl=%2Fkarma-yoga&intent=save");
+    expect(window.sessionStorage.getItem("buddhi-align:anonymous-entry-draft:/karma-yoga")).toContain("Helped a neighbor");
   });
 });

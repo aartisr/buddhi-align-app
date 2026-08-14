@@ -22,7 +22,7 @@
   color: var(--accent);
 }
 
-@media (prefers-color-scheme: dark) {
+:root[data-theme="midnight"] {
   .app-module-label--karma,
   .app-module-value--karma,
   .app-module-label--dhyana,

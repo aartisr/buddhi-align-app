@@ -105,7 +105,10 @@ const nextConfig = {
   compress: true,
   productionBrowserSourceMaps: false,
   experimental: {
-    optimizePackageImports: ['@buddhi-align/shared-ui', 'react-apexcharts', 'apexcharts'],
+    // ApexCharts is loaded with `next/dynamic` in browser-only components.
+    // Let webpack own that async boundary; optimizing these packages here can
+    // corrupt the runtime public path in Next 14 development builds.
+    optimizePackageImports: ['@buddhi-align/shared-ui'],
   },
   // Attach security headers to all routes
   async headers() {

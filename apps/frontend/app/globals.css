@@ -1018,7 +1018,7 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
+:root[data-theme="midnight"] {
   .app-header-panel {
     background: linear-gradient(180deg, rgba(20, 34, 29, 0.9) 0%, rgba(23, 41, 35, 0.86) 100%);
     border-bottom-color: rgba(178, 213, 198, 0.22);
@@ -1997,7 +1997,7 @@ select::placeholder {
   }
 }
 
-@media (prefers-color-scheme: dark) {
+:root[data-theme="midnight"] {
   .app-platinum-badge {
     filter: saturate(0.96);
   }

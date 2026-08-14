@@ -285,7 +285,7 @@
   font-weight: 700;
 }
 
-@media (prefers-color-scheme: dark) {
+:root[data-theme="midnight"] {
   .app-mobile-menu-btn {
     background: rgba(20, 34, 29, 0.82);
     border-color: rgba(178, 213, 198, 0.3);

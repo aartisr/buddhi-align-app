@@ -1,0 +1,87 @@
+/*
+ * Persistent UI contract
+ *
+ * The header, navigation, footer, drawers, and dialogs intentionally share
+ * role-based tokens rather than hard-coded palette values. New themes only
+ * need to define the semantic values in theme-base.css.
+ */
+
+.app-header-panel {
+  color: var(--chrome-ink);
+  background:
+    linear-gradient(180deg, var(--chrome-surface) 0%, var(--chrome-surface-raised) 100%),
+    radial-gradient(circle at 92% 8%, var(--chrome-wash) 0%, transparent 45%);
+  border-bottom-color: var(--chrome-border);
+  box-shadow: 0 10px 28px var(--chrome-shadow), 0 1px 0 var(--season-sheen) inset;
+}
+
+.app-top-nav,
+.app-mobile-nav-drawer,
+.app-mobile-nav-header,
+.app-nav-submenu,
+.app-preferences-panel {
+  color: var(--chrome-ink);
+  background: var(--chrome-surface);
+  border-color: var(--chrome-border);
+  box-shadow: 0 14px 32px var(--chrome-shadow);
+}
+
+.app-mobile-menu-btn {
+  background: var(--chrome-surface-raised);
+  border-color: var(--chrome-border);
+}
+
+.app-mobile-menu-btn:hover,
+.app-nav-group:hover .app-nav-group-trigger,
+.app-nav-group:focus-within .app-nav-group-trigger,
+.app-nav-submenu-link:hover,
+.app-nav-submenu-link:focus-visible,
+.app-mobile-nav-link:hover,
+.app-mobile-nav-link:focus-visible,
+.app-mobile-nav-close:hover {
+  background: var(--chrome-surface-hover);
+  color: var(--chrome-link);
+  border-color: var(--chrome-border);
+}
+
+.app-hamburger-bar,
+.app-nav-group-trigger,
+.app-nav-submenu-link,
+.app-mobile-nav-link,
+.app-mobile-nav-close {
+  color: var(--chrome-ink);
+  background-color: currentColor;
+}
+
+.app-nav-group-trigger,
+.app-nav-submenu-link,
+.app-mobile-nav-link,
+.app-mobile-nav-close {
+  background-color: transparent;
+}
+
+.app-nav-group.is-active .app-nav-group-trigger,
+.app-nav-submenu-link.is-active,
+.app-mobile-nav-link.is-active,
+.app-mobile-nav-chip:hover,
+.app-mobile-nav-chip:focus-visible,
+.app-mobile-nav-chip.is-active {
+  color: var(--chrome-link);
+  background: linear-gradient(135deg, var(--chrome-wash) 0%, color-mix(in srgb, var(--chrome-glow) 68%, transparent) 100%);
+  border-color: var(--chrome-border);
+}
+
+.app-mobile-nav-overlay {
+  background: var(--chrome-overlay);
+}
+
+.app-save-signin-dialog {
+  color: var(--foreground);
+  background: var(--chrome-surface-raised);
+  border-color: var(--chrome-border);
+  box-shadow: 0 24px 70px var(--chrome-shadow);
+}
+
+.app-save-signin-dialog::backdrop {
+  background: var(--chrome-overlay);
+}

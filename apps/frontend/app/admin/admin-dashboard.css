@@ -320,7 +320,7 @@
   width: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
+:root[data-theme="midnight"] {
   .app-admin-status--healthy {
     color: #bce8d2;
     background: rgba(93, 166, 130, 0.18);

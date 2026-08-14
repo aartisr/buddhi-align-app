@@ -19,8 +19,8 @@ export default function SiteFooter() {
 
         <div className="site-footer__grid">
           <section className="site-footer__panel site-footer__panel--brand" aria-label="Brand and dedication">
-            <p className="site-footer__kicker">Refined Daily Practice Platform</p>
-            <h2 className="site-footer__title">Built for focused spiritual growth.</h2>
+            <p className="site-footer__kicker">A welcoming space for daily practice</p>
+            <h2 className="site-footer__title">A gentle companion for reflection, service, and shared growth.</h2>
 
             <p className="site-footer__dedication-line">
               <span className="site-footer__dedication-prefix">{t("footer.dedicatedTo")}</span>
