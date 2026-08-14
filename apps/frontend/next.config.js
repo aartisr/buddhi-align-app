@@ -51,6 +51,14 @@ const crawlerUtilityHeaders = [
   },
 ];
 
+// These files are intentionally versionless so they remain easy to reference
+// from metadata and accessible video controls. Cache them at the edge for a
+// day—not indefinitely—so repeat visits are quick without delaying a release.
+const mediaCacheHeaders = [
+  { key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800' },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+];
+
 /** OWASP-recommended HTTP security headers */
 const securityHeaders = [
   // Prevent browsers from MIME-sniffing a response from the declared content-type
@@ -114,6 +122,14 @@ const nextConfig = {
   async headers() {
     return [
       ...crawlerUtilityHeaders,
+      {
+        source: '/videos/:path*',
+        headers: mediaCacheHeaders,
+      },
+      {
+        source: '/audio/:path*',
+        headers: mediaCacheHeaders,
+      },
       {
         source: appSecurityHeaderSource,
         headers: securityHeaders,
