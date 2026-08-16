@@ -1,6 +1,8 @@
 # Buddhi Align Wiki
 
-Welcome. I am Aarti S. Ravikumar, and I created [Buddhi Align](https://buddhi-align.foreverlotus.com/) with the belief that a more attentive inner life can help us meet one another with greater patience, courage, and care. This wiki is a shared doorway into that practice: a place for anyone to learn, begin gently, and help the work grow.
+Welcome. I am [Aarti S Ravikumar](https://ai-aarti.com/), and I created [Buddhi Align](https://buddhi-align.foreverlotus.com/) with the belief that a more attentive inner life can help us meet one another with greater patience, courage, and care. This wiki is a shared doorway into that practice: a place for anyone to learn, begin gently, and help the work grow.
+
+**Author:** [Aarti S Ravikumar](https://ai-aarti.com/)
 
 Buddhi Align supports a simple daily rhythm: form an intention, practice with care, reflect on what you notice, and review your growth with gentleness. There is no requirement to do everything at once. One sincere moment of attention can change how we speak, serve, listen, and belong.
 

@@ -316,7 +316,7 @@ describe("SEO crawler and AI retrieval metadata", () => {
     expect(organization?.sameAs).toEqual(
       expect.arrayContaining([
         "https://foreverlotus.com",
-        "https://aartisr.foreverlotus.com",
+        "https://ai-aarti.com",
       ]),
     );
   });

@@ -57,15 +57,15 @@ export default function HomePageClient() {
   return (
     <ModuleLayout
       titleKey="app.dashboard"
-      heading="A gentle practice for today"
+      heading={t("dashboard.heading")}
     >
       <section className="app-guided-flow app-surface-card max-w-4xl mx-auto mb-6 p-5 sm:p-7" aria-label={t("dashboard.flow.aria")}>
         <div className="app-guided-flow-header">
           <div>
-            <p className="app-guided-flow-kicker">One mindful rhythm</p>
-            <h2 className="app-panel-title text-xl sm:text-2xl font-bold leading-tight">Decide. Do. Reflect.</h2>
+            <p className="app-guided-flow-kicker">{t("dashboard.flow.kicker")}</p>
+            <h2 className="app-panel-title text-xl sm:text-2xl font-bold leading-tight">{t("dashboard.flow.title")}</h2>
             <p className="app-copy-soft text-sm mt-2 max-w-2xl">
-              Begin with one purpose-aligned intention, offer one meaningful action, and make space to notice what you learn.
+              {t("dashboard.flow.subtitle")}
             </p>
           </div>
           <Link
@@ -73,13 +73,13 @@ export default function HomePageClient() {
             className="app-guided-flow-primary-link"
             onClick={() => logEvent("homepage_primary_action_clicked", { destination: "/dharma-planner" })}
           >
-            Start now
+            {t("dashboard.flow.primaryCta")}
           </Link>
         </div>
         <div className="app-guided-flow-grid">
-          {flowSteps.map((step) => (
+          {flowSteps.map((step, index) => (
             <article key={step.key} className="app-guided-flow-card">
-              <p className="app-guided-flow-step">Focus now</p>
+              <p className="app-guided-flow-step">{t("dashboard.flow.stepLabel", { step: String(index + 1) })}</p>
               <h3 className="app-guided-flow-card-title">
                 <span aria-hidden className={`app-module-icon ${step.iconClassName}`}>{step.icon}</span>
                 <span>{step.title}</span>
@@ -94,16 +94,16 @@ export default function HomePageClient() {
       </section>
 
       <LazyDetails
-        summary={`Explore ${supportModules.length} more practice areas`}
+        summary={t("dashboard.morePractices", { count: String(supportModules.length) })}
         className="app-surface-card max-w-4xl mx-auto mb-6 p-4 sm:p-6"
       >
         <section aria-labelledby="other-modules-heading">
           <div className="flex items-center justify-between gap-3 mb-3">
             <h2 id="other-modules-heading" className="app-panel-title text-lg sm:text-xl font-bold leading-tight">
-              More ways to practice
+              {t("dashboard.moreWays")}
             </h2>
             <Link href="/motivation-analytics" className="app-guided-flow-link">
-              See momentum
+              {t("dashboard.seeMomentum")}
             </Link>
           </div>
           <div className="flex flex-wrap gap-2">

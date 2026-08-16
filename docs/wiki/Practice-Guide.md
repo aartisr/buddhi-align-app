@@ -1,6 +1,8 @@
 # Buddhi Align Practice Guide
 
-I am Aarti S. Ravikumar, and my invitation is simple: begin with one small, meaningful step. [Buddhi Align](https://buddhi-align.foreverlotus.com/) is here to accompany your practice, not to judge it. Let each step be an offering of care—to yourself and, through the way you move through the world, to others.
+I am [Aarti S Ravikumar](https://ai-aarti.com/), and my invitation is simple: begin with one small, meaningful step. [Buddhi Align](https://buddhi-align.foreverlotus.com/) is here to accompany your practice, not to judge it. Let each step be an offering of care—to yourself and, through the way you move through the world, to others.
+
+**Author:** [Aarti S Ravikumar](https://ai-aarti.com/)
 
 ## Plan
 

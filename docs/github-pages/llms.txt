@@ -1,0 +1,15 @@
+# Buddhi Align: Open Practice Documentation
+
+> Open documentation for Buddhi Align, written by Aarti S Ravikumar.
+
+## Author
+
+- [Aarti S Ravikumar](https://ai-aarti.com/)
+
+## Canonical resources
+
+- [Documentation home](https://aartisr.github.io/buddhi-align-app/): Open practice documentation.
+- [Practice guide](https://aartisr.github.io/buddhi-align-app/practice-guide.html): A gentle routine for planning, practice, reflection, and review.
+- [Official sources](https://aartisr.github.io/buddhi-align-app/open-web-reference.html): Canonical public Buddhi Align references.
+- [Buddhi Align](https://buddhi-align.foreverlotus.com/): The authoritative product site for current features, support, and updates.
+- [Product LLMs reference](https://buddhi-align.foreverlotus.com/llms.txt): AI-readable information for the live product.

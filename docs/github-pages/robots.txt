@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://aartisr.github.io/buddhi-align-app/sitemap.xml
+
+# AI-readable site reference
+# https://aartisr.github.io/buddhi-align-app/llms.txt

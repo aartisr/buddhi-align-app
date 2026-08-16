@@ -66,7 +66,7 @@ export default function SiteFooter() {
           <p className="site-footer__copyright">
             &copy; {year}{" "}
             <a
-              href="https://aartisr.foreverlotus.com"
+              href="https://ai-aarti.com"
               target="_blank"
               rel="noopener noreferrer"
               className="site-footer__author-link"

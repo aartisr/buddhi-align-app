@@ -15,14 +15,32 @@ vi.mock("./components/ModuleLayout", () => ({
 vi.mock("./i18n/provider", () => ({
   useI18n: () => ({
     t: (key: string, vars?: Record<string, string>) => {
-      if (key === "dashboard.welcome") return "Welcome, {{name}}";
-      if (key === "dashboard.defaultUser") return "Seeker";
-      if (key === "dashboard.subtitle") return "Your unified overview for self-development and spiritual growth.";
-      if (key === "app.dashboard") return "Buddhi Dashboard";
+      const translations: Record<string, string> = {
+        "app.dashboard": "Buddhi Dashboard",
+        "dashboard.heading": "A gentle practice for today",
+        "dashboard.flow.aria": "Guided daily flow",
+        "dashboard.flow.kicker": "One mindful rhythm",
+        "dashboard.flow.title": "Decide. Do. Reflect.",
+        "dashboard.flow.subtitle": "Begin with one purpose-aligned intention, offer one meaningful action, and make space to notice what you learn.",
+        "dashboard.flow.primaryCta": "Start now",
+        "dashboard.flow.plan.title": "Plan your intention",
+        "dashboard.flow.plan.description": "Set a dharma goal",
+        "dashboard.flow.plan.cta": "Open Dharma Planner",
+        "dashboard.flow.practice.title": "Do one meaningful practice",
+        "dashboard.flow.practice.description": "Record one meaningful practice",
+        "dashboard.flow.practice.cta": "Open Karma Yoga",
+        "dashboard.flow.reflect.title": "Reflect and realign",
+        "dashboard.flow.reflect.description": "Capture insight",
+        "dashboard.flow.reflect.cta": "Open Jnana Reflection",
+        "dashboard.morePractices": "Explore {{count}} more practice areas",
+        "dashboard.moreWays": "More ways to practice",
+        "dashboard.seeMomentum": "See momentum",
+      };
+      const message = translations[key] ?? key;
       if (vars) {
-        return Object.entries(vars).reduce((acc, [k, v]) => acc.replaceAll(`{{${k}}}`, v), key);
+        return Object.entries(vars).reduce((acc, [k, v]) => acc.replaceAll(`{{${k}}}`, v), message);
       }
-      return key;
+      return message;
     },
   }),
   useLocalizedModules: () => [
@@ -40,14 +58,14 @@ describe("Home page", () => {
   it("renders a simplified Copilot-first dashboard with quick access modules", () => {
     render(<Home />);
 
-    expect(screen.getByRole("heading", { name: "Buddhi Align: Daily Spiritual Practice and Reflection", level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "A gentle practice for today", level: 1 })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Decide. Do. Reflect.", level: 2 })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Start now" })).toBeInTheDocument();
     expect(screen.getByText("Explore 4 more practice areas")).toBeInTheDocument();
 
-    expect(screen.getByRole("link", { name: "dashboard.flow.plan.cta" })).toHaveAttribute("href", "/dharma-planner");
-    expect(screen.getByRole("link", { name: "dashboard.flow.practice.cta" })).toHaveAttribute("href", "/karma-yoga");
-    expect(screen.getByRole("link", { name: "dashboard.flow.reflect.cta" })).toHaveAttribute("href", "/jnana-reflection");
+    expect(screen.getByRole("link", { name: "Open Dharma Planner" })).toHaveAttribute("href", "/dharma-planner");
+    expect(screen.getByRole("link", { name: "Open Karma Yoga" })).toHaveAttribute("href", "/karma-yoga");
+    expect(screen.getByRole("link", { name: "Open Jnana Reflection" })).toHaveAttribute("href", "/jnana-reflection");
 
     expect(screen.getByText("Explore 4 more practice areas")).toBeInTheDocument();
   });

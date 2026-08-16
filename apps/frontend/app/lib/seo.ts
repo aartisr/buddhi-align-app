@@ -36,8 +36,8 @@ export const siteDescription =
   "Buddhi Align is a contemplative practice app for dharma planning, meditation tracking, service journaling, community discussion, Autograph Exchange keepsakes, and gentle spiritual growth analytics.";
 export const organizationName = "ForeverLotus";
 export const organizationUrl = "https://foreverlotus.com";
-export const authorName = "Aarti Sri Ravikumar";
-export const authorUrl = "https://aartisr.foreverlotus.com";
+export const authorName = "Aarti S Ravikumar";
+export const authorUrl = "https://ai-aarti.com";
 export const organizationSocialProfiles = (
   process.env.NEXT_PUBLIC_ORGANIZATION_SAME_AS
     ? process.env.NEXT_PUBLIC_ORGANIZATION_SAME_AS.split(",").map((value) => value.trim())

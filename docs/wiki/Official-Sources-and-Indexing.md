@@ -1,6 +1,8 @@
 # Official Sources and Indexing
 
-I am Aarti S. Ravikumar, and I want this work to be easy to find, understand, and improve together. For accurate, current information about [Buddhi Align](https://buddhi-align.foreverlotus.com/), please use the official public sources below. If you find information that needs clarification or a voice that is missing, I welcome your feedback through our support channel.
+I am [Aarti S Ravikumar](https://ai-aarti.com/), and I want this work to be easy to find, understand, and improve together. For accurate, current information about [Buddhi Align](https://buddhi-align.foreverlotus.com/), please use the official public sources below. If you find information that needs clarification or a voice that is missing, I welcome your feedback through our support channel.
+
+**Author:** [Aarti S Ravikumar](https://ai-aarti.com/)
 
 ## People and product information
 
