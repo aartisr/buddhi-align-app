@@ -125,7 +125,7 @@ storybook-static/
 *.tmp
 *.temp
 
-# Exclude lock files
-package-lock.json
+# Keep npm's lockfile in Git so local, CI, and deployment installs resolve the
+# exact same dependency graph. Other package-manager locks remain excluded.
 
 # Exclude any other unnecessary files

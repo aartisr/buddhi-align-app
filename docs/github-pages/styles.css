@@ -67,5 +67,17 @@ main { padding-bottom: 4.75rem; }
 .site-footer { padding: 2rem 0 3rem; border-top: 1px solid rgb(21 47 40 / 13%); color: var(--ink-soft); font-size: .88rem; }
 .footer-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem 1.5rem; }
 .site-footer p { margin: 0; }
+.wiki-page { padding-top: clamp(2.5rem, 6vw, 5rem); }
+.wiki-page > .eyebrow { margin-bottom: 1.25rem; }
+.wiki-article { max-width: 52rem; padding: clamp(1.25rem, 4vw, 3rem); background: rgb(255 255 255 / 84%); border: 1px solid var(--line); border-radius: 1.25rem; box-shadow: var(--shadow); }
+.wiki-article h1 { max-width: 16ch; margin-bottom: 2rem; font-size: clamp(2.35rem, 6vw, 4.5rem); }
+.wiki-article h2 { margin-top: 2.6rem; padding-top: 2rem; border-top: 1px solid var(--line); }
+.wiki-article p, .wiki-article li { color: var(--ink-soft); }
+.wiki-article ul { padding-left: 1.25rem; }
+.wiki-article li + li { margin-top: .55rem; }
+.wiki-article code { padding: .1rem .3rem; color: var(--forest-deep); background: var(--sage); border-radius: .25rem; font: .9em ui-monospace, SFMono-Regular, Menlo, monospace; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .45rem 1rem; }
+.footer-links a { white-space: nowrap; }
+@media (max-width: 44rem) { .footer-links { justify-content: flex-start; } }
 @media (max-width: 700px) { .hero__grid, .reference, .card-grid { grid-template-columns: 1fr; } .hero__note { max-width: 31rem; } .card { min-height: auto; } .nav { padding-bottom: .5rem; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }

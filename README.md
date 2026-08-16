@@ -35,7 +35,11 @@ Website: [https://www.shishubharati.net/](https://www.shishubharati.net/)
 
 The GitHub Pages companion supplies original public documentation and links to the
 authoritative product pages. It is deployed from `docs/github-pages` after GitHub
-Pages is configured to use GitHub Actions.
+Pages is configured to use GitHub Actions. Its searchable Wiki edition is rendered
+from `docs/wiki` at `/wiki/`; the same Markdown is synchronized to GitHub Wiki when
+the repository Wiki feature is enabled.
+
+The documentation network intentionally cross-links the [GitHub Pages home](https://aartisr.github.io/buddhi-align-app/), [searchable Wiki](https://aartisr.github.io/buddhi-align-app/wiki/), [native GitHub Wiki](https://github.com/aartisr/buddhi-align-app/wiki), [official source reference](https://aartisr.github.io/buddhi-align-app/open-web-reference.html), and [live product](https://buddhi-align.foreverlotus.com/). This makes the relationship between the product, its author, its documentation, and its reviewed source explicit for people and retrieval systems.
 
 ## Documentation Status
 
