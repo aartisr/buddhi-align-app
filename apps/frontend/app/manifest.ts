@@ -23,17 +23,20 @@ export const pwaManifest: MetadataRoute.Manifest = {
   prefer_related_applications: false,
   icons: [
     { src: "/favicon.ico", sizes: "16x16 32x32 48x48", type: "image/x-icon", purpose: "any" },
+    { src: "/buddhi-align-icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+    { src: "/buddhi-align-icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+    { src: "/buddhi-align-icon-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
     { src: "/buddhi-align-icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
     { src: "/buddhi-align-icon-maskable.svg", sizes: "any", type: "image/svg+xml", purpose: "maskable" },
   ],
   shortcuts: [
-    { name: "Dharma Planner", short_name: "Dharma", description: "Set an intention and choose a meaningful next action", url: "/dharma-planner", icons: [{ src: "/buddhi-align-icon.svg", sizes: "any" }] },
-    { name: "Karma Yoga Tracker", short_name: "Karma Yoga", description: "Log your karma yoga practice", url: "/karma-yoga", icons: [{ src: "/buddhi-align-icon.svg", sizes: "any" }] },
-    { name: "Bhakti Journal", short_name: "Bhakti", description: "Journal your devotional practice", url: "/bhakti-journal", icons: [{ src: "/buddhi-align-icon.svg", sizes: "any" }] },
-    { name: "Dhyana Meditation", short_name: "Dhyana", description: "Track your meditation sessions", url: "/dhyana-meditation", icons: [{ src: "/buddhi-align-icon.svg", sizes: "any" }] },
-    { name: "Motivation and Analytics", short_name: "Analytics", description: "Review your practice streaks and balance", url: "/motivation-analytics", icons: [{ src: "/buddhi-align-icon.svg", sizes: "any" }] },
-    { name: "Buddhi Align Community", short_name: "Community", description: "Join Discourse-powered practice discussions", url: "/api/community/discourse/login?returnPath=/community", icons: [{ src: "/buddhi-align-icon.svg", sizes: "any" }] },
-    { name: "Share Buddhi Align", short_name: "Share", description: "Invite others into the daily practice loop", url: "/share", icons: [{ src: "/buddhi-align-icon.svg", sizes: "any" }] },
+    { name: "Dharma Planner", short_name: "Dharma", description: "Set an intention and choose a meaningful next action", url: "/dharma-planner", icons: [{ src: "/buddhi-align-icon-192.png", sizes: "192x192", type: "image/png" }] },
+    { name: "Karma Yoga Tracker", short_name: "Karma Yoga", description: "Log your karma yoga practice", url: "/karma-yoga", icons: [{ src: "/buddhi-align-icon-192.png", sizes: "192x192", type: "image/png" }] },
+    { name: "Bhakti Journal", short_name: "Bhakti", description: "Journal your devotional practice", url: "/bhakti-journal", icons: [{ src: "/buddhi-align-icon-192.png", sizes: "192x192", type: "image/png" }] },
+    { name: "Dhyana Meditation", short_name: "Dhyana", description: "Track your meditation sessions", url: "/dhyana-meditation", icons: [{ src: "/buddhi-align-icon-192.png", sizes: "192x192", type: "image/png" }] },
+    { name: "Motivation and Analytics", short_name: "Analytics", description: "Review your practice streaks and balance", url: "/motivation-analytics", icons: [{ src: "/buddhi-align-icon-192.png", sizes: "192x192", type: "image/png" }] },
+    { name: "Buddhi Align Community", short_name: "Community", description: "Join Discourse-powered practice discussions", url: "/api/community/discourse/login?returnPath=/community", icons: [{ src: "/buddhi-align-icon-192.png", sizes: "192x192", type: "image/png" }] },
+    { name: "Share Buddhi Align", short_name: "Share", description: "Invite others into the daily practice loop", url: "/share", icons: [{ src: "/buddhi-align-icon-192.png", sizes: "192x192", type: "image/png" }] },
   ],
 };
 

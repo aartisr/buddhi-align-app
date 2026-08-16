@@ -14,6 +14,16 @@ describe("PWA public contract", () => {
     expect(pwaManifest.display_override).toContain("standalone");
     expect(pwaManifest.prefer_related_applications).toBe(false);
     expect(pwaManifest.icons?.some((icon) => icon.purpose?.includes("maskable"))).toBe(true);
+    expect(pwaManifest.icons).toContainEqual(expect.objectContaining({
+      src: "/buddhi-align-icon-512.png",
+      sizes: "512x512",
+      type: "image/png",
+    }));
+    expect(pwaManifest.icons).toContainEqual(expect.objectContaining({
+      src: "/buddhi-align-icon-maskable-512.png",
+      purpose: "maskable",
+      type: "image/png",
+    }));
     expect(pwaManifest.shortcuts?.map((shortcut) => shortcut.url)).toContain("/dharma-planner");
     expect(PWA_MANIFEST_PATH).toBe("/manifest.webmanifest");
   });

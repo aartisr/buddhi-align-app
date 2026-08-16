@@ -67,7 +67,7 @@ export const metadata: Metadata = {
       { url: "/favicon.ico", sizes: "any" },
       { url: "/buddhi-align-icon.svg", type: "image/svg+xml" },
     ],
-    apple: [{ url: "/buddhi-align-icon.svg" }],
+    apple: [{ url: "/buddhi-align-icon-512.png", sizes: "512x512", type: "image/png" }],
     shortcut: ["/favicon.ico"],
   },
   appleWebApp: {

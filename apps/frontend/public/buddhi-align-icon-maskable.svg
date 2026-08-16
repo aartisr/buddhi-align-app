@@ -1,11 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" role="img" aria-labelledby="title desc">
   <title id="title">Buddhi Align maskable icon</title>
-  <desc id="desc">A lotus-inspired icon centered on a deep green field for maskable launch surfaces.</desc>
-  <rect width="512" height="512" rx="128" fill="#1b4332"/>
-  <circle cx="256" cy="256" r="168" fill="#2d6a4f"/>
-  <path d="M256 126c28 33 42 63 42 91 0 44-21 70-42 81-21-11-42-37-42-81 0-28 14-58 42-91Z" fill="#fefae0"/>
-  <path d="M160 288c39-57 90-86 96-86s57 29 96 86c-23 39-59 72-96 85-37-13-73-46-96-85Z" fill="#d8f3dc"/>
-  <path d="M122 322c41-22 86-28 134-19-21 34-54 67-93 81-20-13-34-33-41-62Z" fill="#95d5b2"/>
-  <path d="M390 322c-7 29-21 49-41 62-39-14-72-47-93-81 48-9 93-3 134 19Z" fill="#95d5b2"/>
-  <circle cx="256" cy="258" r="16" fill="#52b788"/>
+  <desc id="desc">The Buddhi Align webpage mark positioned safely for masked launcher surfaces.</desc>
+  <defs>
+    <linearGradient id="ba-logo-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4338ca"/>
+      <stop offset="100%" stop-color="#0f766e"/>
+    </linearGradient>
+    <linearGradient id="ba-logo-mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect width="44" height="44" fill="url(#ba-logo-bg)"/>
+  <g transform="translate(4.4 4.4) scale(.8)">
+    <rect x="1" y="1" width="42" height="42" rx="12" fill="url(#ba-logo-bg)"/>
+    <path d="M22 9 L27 18 L17 18 Z" fill="url(#ba-logo-mark)"/>
+    <circle cx="22" cy="23" r="5.2" fill="#fef08a"/>
+    <path d="M13 32 C16 27, 20 27, 22 31 C24 27, 28 27, 31 32" stroke="#fef3c7" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </g>
 </svg>
