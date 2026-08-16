@@ -29,14 +29,16 @@ jobs:
             echo "WIKI_SYNC_TOKEN is required to publish to the separate GitHub Wiki repository." >&2
             exit 1
           }
-          WIKI_URL="https://x-access-token:${WIKI_SYNC_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git"
-          git clone --branch master "$WIKI_URL" wiki
+          WIKI_READ_URL="https://github.com/${GITHUB_REPOSITORY}.wiki.git"
+          WIKI_PUSH_URL="https://x-access-token:${WIKI_SYNC_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git"
+          git clone --branch master "$WIKI_READ_URL" wiki
           rsync -a --delete docs/wiki/ wiki/
           cd wiki
           git remote get-url origin | grep -q "${GITHUB_REPOSITORY}.wiki.git$" || {
             echo "Refusing to publish: origin is not this repository's Wiki." >&2
             exit 1
           }
+          git remote set-url --push origin "$WIKI_PUSH_URL"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add --all
