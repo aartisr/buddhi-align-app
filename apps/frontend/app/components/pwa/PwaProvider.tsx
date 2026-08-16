@@ -42,7 +42,10 @@ export default function PwaProvider() {
     window.addEventListener("offline", onOffline);
     window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
 
-    if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
+    const isPwaEnabled = process.env.NODE_ENV === "production"
+      || process.env.NEXT_PUBLIC_PWA_TEST_MODE === "1";
+
+    if (isPwaEnabled && "serviceWorker" in navigator) {
       void navigator.serviceWorker.register(PWA_SERVICE_WORKER_PATH, { scope: "/" }).then((registration) => {
         registrationRef.current = registration;
         if (registration.waiting && navigator.serviceWorker.controller) {

@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { SessionProvider } from "next-auth/react";
 import RequestFeedbackProvider from "./RequestFeedbackProvider";
 import WebVitalsReporter from "./WebVitalsReporter";
-import PwaProvider from "./pwa/PwaProvider";
 import {
   PREFERENCES_UPDATED_EVENT,
   readStoredThemePreference,
@@ -89,7 +88,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <SessionProvider>
-      <PwaProvider />
       {isClientObservabilityEnabled ? <WebVitalsReporter /> : null}
       <RequestFeedbackProvider>{children}</RequestFeedbackProvider>
     </SessionProvider>

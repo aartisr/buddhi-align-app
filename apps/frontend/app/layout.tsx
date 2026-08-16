@@ -22,6 +22,7 @@ import SiteFooter from "./components/SiteFooter";
 import { I18nProvider } from "./i18n/provider";
 import { DEFAULT_LOCALE, translate } from "./i18n/config";
 import Providers from "./components/Providers";
+import PwaProvider from "./components/pwa/PwaProvider";
 import {
   authorName,
   authorUrl,
@@ -137,6 +138,7 @@ export default function RootLayout({
         <JsonLd data={buildSiteJsonLd({ name: title, description })} />
         <Providers>
           <I18nProvider>
+            <PwaProvider />
             <div className="buddhi-bg-gradient" aria-hidden="true"></div>
             <BackgroundMusic />
             {children}

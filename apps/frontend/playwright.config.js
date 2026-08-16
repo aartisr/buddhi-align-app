@@ -31,6 +31,7 @@ const config = {
     env: {
       NEXT_PUBLIC_BGM_URL: "/audio/e2e-track.mp3",
       NEXT_PUBLIC_BGM_URLS: "",
+      NEXT_PUBLIC_PWA_TEST_MODE: "1",
     },
   },
 };
