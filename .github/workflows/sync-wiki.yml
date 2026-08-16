@@ -31,10 +31,13 @@ jobs:
           }
           WIKI_READ_URL="https://github.com/${GITHUB_REPOSITORY}.wiki.git"
           WIKI_PUSH_URL="https://x-access-token:${WIKI_SYNC_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git"
+          echo "Expected Wiki remote: $WIKI_READ_URL"
           git clone --branch master "$WIKI_READ_URL" wiki
           rsync -a --delete docs/wiki/ wiki/
           cd wiki
-          git remote get-url origin | grep -q "${GITHUB_REPOSITORY}.wiki.git$" || {
+          ACTUAL_REMOTE="$(git remote get-url origin)"
+          echo "Cloned remote: $ACTUAL_REMOTE"
+          printf '%s\n' "$ACTUAL_REMOTE" | grep -q "${GITHUB_REPOSITORY}.wiki.git$" || {
             echo "Refusing to publish: origin is not this repository's Wiki." >&2
             exit 1
           }
