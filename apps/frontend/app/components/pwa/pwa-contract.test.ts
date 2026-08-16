@@ -6,6 +6,7 @@ import { PWA_MANIFEST_PATH } from "../../lib/pwa";
 
 const publicDirectory = resolve(__dirname, "../../../public");
 const serviceWorker = readFileSync(resolve(publicDirectory, "sw.js"), "utf8");
+const footer = readFileSync(resolve(__dirname, "../SiteFooter.tsx"), "utf8");
 
 describe("PWA public contract", () => {
   it("publishes installable, app-like manifest metadata", () => {
@@ -22,5 +23,13 @@ describe("PWA public contract", () => {
     expect(serviceWorker).toContain("isApiOrPrivateRoute");
     expect(serviceWorker).toContain("/(api|auth|admin|settings)");
     expect(serviceWorker).toContain("SKIP_WAITING");
+  });
+
+  it("connects the footer install surface to the native prompt with a browser-safe fallback", () => {
+    expect(footer).toContain("Install Buddhi Align");
+    expect(footer).toContain("PWA_REQUEST_INSTALL_EVENT");
+    expect(footer).toContain("How to install");
+    expect(footer).toContain("Add to Home Screen");
+    expect(footer).toContain('aria-modal="true"');
   });
 });

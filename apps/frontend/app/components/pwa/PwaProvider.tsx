@@ -9,6 +9,18 @@ type InstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
 };
 
+export const PWA_STATE_EVENT = "buddhi-align:pwa-state";
+export const PWA_REQUEST_INSTALL_EVENT = "buddhi-align:request-install";
+
+type PwaPublicState = {
+  canInstall: boolean;
+  isStandalone: boolean;
+};
+
+function publishPwaState(state: PwaPublicState) {
+  window.dispatchEvent(new CustomEvent<PwaPublicState>(PWA_STATE_EVENT, { detail: state }));
+}
+
 function isStandalone() {
   return window.matchMedia("(display-mode: standalone)").matches
     || (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
@@ -27,6 +39,7 @@ export default function PwaProvider() {
   const [updateReady, setUpdateReady] = useState(false);
   const shouldReloadAfterUpdate = useRef(false);
   const registrationRef = useRef<ServiceWorkerRegistration | null>(null);
+  const installPromptRef = useRef<InstallPromptEvent | null>(null);
 
   useEffect(() => {
     setIsOffline(!navigator.onLine);
@@ -35,12 +48,34 @@ export default function PwaProvider() {
     const onOffline = () => setIsOffline(true);
     const onBeforeInstallPrompt = (event: Event) => {
       event.preventDefault();
-      setInstallPrompt(event as InstallPromptEvent);
+      installPromptRef.current = event as InstallPromptEvent;
+      setInstallPrompt(installPromptRef.current);
+      publishPwaState({ canInstall: true, isStandalone: false });
+    };
+
+    const onRequestInstall = () => {
+      const prompt = installPromptRef.current;
+      if (!prompt) return;
+      void prompt.prompt().then(async () => {
+        await prompt.userChoice;
+        installPromptRef.current = null;
+        setInstallPrompt(null);
+        publishPwaState({ canInstall: false, isStandalone: isStandalone() });
+      });
+    };
+
+    const onAppInstalled = () => {
+      installPromptRef.current = null;
+      setInstallPrompt(null);
+      publishPwaState({ canInstall: false, isStandalone: true });
     };
 
     window.addEventListener("online", onOnline);
     window.addEventListener("offline", onOffline);
     window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
+    window.addEventListener(PWA_REQUEST_INSTALL_EVENT, onRequestInstall);
+    window.addEventListener("appinstalled", onAppInstalled);
+    publishPwaState({ canInstall: false, isStandalone: isStandalone() });
 
     const isPwaEnabled = process.env.NODE_ENV === "production"
       || process.env.NEXT_PUBLIC_PWA_TEST_MODE === "1";
@@ -80,6 +115,8 @@ export default function PwaProvider() {
       window.removeEventListener("online", onOnline);
       window.removeEventListener("offline", onOffline);
       window.removeEventListener("beforeinstallprompt", onBeforeInstallPrompt);
+      window.removeEventListener(PWA_REQUEST_INSTALL_EVENT, onRequestInstall);
+      window.removeEventListener("appinstalled", onAppInstalled);
     };
   }, []);
 
@@ -87,7 +124,9 @@ export default function PwaProvider() {
     if (!installPrompt) return;
     await installPrompt.prompt();
     await installPrompt.userChoice;
+    installPromptRef.current = null;
     setInstallPrompt(null);
+    publishPwaState({ canInstall: false, isStandalone: isStandalone() });
   };
 
   const applyUpdate = () => {

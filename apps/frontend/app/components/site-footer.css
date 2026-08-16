@@ -37,7 +37,7 @@
 
 .site-footer__grid {
   display: grid;
-  grid-template-columns: 1.35fr .85fr;
+  grid-template-columns: 1.35fr .85fr 1fr;
   gap: 0.95rem;
   position: relative;
   z-index: 1;
@@ -69,6 +69,122 @@
   box-shadow: 0 12px 24px var(--chrome-shadow);
   border-color: var(--chrome-border);
 }
+
+.site-footer__panel--install {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+  align-items: start;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 44%),
+    linear-gradient(145deg, color-mix(in srgb, var(--primary) 10%, var(--footer-panel)), var(--footer-panel));
+}
+
+.site-footer__panel--install::after {
+  content: "";
+  position: absolute;
+  inset: auto -18% -55% 38%;
+  height: 9rem;
+  border-radius: 999px;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%);
+  pointer-events: none;
+}
+
+.site-footer__install-icon {
+  display: grid;
+  width: 2.7rem;
+  height: 2.7rem;
+  place-items: center;
+  color: var(--on-primary);
+  background: linear-gradient(145deg, var(--primary), color-mix(in srgb, var(--primary) 70%, var(--accent)));
+  border-radius: 0.9rem;
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--primary) 24%, transparent);
+}
+
+.site-footer__install-icon svg { width: 1.35rem; height: 1.35rem; }
+.site-footer__install-copy { min-width: 0; }
+.site-footer__install-copy .site-footer__kicker { margin-bottom: 0.28rem; }
+.site-footer__install-title { margin: 0; color: var(--footer-link); font-size: 1rem; line-height: 1.2; }
+.site-footer__install-description { margin: 0.38rem 0 0; color: var(--footer-ink); font-size: 0.82rem; line-height: 1.45; }
+
+.site-footer__install-button,
+.site-footer__install-dialog-done {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  grid-column: 1 / -1;
+  margin-top: 0.2rem;
+  padding: 0.72rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 48%, var(--chrome-border));
+  border-radius: 0.72rem;
+  color: var(--on-primary);
+  background: var(--primary);
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--primary) 18%, transparent);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+}
+
+.site-footer__install-button:hover,
+.site-footer__install-button:focus-visible,
+.site-footer__install-dialog-done:hover,
+.site-footer__install-dialog-done:focus-visible {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--primary) 26%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--accent) 48%, transparent);
+  outline-offset: 2px;
+}
+
+.site-footer__installed-status {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--footer-link);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+.site-footer__installed-status::before { content: "✓"; }
+
+.site-footer__install-dialog-backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: color-mix(in srgb, #071611 58%, transparent);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+}
+
+.site-footer__install-dialog {
+  position: relative;
+  width: min(100%, 29rem);
+  border: 1px solid color-mix(in srgb, var(--primary) 28%, var(--chrome-border));
+  border-radius: 1.2rem;
+  padding: 1.4rem;
+  color: var(--foreground);
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 42%),
+    var(--footer-surface);
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.32);
+}
+.site-footer__install-dialog h2 { margin: 0; color: var(--footer-link); font-size: clamp(1.25rem, 4vw, 1.55rem); line-height: 1.16; }
+.site-footer__install-dialog ol { margin: 1.05rem 0; padding-left: 1.3rem; color: var(--footer-ink); line-height: 1.65; }
+.site-footer__install-dialog-note { margin: 0 0 1rem; color: var(--text-subtle); font-size: 0.86rem; line-height: 1.45; }
+.site-footer__install-dialog-close { position: absolute; top: 0.65rem; right: 0.7rem; width: 2rem; height: 2rem; border: 0; border-radius: 50%; color: var(--footer-ink); background: var(--chrome-surface-hover); font-size: 1.4rem; line-height: 1; cursor: pointer; }
+.site-footer__install-dialog-close:hover, .site-footer__install-dialog-close:focus-visible { color: var(--footer-link); outline: 3px solid color-mix(in srgb, var(--accent) 48%, transparent); outline-offset: 2px; }
+.site-footer__install-dialog-done { width: auto; min-width: 7rem; margin: 0; }
 
 @keyframes app-footer-panel-rise {
   from {
@@ -419,6 +535,11 @@
   .site-footer__logo-link,
   .site-footer__author-link,
   .app-awaricon-badge--footer {
+    transition: none;
+  }
+
+  .site-footer__install-button,
+  .site-footer__install-dialog-done {
     transition: none;
   }
 }
