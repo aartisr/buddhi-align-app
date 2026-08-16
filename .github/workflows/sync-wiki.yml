@@ -17,14 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Sync Markdown to the repository Wiki
         env:
           WIKI_SYNC_TOKEN: ${{ secrets.WIKI_SYNC_TOKEN }}
         run: |
-          # checkout persists an authorization header for the primary repository.
-          # Remove it before cloning so the URL below is the sole, explicit
-          # credential and Git cannot silently fall back to the primary repo.
-          git config --local --unset-all http.https://github.com/.extraheader || true
           test -n "$WIKI_SYNC_TOKEN" || {
             echo "WIKI_SYNC_TOKEN is required to publish to the separate GitHub Wiki repository." >&2
             exit 1
