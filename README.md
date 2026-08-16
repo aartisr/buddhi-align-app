@@ -2,7 +2,7 @@
 
 > A gentle place to return to clarity, care, and purposeful daily action.
 
-I am Aarti S. Ravikumar, and I made Buddhi Align from a simple conviction: none of us should have to carry the work of becoming whole alone. In crowded days and uncertain seasons, we all deserve a small, steady place to pause, listen inwardly, and choose our next step with kindness.
+I am [Aarti S Ravikumar](https://ai-aarti.com/), and I made Buddhi Align from a simple conviction: none of us should have to carry the work of becoming whole alone. In crowded days and uncertain seasons, we all deserve a small, steady place to pause, listen inwardly, and choose our next step with kindness.
 
 This is not a measure of anyone's worth, nor a demand to be perfect. It is a companion for the ordinary, courageous work of living—meeting our responsibilities, noticing our patterns, tending our inner lives, and remembering that the wellbeing we cultivate in ourselves can ripple outward into our families, workplaces, and communities.
 
@@ -12,7 +12,7 @@ Please use it, adapt it, question it, and share what you learn. Your feedback is
 
 With gratitude,
 
-**Aarti S. Ravikumar**
+**[Aarti S Ravikumar](https://ai-aarti.com/)**
 
 [![Shishu Bharati Logo](https://www.shishubharati.net/wp-content/uploads/2024/07/ShishuBharati-Logo-Transparent-HiRes-150x150.png)](https://www.shishubharati.net/)
 
@@ -31,6 +31,7 @@ Website: [https://www.shishubharati.net/](https://www.shishubharati.net/)
 - [Product updates](https://buddhi-align.foreverlotus.com/updates)
 - [Public support](https://buddhi-align.foreverlotus.com/support)
 - [Sitemap](https://buddhi-align.foreverlotus.com/sitemap.xml) and [AI-readable reference](https://buddhi-align.foreverlotus.com/llms.txt)
+- [PWA manifest](https://buddhi-align.foreverlotus.com/manifest.webmanifest) and [PWA architecture](docs/pwa-architecture.md)
 
 The GitHub Pages companion supplies original public documentation and links to the
 authoritative product pages. It is deployed from `docs/github-pages` after GitHub
@@ -38,7 +39,7 @@ Pages is configured to use GitHub Actions.
 
 ## Documentation Status
 
-This documentation was refreshed on **2026-03-30** to match the current codebase.
+This documentation was refreshed on **2026-08-16** to match the current codebase.
 
 ### Autograph Integration
 

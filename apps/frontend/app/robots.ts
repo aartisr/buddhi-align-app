@@ -16,6 +16,7 @@ const allowPublic = [
   "/feed.xml",
   "/llms.txt",
   "/llms-full.txt",
+  "/manifest.webmanifest",
   "/opengraph-image",
   "/twitter-image",
   "/6A06157D-A0A1-46BA-BA2B-439CD61864A3.txt",

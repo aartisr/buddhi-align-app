@@ -19,7 +19,7 @@ export type PublicPageProfile = {
 
 type PublicPageProfileDefinition = Omit<PublicPageProfile, "lastModified">;
 
-export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-04-28";
+export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-08-16";
 
 const moduleAudience = [
   "mindfulness practitioners",

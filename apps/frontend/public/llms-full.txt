@@ -2,12 +2,14 @@
 
 Project: Buddhi Align
 Organization: ForeverLotus
+Author: Aarti S Ravikumar — https://ai-aarti.com/
 Primary URL: https://buddhi-align.foreverlotus.com
 About: https://buddhi-align.foreverlotus.com/about
 RSS feed: https://buddhi-align.foreverlotus.com/feed.xml
 Sitemap: https://buddhi-align.foreverlotus.com/sitemap.xml
 Community sitemap: https://buddhi-align.foreverlotus.com/community/sitemap.xml
 Robots: https://buddhi-align.foreverlotus.com/robots.txt
+PWA manifest: https://buddhi-align.foreverlotus.com/manifest.webmanifest
 Guided tour: https://buddhi-align.foreverlotus.com/motivation-analytics#quick-tour
 Share kit: https://buddhi-align.foreverlotus.com/share
 Support: https://buddhi-align.foreverlotus.com/support
@@ -76,6 +78,7 @@ Buddhi Align is a contemplative-practice web application that helps users build 
 - Autograph Profile Directory: https://buddhi-align.foreverlotus.com/profiles
 - Support: https://buddhi-align.foreverlotus.com/support
 - Public profile pages: discover through https://buddhi-align.foreverlotus.com/sitemap.xml
+- PWA manifest: https://buddhi-align.foreverlotus.com/manifest.webmanifest
 
 ## Retrieval And Citation Guidance
 

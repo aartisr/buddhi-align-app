@@ -16,6 +16,7 @@ Buddhi Align is a reflective practice tool, not medical treatment, therapy, or a
 - [About Buddhi Align](https://buddhi-align.foreverlotus.com/about)
 - [Practice Guide](Practice-Guide)
 - [Official Sources and Indexing](Official-Sources-and-Indexing)
+- [PWA architecture](../pwa-architecture.md)
 - [Product updates](https://buddhi-align.foreverlotus.com/updates)
 - [Share feedback or get support](https://buddhi-align.foreverlotus.com/support)
 

@@ -29,6 +29,14 @@ const postHogConnectSource = postHogHost ? ` ${postHogHost}` : '';
 
 const crawlerUtilityHeaders = [
   {
+    source: '/sw.js',
+    headers: [
+      { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+      { key: 'Service-Worker-Allowed', value: '/' },
+      { key: 'X-Content-Type-Options', value: 'nosniff' },
+    ],
+  },
+  {
     source: bingVerificationPath,
     headers: [
       { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
@@ -68,7 +76,7 @@ const securityHeaders = [
   // Control referrer information included with requests
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   // Expose machine-readable discovery endpoints for search and AI agents
-  { key: 'Link', value: '</llms.txt>; rel="alternate"; type="text/plain", </sitemap.xml>; rel="sitemap"; type="application/xml"' },
+  { key: 'Link', value: '</llms.txt>; rel="alternate"; type="text/plain", </sitemap.xml>; rel="sitemap"; type="application/xml", </manifest.webmanifest>; rel="manifest"' },
   // DNS prefetching for performance
   { key: 'X-DNS-Prefetch-Control', value: 'on' },
   // Restrict browser feature access

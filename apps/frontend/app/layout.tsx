@@ -14,6 +14,7 @@ import "./styles/contrast-overrides.css";
 import "./styles/theme-contract.css";
 import "./components/buddhi-bg.css";
 import "./components/copilot/copilot.css";
+import "./components/pwa/pwa.css";
 
 import BackgroundMusic from "./components/BackgroundMusic";
 import JsonLd from "./components/JsonLd";
@@ -31,6 +32,7 @@ import {
   siteUrl,
 } from "./lib/seo";
 import { resolveDefaultSeasonalTheme, resolveDefaultTheme } from "./lib/theme";
+import { PWA_MANIFEST_PATH } from "./lib/pwa";
 
 const title = translate(DEFAULT_LOCALE, "app.title");
 const description = translate(DEFAULT_LOCALE, "app.description");
@@ -48,7 +50,7 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL(siteUrl),
   applicationName: title,
-  manifest: "/manifest.json",
+  manifest: PWA_MANIFEST_PATH,
   authors: [{ name: authorName, url: authorUrl }],
   creator: authorName,
   publisher: organizationName,

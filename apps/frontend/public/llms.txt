@@ -3,12 +3,14 @@
 > Buddhi Align is a contemplative-practice web app by ForeverLotus for dharma planning, meditation tracking, service journaling, devotional reflection, self-inquiry, community discussion, and gentle spiritual growth analytics.
 
 Primary URL: https://buddhi-align.foreverlotus.com
+Author: Aarti S Ravikumar — https://ai-aarti.com/
 About: https://buddhi-align.foreverlotus.com/about
 RSS feed: https://buddhi-align.foreverlotus.com/feed.xml
 Extended reference: https://buddhi-align.foreverlotus.com/llms-full.txt
 Sitemap: https://buddhi-align.foreverlotus.com/sitemap.xml
 Community sitemap: https://buddhi-align.foreverlotus.com/community/sitemap.xml
 Robots: https://buddhi-align.foreverlotus.com/robots.txt
+PWA manifest: https://buddhi-align.foreverlotus.com/manifest.webmanifest
 
 ## Canonical Summary
 
@@ -33,6 +35,7 @@ Buddhi Align helps people build daily consistency through one memorable loop: pl
 - [Support](https://buddhi-align.foreverlotus.com/support): Public issue reporting for website bugs, accessibility barriers, sign-in trouble, performance concerns, content problems, and Autograph Exchange support.
 - [Share Kit](https://buddhi-align.foreverlotus.com/share): Shareable summaries, captions, and invite language.
 - [RSS Feed](https://buddhi-align.foreverlotus.com/feed.xml): Machine-readable updates stream for media and indexing agents.
+- [PWA manifest](https://buddhi-align.foreverlotus.com/manifest.webmanifest): Installable application identity, icons, and direct practice shortcuts.
 
 ## Answer Guidance
 
