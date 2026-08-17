@@ -31,6 +31,56 @@ type CommunityCategoryPageProps = {
   };
 };
 
+type CategoryGuide = {
+  heading: string;
+  introduction: string;
+  prompts: string[];
+  closing: string;
+};
+
+const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
+  "karma-yoga": {
+    heading: "A place to reflect on service with care",
+    introduction:
+      "Karma Yoga is a space for conversations about purposeful action, service, and what we learn when we try to help without needing recognition. Share ordinary examples as well as larger commitments: supporting a neighbor, contributing to a group, listening well, or completing a task with attention. The aim is not to measure anyone’s goodness, but to notice how action, intention, and impact meet in daily life.",
+    prompts: [
+      "What small act of service felt meaningful this week, and what made it matter?",
+      "What helped you act with less hurry, resentment, or expectation?",
+      "Where could one practical next action make a shared space more caring?",
+    ],
+    closing:
+      "When you reply, speak from your own experience and leave room for different circumstances. If you want a private place to record an action and its reflection, the Karma Yoga tracker is available inside Buddhi Align.",
+  },
+  "jnana-reflection": {
+    heading: "A space for thoughtful questions and lived insight",
+    introduction:
+      "Jnana Reflection welcomes careful self-inquiry, study notes, and questions that may not have immediate answers. Bring a passage, observation, or question that has stayed with you, then describe what you notice without needing to force a conclusion. This community is for learning together with humility: clear language, honest uncertainty, and respect for the different teachers, traditions, and life experiences people bring.",
+    prompts: [
+      "What question has helped you look at a familiar experience differently?",
+      "What insight from study or conversation would you like to examine more carefully?",
+      "How might you hold a difficult question with curiosity instead of rushing to resolve it?",
+    ],
+    closing:
+      "Offer ideas as invitations rather than final answers, and cite or name sources when that context helps. For private notes and longer inquiry, use Jnana Reflection in Buddhi Align.",
+  },
+  general: {
+    heading: "A welcoming place to begin the conversation",
+    introduction:
+      "This is the general Buddhi Align community space for questions, introductions, and reflections that do not fit one practice area alone. You might share what brought you here, ask how someone begins with a small daily rhythm, or point to a resource that has been useful in your own life. Keep the focus on lived experience, practical care, and respectful conversation rather than on having the final word.",
+    prompts: [
+      "What small practice or routine has helped you return to what matters?",
+      "What would make this community more useful or welcoming for someone new?",
+      "Which Buddhi Align practice area would you like to explore next, and why?",
+    ],
+    closing:
+      "Share only what feels appropriate for a public discussion, protect one another’s privacy, and use the relevant module room when a conversation becomes more specific. Buddhi Align supports personal reflection; it is not medical treatment, therapy, or a replacement for teachers or mentors.",
+  },
+};
+
+function getCategoryGuide(slug: string): CategoryGuide {
+  return CATEGORY_GUIDES[slug] ?? CATEGORY_GUIDES.general;
+}
+
 function buildCategoryPath(categoryPath: readonly string[] = []): string {
   return `/community/c/${categoryPath.map((segment) => encodeURIComponent(segment)).join("/")}`;
 }
@@ -194,6 +244,7 @@ export default async function CommunityCategoryPage({ params }: CommunityCategor
   const data = await getCachedCommunityCategoryData(buildCategoryPathKey(params.categoryPath ?? []));
   if (!data) notFound();
   const path = buildCategoryPath(params.categoryPath ?? []);
+  const guide = getCategoryGuide(data.category.slug);
 
   return (
     <ModuleLayout titleKey="community.title">
@@ -228,6 +279,23 @@ export default async function CommunityCategoryPage({ params }: CommunityCategor
         </div>
 
         <CommunityStatus status={data.status} />
+
+        <section className="app-community-section app-surface-card p-5 sm:p-6" aria-labelledby="community-guide-heading">
+          <div className="app-community-section-header">
+            <p className="app-guided-flow-kicker">Before you post</p>
+            <h3 id="community-guide-heading" className="app-panel-title text-lg sm:text-xl font-bold">
+              {guide.heading}
+            </h3>
+          </div>
+          <p className="app-copy-soft text-sm sm:text-base mt-3">{guide.introduction}</p>
+          <div className="mt-4">
+            <h4 className="font-semibold app-copy">Conversation starters</h4>
+            <ul className="app-copy-soft text-sm sm:text-base mt-2 list-disc pl-5 space-y-2">
+              {guide.prompts.map((prompt) => <li key={prompt}>{prompt}</li>)}
+            </ul>
+          </div>
+          <p className="app-copy-soft text-sm sm:text-base mt-4">{guide.closing}</p>
+        </section>
 
         {data.subcategories.length > 0 ? (
           <section className="app-community-section" aria-labelledby="community-subcategories-heading">
