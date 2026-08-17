@@ -89,6 +89,13 @@ function buildCategoryPathKey(categoryPath: readonly string[] = []): string {
   return categoryPath.join("/");
 }
 
+function buildCategoryTitle(categoryName: string): string {
+  const conciseTitle = `${categoryName} Community Discussion | Buddhi Align`;
+  return conciseTitle.length >= 50
+    ? conciseTitle
+    : `${categoryName} Practice Community Discussion | Buddhi Align`;
+}
+
 function CommunityStatus({ status }: { status: CommunityDataStatus }) {
   if (status === "ready") return null;
 
@@ -148,22 +155,27 @@ export async function generateMetadata({ params }: CommunityCategoryPageProps): 
   const path = categoryPath.length > 0 ? buildCategoryPath(categoryPath) : "/community";
 
   if (!data) {
-    return buildPageMetadata({
-      title: "Buddhi Align Community Discussion",
+    const title = "Buddhi Align Community Discussions and Practice Support";
+    return {
+      ...buildPageMetadata({
+      title,
       description:
         "Browse Buddhi Align community discussions for spiritual practice, meditation, service, devotion, self-inquiry, dharma planning, and shared reflection.",
       path,
       keywords: ["Buddhi Align community", "spiritual practice forum", "mindfulness discussion"],
-    });
+      }),
+      title: { absolute: title },
+    };
   }
 
-  const title = `${data.category.name} Community Discussion`;
+  const title = buildCategoryTitle(data.category.name);
   const description = fitDescription(
     `${data.category.description} Join Buddhi Align discussion for practice questions, shared reflection, module support, and steady daily growth.`,
   );
 
-  return buildPageMetadata({
-    title,
+  return {
+    ...buildPageMetadata({
+      title,
     description,
     path,
     keywords: [
@@ -172,7 +184,9 @@ export async function generateMetadata({ params }: CommunityCategoryPageProps): 
       "Buddhi Align community",
       "spiritual practice forum",
     ],
-  });
+    }),
+    title: { absolute: title },
+  };
 }
 
 function buildCategoryJsonLd(data: NonNullable<Awaited<ReturnType<typeof getCommunityCategoryData>>>, path: string) {
