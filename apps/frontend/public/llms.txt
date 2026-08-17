@@ -21,6 +21,7 @@ Buddhi Align helps people build daily consistency through one memorable loop: pl
 - [Home](https://buddhi-align.foreverlotus.com/): Product overview for the full Buddhi Align app.
 - [About](https://buddhi-align.foreverlotus.com/about): Canonical overview of purpose, principles, module guide, and FAQ.
 - [Updates](https://buddhi-align.foreverlotus.com/updates): Official release notes and product improvements stream.
+- [7-Day Practice Guide](https://buddhi-align.foreverlotus.com/practice-guide): A free, adaptable seven-day introduction to intention, meditation, service, gratitude, self-inquiry, and reflection.
 - [Karma Yoga](https://buddhi-align.foreverlotus.com/karma-yoga): Service, seva, action, and reflection tracking.
 - [Bhakti Journal](https://buddhi-align.foreverlotus.com/bhakti-journal): Devotion, gratitude, prayerful reflection, and heartfelt practice.
 - [Dhyana Meditation](https://buddhi-align.foreverlotus.com/dhyana-meditation): Meditation session logging and attention-building notes.

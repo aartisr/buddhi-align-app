@@ -44,6 +44,7 @@ describe("SEO public route metadata", () => {
     expect(paths).toContain("/support");
     expect(paths).toContain("/about");
     expect(paths).toContain("/updates");
+    expect(paths).toContain("/practice-guide");
     expect(new Set(paths).size).toBe(paths.length);
     expect(publicShareDestinations.map((item) => item.href)).toEqual(
       expect.arrayContaining(["/karma-yoga", "/bhakti-journal", "/dhyana-meditation"]),
@@ -271,6 +272,7 @@ describe("SEO crawler and AI retrieval metadata", () => {
         "/community/t/",
         "/about",
         "/updates",
+        "/practice-guide",
         "/profiles",
         "/profiles/",
         "/support",
@@ -293,6 +295,7 @@ describe("SEO crawler and AI retrieval metadata", () => {
     expect(llmsTxt).toContain("# Buddhi Align");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/about");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/updates");
+    expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/practice-guide");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/feed.xml");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/community");
     expect(llmsTxt).toContain("https://buddhi-align.foreverlotus.com/community/sitemap.xml");
@@ -301,6 +304,7 @@ describe("SEO crawler and AI retrieval metadata", () => {
     expect(llmsTxt).toContain("Do not cite private, admin, settings, sign-in, or API routes");
     expect(llmsFullTxt).toContain("Community module rooms: discover ID-qualified Discourse category URLs");
     expect(llmsFullTxt).toContain("- Updates: https://buddhi-align.foreverlotus.com/updates");
+    expect(llmsFullTxt).toContain("- 7-Day Practice Guide: https://buddhi-align.foreverlotus.com/practice-guide");
     expect(llmsFullTxt).toContain("- RSS Feed: https://buddhi-align.foreverlotus.com/feed.xml");
     expect(llmsFullTxt).toContain("Public profile pages: discover through https://buddhi-align.foreverlotus.com/sitemap.xml");
     expect(llmsFullTxt).toContain("not medical treatment, therapy, or a replacement");

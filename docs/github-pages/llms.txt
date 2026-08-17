@@ -9,7 +9,8 @@
 ## Canonical resources
 
 - [Documentation home](https://aartisr.github.io/buddhi-align-app/): Open practice documentation.
-- [Practice guide](https://aartisr.github.io/buddhi-align-app/practice-guide.html): A gentle routine for planning, practice, reflection, and review.
+- [Practice guide](https://aartisr.github.io/buddhi-align-app/practice-guide.html): Open documentation companion to the live seven-day guide.
+- [Live 7-Day Gentle Contemplative Practice Guide](https://buddhi-align.foreverlotus.com/practice-guide): The authoritative free, adaptable guide for intention, meditation, service, gratitude, self-inquiry, and reflection.
 - [Official sources](https://aartisr.github.io/buddhi-align-app/open-web-reference.html): Canonical public Buddhi Align references.
 - [Wiki home](https://aartisr.github.io/buddhi-align-app/wiki/): Open learning, practice, and source-indexing documentation.
 - [Wiki practice guide](https://aartisr.github.io/buddhi-align-app/wiki/practice-guide.html): A gentle guide to planning, practicing, reflecting, and reviewing.

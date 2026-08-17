@@ -8,7 +8,7 @@ const repositoryUrl = "https://github.com/aartisr/buddhi-align-app";
 const githubWikiUrl = `${repositoryUrl}/wiki`;
 const authorName = "Aarti S Ravikumar";
 const authorUrl = "https://ai-aarti.com/";
-const lastModified = "2026-08-16";
+const lastModified = "2026-08-17";
 
 if (!sourceDirectory || !outputDirectory) {
   throw new Error("Usage: node scripts/build-github-pages-wiki.mjs <source-directory> <output-directory>");

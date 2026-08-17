@@ -1,8 +1,12 @@
-# Buddhi Align Practice Guide
+# Buddhi Align 7-Day Gentle Practice Guide
 
 I am [Aarti S Ravikumar](https://ai-aarti.com/), and my invitation is simple: begin with one small, meaningful step. [Buddhi Align](https://buddhi-align.foreverlotus.com/) is here to accompany your practice, not to judge it. Let each step be an offering of care—to yourself and, through the way you move through the world, to others.
 
 **Author:** [Aarti S Ravikumar](https://ai-aarti.com/)
+
+## Begin with the current seven-day guide
+
+The complete [7-Day Gentle Contemplative Practice Guide](https://buddhi-align.foreverlotus.com/practice-guide) is the current public starting point. It offers one small, adaptable practice each day: intention, quiet attention, helpful action, gratitude, self-inquiry, pattern awareness, and gentle review. Use it at your own pace, repeat a day when it helps, and adapt its language to your tradition and trusted sources of guidance.
 
 ## Plan
 
@@ -16,6 +20,6 @@ Choose the module that meets you where you are: [Karma Yoga](https://buddhi-alig
 
 Observe recurring patterns in the [Vasana Tracker](https://buddhi-align.foreverlotus.com/vasana-tracker), then use [Motivation Analytics](https://buddhi-align.foreverlotus.com/motivation-analytics) for a calm view of practice consistency. Let what you see be information, not a verdict. For the official framework and FAQ, visit [About Buddhi Align](https://buddhi-align.foreverlotus.com/about).
 
-Please share what supports you and what could serve people better through [public support](https://buddhi-align.foreverlotus.com/support). Your feedback helps this practice grow in care and usefulness. For canonical source links and machine-readable discovery files, see [Official Sources and Indexing](Official-Sources-and-Indexing).
+Please share what supports you and what could serve people better through [public support](https://buddhi-align.foreverlotus.com/support). Your feedback helps this practice grow in care and usefulness. The [share kit](https://buddhi-align.foreverlotus.com/share) has ready-to-use language for inviting a friend, class, or community. For canonical source links and machine-readable discovery files, see [Official Sources and Indexing](Official-Sources-and-Indexing).
 
-[Return to the Wiki home](Home) · [Official sources](Official-Sources-and-Indexing) · [Web documentation](https://aartisr.github.io/buddhi-align-app/practice-guide.html) · [Open Buddhi Align](https://buddhi-align.foreverlotus.com/)
+[Return to the Wiki home](Home) · [Official sources](Official-Sources-and-Indexing) · [Web documentation](https://aartisr.github.io/buddhi-align-app/practice-guide.html) · [Open the 7-Day Guide](https://buddhi-align.foreverlotus.com/practice-guide) · [Open Buddhi Align](https://buddhi-align.foreverlotus.com/)

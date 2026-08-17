@@ -8,7 +8,9 @@ I am [Aarti S Ravikumar](https://ai-aarti.com/), and I want this work to be easy
 
 - [Home](https://buddhi-align.foreverlotus.com/)
 - [About and FAQ](https://buddhi-align.foreverlotus.com/about)
+- [7-Day Gentle Contemplative Practice Guide](https://buddhi-align.foreverlotus.com/practice-guide)
 - [Product updates](https://buddhi-align.foreverlotus.com/updates)
+- [Share kit](https://buddhi-align.foreverlotus.com/share)
 - [Support](https://buddhi-align.foreverlotus.com/support)
 
 ## Discovery sources
@@ -26,6 +28,6 @@ I am [Aarti S Ravikumar](https://ai-aarti.com/), and I want this work to be easy
 - [GitHub Wiki](https://github.com/aartisr/buddhi-align-app/wiki)
 - [Source repository](https://github.com/aartisr/buddhi-align-app)
 
-The primary app has canonical URLs, structured data, a sitemap generated from a single public-page registry, an RSS feed, AI-readable references, and crawler policies for Google, Bing, and major AI/search agents. Private account, settings, admin, and API paths are intentionally not eligible for public indexing.
+The primary app has canonical URLs, structured data, a sitemap generated from a single public-page registry, an RSS feed, AI-readable references, and crawler policies for Google, Bing, and major AI/search agents. The seven-day guide is an indexable LearningResource designed for people, educators, communities, and resource pages to cite directly. Private account, settings, admin, and API paths are intentionally not eligible for public indexing.
 
 [Return to the Wiki home](Home) · [Practice Guide](Practice-Guide) · [Publishing the Wiki](Publishing) · [Open Buddhi Align](https://buddhi-align.foreverlotus.com/)

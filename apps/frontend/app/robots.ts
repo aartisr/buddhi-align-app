@@ -10,6 +10,7 @@ const allowPublic = [
   "/community/t/",
   "/about",
   "/updates",
+  "/practice-guide",
   "/profiles",
   "/profiles/",
   "/support",

@@ -19,7 +19,7 @@ export type PublicPageProfile = {
 
 type PublicPageProfileDefinition = Omit<PublicPageProfile, "lastModified">;
 
-export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-08-16";
+export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-08-17";
 
 const moduleAudience = [
   "mindfulness practitioners",
@@ -213,6 +213,28 @@ const corePublicPageProfiles = ([
     outcomes: ["Share the app clearly", "Invite others quickly", "Explain the daily practice loop"],
     changeFrequency: "monthly",
     priority: 0.7,
+  },
+  {
+    path: "/practice-guide",
+    title: "7-Day Gentle Contemplative Practice Guide",
+    description:
+      "Follow a free seven-day contemplative practice guide for setting intentions, meditation, service, gratitude, self-inquiry, and gentle reflection.",
+    summary:
+      "This approachable seven-day guide offers one small, adaptable practice each day for people beginning or renewing a reflective routine.",
+    keywords: [
+      "seven day contemplative practice guide",
+      "beginner spiritual practice guide",
+      "daily reflection prompts",
+      "gentle meditation practice",
+    ],
+    audience: ["new practitioners", "teachers", "community groups", "reflective learners"],
+    outcomes: [
+      "Begin with a manageable daily rhythm",
+      "Explore several paths of contemplative practice",
+      "Choose a next step without pressure or perfectionism",
+    ],
+    changeFrequency: "monthly",
+    priority: 0.82,
   },
   {
     path: "/support",

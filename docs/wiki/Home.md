@@ -14,6 +14,7 @@ Buddhi Align is a reflective practice tool, not medical treatment, therapy, or a
 
 - [Official product overview](https://buddhi-align.foreverlotus.com/)
 - [About Buddhi Align](https://buddhi-align.foreverlotus.com/about)
+- [7-Day Gentle Contemplative Practice Guide](https://buddhi-align.foreverlotus.com/practice-guide): a free, adaptable introduction to intention, meditation, service, gratitude, self-inquiry, and reflection.
 - [Documentation home](https://aartisr.github.io/buddhi-align-app/)
 - [GitHub Pages practice guide](https://aartisr.github.io/buddhi-align-app/practice-guide.html)
 - [Practice Guide](Practice-Guide)
@@ -23,6 +24,7 @@ Buddhi Align is a reflective practice tool, not medical treatment, therapy, or a
 - [Source repository](https://github.com/aartisr/buddhi-align-app)
 - [PWA architecture](https://github.com/aartisr/buddhi-align-app/blob/main/docs/pwa-architecture.md)
 - [Product updates](https://buddhi-align.foreverlotus.com/updates)
+- [Share kit](https://buddhi-align.foreverlotus.com/share)
 - [Share feedback or get support](https://buddhi-align.foreverlotus.com/support)
 
 ## Core practice areas
