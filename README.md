@@ -1,14 +1,14 @@
 # Buddhi Align
 
-> A gentle place to return to clarity, care, and purposeful daily action.
+> A modest companion for reflection, care, and purposeful daily action.
 
-I am [Aarti S Ravikumar](https://ai-aarti.com/), and I made Buddhi Align from a simple conviction: none of us should have to carry the work of becoming whole alone. In crowded days and uncertain seasons, we all deserve a small, steady place to pause, listen inwardly, and choose our next step with kindness.
+I am [Aarti S Ravikumar](https://ai-aarti.com/), and I created Buddhi Align in the hope that a small, quiet space for attention may help people meet their lives and one another with greater care. It is offered as a tool for practice and reflection—not as a measure of anyone’s worth, a promise of particular outcomes, or a substitute for medical care, therapy, trusted teachers, or spiritual guidance.
 
-This is not a measure of anyone's worth, nor a demand to be perfect. It is a companion for the ordinary, courageous work of living—meeting our responsibilities, noticing our patterns, tending our inner lives, and remembering that the wellbeing we cultivate in ourselves can ripple outward into our families, workplaces, and communities.
+Buddhi Align draws respectfully on Karma Yoga, Bhakti, Jnana, and Dhyana. These living traditions are wider and deeper than any application. The app can support a person’s own practice by making room to pause, notice, reflect, and choose a next action; each person and community remains the best judge of what is appropriate in their context.
 
-Buddhi Align draws on the enduring paths of Karma Yoga, Bhakti, Jnana, and Dhyana, and holds them as practices for real human days. A reflection can become a clearer conversation. A moment of meditation can become patience with a neighbor. A plan made with care can become service. I hope this app helps each person find their own meaningful bridge between inner steadiness and generous action.
+Its design is guided by a simple discipline: make claims proportionate to the evidence, name uncertainty plainly, protect people’s dignity, and learn from correction. Reflection data and analytics are prompts for inquiry, not verdicts about progress. We welcome research, lived experience, accessibility feedback, and careful critique that can make the work more useful and more honest.
 
-Please use it, adapt it, question it, and share what you learn. Your feedback is not an afterthought; it is how this work becomes more useful, more welcoming, and more truthful. If something helps you, tell us. If something excludes you or could be gentler, tell us that too. I invite builders, seekers, teachers, friends, and communities everywhere to help shape Buddhi Align into a resource that serves with humility and care.
+Please use it, adapt it, question it, and share what you learn. If something helps, is unclear, excludes someone, or could be more truthful, we would be grateful to hear it. Builders, seekers, teachers, researchers, friends, and communities are warmly invited to help improve Buddhi Align with humility, rigor, and compassion.
 
 With gratitude,
 
@@ -16,9 +16,7 @@ With gratitude,
 
 [![Shishu Bharati Logo](https://www.shishubharati.net/wp-content/uploads/2024/07/ShishuBharati-Logo-Transparent-HiRes-150x150.png)](https://www.shishubharati.net/)
 
-![Awaricon Platinum Readiness](https://img.shields.io/badge/Awaricon-Platinum%20Readiness-E5E4E2?style=for-the-badge&logo=sparkle&logoColor=1f2937&labelColor=8a8f98)
-
-Certification target: ForeverLotus Awaricon Platinum.
+Project intention: ongoing quality, accessibility, and community-care work—without claims of certification or special distinction.
 
 This project is dedicated to **Shishubharati**.
 
@@ -26,6 +24,7 @@ Website: [https://www.shishubharati.net/](https://www.shishubharati.net/)
 
 ## Official Buddhi Align Links
 
+- **Current live deployment:** [https://buddhi-align.foreverlotus.com/](https://buddhi-align.foreverlotus.com/)
 - [Buddhi Align app](https://buddhi-align.foreverlotus.com/)
 - [Product overview and FAQ](https://buddhi-align.foreverlotus.com/about)
 - [Product updates](https://buddhi-align.foreverlotus.com/updates)
@@ -39,11 +38,11 @@ Pages is configured to use GitHub Actions. Its searchable Wiki edition is render
 from `docs/wiki` at `/wiki/`; the same Markdown is synchronized to GitHub Wiki when
 the repository Wiki feature is enabled.
 
-The documentation network intentionally cross-links the [GitHub Pages home](https://aartisr.github.io/buddhi-align-app/), [searchable Wiki](https://aartisr.github.io/buddhi-align-app/wiki/), [native GitHub Wiki](https://github.com/aartisr/buddhi-align-app/wiki), [official source reference](https://aartisr.github.io/buddhi-align-app/open-web-reference.html), and [live product](https://buddhi-align.foreverlotus.com/). This makes the relationship between the product, its author, its documentation, and its reviewed source explicit for people and retrieval systems.
+The documentation network intentionally cross-links the [GitHub Pages home](https://aartisr.github.io/buddhi-align-app/), [searchable Wiki](https://aartisr.github.io/buddhi-align-app/wiki/), [native GitHub Wiki](https://github.com/aartisr/buddhi-align-app/wiki), [official source reference](https://aartisr.github.io/buddhi-align-app/open-web-reference.html), and [live product](https://buddhi-align.foreverlotus.com/). This lets readers distinguish maintained documentation from the live service and trace public statements back to reviewed source.
 
 ## Documentation Status
 
-This documentation was refreshed on **2026-08-16** to match the current codebase.
+This documentation was refreshed on **2026-08-18**. Please treat the deployed site, release notes, and source history as the appropriate places to verify changing details.
 
 ### Autograph Integration
 
