@@ -11,6 +11,7 @@ const allowPublic = [
   "/about",
   "/updates",
   "/practice-guide",
+  "/resources",
   "/profiles",
   "/profiles/",
   "/support",

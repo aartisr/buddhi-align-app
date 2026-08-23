@@ -45,6 +45,7 @@ describe("SEO public route metadata", () => {
     expect(paths).toContain("/about");
     expect(paths).toContain("/updates");
     expect(paths).toContain("/practice-guide");
+    expect(paths).toContain("/resources");
     expect(new Set(paths).size).toBe(paths.length);
     expect(publicShareDestinations.map((item) => item.href)).toEqual(
       expect.arrayContaining(["/karma-yoga", "/bhakti-journal", "/dhyana-meditation"]),
@@ -273,6 +274,7 @@ describe("SEO crawler and AI retrieval metadata", () => {
         "/about",
         "/updates",
         "/practice-guide",
+        "/resources",
         "/profiles",
         "/profiles/",
         "/support",

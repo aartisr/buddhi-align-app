@@ -19,7 +19,7 @@ export type PublicPageProfile = {
 
 type PublicPageProfileDefinition = Omit<PublicPageProfile, "lastModified">;
 
-export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-08-17";
+export const PUBLIC_CONTENT_LAST_MODIFIED = "2026-08-23";
 
 const moduleAudience = [
   "mindfulness practitioners",
@@ -235,6 +235,28 @@ const corePublicPageProfiles = ([
     ],
     changeFrequency: "monthly",
     priority: 0.82,
+  },
+  {
+    path: "/resources",
+    title: "Free Contemplative Practice Resources and Partner Link Kit",
+    description:
+      "Explore free Buddhi Align practice resources, share a seven-day guide, and find clear descriptions for teachers, schools, and community partners.",
+    summary:
+      "The resources hub gives teachers, community leaders, and readers a useful starting point to share a free practice guide or describe Buddhi Align accurately.",
+    keywords: [
+      "contemplative practice resources",
+      "spiritual practice guide",
+      "meditation resources for groups",
+      "Buddhi Align partner kit",
+    ],
+    audience: ["teachers", "community leaders", "schools", "wellness resource editors"],
+    outcomes: [
+      "Share a free practice resource",
+      "Find accurate language for a resource page",
+      "Connect people with a calm daily practice",
+    ],
+    changeFrequency: "monthly",
+    priority: 0.8,
   },
   {
     path: "/support",

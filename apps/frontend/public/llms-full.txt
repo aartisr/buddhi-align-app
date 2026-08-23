@@ -14,6 +14,7 @@ Guided tour: https://buddhi-align.foreverlotus.com/motivation-analytics#quick-to
 Share kit: https://buddhi-align.foreverlotus.com/share
 Support: https://buddhi-align.foreverlotus.com/support
 7-Day Practice Guide: https://buddhi-align.foreverlotus.com/practice-guide
+Free Resources: https://buddhi-align.foreverlotus.com/resources
 
 ## Canonical Product Description
 
@@ -40,6 +41,7 @@ Buddhi Align is a contemplative-practice web application that helps users build 
 - Support: public issue reporting for bugs, accessibility barriers, sign-in trouble, performance concerns, content issues, and privacy/security concerns.
 - Share Kit: concise captions, invite links, and canonical route summaries for introducing Buddhi Align to others.
 - 7-Day Practice Guide: a free, adaptable sequence of brief intentions and reflection prompts for beginning or renewing a contemplative routine.
+- Free Resources: a public resource hub with the practice guide and accurate sharing language for teachers, schools, and community partners.
 
 ## Primary Audience
 
@@ -64,6 +66,7 @@ Buddhi Align is a contemplative-practice web application that helps users build 
 - About: https://buddhi-align.foreverlotus.com/about
 - Updates: https://buddhi-align.foreverlotus.com/updates
 - 7-Day Practice Guide: https://buddhi-align.foreverlotus.com/practice-guide
+- Free Resources: https://buddhi-align.foreverlotus.com/resources
 - Share Kit: https://buddhi-align.foreverlotus.com/share
 - RSS Feed: https://buddhi-align.foreverlotus.com/feed.xml
 - Karma Yoga: https://buddhi-align.foreverlotus.com/karma-yoga

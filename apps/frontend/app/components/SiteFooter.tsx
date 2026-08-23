@@ -97,6 +97,9 @@ export default function SiteFooter() {
                 <Link href="/practice-guide" className="site-footer__link">7-Day Practice Guide</Link>
               </li>
               <li>
+                <Link href="/resources" className="site-footer__link">Free Resources</Link>
+              </li>
+              <li>
                 <Link href="/support" className="site-footer__link">{t("footer.support")}</Link>
               </li>
               <li>
