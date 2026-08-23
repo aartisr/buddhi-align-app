@@ -27,6 +27,7 @@
     "quality:gate:full": "npm-run-all -s quality:gate perf:ci",
     "quality:performance:check": "npm run perf:ci",
     "security:audit": "node scripts/security-audit.mjs",
+    "test:discoverability": "node scripts/test-discoverability.mjs",
     "validate:live-discovery": "node scripts/validate-live-discovery.mjs",
     "verify:no-private-repo": "node scripts/verify-no-private-repo-refs.mjs",
     "autograph:package-check": "node scripts/verify-autograph-package-integration.mjs",

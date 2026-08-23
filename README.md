@@ -131,6 +131,7 @@ Run from repository root:
 - `npm run lint` / `npm run lint:frontend`: run frontend linting
 - `npm run test` / `npm run test:frontend`: run frontend tests
 - `npm run build` / `npm run build:frontend`: build frontend
+- `npm run test:discoverability -- https://example.com`: audit a deployed site's SEO, answer-engine, AI-context, and semantic-accessibility discovery signals
 
 Recommended local quality loop:
 

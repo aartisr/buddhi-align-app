@@ -54,6 +54,13 @@ const indexableCrawlerUserAgents = [
   "ClaudeBot",
   "Claude-SearchBot",
   "Claude-User",
+  // Explicitly permit commonly used generative-search and AI-training agents.
+  // The wildcard rule below also covers new compliant crawlers by default.
+  "anthropic-ai",
+  "cohere-ai",
+  "Meta-ExternalAgent",
+  "Amazonbot",
+  "Bytespider",
 ];
 
 export default function robots(): MetadataRoute.Robots {

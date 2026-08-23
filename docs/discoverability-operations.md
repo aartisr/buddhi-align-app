@@ -1,6 +1,22 @@
 # Discoverability operations
 
-The application automatically publishes canonical metadata, JSON-LD, `robots.txt`, `sitemap.xml`, RSS, `llms.txt`, and a PWA manifest. The scheduled **Live discoverability validation** workflow checks the deployed production endpoints daily and can be started manually after a deployment.
+The application automatically publishes canonical metadata, JSON-LD, `robots.txt`, `sitemap.xml`, RSS, `llms.txt`, and a PWA manifest. Together these cover technical SEO, answer-engine optimization (AEO), AI-answer context (often called AIO), generative-engine optimization (GEO), and accessible semantic content (AXO). `robots.txt` explicitly permits major search, answer, and generative-AI crawlers and has a wildcard rule for new compliant agents. These measures improve eligibility for discovery; no implementation can guarantee a crawler's indexing or an AI product's citation decision.
+
+## Generic discoverability test
+
+Use the dependency-free test against any public HTTP(S) deployment:
+
+```bash
+npm run test:discoverability -- https://example.com
+```
+
+It checks the HTML title, description, canonical URL, language, viewport, landmarks, social previews, valid JSON-LD, image alternatives, crawler directives, sitemap, and optional `llms.txt`. It exits nonzero only for failed requirements by default; add `--strict` to make recommendations fail CI, or `--require-llms` to require AI-readable context:
+
+```bash
+npm run test:discoverability -- https://example.com --path=/about --require-llms --strict
+```
+
+The existing `npm run validate:live-discovery` remains the product-specific production smoke test.
 
 ## Owner-required submissions
 
