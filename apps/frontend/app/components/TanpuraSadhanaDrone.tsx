@@ -31,6 +31,7 @@ function useTanpuraSadhanaLogic() {
   const masterGainRef = useRef<GainNode | null>(null);
   const timerIntervalRef = useRef<number | null>(null);
   const pluckCycleTimeoutRef = useRef<number | null>(null);
+  const isPlayingRef = useRef(false);
 
   // Play Tibetan Singing Bowl bell chime
   const playTibetanBell = useCallback((ctx: AudioContext) => {
@@ -108,7 +109,7 @@ function useTanpuraSadhanaLogic() {
 
   // Continuous 4-string Tanpura pluck cycle: Pa/Ma -> Tara Sa -> Tara Sa -> Kharaj Sa
   const scheduleTanpuraCycle = useCallback((ctx: AudioContext, masterGain: GainNode, tuning: DroneTuning, pancham: boolean) => {
-    if (!isPlaying) return;
+    if (!isPlayingRef.current) return;
 
     const string1 = pancham ? tuning.fifthFreq : tuning.fourthFreq; // Pa or Ma
     const string2 = tuning.highSaFreq; // Tara Sa
@@ -139,11 +140,12 @@ function useTanpuraSadhanaLogic() {
         }, stepInterval);
       }, stepInterval);
     }, stepInterval);
-  }, [isPlaying, pluckString]);
+  }, [pluckString]);
 
   // Start/Stop handler
   const toggleAudio = () => {
     if (isPlaying) {
+      isPlayingRef.current = false;
       if (pluckCycleTimeoutRef.current) clearTimeout(pluckCycleTimeoutRef.current);
       if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
       if (audioCtxRef.current && audioCtxRef.current.state !== "closed") {
@@ -168,6 +170,7 @@ function useTanpuraSadhanaLogic() {
       setIsPlaying(true);
       setElapsedSeconds(0);
 
+      isPlayingRef.current = true;
       // Play initial opening Tibetan bowl chime
       playTibetanBell(ctx);
 
@@ -197,6 +200,7 @@ function useTanpuraSadhanaLogic() {
 
   useEffect(() => {
     return () => {
+      isPlayingRef.current = false;
       const pluckTimeout = pluckCycleTimeoutRef.current;
       const timerInterval = timerIntervalRef.current;
       const audioCtx = audioCtxRef.current;
