@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import ModuleLayout from "../components/ModuleLayout";
 import { type Translate } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
-import { cachedJsonFetch, invalidateClientFetchCache } from "./clientFetchCache";
+import { cachedJsonFetch, invalidateClientFetchCache } from "../lib/clientFetchCache";
 import { getSyntheticAnalyticsPayload, shouldUseSyntheticAnalytics } from "./demoData";
 import { buildPersonalizationSignals, type PersonalizationRecommendation } from "./personalization";
 import LongitudinalChart from "../components/LongitudinalChart";
