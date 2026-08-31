@@ -1,8 +1,9 @@
 import Link from "next/link";
-
 import JsonLd from "../components/JsonLd";
 import ModuleLayout from "../components/ModuleLayout";
 import PublicPageJsonLd from "../components/PublicPageJsonLd";
+import PrintableSadhanaReview from "../components/PrintableSadhanaReview";
+import SanskritGlossaryGuide from "../components/SanskritGlossaryGuide";
 import { siteUrl } from "../lib/seo";
 
 const resources = [
@@ -52,9 +53,8 @@ export default function ResourcesPage() {
     <ModuleLayout titleKey="app.brand">
       <PublicPageJsonLd path="/resources" />
       <JsonLd data={collectionJsonLd} />
-
-      <article className="max-w-5xl mx-auto mb-6" aria-labelledby="resources-heading">
-        <section className="app-surface-card p-5 sm:p-7 mb-6">
+      <article className="max-w-5xl mx-auto mb-6 space-y-6" aria-labelledby="resources-heading">
+        <section className="app-surface-card p-5 sm:p-7">
           <p className="app-guided-flow-kicker">Free public resources</p>
           <h1 id="resources-heading" className="app-panel-title text-2xl sm:text-3xl font-bold leading-tight">
             Practical resources for a steadier daily practice
@@ -64,6 +64,16 @@ export default function ResourcesPage() {
             resource editors to share. They support reflection and practice; they are not medical treatment, therapy,
             or a replacement for teachers, mentors, or spiritual guidance.
           </p>
+        </section>
+
+        {/* 10/10 Interactive Feature: Printable Monthly Sadhana Worksheet */}
+        <section aria-labelledby="printable-sadhana-heading">
+          <PrintableSadhanaReview />
+        </section>
+
+        {/* 10/10 Interactive Feature: Sanskrit Philosophical Lexicon */}
+        <section aria-labelledby="sanskrit-glossary-heading">
+          <SanskritGlossaryGuide />
         </section>
 
         <section className="grid gap-4 sm:grid-cols-3" aria-label="Free Buddhi Align resources">
@@ -76,7 +86,7 @@ export default function ResourcesPage() {
           ))}
         </section>
 
-        <section className="app-surface-card p-5 sm:p-6 mt-6" aria-labelledby="partner-kit-heading">
+        <section className="app-surface-card p-5 sm:p-6" aria-labelledby="partner-kit-heading">
           <p className="app-guided-flow-kicker">For partners and resource pages</p>
           <h2 id="partner-kit-heading" className="app-panel-title text-xl font-bold leading-tight">
             Suggested description for a link or listing

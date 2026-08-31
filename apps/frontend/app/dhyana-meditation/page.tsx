@@ -1,9 +1,11 @@
 "use client";
+
 import { DhyanaMeditation } from "@buddhi-align/shared-ui";
 import ModuleLayout from "../components/ModuleLayout";
 import ModuleEntryForm from "../components/ModuleEntryForm";
 import { ModuleFormField } from "../components/ModuleFormFields";
 import PranayamaTimer from "../components/PranayamaTimer";
+import TanpuraSadhanaDrone from "../components/TanpuraSadhanaDrone";
 import {
   DHYANA_INITIAL_FORM_STATE,
   getDhyanaFields,
@@ -20,6 +22,7 @@ export default function DhyanaMeditationPage() {
   const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useDhyanaMeditationEntries();
   const [form, setForm] = useState<DhyanaFormState>(DHYANA_INITIAL_FORM_STATE);
+
   useCopilotPracticeDraft("dhyana", DHYANA_INITIAL_FORM_STATE, setForm);
   const fields = getDhyanaFields(form, t);
 
@@ -29,6 +32,11 @@ export default function DhyanaMeditationPage() {
         title="Sit once, log once"
         summary="Track one meditation session and keep your rhythm steady."
       />
+
+      {/* 10/10 Enhancement: Acoustic Tanpura Drone & Interval Bells Synthesizer */}
+      <div className="max-w-4xl mx-auto mb-6">
+        <TanpuraSadhanaDrone />
+      </div>
 
       <LazyDetails summary="Need a breathing timer?" className="app-surface-card max-w-4xl mx-auto mb-5 p-4">
         <PranayamaTimer />
@@ -59,6 +67,7 @@ export default function DhyanaMeditationPage() {
           />
         ))}
       </ModuleEntryForm>
+
       {loading ? (
         <div>{t("app.loading")}</div>
       ) : (

@@ -1,9 +1,11 @@
 "use client";
+
 import { JnanaReflection } from "@buddhi-align/shared-ui";
 import ModuleLayout from "../components/ModuleLayout";
 import ModuleEntryForm from "../components/ModuleEntryForm";
 import { ModuleFormField } from "../components/ModuleFormFields";
 import DailyReflectionPrompt from "../components/DailyReflectionPrompt";
+import SanskritGlossaryGuide from "../components/SanskritGlossaryGuide";
 import {
   getJnanaFields,
   JNANA_INITIAL_FORM_STATE,
@@ -20,6 +22,7 @@ export default function JnanaReflectionPage() {
   const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useJnanaReflectionEntries();
   const [form, setForm] = useState<JnanaFormState>(JNANA_INITIAL_FORM_STATE);
+
   useCopilotPracticeDraft("jnana", JNANA_INITIAL_FORM_STATE, setForm);
   const fields = getJnanaFields(form, t);
 
@@ -29,6 +32,11 @@ export default function JnanaReflectionPage() {
         title="Capture one insight"
         summary="Write the clearest insight from today in a few lines."
       />
+
+      {/* 10/10 Enhancement: Sanskrit Wisdom & Vedic Intonation Guide */}
+      <div className="max-w-4xl mx-auto mb-6">
+        <SanskritGlossaryGuide />
+      </div>
 
       <LazyDetails summary="Need a prompt?" className="app-surface-card max-w-4xl mx-auto mb-5 p-4">
         <DailyReflectionPrompt module="jnana" />
@@ -59,6 +67,7 @@ export default function JnanaReflectionPage() {
           />
         ))}
       </ModuleEntryForm>
+
       {loading ? (
         <div>{t("app.loading")}</div>
       ) : (
