@@ -1,6 +1,7 @@
 "use client";
 
 import { JnanaReflection } from "@buddhi-align/shared-ui";
+import ShareInsightCard from "../components/ShareInsightCard";
 import ModuleLayout from "../components/ModuleLayout";
 import ModuleEntryForm from "../components/ModuleEntryForm";
 import { ModuleFormField } from "../components/ModuleFormFields";
@@ -82,6 +83,12 @@ export default function JnanaReflectionPage() {
           deletingIds={deletingIds}
           deleteLabel={t("app.delete")}
         />
+      )}
+      {entries.length > 0 && !loading && (
+        <div className="max-w-4xl mx-auto mt-12">
+          <h2 className="text-2xl font-bold mb-6 text-center text-emerald-950 dark:text-emerald-50">Share Your Insight</h2>
+          <ShareInsightCard insightText={entries[0].insight} author="My Sadhana" theme="dark" />
+        </div>
       )}
     </ModuleLayout>
   );

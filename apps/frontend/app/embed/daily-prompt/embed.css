@@ -1,0 +1,66 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+.buddhi-embed-container {
+  background: #faf7f2;
+  border: 1px solid rgba(47, 93, 80, 0.15);
+  border-radius: 12px;
+  padding: 1.25rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+.buddhi-embed-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+.buddhi-embed-header {
+  margin-bottom: 0.75rem;
+}
+.buddhi-embed-kicker {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #8e7323;
+  font-weight: 700;
+}
+.buddhi-embed-prompt {
+  margin: 0 0 1.25rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #0d2b21;
+  line-height: 1.4;
+}
+.buddhi-embed-footer {
+  display: inline-block;
+  font-size: 0.75rem;
+  color: #2f5d50;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+.buddhi-embed-footer strong {
+  font-weight: 700;
+}
+.buddhi-embed-footer:hover {
+  opacity: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  .buddhi-embed-container {
+    background: #0a1914;
+    border-color: rgba(255, 246, 196, 0.15);
+  }
+  .buddhi-embed-prompt {
+    color: #fdfbf7;
+  }
+  .buddhi-embed-kicker {
+    color: #d4af37;
+  }
+  .buddhi-embed-footer {
+    color: #8faea4;
+  }
+}

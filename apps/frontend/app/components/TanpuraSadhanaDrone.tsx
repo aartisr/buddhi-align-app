@@ -18,7 +18,8 @@ const TUNINGS: DroneTuning[] = [
   { key: "A", name: "A 432Hz (Cosmic Harmonization)", rootFreq: 108.00, fifthFreq: 162.00, fourthFreq: 144.00, highSaFreq: 216.00 },
 ];
 
-export default function TanpuraSadhanaDrone() {
+function useTanpuraSadhanaLogic() {
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedTuning, setSelectedTuning] = useState<DroneTuning>(TUNINGS[0]);
   const [usePancham, setUsePancham] = useState(true); // true = Pa (fifth), false = Ma (fourth)
@@ -196,19 +197,30 @@ export default function TanpuraSadhanaDrone() {
 
   useEffect(() => {
     return () => {
-      if (pluckCycleTimeoutRef.current) clearTimeout(pluckCycleTimeoutRef.current);
-      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
-      if (audioCtxRef.current && audioCtxRef.current.state !== "closed") {
-        audioCtxRef.current.close().catch(() => {});
+      const pluckTimeout = pluckCycleTimeoutRef.current;
+      const timerInterval = timerIntervalRef.current;
+      const audioCtx = audioCtxRef.current;
+      if (pluckTimeout) clearTimeout(pluckTimeout);
+      if (timerInterval) clearInterval(timerInterval);
+      if (audioCtx && audioCtx.state !== "closed") {
+        audioCtx.close().catch(() => {});
       }
     };
   }, []);
 
-  const formatTime = (secs: number) => {
-    const m = Math.floor(secs / 60);
-    const s = secs % 60;
-    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-  };
+
+
+  return { isPlaying, selectedTuning, setSelectedTuning, usePancham, setUsePancham, volume, handleVolumeChange, bellIntervalMinutes, setBellIntervalMinutes, elapsedSeconds, toggleAudio, audioCtxRef, playTibetanBell };
+}
+
+const formatTime = (secs: number) => {
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+};
+
+export default function TanpuraSadhanaDrone() {
+  const { isPlaying, selectedTuning, setSelectedTuning, usePancham, setUsePancham, volume, handleVolumeChange, bellIntervalMinutes, setBellIntervalMinutes, elapsedSeconds, toggleAudio, audioCtxRef, playTibetanBell } = useTanpuraSadhanaLogic();
 
   return (
     <div className="bg-(--surface-soft) rounded-2xl p-5 border border-(--border-subtle) space-y-4">
