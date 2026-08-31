@@ -87,7 +87,7 @@ function QuoteHero({ t, quote, inspireAgain }: { t: TranslateFn; quote: Quote; i
         onClick={inspireAgain}
         className="text-xs font-semibold px-4 py-2 rounded-full border border-(--border-subtle) bg-(--surface) text-(--primary) hover:bg-(--surface-soft) transition-colors inline-flex items-center gap-2 mt-2 shadow-sm"
       >
-        <span aria-hidden="true">✨</span> {t("motivation.inspireMe")}
+        <span aria-hidden="true">✨</span> Inspire me
       </button>
     </div>
   );
