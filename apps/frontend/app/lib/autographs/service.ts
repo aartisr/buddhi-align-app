@@ -1,11 +1,24 @@
 import { createDataProvider } from "@buddhi-align/data-access";
-import { createAutographService, createModuleAutographStorage } from "@aartisr/autograph-core";
+import { createAutographService, createModuleAutographStorage, AutographService } from "@aartisr/autograph-core";
 
-const service = createAutographService(createModuleAutographStorage(createDataProvider()));
+let _service: AutographService | null = null;
+function getService(): AutographService {
+  if (!_service) {
+    _service = createAutographService(createModuleAutographStorage(createDataProvider()));
+  }
+  return _service;
+}
 
-export const listAutographProfiles = service.listAutographProfiles;
-export const upsertAutographProfile = service.upsertAutographProfile;
-export const listVisibleAutographRequests = service.listVisibleAutographRequests;
-export const createAutographRequest = service.createAutographRequest;
-export const signAutographRequest = service.signAutographRequest;
-export const autographService = service;
+export const autographService = new Proxy({} as AutographService, {
+  get(_, prop) {
+    const svc = getService();
+    const val = (svc as any)[prop];
+    return typeof val === 'function' ? val.bind(svc) : val;
+  }
+});
+
+export const listAutographProfiles = (...args: Parameters<AutographService['listAutographProfiles']>) => getService().listAutographProfiles(...args);
+export const upsertAutographProfile = (...args: Parameters<AutographService['upsertAutographProfile']>) => getService().upsertAutographProfile(...args);
+export const listVisibleAutographRequests = (...args: Parameters<AutographService['listVisibleAutographRequests']>) => getService().listVisibleAutographRequests(...args);
+export const createAutographRequest = (...args: Parameters<AutographService['createAutographRequest']>) => getService().createAutographRequest(...args);
+export const signAutographRequest = (...args: Parameters<AutographService['signAutographRequest']>) => getService().signAutographRequest(...args);
