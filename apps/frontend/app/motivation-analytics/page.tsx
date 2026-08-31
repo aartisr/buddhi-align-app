@@ -12,24 +12,11 @@ import DeferredRender from "../components/DeferredRender";
 import { logEvent } from "../lib/logEvent";
 import FocusIntro from "../components/FocusIntro";
 import LazyDetails from "../components/LazyDetails";
+import type { AnalyticsPayload } from "../api/analytics/types";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 type TranslateFn = ReturnType<typeof useI18n>['t'];
-
-interface AnalyticsPayload {
-  karma: number;
-  bhakti: number;
-  jnana: number;
-  dhyana: number;
-  vasana: number;
-  dharma: number;
-  streak: number;
-  totalEntries: number;
-  counts: Record<string, number>;
-  todayActivity: Record<string, boolean>;
-  mostActive?: string;
-}
 
 interface StatsModel {
   karma: number;
@@ -274,7 +261,7 @@ export default function MotivationAnalyticsPage() {
   );
 
   const recommendations = useMemo(
-    () => (analyticsPayload ? buildPersonalizationSignals(analyticsPayload as any) : []),
+    () => (analyticsPayload ? buildPersonalizationSignals(analyticsPayload) : []),
     [analyticsPayload],
   );
 
@@ -306,7 +293,7 @@ export default function MotivationAnalyticsPage() {
       );
       
       const data = shouldUseSyntheticAnalytics(apiData)
-        ? (getSyntheticAnalyticsPayload() as unknown as AnalyticsPayload)
+        ? getSyntheticAnalyticsPayload()
         : apiData;
         
       setAnalyticsPayload(data);
@@ -318,7 +305,7 @@ export default function MotivationAnalyticsPage() {
         syntheticData: shouldUseSyntheticAnalytics(apiData),
       });
     } catch {
-      const data = getSyntheticAnalyticsPayload() as unknown as AnalyticsPayload;
+      const data = getSyntheticAnalyticsPayload();
       setAnalyticsPayload(data);
       setStats(toStatsModel(data));
       logEvent("analytics_fetch_failed", { syntheticData: true });
