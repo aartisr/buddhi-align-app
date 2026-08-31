@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
 import ModuleLayout from "../components/ModuleLayout";
-import { type Translate } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 import { cachedJsonFetch, invalidateClientFetchCache } from "../lib/clientFetchCache";
 import { getSyntheticAnalyticsPayload, shouldUseSyntheticAnalytics } from "./demoData";
@@ -209,7 +208,7 @@ function RecommendationsPanel({
 }
 
 export default function MotivationAnalyticsPage() {
-  const { locale, t } = useI18n();
+  const { t } = useI18n();
   const [quote, setQuote] = useState(() => getRandomQuote());
   const [loadingStats, setLoadingStats] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
