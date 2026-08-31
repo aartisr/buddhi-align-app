@@ -1,18 +1,7 @@
+"use client";
 import React from "react";
-import type { Metadata } from "next";
 import TanpuraSadhanaDrone from "../../components/TanpuraSadhanaDrone";
 import SiteFooter from "../../components/SiteFooter";
-
-export const metadata: Metadata = {
-  title: "Free Online Tanpura & Meditation Drone | Buddhi Align",
-  description: "A free, high-fidelity acoustic Tanpura synthesizer and meditation drone. Perfect for classical Indian music practice, chanting, and Dhyana mindfulness.",
-  keywords: ["online tanpura", "free tanpura", "meditation drone", "shruti box", "indian classical music", "dhyana", "chanting"],
-  openGraph: {
-    title: "Free Online Tanpura & Meditation Drone",
-    description: "High-fidelity acoustic Tanpura synthesizer for chanting and meditation.",
-    type: "website",
-  },
-};
 
 export default function OnlineTanpuraPage() {
   return (

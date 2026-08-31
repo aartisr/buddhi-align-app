@@ -1,18 +1,7 @@
+"use client";
 import React from "react";
-import type { Metadata } from "next";
 import SanskritGlossaryGuide from "../../components/SanskritGlossaryGuide";
 import SiteFooter from "../../components/SiteFooter";
-
-export const metadata: Metadata = {
-  title: "Sanskrit Wisdom Lexicon & Etymology | Buddhi Align",
-  description: "Explore the authentic Sanskrit roots and philosophical etymology of yogic concepts like Dharma, Dhyana, Karma, and Bhakti.",
-  keywords: ["sanskrit glossary", "yoga terminology", "sanskrit roots", "dharma meaning", "dhyana", "vedic philosophy"],
-  openGraph: {
-    title: "Sanskrit Wisdom Lexicon",
-    description: "Authentic Sanskrit roots and philosophical etymology of yogic concepts.",
-    type: "website",
-  },
-};
 
 export default function SanskritGlossaryPage() {
   return (

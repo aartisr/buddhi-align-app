@@ -7,7 +7,7 @@ import { type Translate } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
 import { cachedJsonFetch, invalidateClientFetchCache } from "../lib/clientFetchCache";
 import { getSyntheticAnalyticsPayload, shouldUseSyntheticAnalytics } from "./demoData";
-import { buildPersonalizationSignals, type PersonalizationRecommendation } from "./personalization";
+import { buildPersonalizationSignals, type RecommendationSignal } from "./personalization";
 import LongitudinalChart from "../components/LongitudinalChart";
 import DeferredRender from "../components/DeferredRender";
 import { logEvent } from "../lib/logEvent";
@@ -15,6 +15,8 @@ import FocusIntro from "../components/FocusIntro";
 import LazyDetails from "../components/LazyDetails";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
+
+type TranslateFn = ReturnType<typeof useI18n>['t'];
 
 interface AnalyticsPayload {
   karma: number;
@@ -25,6 +27,9 @@ interface AnalyticsPayload {
   dharma: number;
   streak: number;
   totalEntries: number;
+  counts: Record<string, number>;
+  todayActivity: Record<string, boolean>;
+  mostActive?: string;
 }
 
 interface StatsModel {
@@ -70,7 +75,7 @@ function getRandomQuote(): Quote {
   return FALLBACK_QUOTES[Math.floor(Math.random() * FALLBACK_QUOTES.length)];
 }
 
-function QuoteHero({ t, quote, inspireAgain }: { t: Translate; quote: Quote; inspireAgain: () => void }) {
+function QuoteHero({ t, quote, inspireAgain }: { t: TranslateFn; quote: Quote; inspireAgain: () => void }) {
   return (
     <div className="w-full text-center space-y-4 mb-6">
       <blockquote className="text-xl sm:text-2xl font-serif italic text-(--foreground) leading-relaxed">
@@ -95,7 +100,7 @@ function ModuleActivityChart({
   chartOptions,
   chartSeries,
 }: {
-  t: Translate;
+  t: TranslateFn;
   isMounted: boolean;
   chartOptions: object;
   chartSeries: { name: string; data: number[] }[];
@@ -116,7 +121,7 @@ function ModuleActivityChart({
   );
 }
 
-function StatsGrid({ t, loadingStats, stats }: { t: Translate; loadingStats: boolean; stats: StatsModel }) {
+function StatsGrid({ t, loadingStats, stats }: { t: TranslateFn; loadingStats: boolean; stats: StatsModel }) {
   const statCards = [
     { key: "streak", label: t("motivation.streak"), value: stats.streak, unit: t("motivation.days"), icon: "🔥", accent: "text-orange-600" },
     { key: "total", label: t("motivation.totalEntries"), value: stats.totalEntries, icon: "📚", accent: "text-blue-600" },
@@ -151,8 +156,8 @@ function RecommendationsPanel({
   t,
   recommendations,
 }: {
-  t: Translate;
-  recommendations: PersonalizationRecommendation[];
+  t: TranslateFn;
+  recommendations: RecommendationSignal[];
 }) {
   if (recommendations.length === 0) return null;
 
@@ -270,7 +275,7 @@ export default function MotivationAnalyticsPage() {
   );
 
   const recommendations = useMemo(
-    () => (analyticsPayload ? buildPersonalizationSignals(analyticsPayload) : []),
+    () => (analyticsPayload ? buildPersonalizationSignals(analyticsPayload as any) : []),
     [analyticsPayload],
   );
 
@@ -302,7 +307,7 @@ export default function MotivationAnalyticsPage() {
       );
       
       const data = shouldUseSyntheticAnalytics(apiData)
-        ? getSyntheticAnalyticsPayload()
+        ? (getSyntheticAnalyticsPayload() as unknown as AnalyticsPayload)
         : apiData;
         
       setAnalyticsPayload(data);
@@ -314,7 +319,7 @@ export default function MotivationAnalyticsPage() {
         syntheticData: shouldUseSyntheticAnalytics(apiData),
       });
     } catch {
-      const data = getSyntheticAnalyticsPayload();
+      const data = getSyntheticAnalyticsPayload() as unknown as AnalyticsPayload;
       setAnalyticsPayload(data);
       setStats(toStatsModel(data));
       logEvent("analytics_fetch_failed", { syntheticData: true });
