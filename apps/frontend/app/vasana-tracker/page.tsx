@@ -36,7 +36,7 @@ export default function VasanaTrackerPage() {
           onSubmit={async (e) => {
             e.preventDefault();
             if (isCreating) return;
-            if (!form.date || !form.trigger || !form.reaction) return;
+            if (!form.date || !form.habit || !form.tendency) return;
             await addEntry(form);
             setForm({ ...VASANA_INITIAL_FORM_STATE });
           }}

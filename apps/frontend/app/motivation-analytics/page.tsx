@@ -43,7 +43,16 @@ function emptyStatsModel(): StatsModel {
 }
 
 function toStatsModel(payload: AnalyticsPayload): StatsModel {
-  return { ...payload };
+  return {
+    karma: payload.counts.karma ?? 0,
+    bhakti: payload.counts.bhakti ?? 0,
+    jnana: payload.counts.jnana ?? 0,
+    dhyana: payload.counts.dhyana ?? 0,
+    vasana: payload.counts.vasana ?? 0,
+    dharma: payload.counts.dharma ?? 0,
+    streak: payload.streak,
+    totalEntries: payload.totalEntries,
+  };
 }
 
 interface Quote {
