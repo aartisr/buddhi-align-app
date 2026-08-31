@@ -22,7 +22,7 @@ vi.mock("./i18n/provider", () => ({
         "dashboard.flow.kicker": "One mindful rhythm",
         "dashboard.flow.title": "Decide. Do. Reflect.",
         "dashboard.flow.subtitle": "Begin with one purpose-aligned intention, offer one meaningful action, and make space to notice what you learn.",
-        "dashboard.flow.primaryCta": "Start now",
+        "dashboard.flow.stepLabel": "Step {{step}}",
         "dashboard.flow.plan.title": "Plan your intention",
         "dashboard.flow.plan.description": "Set a dharma goal",
         "dashboard.flow.plan.cta": "Open Dharma Planner",
@@ -32,7 +32,6 @@ vi.mock("./i18n/provider", () => ({
         "dashboard.flow.reflect.title": "Reflect and realign",
         "dashboard.flow.reflect.description": "Capture insight",
         "dashboard.flow.reflect.cta": "Open Jnana Reflection",
-        "dashboard.morePractices": "Explore {{count}} more practice areas",
         "dashboard.moreWays": "More ways to practice",
         "dashboard.seeMomentum": "See momentum",
       };
@@ -55,18 +54,16 @@ vi.mock("./i18n/provider", () => ({
 }));
 
 describe("Home page", () => {
-  it("renders a simplified Copilot-first dashboard with quick access modules", () => {
+  it("renders a simplified Bento-grid dashboard with quick access modules", () => {
     render(<Home />);
-
     expect(screen.getByRole("heading", { name: "A gentle practice for today", level: 1 })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Decide. Do. Reflect.", level: 2 })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Start now" })).toBeInTheDocument();
-    expect(screen.getByText("Explore 4 more practice areas")).toBeInTheDocument();
-
-    expect(screen.getByRole("link", { name: "Open Dharma Planner" })).toHaveAttribute("href", "/dharma-planner");
-    expect(screen.getByRole("link", { name: "Open Karma Yoga" })).toHaveAttribute("href", "/karma-yoga");
-    expect(screen.getByRole("link", { name: "Open Jnana Reflection" })).toHaveAttribute("href", "/jnana-reflection");
-
-    expect(screen.getByText("Explore 4 more practice areas")).toBeInTheDocument();
+    expect(screen.getByText("Plan your intention")).toBeInTheDocument();
+    expect(screen.getByText("Do one meaningful practice")).toBeInTheDocument();
+    expect(screen.getByText("Reflect and realign")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "More ways to practice", level: 2 })).toBeInTheDocument();
+    expect(screen.getByText("Bhakti Journal")).toBeInTheDocument();
+    expect(screen.getByText("Dhyana Meditation")).toBeInTheDocument();
+    expect(screen.getByText("Vasana Tracker")).toBeInTheDocument();
   });
 });
