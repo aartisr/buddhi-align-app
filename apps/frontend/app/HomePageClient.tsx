@@ -1,9 +1,7 @@
 "use client";
-
 import React, { useMemo } from "react";
 import Link from "next/link";
 import ModuleLayout from "./components/ModuleLayout";
-import LazyDetails from "./components/LazyDetails";
 import { MODULE_CATALOG } from "./i18n/config";
 import { useI18n, useLocalizedModules } from "./i18n/provider";
 import { logEvent } from "./lib/logEvent";
@@ -11,10 +9,12 @@ import { logEvent } from "./lib/logEvent";
 export default function HomePageClient() {
   const { t } = useI18n();
   const modules = useLocalizedModules();
+  
   const moduleByKey = useMemo(
     () => new Map(MODULE_CATALOG.map((item) => [item.key, item])),
     [],
   );
+
   const flowSteps = useMemo(
     () =>
       [
@@ -48,6 +48,7 @@ export default function HomePageClient() {
       ] as const,
     [moduleByKey, t],
   );
+
   const coreModuleKeys = useMemo(() => new Set(["dharma", "karma", "jnana"]), []);
   const supportModules = useMemo(
     () => modules.filter((module) => !coreModuleKeys.has(module.key)),
@@ -59,67 +60,78 @@ export default function HomePageClient() {
       titleKey="app.dashboard"
       heading={t("dashboard.heading")}
     >
-      <section className="app-guided-flow app-surface-card max-w-4xl mx-auto mb-6 p-5 sm:p-7" aria-label={t("dashboard.flow.aria")}>
-        <div className="app-guided-flow-header">
-          <div>
-            <p className="app-guided-flow-kicker">{t("dashboard.flow.kicker")}</p>
-            <h2 className="app-panel-title text-xl sm:text-2xl font-bold leading-tight">{t("dashboard.flow.title")}</h2>
-            <p className="app-copy-soft text-sm mt-2 max-w-2xl">
+      <div className="max-w-5xl mx-auto space-y-12 pb-16">
+        
+        {/* Core Journey Section - Sleek Grid */}
+        <section aria-label={t("dashboard.flow.aria")} className="space-y-6">
+          <div className="text-center space-y-2 mb-10">
+            <h2 className="text-3xl font-bold tracking-tight text-(--foreground)">{t("dashboard.flow.title")}</h2>
+            <p className="text-(--text-muted) max-w-2xl mx-auto text-lg">
               {t("dashboard.flow.subtitle")}
             </p>
           </div>
-          <Link
-            href="/dharma-planner"
-            className="app-guided-flow-primary-link"
-            onClick={() => logEvent("homepage_primary_action_clicked", { destination: "/dharma-planner" })}
-          >
-            {t("dashboard.flow.primaryCta")}
-          </Link>
-        </div>
-        <div className="app-guided-flow-grid">
-          {flowSteps.map((step, index) => (
-            <article key={step.key} className="app-guided-flow-card">
-              <p className="app-guided-flow-step">{t("dashboard.flow.stepLabel", { step: String(index + 1) })}</p>
-              <h3 className="app-guided-flow-card-title">
-                <span aria-hidden className={`app-module-icon ${step.iconClassName}`}>{step.icon}</span>
-                <span>{step.title}</span>
-              </h3>
-              <p className="app-copy-soft text-sm">{step.description}</p>
-              <Link href={step.href} className="app-guided-flow-link">
-                {step.cta}
-              </Link>
-            </article>
-          ))}
-        </div>
-      </section>
 
-      <LazyDetails
-        summary={t("dashboard.morePractices", { count: String(supportModules.length) })}
-        className="app-surface-card max-w-4xl mx-auto mb-6 p-4 sm:p-6"
-      >
-        <section aria-labelledby="other-modules-heading">
-          <div className="flex items-center justify-between gap-3 mb-3">
-            <h2 id="other-modules-heading" className="app-panel-title text-lg sm:text-xl font-bold leading-tight">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {flowSteps.map((step, index) => (
+              <Link 
+                key={step.key} 
+                href={step.href}
+                onClick={() => logEvent(`homepage_${step.key}_clicked`, { destination: step.href })}
+                className="group relative flex flex-col p-8 rounded-3xl bg-(--surface-soft) border border-(--border-subtle) hover:bg-(--surface) hover:border-(--border-soft) hover:shadow-sm transition-all duration-300"
+              >
+                <div className="mb-6 flex justify-between items-start">
+                  <span aria-hidden className={`text-4xl ${step.iconClassName}`}>{step.icon}</span>
+                  <span className="text-xs font-bold tracking-widest uppercase text-(--text-subtle) opacity-50">
+                    {t("dashboard.flow.stepLabel", { step: String(index + 1) })}
+                  </span>
+                </div>
+                
+                <h3 className="text-xl font-bold text-(--foreground) mb-3 group-hover:text-(--primary) transition-colors">
+                  {step.title}
+                </h3>
+                
+                <p className="text-(--text-soft) text-sm leading-relaxed flex-1 mb-6">
+                  {step.description}
+                </p>
+
+                <div className="inline-flex items-center gap-2 text-sm font-semibold text-(--primary)">
+                  {step.cta}
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Support Modules - Elegant Pill Layout */}
+        <section aria-labelledby="other-modules-heading" className="pt-8 border-t border-(--border-subtle)">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <h2 id="other-modules-heading" className="text-xl font-bold text-(--foreground)">
               {t("dashboard.moreWays")}
             </h2>
-            <Link href="/motivation-analytics" className="app-guided-flow-link">
-              {t("dashboard.seeMomentum")}
+            <Link 
+              href="/motivation-analytics" 
+              className="text-sm font-semibold text-(--primary) hover:text-(--accent) transition-colors inline-flex items-center gap-1"
+            >
+              {t("dashboard.seeMomentum")} <span aria-hidden>→</span>
             </Link>
           </div>
-          <div className="flex flex-wrap gap-2">
+          
+          <div className="flex flex-wrap gap-3">
             {supportModules.map((module) => (
               <Link
                 key={module.key}
                 href={module.href}
-                className={`app-module-chip app-module-chip--${module.key} inline-flex items-center gap-2 rounded-full border border-(--border-soft) bg-(--surface-strong) px-3 py-2 text-sm font-semibold text-(--primary)`}
+                className="inline-flex items-center gap-2.5 rounded-full border border-(--border-subtle) bg-(--surface-soft) px-5 py-3 text-sm font-medium text-(--text-soft) hover:bg-(--surface) hover:text-(--primary) hover:border-(--border-soft) transition-all shadow-sm hover:shadow"
               >
-                <span aria-hidden className={`app-module-icon app-module-icon--${module.key}`}>{module.icon}</span>
+                <span aria-hidden className="text-lg">{module.icon}</span>
                 <span>{module.navLabel}</span>
               </Link>
             ))}
           </div>
         </section>
-      </LazyDetails>
+
+      </div>
     </ModuleLayout>
   );
 }
