@@ -3,12 +3,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
 import ModuleLayout from "../components/ModuleLayout";
-import { MOTIVATIONAL_QUOTES } from "../data/motivation";
-import { type Quote, type Translate } from "../i18n/config";
+import { type Translate } from "../i18n/config";
 import { useI18n } from "../i18n/provider";
-import { cachedJsonFetch, invalidateClientFetchCache } from "../lib/fetchCache";
-import { getSyntheticAnalyticsPayload, shouldUseSyntheticAnalytics } from "../lib/syntheticAnalytics";
-import { buildPersonalizationSignals, type PersonalizationRecommendation } from "../motivation-analytics/personalization";
+import { cachedJsonFetch, invalidateClientFetchCache } from "./clientFetchCache";
+import { getSyntheticAnalyticsPayload, shouldUseSyntheticAnalytics } from "./demoData";
+import { buildPersonalizationSignals, type PersonalizationRecommendation } from "./personalization";
 import LongitudinalChart from "../components/LongitudinalChart";
 import DeferredRender from "../components/DeferredRender";
 import { logEvent } from "../lib/logEvent";
@@ -56,13 +55,19 @@ function toStatsModel(payload: AnalyticsPayload): StatsModel {
   return { ...payload };
 }
 
-function getRandomQuote(quotes: readonly Quote[]): Quote {
-  return quotes[Math.floor(Math.random() * quotes.length)];
+interface Quote {
+  text: string;
+  author: string;
+  source: string;
 }
 
-function getInitialQuote(quotes: readonly Quote[]): Quote {
-  if (typeof window !== "undefined") return getRandomQuote(quotes);
-  return quotes[0];
+const FALLBACK_QUOTES: readonly Quote[] = [
+  { text: "Yoga is the journey of the self, through the self, to the self.", author: "The Bhagavad Gita", source: "Chapter 6" },
+  { text: "When meditation is mastered, the mind is unwavering like the flame of a lamp in a windless place.", author: "The Bhagavad Gita", source: "Chapter 6" },
+];
+
+function getRandomQuote(): Quote {
+  return FALLBACK_QUOTES[Math.floor(Math.random() * FALLBACK_QUOTES.length)];
 }
 
 function QuoteHero({ t, quote, inspireAgain }: { t: Translate; quote: Quote; inspireAgain: () => void }) {
@@ -200,8 +205,7 @@ function RecommendationsPanel({
 
 export default function MotivationAnalyticsPage() {
   const { locale, t } = useI18n();
-  const quotes = MOTIVATIONAL_QUOTES[locale] ?? MOTIVATIONAL_QUOTES.en;
-  const [quote, setQuote] = useState(() => getInitialQuote(quotes));
+  const [quote, setQuote] = useState(() => getRandomQuote());
   const [loadingStats, setLoadingStats] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [analyticsPayload, setAnalyticsPayload] = useState<AnalyticsPayload | null>(null);
@@ -327,10 +331,6 @@ export default function MotivationAnalyticsPage() {
     setIsMounted(true);
   }, []);
 
-  useEffect(() => {
-    setQuote(getInitialQuote(quotes));
-  }, [locale, quotes]);
-
   return (
     <ModuleLayout titleKey="module.motivation.title">
       <div className="max-w-5xl mx-auto space-y-12 pb-16">
@@ -367,7 +367,7 @@ export default function MotivationAnalyticsPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-12 border-t border-(--border-subtle)">
           <div className="bg-(--surface-soft) rounded-3xl p-8 border border-(--border-subtle) shadow-sm flex flex-col justify-center">
-            <QuoteHero t={t} quote={quote} inspireAgain={() => setQuote(getRandomQuote(quotes))} />
+            <QuoteHero t={t} quote={quote} inspireAgain={() => setQuote(getRandomQuote())} />
           </div>
           <LazyDetails summary="How this works" className="bg-(--surface) border border-(--border-subtle) rounded-3xl p-6 shadow-sm">
              <h3 className="text-xl font-bold mb-4 text-(--foreground)">{t("motivation.howTo")}</h3>
