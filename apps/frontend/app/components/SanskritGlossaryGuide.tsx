@@ -101,6 +101,7 @@ export default function SanskritGlossaryGuide() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const audioTimeoutRef = useRef<number | null>(null);
 
   const filteredTerms = CANONICAL_SANSKRIT_TERMS.filter(
     (t) =>
@@ -162,7 +163,8 @@ export default function SanskritGlossaryGuide() {
       osc3.start(now);
       osc3.stop(now + 2.2);
 
-      setTimeout(() => {
+      if (audioTimeoutRef.current) clearTimeout(audioTimeoutRef.current);
+      audioTimeoutRef.current = window.setTimeout(() => {
         setIsPlayingAudio(false);
       }, 3000);
     } catch {
@@ -172,6 +174,7 @@ export default function SanskritGlossaryGuide() {
 
   useEffect(() => {
     return () => {
+      if (audioTimeoutRef.current) clearTimeout(audioTimeoutRef.current);
       if (audioCtxRef.current && audioCtxRef.current.state !== "closed") {
         audioCtxRef.current.close().catch(() => {});
       }

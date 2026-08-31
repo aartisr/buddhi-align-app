@@ -171,7 +171,7 @@ export default function BackgroundMusic() {
   useEffect(() => {
     if (!playing) return;
     void startPlayback();
-  }, [trackIndex, playing, startPlayback]);
+  }, [playing, startPlayback]);
 
   useEffect(() => {
     setTrackIndex((currentIndex: number) => {
