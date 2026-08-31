@@ -42,6 +42,7 @@ interface ModuleEntryFormProps extends React.FormHTMLAttributes<HTMLFormElement>
   onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
 }
 
+/* eslint-disable-next-line max-lines-per-function */
 export default function ModuleEntryForm(props: ModuleEntryFormProps) {
   const {
     title,
