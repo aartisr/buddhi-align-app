@@ -18,55 +18,60 @@ export default function DharmaPlannerPage() {
   const { t } = useI18n();
   const { entries, loading, addEntry, deleteEntry, isCreating, deletingIds } = useDharmaPlannerEntries();
   const [form, setForm] = useState<DharmaFormState>(DHARMA_INITIAL_FORM_STATE);
+
   useCopilotPracticeDraft("dharma", DHARMA_INITIAL_FORM_STATE, setForm);
   const fields = getDharmaFields(form, t);
 
   return (
     <ModuleLayout titleKey="module.dharma.title">
-      <FocusIntro
-        title="Pick one clear intention"
-        summary="Capture one purpose-aligned goal and the next concrete action."
-      />
-
-      <ModuleEntryForm
-        title={t("module.dharma.title")}
-        icon="📜"
-        className="app-form-shell app-form-shell--dharma mb-8 flex flex-col gap-4 p-6 rounded-2xl max-w-xl mx-auto"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          if (isCreating) return;
-          if (!form.date || !form.goal || !form.action) return;
-          await addEntry(form);
-          setForm({ ...DHARMA_INITIAL_FORM_STATE });
-        }}
-        isSubmitting={isCreating}
-        submitLabel={t("form.saveEntry")}
-        submitPendingLabel={t("form.savingEntry")}
-        helperText={t("form.helperRequired")}
-        submitButtonClassName="app-button-primary app-button-primary--dharma"
-      >
-        {fields.map((field) => (
-          <ModuleFormField
-            key={field.key}
-            field={field}
-            onValueChange={(key, value) => setForm((f) => ({ ...f, [key]: value } as typeof f))}
-          />
-        ))}
-      </ModuleEntryForm>
-      {loading ? (
-        <div>{t("app.loading")}</div>
-      ) : (
-        <DharmaPlanner
-          title={t("module.dharma.title")}
-          description={t("module.dharma.description")}
-          emptyState={t("list.empty.dharma")}
-          entries={entries}
-          onAddEntry={addEntry}
-          onDelete={deleteEntry}
-          deletingIds={deletingIds}
-          deleteLabel={t("app.delete")}
+      <div className="max-w-5xl mx-auto space-y-12 pb-16">
+        <FocusIntro
+          title="Pick one clear intention"
+          summary="Capture one purpose-aligned goal and the next concrete action."
         />
-      )}
+
+        <ModuleEntryForm
+          title={t("module.dharma.title")}
+          icon="📜"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            if (isCreating) return;
+            if (!form.date || !form.goal || !form.action) return;
+            await addEntry(form);
+            setForm({ ...DHARMA_INITIAL_FORM_STATE });
+          }}
+          isSubmitting={isCreating}
+          submitLabel={t("form.saveEntry")}
+          submitPendingLabel={t("form.savingEntry")}
+          helperText={t("form.helperRequired")}
+          submitButtonClassName="bg-(--gold) text-(--foreground) hover:brightness-110"
+        >
+          {fields.map((field) => (
+            <ModuleFormField
+              key={field.key}
+              field={field}
+              onValueChange={(key, value) => setForm((f) => ({ ...f, [key]: value } as typeof f))}
+            />
+          ))}
+        </ModuleEntryForm>
+
+        {loading ? (
+          <div className="flex justify-center p-12"><span className="app-inline-spinner w-8 h-8 text-(--primary)" /></div>
+        ) : (
+          <div className="max-w-4xl mx-auto">
+            <DharmaPlanner
+              title={t("module.dharma.title")}
+              description={t("module.dharma.description")}
+              emptyState={t("list.empty.dharma")}
+              entries={entries}
+              onAddEntry={addEntry}
+              onDelete={deleteEntry}
+              deletingIds={deletingIds}
+              deleteLabel={t("app.delete")}
+            />
+          </div>
+        )}
+      </div>
     </ModuleLayout>
   );
 }
