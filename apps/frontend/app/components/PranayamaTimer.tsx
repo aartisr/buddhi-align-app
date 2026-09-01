@@ -56,6 +56,7 @@ export default function PranayamaTimer() {
   const presetIdxRef = useRef(0);
   const phaseIdxRef = useRef(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const elapsedRef = useRef(0);
 
   useEffect(() => { presetIdxRef.current = presetIdx; }, [presetIdx]);
   useEffect(() => { phaseIdxRef.current = phaseIdx; }, [phaseIdx]);
@@ -76,6 +77,7 @@ export default function PranayamaTimer() {
     stop();
     setPhaseIdx(0);
     phaseIdxRef.current = 0;
+    elapsedRef.current = 0;
     setElapsedTenths(0);
   }, [stop]);
 
@@ -83,6 +85,7 @@ export default function PranayamaTimer() {
     stop();
     setPhaseIdx(0);
     phaseIdxRef.current = 0;
+    elapsedRef.current = 0;
     setElapsedTenths(0);
     setPresetIdx(idx);
     presetIdxRef.current = idx;
@@ -90,24 +93,25 @@ export default function PranayamaTimer() {
 
   useEffect(() => {
     if (!running) return;
+    elapsedRef.current = elapsedTenths;
     intervalRef.current = setInterval(() => {
-      setElapsedTenths((prev) => {
-        const currentPreset = PRESETS[presetIdxRef.current];
-        const currentPhase = currentPreset.phases[phaseIdxRef.current];
-        const tt = currentPhase.duration * 10;
-        if (prev + 1 >= tt) {
-          const next = (phaseIdxRef.current + 1) % currentPreset.phases.length;
-          phaseIdxRef.current = next;
-          setPhaseIdx(next);
-          return 0;
-        }
-        return prev + 1;
-      });
+      const currentPreset = PRESETS[presetIdxRef.current];
+      const currentPhase = currentPreset.phases[phaseIdxRef.current];
+      const tt = currentPhase.duration * 10;
+      
+      elapsedRef.current += 1;
+      if (elapsedRef.current >= tt) {
+        elapsedRef.current = 0;
+        const next = (phaseIdxRef.current + 1) % currentPreset.phases.length;
+        phaseIdxRef.current = next;
+        setPhaseIdx(next);
+      }
+      setElapsedTenths(elapsedRef.current);
     }, 100);
     return () => {
       if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
     };
-  }, [running]);
+  }, [running, elapsedTenths]);
 
   return (
     <div className="app-breathwork-card max-w-xl mx-auto mb-8 p-5 rounded-2xl">

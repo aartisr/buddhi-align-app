@@ -1,4 +1,6 @@
-import { createDataProvider } from "@buddhi-align/data-access";
+const fs = require('fs');
+
+const code = `import { createDataProvider } from "@buddhi-align/data-access";
 import { createAutographService, createModuleAutographStorage, AutographService } from "@aartisr/autograph-core";
 
 let _service: AutographService | null = null;
@@ -22,3 +24,7 @@ export const upsertAutographProfile = (...args: Parameters<AutographService['ups
 export const listVisibleAutographRequests = (...args: Parameters<AutographService['listVisibleAutographRequests']>) => getService().listVisibleAutographRequests(...args);
 export const createAutographRequest = (...args: Parameters<AutographService['createAutographRequest']>) => getService().createAutographRequest(...args);
 export const signAutographRequest = (...args: Parameters<AutographService['signAutographRequest']>) => getService().signAutographRequest(...args);
+`;
+
+fs.writeFileSync('/tmp/buddhi-repo/apps/frontend/app/lib/autographs/service.ts', code);
+console.log('Fixed autograph service');

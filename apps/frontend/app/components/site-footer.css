@@ -498,52 +498,6 @@
   transform: none;
 }
 
-@media (max-width: 980px) {
-  .site-footer__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .site-footer__meta {
-    grid-template-columns: 1fr;
-  }
-
-  .site-footer__awaricon {
-    justify-self: start;
-  }
-
-  .site-footer__product-hunt {
-    justify-self: start;
-  }
-}
-
-@media (max-width: 640px) {
-  .site-footer {
-    padding-top: 1rem;
-  }
-
-  .site-footer__inner {
-    width: min(96%, 560px);
-    padding: 1rem 0.8rem;
-  }
-
-  .site-footer__panel {
-    padding: 0.82rem;
-  }
-
-  .site-footer__title {
-    font-size: 1rem;
-  }
-
-  .site-footer__link {
-    font-size: 0.86rem;
-  }
-
-  .app-awaricon-badge__image {
-    width: 114px;
-    height: 114px;
-  }
-}
-
 :root[data-theme="midnight"] .app-awaricon-badge--footer {
   filter: saturate(0.95);
 }
@@ -573,5 +527,67 @@
   .site-footer__install-button,
   .site-footer__install-dialog-done {
     transition: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .site-footer__grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .site-footer__meta {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  .site-footer__utility {
+    justify-self: center;
+  }
+  .site-footer__utility-links {
+    justify-content: center;
+  }
+  .site-footer__awaricon {
+    justify-self: center;
+  }
+  .site-footer__product-hunt {
+    justify-self: center;
+  }
+  .site-footer__dedication-line {
+    justify-content: center;
+  }
+  .site-footer__panel {
+    text-align: center;
+  }
+  .site-footer__link-list {
+    justify-content: center;
+    align-items: center;
+  }
+  .site-footer__install-button {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-footer {
+    padding-top: 1.5rem;
+  }
+  .site-footer__inner {
+    width: 100%;
+    padding: 1.2rem 1rem;
+    border-radius: 0;
+  }
+  .site-footer__panel {
+    padding: 1.25rem 1rem;
+  }
+  .site-footer__title {
+    font-size: 1.15rem;
+  }
+  .site-footer__link {
+    font-size: 0.95rem;
+    justify-content: center;
+  }
+  .app-awaricon-badge__image {
+    width: 120px;
+    height: 120px;
   }
 }
