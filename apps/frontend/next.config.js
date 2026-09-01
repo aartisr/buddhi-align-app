@@ -103,8 +103,8 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       // Fonts are self-hosted via next/font at build time — no external CDN needed
       "font-src 'self' data:",
-      // Allow images from auth providers, Shishu Bharati, and Awaricon badge host
-      "img-src 'self' data: blob: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://graph.facebook.com https://www.shishubharati.net https://www.foreverlotus.com https://*.clarity.ms",
+      // Allow images from auth providers, partner sites, and footer badges
+      "img-src 'self' data: blob: https://lh3.googleusercontent.com https://avatars.githubusercontent.com https://graph.facebook.com https://www.shishubharati.net https://www.foreverlotus.com https://api.producthunt.com https://*.clarity.ms",
       // Supabase real-time + REST connections
       `connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.clarity.ms${postHogConnectSource}`,
       "frame-ancestors 'self'",
