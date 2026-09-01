@@ -38,7 +38,7 @@ describe("PWA public contract", () => {
   it("connects the footer install surface to the native prompt with a browser-safe fallback", () => {
     expect(footer).toContain("Install Buddhi Align");
     expect(footer).toContain("PWA_REQUEST_INSTALL_EVENT");
-    expect(footer).toContain("How to install");
+    expect(footer).toContain("How to Install in Safari Browser");
     expect(footer).toContain("Add to Home Screen");
     expect(footer).toContain('aria-modal="true"');
   });

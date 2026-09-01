@@ -127,7 +127,7 @@ export default function SiteFooter() {
             </div>
             {!pwa.isStandalone ? (
               <button type="button" className="site-footer__install-button" onClick={requestInstall}>
-                <span>{pwa.canInstall ? "Install app" : "How to install"}</span>
+                <span>{pwa.canInstall ? "Install app" : "How to Install in Safari"}</span>
                 <span aria-hidden="true">→</span>
               </button>
             ) : <span className="site-footer__installed-status">Installed</span>}
@@ -163,6 +163,21 @@ export default function SiteFooter() {
             <p className="site-footer__awaricon-label">Certified Excellence</p>
             <PlatinumBadge size="footer" />
           </div>
+
+          <a
+            className="site-footer__product-hunt"
+            href="https://www.producthunt.com/products/a-gentle-practice-for-today?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-a-gentle-practice-for-today"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="A gentle practice for today on Product Hunt"
+          >
+            <img
+              alt="A gentle practice for today - Decide. Do. Reflect. | Product Hunt"
+              width="250"
+              height="54"
+              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1237397&amp;theme=light&amp;t=1788270937596"
+            />
+          </a>
         </div>
       </div>
 

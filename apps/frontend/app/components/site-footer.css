@@ -345,6 +345,34 @@
   margin: 0;
 }
 
+.site-footer__product-hunt {
+  align-self: center;
+  justify-self: end;
+  display: inline-flex;
+  max-width: min(250px, 100%);
+  opacity: 0.34;
+  border-radius: 0.4rem;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.site-footer__product-hunt img {
+  display: block;
+  width: 250px;
+  max-width: 100%;
+  height: auto;
+}
+
+.site-footer__product-hunt:hover,
+.site-footer__product-hunt:focus-visible {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.site-footer__product-hunt:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 48%, transparent);
+  outline-offset: 3px;
+}
+
 .site-footer__utility {
   justify-self: start;
   font-size: 0.78rem;
@@ -480,6 +508,10 @@
   }
 
   .site-footer__awaricon {
+    justify-self: start;
+  }
+
+  .site-footer__product-hunt {
     justify-self: start;
   }
 }
