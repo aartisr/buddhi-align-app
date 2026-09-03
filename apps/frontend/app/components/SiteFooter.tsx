@@ -21,6 +21,42 @@ function isAppleMobile() {
     || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 }
 
+function FooterExternalBadges() {
+  return (
+    <div className="site-footer__badge-cluster" aria-label="External product badges">
+      <a
+        className="site-footer__product-hunt"
+        href="https://www.producthunt.com/products/a-gentle-practice-for-today?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-a-gentle-practice-for-today"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="A gentle practice for today on Product Hunt"
+      >
+        <img
+          alt="A gentle practice for today - Decide. Do. Reflect. | Product Hunt"
+          width="250"
+          height="54"
+          src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1237397&amp;theme=light&amp;t=1788270937596"
+        />
+      </a>
+
+      <a
+        className="site-footer__launchnest"
+        href="https://launchnest.io/p/buddhi-align"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Buddhi Align on LaunchNest"
+      >
+        <img
+          src="https://launchnest.io/badge/buddhi-align.svg?variant=listed"
+          alt="Buddhi Align on LaunchNest"
+          width="220"
+          height="56"
+        />
+      </a>
+    </div>
+  );
+}
+
 export default function SiteFooter() {
   const { t } = useI18n();
   const year = new Date().getFullYear();
@@ -164,37 +200,7 @@ export default function SiteFooter() {
             <PlatinumBadge size="footer" />
           </div>
 
-          <div className="site-footer__badge-cluster" aria-label="External product badges">
-            <a
-              className="site-footer__product-hunt"
-              href="https://www.producthunt.com/products/a-gentle-practice-for-today?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-a-gentle-practice-for-today"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="A gentle practice for today on Product Hunt"
-            >
-              <img
-                alt="A gentle practice for today - Decide. Do. Reflect. | Product Hunt"
-                width="250"
-                height="54"
-                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1237397&amp;theme=light&amp;t=1788270937596"
-              />
-            </a>
-
-            <a
-              className="site-footer__launchnest"
-              href="https://launchnest.io/p/buddhi-align"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Buddhi Align on LaunchNest"
-            >
-              <img
-                src="https://launchnest.io/badge/buddhi-align.svg?variant=listed"
-                alt="Buddhi Align on LaunchNest"
-                width="220"
-                height="56"
-              />
-            </a>
-          </div>
+          <FooterExternalBadges />
         </div>
       </div>
 
